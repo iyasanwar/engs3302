@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ENGS 3302 · التعرف على الأنماط</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&family=El+Messiri:wght@700&display=swap">
+<style>
+:root{--bg:#F5F7FB;--surface:#FFFFFF;--fg:#1B2130;--muted:#5C6577;--line:#DCE1EA;--bass:#2D5BC4;--salmon:#D9822B;color-scheme:light}
+@media (prefers-color-scheme: dark){:root{--bg:#0F131B;--surface:#161C27;--fg:#E7EAF1;--muted:#9BA4B6;--line:#283042;--bass:#7FA2F2;--salmon:#F0A55A;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Almarai","Noto Sans Arabic",Tahoma,sans-serif;font-size:17px;line-height:1.8}
+.wrap{max-width:720px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-right)) 48px max(16px,env(safe-area-inset-left))}
+.eyebrow{font-size:13px;color:var(--muted)}
+h1{font-family:"El Messiri","Almarai",Tahoma,sans-serif;font-size:clamp(28px,7vw,40px);line-height:1.35;margin:6px 0 10px}
+.lead{color:var(--muted);max-width:60ch;margin:0 0 24px}
+.list{display:grid;gap:12px}
+a.card{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;text-decoration:none;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+a.card:hover,a.card:focus-visible{border-color:var(--bass);outline:none}
+.badge{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-weight:700;font-size:14px;background:var(--bg);border:1px solid var(--line);font-variant-numeric:tabular-nums}
+.card.main .badge{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.t{font-family:"El Messiri","Almarai",Tahoma,sans-serif;font-weight:700;font-size:19px;line-height:1.4}
+.d{font-size:14px;color:var(--muted);line-height:1.7}
+.en{direction:ltr;unicode-bidi:isolate}
+h2{font-family:"El Messiri","Almarai",Tahoma,sans-serif;font-size:20px;margin:30px 0 10px}
+footer{margin-top:34px;font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow"><span class="en">ENGS 3302</span> · جامعة الأقصى · الفصل الأول 2026/2027</div>
+  <h1>التعرف على الأنماط</h1>
+  <p class="lead">صفحات تفاعلية ترافق المساق: خريطة الفصل، وصفحات نستخدمها داخل الفيديوهات. المادة الأساسية والتكاليف والمواعيد كلها على <span class="en">Moodle</span>.</p>
+
+  <div class="list">
+    <a class="card main" href="map/">
+      <span class="badge">1–12</span>
+      <span><span class="t">خريطة الفصل</span><br><span class="d">سؤال واحد، وطرق مختلفة للإجابة: كيف يرتبط كل أسبوع بما قبله وما بعده.</span></span>
+    </a>
+  </div>
+
+  <h2>صفحات الأسابيع</h2>
+  <div class="list">
+    <a class="card" href="w01/">
+      <span class="badge">1</span>
+      <span><span class="t en">Feature Space Explorer</span><br><span class="d">أزهار <span class="en">Iris</span> نقاطًا في <span class="en">feature space</span>: اختر الـ<span class="en">features</span> وانظر كيف تنفصل الأنواع.</span></span>
+    </a>
+    <a class="card" href="w02/">
+      <span class="badge">2</span>
+      <span><span class="t en">Distance and Scaling Explorer</span><br><span class="d">السمكات العشر وأقرب مركز: غيّر وحدة القياس والتطبيع ونوع المسافة، وراقب القرار.</span></span>
+    </a>
+  </div>
+
+  <footer>Iyas A. I. Alshaikhkhalil · للتواصل: <span class="en">Discord</span> أولًا، ثم البريد الإلكتروني.</footer>
+</div>
+</body>
+</html>

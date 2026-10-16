@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>سؤال واحد، وطرق مختلفة للإجابة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=El+Messiri:wght@600;700&display=swap">
+<style>
+/* Layout: one reading column; a vertical path on the right (RTL) with 12 stations in 4 parts; sticky week rail on top. */
+:root{
+  --bg:#F5F7FB; --surface:#FFFFFF; --fg:#1B2130; --muted:#5C6577; --line:#DCE1EA; --soft:#EEF2FB;
+  --bass:#2D5BC4; --salmon:#D9822B; --third:#1F7A4D; --here:#B8860B; --herebg:#FFF4D6;
+  --bass-a:rgba(45,91,196,.13); --salmon-a:rgba(217,130,43,.15); --third-a:rgba(31,122,77,.14);
+  --f-body:"Almarai","Noto Sans Arabic",Tahoma,"Segoe UI",sans-serif;
+  --f-disp:"El Messiri","Almarai","Noto Sans Arabic",Tahoma,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F131B; --surface:#161C27; --fg:#E7EAF1; --muted:#9BA4B6; --line:#283042; --soft:#1C2433;
+  --bass:#7FA2F2; --salmon:#F0A55A; --third:#5CC28F; --here:#E8BE4F; --herebg:#2C2614;
+  --bass-a:rgba(127,162,242,.16); --salmon-a:rgba(240,165,90,.17); --third-a:rgba(92,194,143,.16); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F131B; --surface:#161C27; --fg:#E7EAF1; --muted:#9BA4B6; --line:#283042; --soft:#1C2433;
+  --bass:#7FA2F2; --salmon:#F0A55A; --third:#5CC28F; --here:#E8BE4F; --herebg:#2C2614;
+  --bass-a:rgba(127,162,242,.16); --salmon-a:rgba(240,165,90,.17); --third-a:rgba(92,194,143,.16); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:17px;line-height:1.85;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.en{font-family:var(--f-body);direction:ltr;unicode-bidi:isolate}
+h1,h2,h3{font-family:var(--f-disp);font-weight:700;text-wrap:balance;line-height:1.45;margin:0}
+p{margin:0}
+:focus-visible{outline:2px solid var(--bass);outline-offset:2px}
+
+/* hero */
+.hero{padding-block:36px 18px}
+.eyebrow{font-size:13px;letter-spacing:.02em;color:var(--muted)}
+.hero h1{font-size:clamp(30px,8vw,44px);margin-top:6px}
+.q{margin-top:20px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 18px;display:flex;gap:14px;align-items:center}
+.q svg{flex:0 0 auto;width:64px;height:64px}
+.q p{font-size:19px;font-weight:500;line-height:1.7}
+.lead{margin-top:18px;display:grid;gap:12px;color:var(--fg)}
+.lead p{max-width:62ch}
+
+/* where-are-we banner */
+.here{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;background:var(--herebg);border:1px solid var(--here);border-radius:12px;padding:12px 14px}
+.here b{font-family:var(--f-disp);font-weight:700}
+.here button{font:inherit;font-size:14px;border:1px solid var(--here);background:var(--surface);color:var(--fg);border-radius:999px;padding:4px 14px;cursor:pointer}
+
+/* rail */
+.rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-top:22px}
+.rail .wrap{display:flex;gap:6px;align-items:center;padding-block:10px;overflow-x:auto;scrollbar-width:none}
+.rail a{flex:0 0 auto;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;text-decoration:none;color:var(--muted);border:1px solid var(--line);background:var(--surface);font-variant-numeric:tabular-nums}
+.rail a.sep{margin-inline-start:8px}
+.rail a.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.rail a.is-here{box-shadow:0 0 0 2px var(--here)}
+.rail a.dim{opacity:.35}
+
+/* parts & stations */
+.part{padding-block:34px 4px}
+.part .tag{font-size:13px;color:var(--muted)}
+.part h2{font-size:26px;margin-top:2px}
+.part p{margin-top:8px;color:var(--muted);max-width:60ch}
+.path{position:relative;margin-top:18px;padding-inline-start:34px}
+.path::before{content:"";position:absolute;inset-block:6px 6px;inset-inline-start:13px;width:2px;background:var(--line)}
+.st{position:relative;padding-block:6px 26px;transition:opacity .25s}
+.st .node{position:absolute;inset-inline-start:-34px;top:8px;width:28px;height:28px;border-radius:50%;background:var(--surface);border:2px solid var(--fg);display:grid;place-items:center;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+.st.is-here .node{background:var(--here);border-color:var(--here);color:var(--surface)}
+.st .meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:13px;color:var(--muted)}
+.pill{font-size:12px;border-radius:999px;padding:1px 10px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+.pill.here-p{border-color:var(--here);background:var(--herebg);color:var(--fg);font-weight:700}
+.st h3{font-size:23px;margin-top:4px}
+.arrive{margin-top:6px;font-weight:500;color:var(--muted)}
+.story{margin-top:10px;display:grid;gap:10px}
+.story p{max-width:62ch}
+figure{margin:14px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+figure svg{display:block;width:100%;height:auto}
+figcaption{font-size:14px;color:var(--muted);margin-top:8px;line-height:1.7}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:10px;font-size:14px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{font:inherit;font-size:14px;border:0;background:transparent;color:var(--fg);padding:4px 14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.btn{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--soft);color:var(--fg);border-radius:999px;padding:4px 14px;cursor:pointer}
+input[type=range]{width:min(260px,100%);accent-color:var(--salmon)}
+.readout{font-variant-numeric:tabular-nums;color:var(--muted)}
+.readout b{color:var(--fg)}
+.take{margin-top:12px;font-size:15px;border-inline-start:3px solid var(--bass);padding-inline-start:10px}
+.take b{font-weight:700}
+.bridge{margin-top:12px;display:block;text-decoration:none;color:var(--fg);background:var(--soft);border-radius:10px;padding:10px 12px;font-size:15px}
+.bridge .bl{color:var(--muted);font-size:13px;display:block}
+.threads-tags{display:inline-flex;flex-wrap:wrap;gap:4px}
+.st.dim{opacity:.32}
+
+/* threads */
+.threads{padding-block:38px 10px}
+.threads h2{font-size:26px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:4px 14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.tdesc{margin-top:12px;min-height:3.6em;color:var(--fg);max-width:62ch}
+.mx{overflow-x:auto;margin-top:12px}
+.end{padding-block:30px 46px}
+.end p{max-width:62ch}
+.end .sig{margin-top:18px;font-size:14px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+
+</head>
+<body>
+<div dir="rtl" lang="ar">
+<header class="wrap hero">
+  <a href="../" style="font-size:14px;color:var(--muted);text-decoration:none">← صفحة المساق</a>
+  <div class="eyebrow">ENGS 3302 · <span>التعرف على الأنماط</span> · <span>خريطة الفصل</span></div>
+  <h1 id="t-hero-title"></h1>
+  <div class="q">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="1" y="1" width="62" height="62" rx="12" fill="var(--soft)"/><circle cx="18" cy="42" r="4" fill="var(--salmon)"/><circle cx="24" cy="34" r="4" fill="var(--salmon)"/><rect x="38" y="16" width="8" height="8" fill="var(--bass)"/><rect x="46" y="26" width="8" height="8" fill="var(--bass)"/><path d="M36 38 l3 6 6.5 .9 -4.7 4.6 1.1 6.5 -5.9-3.1 -5.9 3.1 1.1-6.5 -4.7-4.6 6.5-.9z" fill="none" stroke="var(--fg)" stroke-width="2"/></svg>
+    <p id="t-hero-question">جاءت عيّنة جديدة: سمكة، أو صورة، أو إشارة. إلى أي <span class="en">class</span> تنتمي؟</p>
+  </div>
+  <div class="lead"><p id="t-hero-lead-1"></p><p id="t-hero-lead-2"></p></div>
+  <div class="here" id="here"><span>نحن الآن في <b id="hereTxt">الأسبوع 2</b></span><button type="button" id="hereGo">اذهب إلى محطتنا</button></div>
+</header>
+
+<nav class="rail" aria-label="الأسابيع"><div class="wrap" id="rail"></div></nav>
+
+<main id="parts"></main>
+
+<section class="wrap threads" aria-labelledby="th">
+  <h2 id="th">خمسة خيوط تمر عبر الأسابيع</h2>
+  <p id="t-threads-intro" style="margin-top:8px;color:var(--muted);max-width:60ch">الأسابيع ليست جزرًا منفصلة. اختر خيطًا لترى أين يظهر، وكيف يكبر من أسبوع إلى آخر.</p>
+  <div class="chips" id="chips"></div>
+  <p class="tdesc" id="tdesc"></p>
+  <div class="mx" id="mx"></div>
+</section>
+
+<footer class="wrap end">
+  <h2 id="t-end-title" style="font-size:24px">والمشروع النهائي؟</h2>
+  <p id="t-end-1" style="margin-top:10px">هو المكان الذي تجمع فيه الرحلة كلها: مشكلة حقيقية تختارها، و<span class="en">features</span> تستخرجها وتبرّر اختيارها، ومصنِّفات تقارن بينها، وتقييم صادق على بيانات لم يرها المصنِّف.</p>
+  <p id="t-end-2" style="margin-top:10px">في بداية كل أسبوع سنفتح هذه الصفحة معًا لنرى أين نحن. وارجع إليها كلما شعرت أن موضوعًا جديدًا جاء من لا مكان: ستجد دائمًا المشكلة التي جاء ليحلّها.</p>
+  <p class="sig">Iyas A. I. Alshaikhkhalil · <span>جامعة الأقصى</span> · <span class="en">ENGS 3302</span></p>
+</footer>
+</div>
+
+<script>
+(function(){
+document.documentElement.lang="ar";
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const E=s=>'<span class="en">'+s+'</span>';
+// ---------- seeded random ----------
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function gauss(r){let u=0,v=0;while(!u)u=r();while(!v)v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+// ---------- svg helpers ----------
+const S=(w,h,inner,label)=>`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${label||''}" direction="ltr">${inner}</svg>`;
+const anc=o=>{const a=o.a||'middle';return o.rtl&&a!=='middle'?(a==='start'?'end':'start'):a};
+const txt=(x,y,t,o={})=>`<text x="${x}" y="${y}" font-size="${((o.s||12)*1.5).toFixed(1)}" fill="${o.c||'var(--muted)'}" text-anchor="${anc(o)}" font-family="Almarai, Tahoma, sans-serif" ${o.w?'font-weight="'+o.w+'"':''} ${o.rtl?'direction="rtl"':''}>${t}</text>`;
+const dot=(x,y,c,r=4.2)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/>`;
+const sq=(x,y,c,s=8)=>`<rect x="${x-s/2}" y="${y-s/2}" width="${s}" height="${s}" fill="${c}"/>`;
+const star=(x,y,r=9,c='var(--fg)')=>{let p='';for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r*.45:r;p+=(i?'L':'M')+(x+rr*Math.cos(a)).toFixed(1)+' '+(y+rr*Math.sin(a)).toFixed(1)}return `<path d="${p}Z" fill="var(--surface)" stroke="${c}" stroke-width="1.8"/>`};
+const cross=(x,y,c,s=7)=>`<path d="M${x-s} ${y-s}L${x+s} ${y+s}M${x-s} ${y+s}L${x+s} ${y-s}" stroke="var(--surface)" stroke-width="5" stroke-linecap="round"/><path d="M${x-s} ${y-s}L${x+s} ${y+s}M${x-s} ${y+s}L${x+s} ${y-s}" stroke="${c}" stroke-width="2.6" stroke-linecap="round"/>`;
+function frame(x0,y0,w,h,xl,yl){return `<rect x="${x0}" y="${y0}" width="${w}" height="${h}" fill="none" stroke="var(--line)"/>`+(xl?txt(x0+w/2,y0+h+36,xl,{rtl:1}):'')+(yl?`<text transform="translate(${x0-40} ${y0+h/2}) rotate(-90)" font-size="17" fill="var(--muted)" text-anchor="middle" font-family="Almarai, Tahoma, sans-serif">${yl}</text>`:'')}
+function grid(x0,y0,w,h,nx,ny,f){ // f(u,v) -> color or null, u,v in [0,1]
+  let s='';const cw=w/nx,ch=h/ny;
+  for(let i=0;i<nx;i++)for(let j=0;j<ny;j++){const c=f((i+.5)/nx,1-(j+.5)/ny);if(c)s+=`<rect x="${(x0+i*cw).toFixed(2)}" y="${(y0+j*ch).toFixed(2)}" width="${(cw+.4).toFixed(2)}" height="${(ch+.4).toFixed(2)}" fill="${c}"/>`}
+  return s}
+
+// ---------- data: the ten fish of the Notes ----------
+const FISH=[[2.5,16.0],[3.0,19.3],[3.8,16.5],[4.5,18.0],[5.6,17.0],[4.2,20.5],[5.2,19.0],[6.0,21.0],[6.8,19.5],[7.5,20.0]];
+const FY=[0,0,0,0,0,1,1,1,1,1]; const NEW=[7.0,18.0];
+
+// ---------- figures ----------
+const FIG={};
+FIG.w1=()=>{ // pipeline, right to left
+  const W=640,H=150; let s='';
+  const box=(x,w,t1,t2,col)=>`<rect x="${x}" y="40" width="${w}" height="70" rx="10" fill="var(--soft)" stroke="${col||'var(--line)'}"/>`+txt(x+w/2,70,t1,{c:'var(--fg)',s:14,w:700,rtl:1})+txt(x+w/2,92,t2,{s:12,rtl:1});
+  const arr=x=>`<path d="M${x} 75 h-26" stroke="var(--muted)" stroke-width="2"/><path d="M${x-26} 75 l8 -5 v10z" fill="var(--muted)"/>`;
+  // fish (right)
+  s+=`<g transform="translate(520 48)"><ellipse cx="50" cy="27" rx="42" ry="18" fill="var(--bass-a)" stroke="var(--bass)" stroke-width="1.6"/><path d="M8 27 l-12 -14 v28z" fill="var(--bass-a)" stroke="var(--bass)" stroke-width="1.6"/><circle cx="78" cy="22" r="2.6" fill="var(--bass)"/></g>`;
+  s+=txt(570,130,'الشيء: سمكة',{rtl:1});
+  s+=arr(512);
+  s+=box(330,150,'features','(5.5 ، 21.0)');
+  s+=txt(405,130,'إضاءة ، عرض',{rtl:1});
+  s+=arr(322);
+  s+=box(160,130,'مصنِّف','classifier','var(--fg)');
+  s+=arr(152);
+  s+=`<rect x="10" y="48" width="110" height="54" rx="27" fill="var(--bass-a)" stroke="var(--bass)"/>`+txt(65,80,'قاروص',{c:'var(--bass)',s:15,w:700,rtl:1});
+  s+=txt(65,130,'القرار',{rtl:1});
+  return S(W,H,s,'من الشيء إلى الأرقام إلى القرار');
+};
+// W2 interactive: cm/mm
+function w2svg(unit){
+  const k=unit==='mm'?10:1, F=FISH.map(p=>[p[0],p[1]*k]), q=[NEW[0],NEW[1]*k];
+  const m=[0,1].map(c=>{const pts=F.filter((p,i)=>FY[i]===c);return [pts.reduce((a,p)=>a+p[0],0)/5,pts.reduce((a,p)=>a+p[1],0)/5]});
+  const d=m.map(c=>Math.hypot(q[0]-c[0],q[1]-c[1]));
+  const W=640,H=300,x0=56,y0=14,w=560,h=240; const xr=[2,8], yr=[15*k,22*k];
+  const X=v=>x0+(v-xr[0])/(xr[1]-xr[0])*w, Y=v=>y0+h-(v-yr[0])/(yr[1]-yr[0])*h;
+  let s=grid(x0,y0,w,h,64,28,(u,v)=>{const p=[xr[0]+u*(xr[1]-xr[0]),yr[0]+v*(yr[1]-yr[0])];const a=Math.hypot(p[0]-m[0][0],p[1]-m[0][1]),b=Math.hypot(p[0]-m[1][0],p[1]-m[1][1]);return a<b?'var(--salmon-a)':'var(--bass-a)'});
+  s+=frame(x0,y0,w,h,'الإضاءة (0–10)',unit==='mm'?'العرض (mm)':'العرض (cm)');
+  [2,4,6,8].forEach(v=>s+=txt(X(v),y0+h+14,v,{s:11}));
+  [15,18,21].forEach(v=>s+=txt(x0-6,Y(v*k)+4,v*k,{s:11,a:'end'}));
+  F.forEach((p,i)=>s+=FY[i]?sq(X(p[0]),Y(p[1]),'var(--bass)'):dot(X(p[0]),Y(p[1]),'var(--salmon)'));
+  s+=cross(X(m[0][0]),Y(m[0][1]),'var(--salmon)')+cross(X(m[1][0]),Y(m[1][1]),'var(--bass)');
+  s+=`<line x1="${X(q[0])}" y1="${Y(q[1])}" x2="${X(m[0][0])}" y2="${Y(m[0][1])}" stroke="var(--salmon)" stroke-dasharray="4 3"/><line x1="${X(q[0])}" y1="${Y(q[1])}" x2="${X(m[1][0])}" y2="${Y(m[1][1])}" stroke="var(--bass)" stroke-dasharray="4 3"/>`;
+  s+=star(X(q[0]),Y(q[1]),10);
+  const dec=d[0]<d[1]?'سلمون':'قاروص';
+  return {svg:S(W,H+24,s,'أقرب مركز'),d,dec};
+}
+FIG.w3=()=>{
+  const W=640,H=240,x0=40,y0=12,w=580,h=180,xr=[0,10];
+  const X=v=>x0+(v-xr[0])/(xr[1]-xr[0])*w; const pdf=(x,mu)=>Math.exp(-((x-mu)**2)/2)/Math.sqrt(2*Math.PI); const ymax=.45, Y=v=>y0+h-v/ymax*h;
+  let s=frame(x0,y0,w,h,'الإضاءة','');
+  for(let b=0.5;b<10;b+=1){[[4,'var(--salmon-a)','var(--salmon)'],[6,'var(--bass-a)','var(--bass)']].forEach(([mu,f,c],j)=>{const v=pdf(b,mu);const bw=w/10*.42;const xx=X(b-.5)+ (j?w/10*.5:w/10*.08);s+=`<rect x="${xx}" y="${Y(v)}" width="${bw}" height="${y0+h-Y(v)}" fill="${f}" stroke="${c}" stroke-width=".8"/>`})}
+  [[4,'var(--salmon)'],[6,'var(--bass)']].forEach(([mu,c])=>{let p='';for(let x=0;x<=10;x+=.1)p+=(x?'L':'M')+X(x).toFixed(1)+' '+Y(pdf(x,mu)).toFixed(1);s+=`<path d="${p}" fill="none" stroke="${c}" stroke-width="2.4"/>`});
+  [0,2,4,6,8,10].forEach(v=>s+=txt(X(v),y0+h+14,v,{s:11}));
+  s+=txt(X(2.1),Y(.36),'سلمون',{c:'var(--salmon)',w:700,s:13,rtl:1})+txt(X(7.9),Y(.36),'قاروص',{c:'var(--bass)',w:700,s:13,rtl:1});
+  s+=txt(X(5),Y(.42),'منطقة التداخل',{s:12,rtl:1});
+  return S(W,H,s,'أعمدة ومنحنيات');
+};
+// W4 interactive: cost slider
+function w4svg(r){
+  const W=640,H=244,x0=40,y0=12,w=580,h=180,xr=[1,9];
+  const X=v=>x0+(v-xr[0])/(xr[1]-xr[0])*w; const pdf=(x,mu)=>Math.exp(-((x-mu)**2)/2)/Math.sqrt(2*Math.PI); const Y=v=>y0+h-v/.45*h;
+  const t=5+Math.log(r)/2; let s=frame(x0,y0,w,h,'الإضاءة','');
+  // error areas
+  let a='M'+X(t)+' '+Y(0);for(let x=t;x<=xr[1];x+=.05)a+='L'+X(x).toFixed(1)+' '+Y(pdf(x,4)).toFixed(1);a+='L'+X(xr[1])+' '+Y(0)+'Z';
+  let b='M'+X(xr[0])+' '+Y(0);for(let x=xr[0];x<=t;x+=.05)b+='L'+X(x).toFixed(1)+' '+Y(pdf(x,6)).toFixed(1);b+='L'+X(t)+' '+Y(0)+'Z';
+  s+=`<path d="${a}" fill="var(--salmon)" opacity=".35"/><path d="${b}" fill="var(--bass)" opacity=".35"/>`;
+  [[4,'var(--salmon)'],[6,'var(--bass)']].forEach(([mu,c])=>{let p='';for(let x=xr[0];x<=xr[1];x+=.05)p+=(x>xr[0]?'L':'M')+X(x).toFixed(1)+' '+Y(pdf(x,mu)).toFixed(1);s+=`<path d="${p}" fill="none" stroke="${c}" stroke-width="2.4"/>`});
+  s+=`<line x1="${X(t)}" y1="${y0}" x2="${X(t)}" y2="${y0+h}" stroke="var(--fg)" stroke-width="2" stroke-dasharray="6 4"/>`;
+  s+=txt(X(t)+(t<6.6?8:-8),y0+14,'الحد',{c:'var(--fg)',w:700,a:t<6.6?'start':'end',rtl:1});
+  s+=txt((X(xr[0])+X(t))/2,y0+h-8,'← نقول: سلمون',{c:'var(--salmon)',s:12,w:700,rtl:1})+txt((X(t)+X(xr[1]))/2,y0+h-8,'نقول: قاروص →',{c:'var(--bass)',s:12,w:700,rtl:1});
+  [2,4,6,8].forEach(v=>s+=txt(X(v),y0+h+14,v,{s:11}));
+  const Phi=z=>.5*(1+erf(z/Math.SQRT2)); const eS=1-Phi(t-4), eB=Phi(t-6);
+  return {svg:S(W,H,s,'حد القرار'),t,eS,eB};
+}
+function erf(x){const s=Math.sign(x);x=Math.abs(x);const t=1/(1+.3275911*x);const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-.284496736)*t+.254829592)*t*Math.exp(-x*x);return s*y}
+FIG.w5=()=>{
+  const W=640,H=300,x0=20,y0=12,w=600,h=270, xr=[-4,4], yr=[-2.25,2.25];
+  const X=v=>x0+(v-xr[0])/(xr[1]-xr[0])*w, Y=v=>y0+h-(v-yr[0])/(yr[1]-yr[0])*h;
+  const A={m:[-1.3,0],s:[.55,1.25]}, B={m:[1.3,0],s:[1.15,.45]};
+  const g=(p,c)=>-Math.log(c.s[0]*c.s[1])-.5*(((p[0]-c.m[0])/c.s[0])**2+((p[1]-c.m[1])/c.s[1])**2);
+  let s=grid(x0,y0,w,h,80,36,(u,v)=>{const p=[xr[0]+u*(xr[1]-xr[0]),yr[0]+v*(yr[1]-yr[0])];return g(p,A)>g(p,B)?'var(--salmon-a)':'var(--bass-a)'});
+  s+=`<rect x="${x0}" y="${y0}" width="${w}" height="${h}" fill="none" stroke="var(--line)"/>`;
+  [[A,'var(--salmon)'],[B,'var(--bass)']].forEach(([c,col])=>[1,2].forEach(k=>s+=`<ellipse cx="${X(c.m[0])}" cy="${Y(c.m[1])}" rx="${c.s[0]*k*w/8}" ry="${c.s[1]*k*h/4.5}" fill="none" stroke="${col}" stroke-width="${k===1?2:1.2}" ${k===2?'stroke-dasharray="4 3"':''}/>`));
+  s+=cross(X(A.m[0]),Y(0),'var(--salmon)')+cross(X(B.m[0]),Y(0),'var(--bass)');
+  s+=`<line x1="${X(0)}" y1="${y0}" x2="${X(0)}" y2="${y0+h}" stroke="var(--fg)" stroke-width="1.6" stroke-dasharray="7 5"/>`;
+  s+=`<rect x="${X(0)+8}" y="${y0+8}" width="270" height="28" rx="5" fill="var(--surface)" opacity=".9"/>`+txt(X(0)+14,y0+28,'خط أقرب مركز (الأسبوع 2)',{c:'var(--fg)',s:12,a:'start',rtl:1});
+  s+=`<rect x="${x0+8}" y="${y0+h-36}" width="320" height="28" rx="5" fill="var(--surface)" opacity=".9"/>`+txt(x0+14,y0+h-16,'حد بايز حين تختلف أشكال الغيوم',{c:'var(--fg)',s:12,a:'start',rtl:1});
+  return S(W,H,s,'غيمتان طبيعيتان وحدّان');
+};
+FIG.w6=()=>{
+  const r=rng(7),A=[],B=[];for(let i=0;i<22;i++){A.push([-2.3+gauss(r)*.45,gauss(r)*.55]);A.push([2.3+gauss(r)*.45,gauss(r)*.55])}for(let i=0;i<30;i++)B.push([gauss(r)*.45,gauss(r)*.6]);
+  const W=640,H=270,x0=20,y0=12,w=600,h=240,xr=[-3.8,3.8],yr=[-1.9,1.9];
+  const X=v=>x0+(v-xr[0])/(xr[1]-xr[0])*w, Y=v=>y0+h-(v-yr[0])/(yr[1]-yr[0])*h;
+  const P=A.map(p=>[p,0]).concat(B.map(p=>[p,1]));
+  const knn=(p,k)=>{const d=P.map(([q,c])=>[Math.hypot(p[0]-q[0],p[1]-q[1]),c,q]).sort((a,b)=>a[0]-b[0]).slice(0,k);return d};
+  let s=grid(x0,y0,w,h,76,30,(u,v)=>{const p=[xr[0]+u*(xr[1]-xr[0]),yr[0]+v*(yr[1]-yr[0])];const n=knn(p,5);return n.filter(z=>z[1]===0).length>=3?'var(--salmon-a)':'var(--bass-a)'});
+  s+=`<rect x="${x0}" y="${y0}" width="${w}" height="${h}" fill="none" stroke="var(--line)"/>`;
+  A.forEach(p=>s+=dot(X(p[0]),Y(p[1]),'var(--salmon)',3.6));B.forEach(p=>s+=sq(X(p[0]),Y(p[1]),'var(--bass)',7));
+  const q=[-1.55,.75];const n=knn(q,5);const rad=n[4][0];
+  s+=`<ellipse cx="${X(q[0])}" cy="${Y(q[1])}" rx="${rad*w/7.6}" ry="${rad*h/3.8}" fill="none" stroke="var(--fg)" stroke-width="1.6" stroke-dasharray="5 4"/>`;
+  n.forEach(z=>s+=`<line x1="${X(q[0])}" y1="${Y(q[1])}" x2="${X(z[2][0])}" y2="${Y(z[2][1])}" stroke="var(--fg)" stroke-width=".8" opacity=".6"/>`);
+  s+=star(X(q[0]),Y(q[1]),9);
+  s+=`<rect x="${X(q[0])-10}" y="${y0+6}" width="230" height="28" rx="5" fill="var(--surface)" opacity=".92"/>`+txt(X(q[0])-4,y0+26,'أقرب 5 جيران: '+n.filter(z=>z[1]===0).length+' سلمون',{c:'var(--fg)',s:12,a:'start',rtl:1});
+  return S(W,H,s,'أقرب الجيران');
+};
+FIG.w7=()=>{
+  const r=rng(11),W=640,H=260,x0=20,y0=12,w=600,h=230; let s=`<rect x="${x0}" y="${y0}" width="${w}" height="${h}" fill="none" stroke="var(--line)"/>`;
+  const X=v=>x0+v*w, Y=v=>y0+h-v*h;
+  for(let i=0;i<18;i++){const a=[.12+r()*.36,.12+r()*.42];if(a[1]<a[0]*1.1+.5)s+=dot(X(a[0]),Y(a[1]),'var(--salmon)');const b=[.52+r()*.36,.4+r()*.5];if(b[1]>b[0]*1.1-.35)s+=sq(X(b[0]),Y(b[1]),'var(--bass)')}
+  s+=`<line x1="${X(.15)}" y1="${Y(.95)}" x2="${X(.75)}" y2="${Y(.05)}" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="6 5"/>`;
+  s+=`<line x1="${X(.32)}" y1="${Y(.98)}" x2="${X(.62)}" y2="${Y(.02)}" stroke="var(--fg)" stroke-width="2.6"/>`;
+  s+=`<path d="M${X(.45)} ${Y(.5)} q 40 -30 70 -6" fill="none" stroke="var(--fg)" stroke-width="1.6"/><path d="M${X(.45)+70} ${Y(.5)-6} l-9 -4 2 9z" fill="var(--fg)"/>`;
+  s+=txt(X(.2),Y(.9)-6,'خط قديم',{s:12,rtl:1})+txt(X(.62)+10,Y(.06),'بعد التحديث',{c:'var(--fg)',s:12,a:'start',rtl:1});
+  return S(W,H,s,'الخط يتحرك مع كل خطأ');
+};
+FIG.w8=()=>{
+  const W=640,H=260,x0=20,y0=12,w=600,h=230; let s=`<defs><clipPath id="c8"><rect x="${x0}" y="${y0}" width="${w}" height="${h}"/></clipPath></defs><rect x="${x0}" y="${y0}" width="${w}" height="${h}" fill="none" stroke="var(--line)"/><g clip-path="url(#c8)">`;
+  const cx=x0+w/2, cy=y0+h/2, ang=-18*Math.PI/180, R=(u,v)=>[cx+u*Math.cos(ang)-v*Math.sin(ang), cy+u*Math.sin(ang)+v*Math.cos(ang)];
+  s+=`<polygon points="${[R(-48,-140),R(48,-140),R(48,140),R(-48,140)].map(p=>p.join(',')).join(' ')}" fill="var(--soft)"/>`;
+  [[-48,'4 4'],[48,'4 4'],[0,'']].forEach(([u,da])=>{const a=R(u,-140),b=R(u,140);s+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="var(--fg)" stroke-width="${u?1.4:2.6}" ${da?'stroke-dasharray="'+da+'"':''}/>`});
+  const sal=[[-48,-40],[-48,50],[-95,-80],[-130,10],[-110,70],[-170,-40],[-160,90],[-200,20]], bas=[[48,10],[90,-60],[120,40],[150,-20],[110,95],[190,60],[175,-80],[220,0]];
+  sal.forEach(p=>{const q=R(p[0],p[1]);s+=dot(q[0],q[1],'var(--salmon)',4.6);if(p[0]===-48)s+=`<circle cx="${q[0]}" cy="${q[1]}" r="9" fill="none" stroke="var(--fg)" stroke-width="1.4"/>`});
+  bas.forEach(p=>{const q=R(p[0],p[1]);s+=sq(q[0],q[1],'var(--bass)',9);if(p[0]===48)s+=`<circle cx="${q[0]}" cy="${q[1]}" r="10" fill="none" stroke="var(--fg)" stroke-width="1.4"/>`});
+  const m=R(0,100);s+=`<path d="M${R(-48,100).join(' ')}L${R(48,100).join(' ')}" stroke="var(--fg)" stroke-width="1.2"/>`;
+  s+=`<rect x="${m[0]-34}" y="${m[1]-34}" width="68" height="26" rx="5" fill="var(--surface)" opacity=".9"/>`+txt(m[0],m[1]-14,'الهامش',{c:'var(--fg)',s:12,w:700,rtl:1});
+  s+='</g>'+txt(x0+w-10,y0+h-10,'الدوائر: support vectors',{s:12,a:'end'});
+  return S(W,H,s,'أوسع هامش');
+};
+FIG.w9=()=>{
+  const r=rng(5),W=640,H=260,x0=20,y0=12,w=600,h=230; let s=`<rect x="${x0}" y="${y0}" width="${w}" height="${h}" fill="none" stroke="var(--line)"/>`;
+  const cx=x0+w/2,cy=y0+h/2,a=-28*Math.PI/180,c=Math.cos(a),sn=Math.sin(a);
+  const L=[cx-260*c,cy-260*sn,cx+260*c,cy+260*sn];
+  s+=`<line x1="${L[0]}" y1="${L[1]}" x2="${L[2]}" y2="${L[3]}" stroke="var(--bass)" stroke-width="1.4" opacity=".6"/>`;
+  for(let i=0;i<34;i++){const u=gauss(r)*95,v=gauss(r)*24,px=cx+u*c-v*sn,py=cy+u*sn+v*c;const fx=cx+u*c,fy=cy+u*sn;
+    if(i%3===0)s+=`<line x1="${px}" y1="${py}" x2="${fx}" y2="${fy}" stroke="var(--muted)" stroke-width=".8" opacity=".7"/>`+`<circle cx="${fx}" cy="${fy}" r="2.2" fill="var(--bass)"/>`;
+    s+=dot(px,py,'var(--fg)',3.2)}
+  s+=`<path d="M${cx} ${cy} L${cx+170*c} ${cy+170*sn}" stroke="var(--bass)" stroke-width="3"/><path d="M${cx+170*c} ${cy+170*sn} l${-12*c+6*sn} ${-12*sn-6*c} l${-12*sn} ${12*c} z" fill="var(--bass)"/>`;
+  s+=txt(cx+178*c,cy+170*sn-26,'اتجاه أكبر انتشار (PCA)',{c:'var(--bass)',s:12,w:700,a:'end',rtl:1});
+  s+=txt(x0+12,y0+h-12,'كل نقطة تُختصر في رقم واحد: موقع ظلّها على الخط',{s:12,a:'start',rtl:1});
+  return S(W,H,s,'تقليل الأبعاد');
+};
+FIG.w10=()=>{
+  const W=640,H=310,x0=60,y0=14,w=280,h=240,xr=[2,8],yr=[15,22];
+  const X=v=>x0+(v-xr[0])/(xr[1]-xr[0])*w, Y=v=>y0+h-(v-yr[0])/(yr[1]-yr[0])*h;
+  let s='';
+  const reg=(a,b,c,d,col)=>`<rect x="${X(a)}" y="${Y(d)}" width="${X(b)-X(a)}" height="${Y(c)-Y(d)}" fill="${col}"/>`;
+  s+=reg(2,4.8,15,20,'var(--salmon-a)')+reg(2,4.8,20,22,'var(--bass-a)')+reg(4.8,8,15,18,'var(--salmon-a)')+reg(4.8,8,18,22,'var(--bass-a)');
+  s+=frame(x0,y0,w,h,'الإضاءة','العرض (cm)');
+  s+=`<line x1="${X(4.8)}" y1="${y0}" x2="${X(4.8)}" y2="${y0+h}" stroke="var(--fg)" stroke-width="2"/><line x1="${x0}" y1="${Y(20)}" x2="${X(4.8)}" y2="${Y(20)}" stroke="var(--fg)" stroke-width="2"/><line x1="${X(4.8)}" y1="${Y(18)}" x2="${x0+w}" y2="${Y(18)}" stroke="var(--fg)" stroke-width="2"/>`;
+  FISH.forEach((p,i)=>s+=FY[i]?sq(X(p[0]),Y(p[1]),'var(--bass)'):dot(X(p[0]),Y(p[1]),'var(--salmon)'));
+  [2,4,6,8].forEach(v=>s+=txt(X(v),y0+h+14,v,{s:11}));[16,18,20,22].forEach(v=>s+=txt(x0-6,Y(v)+4,v,{s:11,a:'end'}));
+  // tree
+  const tx=495, node=(x,y,t)=>`<rect x="${x-68}" y="${y-16}" width="136" height="32" rx="8" fill="var(--soft)" stroke="var(--line)"/>`+txt(x,y+6,t,{c:'var(--fg)',s:11,rtl:1});
+  const ln=(a,b,c,d,t)=>`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke="var(--muted)"/>`+txt((a+c)/2+(c>a?14:-14),(b+d)/2,t,{s:10,rtl:1});
+  const leaf=(x,y,t,c,f)=>`<rect x="${x-34}" y="${y-15}" width="68" height="30" rx="15" fill="${f}" stroke="${c}"/>`+txt(x,y+6,t,{c:c,s:11,w:700,rtl:1});
+  s+=ln(tx,56,tx-72,120,'نعم')+ln(tx,56,tx+72,120,'لا')+ln(tx-72,136,tx-108,200,'نعم')+ln(tx-72,136,tx-36,200,'لا')+ln(tx+72,136,tx+36,200,'نعم')+ln(tx+72,136,tx+108,260,'لا');
+  s+=node(tx,40,'الإضاءة ≤ 4.8 ؟')+node(tx-72,120,'العرض > 20 ؟')+node(tx+72,120,'العرض ≤ 18 ؟');
+  s+=leaf(tx-108,206,'قاروص','var(--bass)','var(--bass-a)')+leaf(tx-36,206,'سلمون','var(--salmon)','var(--salmon-a)')+leaf(tx+36,206,'سلمون','var(--salmon)','var(--salmon-a)')+leaf(tx+108,266,'قاروص','var(--bass)','var(--bass-a)');
+  return S(W,H,s,'شجرة قرار على السمكات العشر');
+};
+// W11 interactive k-means
+const KM=(function(){const r=rng(21),pts=[];[[-2,1.2],[2.2,1],[0,-1.6]].forEach(c=>{for(let i=0;i<18;i++)pts.push([c[0]+gauss(r)*.55,c[1]+gauss(r)*.5])});
+  const init=[[-.4,1.9],[.3,1.6],[.1,1.2]];return {pts,init}})();
+let kmState;function kmReset(){kmState={C:KM.init.map(c=>c.slice()),A:null,step:0,done:false}}kmReset();
+function kmStep(){const st=kmState;if(st.done)return;
+  if(st.A===null||st.step%2===0){const A=KM.pts.map(p=>{let b=0,bd=1e9;st.C.forEach((c,j)=>{const d=Math.hypot(p[0]-c[0],p[1]-c[1]);if(d<bd){bd=d;b=j}});return b});
+    if(st.A&&A.every((a,i)=>a===st.A[i])&&st.step>0){st.done=true}st.A=A}
+  else{st.C=st.C.map((c,j)=>{const m=KM.pts.filter((p,i)=>st.A[i]===j);return m.length?[m.reduce((a,p)=>a+p[0],0)/m.length,m.reduce((a,p)=>a+p[1],0)/m.length]:c})}
+  st.step++}
+function w11svg(){const W=640,H=270,x0=20,y0=12,w=600,h=240,xr=[-3.6,3.6],yr=[-3,2.6];
+  const X=v=>x0+(v-xr[0])/(xr[1]-xr[0])*w, Y=v=>y0+h-(v-yr[0])/(yr[1]-yr[0])*h;
+  const cols=['var(--salmon)','var(--bass)','var(--third)'];
+  let s=`<rect x="${x0}" y="${y0}" width="${w}" height="${h}" fill="none" stroke="var(--line)"/>`;
+  KM.pts.forEach((p,i)=>s+=dot(X(p[0]),Y(p[1]),kmState.A?cols[kmState.A[i]]:'var(--muted)',3.8));
+  kmState.C.forEach((c,j)=>s+=cross(X(c[0]),Y(c[1]),cols[j],9));
+  return S(W,H,s,'k-means خطوة بخطوة')}
+FIG.w12=()=>{
+  const W=640,H=250; let s='';const L=[[2,'المدخلات'],[4,'طبقة مخفية'],[4,'طبقة مخفية'],[2,'القرار']];
+  const xs=[560,400,240,80];const pos=L.map((l,i)=>Array.from({length:l[0]},(_,j)=>[xs[i],125+(j-(l[0]-1)/2)*48]));
+  for(let i=0;i<3;i++)pos[i].forEach(a=>pos[i+1].forEach(b=>s+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="var(--muted)" stroke-width=".9" opacity=".55"/>`));
+  pos.forEach((col,i)=>col.forEach((p,j)=>{const f=i===3?(j?'var(--bass-a)':'var(--salmon-a)'):'var(--surface)',c=i===3?(j?'var(--bass)':'var(--salmon)'):'var(--fg)';s+=`<circle cx="${p[0]}" cy="${p[1]}" r="15" fill="${f}" stroke="${c}" stroke-width="1.8"/>`}));
+  L.forEach((l,i)=>s+=txt(xs[i],236,l[1],{s:12,rtl:1}));
+  s+=txt(560,pos[0][0][1]-24,'إضاءة',{s:11,rtl:1})+txt(560,pos[0][1][1]+32,'عرض',{s:11,rtl:1});
+  s+=txt(80,pos[3][0][1]-24,'سلمون',{s:11,c:'var(--salmon)',rtl:1})+txt(80,pos[3][1][1]+32,'قاروص',{s:11,c:'var(--bass)',rtl:1});
+  s+=txt(320,18,'هنا تُصنع features جديدة لم يخترها أحد',{c:'var(--fg)',s:12,w:700,rtl:1});
+  return S(W,H,s,'شبكة عصبية متعددة الطبقات');
+};
+
+// ---------- content ----------
+const TH={dist:'المسافة',prob:'الاحتمال',bound:'شكل الحد',feat:'الـfeatures',eval:'التقييم'};
+const PARTS=[
+ {n:1,title:'نرى البيانات بأعيننا',weeks:'الأسبوعان 1–2',intro:'نبدأ بالهندسة: نقاط على رسم ومسافات بينها. لا احتمالات بعد، فقط ما نراه بأعيننا. هذا أسهل باب للدخول، ومنه يبدأ كل شيء.'},
+ {n:2,title:'نقرر ونحن غير متأكدين',weeks:'الأسابيع 3–5',intro:'في الواقع تتداخل الـclasses: بعض السلمون فاتح كالقاروص. المسافة وحدها لا تعرف كيف تتكلم عن هذا الشك، فنتعلم لغة تعرف.'},
+ {n:3,title:'مصنِّفات لا تفترض شكلًا',weeks:'الأسابيع 6–8',intro:'بدل أن نخمّن شكل التوزيع، ندع البيانات تتكلم بنفسها، أو نتعلّم الحد بين الـclasses مباشرة.'},
+ {n:4,title:'نوسّع الصورة',weeks:'الأسابيع 9–12',intro:'نعود إلى الـfeatures بعين أخبر، ونجرّب حدودًا بأشكال جديدة، ونتعامل مع بيانات لم يخبرنا أحد بإجاباتها.'}
+];
+const W=[
+ {w:1,p:1,title:'من الشيء إلى الأرقام',arrive:'كيف يرى الحاسوب سمكة؟',th:['feat'],
+  story:['الحاسوب لا يرى سمكة. يرى أرقامًا. فأول ما نتعلّمه أن نختصر الشيء في أرقام قليلة مفيدة نسميها '+E('features')+': إضاءة السمكة وعرضها مثلًا.','بهذين الرقمين تصبح كل سمكة نقطة على رسم له محوران، اسمه '+E('feature space')+'. ويصير عمل المصنِّف أن يقسم هذا الرسم إلى منطقة للسلمون ومنطقة للقاروص. هذه الصورة البسيطة، نقاط وحدّ بينها، سترافقنا حتى آخر أسبوع.'],
+  fig:'w1',cap:'السمكة تتحول إلى رقمين، والرقمان يدخلان المصنِّف، والمصنِّف يقرر.',
+  take:'عيّنة، ثم '+E('features')+'، ثم مصنِّف، ثم قرار.',leave:'رأينا النقاط على الرسم. لكن كيف نقرر بالأرقام أي منطقة هي الأقرب؟'},
+ {w:2,p:1,title:'أقرب مركز يقرر',arrive:'كيف نحسب «الأقرب»؟',th:['dist','bound','feat','eval'],
+  story:['أبسط فكرة ممكنة: نحسب مركز كل '+E('class')+'، أي متوسط نقاطه، ونعطي السمكة الجديدة للمركز الأقرب إليها. هذا أول مصنِّف حقيقي في المساق: '+E('nearest-mean')+'.','وعلى الطريق نكتشف مفاجأتين. الأولى أن المسافة لا تعرف الوحدات: قِس العرض بالمليمتر بدل السنتيمتر فينقلب القرار، ولذلك نطبّع الـ'+E('features')+' قبل أن نقيس. والثانية أن المصنِّف لا يُحكم عليه بالسمكات التي تعلّم منها، بل بسمكات لم يرها: '+E('test data')+'.'],
+  fig:'w2',interactive:true,cap:'السمكات العشر من الـNotes، والنجمة هي السمكة الجديدة (7.0، 18.0). جرّب تغيير وحدة العرض.',
+  take:'المسافة، والتطبيع، وأول مصنِّف، وأول قياس صادق للأداء.',leave:'المسافة تقول «هذا أقرب»، لكنها لا تقول «كم أنا متأكد». وماذا نفعل حين تتداخل السمكات؟'},
+ {w:3,p:2,title:'لغة الشك',arrive:'كيف نتكلم عن التداخل بالأرقام؟',th:['prob'],
+  story:['حين نعدّ السمكات عند كل درجة إضاءة نحصل على أعمدة، '+E('histogram')+'. وحين تكثر السمكات وتضيق الأعمدة يتحول الرسم إلى منحنى ناعم: هذه هي الكثافة، '+E('PDF')+'.','هنا نفرّق بين احتمال قيمة منفصلة '+E('P')+' وكثافة قيمة متصلة '+E('p')+'، ونتعلّم أن الاحتمال في المتصل مساحة تحت المنحنى. هذه اللغة أداة لا هدف، وسنستعملها فورًا في الأسبوع التالي.'],
+  fig:'w3',cap:'الأعمدة تعدّ السمكات، والمنحنى هو ما تقترب منه الأعمدة حين تكثر البيانات. في الوسط يتداخل الصنفان.',
+  take:''+E('P')+' للاحتمال، و'+E('p')+' للكثافة، والمساحة تحت المنحنى احتمال.',leave:'صار عندنا منحنى لكل '+E('class')+'. كيف نحوّل منحنيين إلى قرار؟'},
+ {w:4,p:2,title:'أفضل قرار ممكن',arrive:'أين نضع الحد بين منحنيين متداخلين؟',th:['prob','bound','eval'],
+  story:['قاعدة بايز تجمع أمرين: كم هذه الإضاءة شائعة في كل '+E('class')+'، وكم كل '+E('class')+' شائع أصلًا. والنتيجة احتمال أن تكون السمكة سلمونًا بعد أن رأيناها، '+E('posterior')+'. نختار الأكبر، فنحصل على أقل خطأ ممكن.','لكن ليس كل خطأ مثل غيره. أن نقول عن مريض إنه سليم أخطر من العكس. عندها نزيح الحد عمدًا لنقلل الخطأ الأغلى، ونقبل زيادة في الخطأ الأرخص: '+E('minimum risk')+'.'],
+  fig:'w4',interactive:true,cap:'المنطقتان الملونتان هما الخطأ: سلمون قلنا عنه قاروص، وقاروص قلنا عنه سلمون. حرّك المنزلق وراقب الحد.',
+  take:''+E('posterior')+'، وأقل خطأ، وأقل مخاطرة حين تختلف كلفة الأخطاء.',leave:'بايز يفترض أننا نعرف المنحنيات. لكننا لا نملك إلا عيّنات. من أين نأتي بالمنحنى؟'},
+ {w:5,p:2,title:'نقدّر المنحنى من البيانات',arrive:'كيف نصنع المنحنى من عيّنات قليلة؟',th:['prob','bound'],
+  story:['نفترض أن كل '+E('class')+' يتوزع توزيعًا طبيعيًا: جرسًا في بعد واحد، أو غيمة بيضاوية في بعدين. ثم نقدّر الغيمة من بيانات التدريب. مركزها هو المتوسط، وشكلها هو التغاير.','لاحظ أن هذا المتوسط هو نفسه مركز الأسبوع الثاني. وحين تكون الغيمتان دائريتين ومتساويتين، يعطي بايز الحد نفسه الذي أعطاه '+E('nearest-mean')+'. كان أبسط مصنِّف عندنا حالة خاصة من أفضل قرار، دون أن نعرف. وحين تختلف الغيمتان في الشكل ينحني الحد: '+E('LDA')+' و'+E('QDA')+'.'],
+  fig:'w5',cap:'الخط المتقطع هو حد أقرب مركز. المنطقتان الملونتان هما قرار بايز حين تكون غيمة السلمون طويلة وغيمة القاروص عريضة.',
+  take:'المتوسط والتغاير يكفيان لبناء المنحنى، والتغاير يحدد شكل الحد.',leave:'وماذا لو لم تكن البيانات جرسًا أصلًا؟ تذكّر الـ'+E('class')+' المكوّن من مجموعتين، الذي أفشل أقرب مركز.'},
+ {w:6,p:3,title:'اسأل الجيران',arrive:'ماذا لو لم نفترض أي شكل للتوزيع؟',th:['dist','eval'],
+  story:[E('k-NN')+' لا يحسب مراكز ولا منحنيات. ينظر إلى أقرب '+E('k')+' عيّنات للسمكة الجديدة، ويأخذ رأي الأغلبية. بهذا ينجح حيث فشل أقرب مركز، فالـ'+E('class')+' المكوّن من مجموعتين لم يعد مشكلة.','وصار عندنا عدة مصنِّفات، فنحتاج أن نقارن بينها بعدل: أين يخطئ كل منها بالضبط ('+E('confusion matrix')+')، وكيف تتغير أخطاؤه حين نحرّك العتبة ('+E('ROC')+')، وكيف نختبر حين تكون البيانات قليلة ('+E('cross-validation')+').'],
+  fig:'w6',cap:'السلمون هنا مجموعتان، والقاروص في الوسط. الجيران يقررون محليًا، فتأخذ كل مجموعة منطقتها.',
+  take:'مصنِّف بلا افتراضات، وأدوات لمقارنة المصنِّفات.',leave:E('k-NN')+' يحفظ كل البيانات ويقيس المسافة إليها كلها مع كل سمكة جديدة. ألا يكفي أن نتعلّم الحد نفسه؟'},
+ {w:7,p:3,title:'نتعلّم الحد مباشرة',arrive:'هل نستطيع أن نتعلّم الخط بدل أن نحسبه من المراكز؟',th:['bound','prob'],
+  story:['نبدأ بخط عشوائي، ونحرّكه قليلًا مع كل خطأ، حتى تقع العيّنات في جهتيها الصحيحتين. هذا هو '+E('Perceptron')+'. وطريقة التحريك الصغير المتكرر اسمها '+E('gradient descent')+'، وستعود معنا في آخر المساق.','ثم نجعل الخط يعطي احتمالًا بدل قرار قاطع: '+E('logistic regression')+'. فنرجع إلى لغة الأسبوع الرابع، لكن من باب جديد: نتعلم الاحتمال مباشرة دون أن نرسم منحنى لكل '+E('class')+'.'],
+  fig:'w7',cap:'الخط القديم يخطئ في بعض النقاط، فيتحرك خطوة صغيرة نحو الوضع الصحيح.',
+  take:'تعلّم الحد بالتحديث المتكرر، ومصنِّف خطي يعطي احتمالًا.',leave:'خطوط كثيرة تفصل البيانات تمامًا. أيها نختار؟'},
+ {w:8,p:3,title:'أوسع طريق بين الصنفين',arrive:'من بين كل الخطوط الصحيحة، أيها الأفضل؟',th:['bound'],
+  story:[E('SVM')+' يختار الخط الذي يترك أكبر مسافة ممكنة عن أقرب العيّنات من الجهتين، '+E('margin')+'. هذا الخط يتحمّل السمكات الجديدة أكثر، لأن بينه وبين الطرفين هامشًا يتّسع للاختلاف.','والعيّنات التي تلمس الهامش وحدها تحدد الخط، واسمها '+E('support vectors')+'. وحين لا يكفي خط مستقيم، تسمح '+E('kernel')+' برسم حد منحنٍ بالفكرة نفسها.'],
+  fig:'w8',cap:'الخط الأوسط هو الحد. العيّنات المحاطة بدوائر هي التي تحدده، وحذف أي عيّنة غيرها لا يغيّر شيئًا.',
+  take:'أفضل خط هو صاحب أوسع هامش.',leave:'كل هذا مع '+E('feature')+'ين اثنين. البيانات الحقيقية قد يكون لها مئات الـ'+E('features')+'. هل الأكثر أفضل دائمًا؟'},
+ {w:9,p:4,title:'أقل، لكن أذكى',arrive:'ماذا نفعل حين تكثر الـfeatures؟',th:['feat','eval','dist'],
+  story:['مع كثرة الـ'+E('features')+' تتباعد العيّنات وتفقد المسافات معناها، وهذه لعنة الأبعاد. فإما أن نختار أفضل الـ'+E('features')+' ونحكم على اختيارنا بأدوات التقييم من الأسبوع السادس، أو أن نصنع '+E('features')+' جديدة أقل عددًا.',E('PCA')+' يبحث عن الاتجاه الذي تنتشر فيه البيانات أكثر، مستعملًا التغاير من الأسبوع الخامس. و'+E('Fisher')+' يبحث عن الاتجاه الذي يفصل الـ'+E('classes')+' أكثر.'],
+  fig:'w9',cap:'رقمان لكل نقطة يُختصران في رقم واحد، ويضيع القليل فقط لأن البيانات تمتد أساسًا في اتجاه واحد.',
+  take:'نختار الـfeatures أو نصنعها، ونقيس أثر ذلك على الأداء.',leave:'كل الحدود حتى الآن خطوط أو منحنيات ناعمة. ماذا لو أردنا قرارًا نشرحه بالكلمات؟'},
+ {w:10,p:4,title:'قرار تقرؤه كقاعدة',arrive:'هل يمكن أن يشرح المصنِّف قراره؟',th:['bound','eval'],
+  story:['الشجرة تسأل سؤالًا واحدًا في كل مرة: هل الإضاءة أقل من 4.8؟ ثم تسأل عن العرض. فتقسم الرسم إلى مستطيلات، وتصبح كل ورقة قاعدة '+E('if-then')+' يقرؤها الإنسان.','لكن الشجرة الواحدة تتأثر كثيرًا بتفاصيل البيانات، وهذه فكرة '+E('overfitting')+' من الأسبوع السادس. فنزرع غابة من أشجار مختلفة وندعها تصوّت: '+E('random forest')+'.'],
+  fig:'w10',cap:'شجرة من ثلاثة أسئلة تصنّف السمكات العشر كلها صحيحًا. كل مستطيل ملوّن هو ورقة في الشجرة.',
+  take:'حدود من أسئلة بسيطة، ومصنِّفات أقوى حين تتعاون.',leave:'كل ما فعلناه احتاج بيانات موسومة. ماذا لو لم يخبرنا أحد بالإجابات؟'},
+ {w:11,p:4,title:'مجموعات بلا أسماء',arrive:'هل في البيانات مجموعات طبيعية، ولا أحد يعرف أسماءها؟',th:['dist'],
+  story:['أحيانًا لا نملك '+E('labels')+'، ونريد أن نعرف هل في البيانات مجموعات طبيعية. '+E('k-means')+' هو أقرب مركز من الأسبوع الثاني، لكن معكوسًا: هناك كنا نجهل السمكة، وهنا نجهل المراكز.','فنخمّن المراكز، ونعطي كل نقطة لأقرب مركز، ثم نعيد حساب المراكز، ونكرر حتى تستقر. والمسافة والتطبيع يعودان أساسيين، فأي خطأ في الوحدات يغيّر المجموعات كلها.'],
+  fig:'w11',interactive:true,cap:'المراكز تبدأ في مكان سيئ عمدًا. اضغط «خطوة» وراقبها تجد طريقها.',
+  take:'عنقدة بلا '+E('labels')+'، بالمسافة نفسها التي بدأنا بها.',leave:'بقي سؤال من الأسبوع الأول: من يختار الـ'+E('features')+' أصلًا؟'},
+ {w:12,p:4,title:'شبكة تتعلّم الـfeatures بنفسها',arrive:'هل يستطيع النموذج أن يختار الـfeatures بدلًا منا؟',th:['feat','bound'],
+  story:['الـ'+E('MLP')+' طبقات من الوحدات الخطية التي رأيناها في الأسبوع السابع، تتدرّب بالـ'+E('gradient descent')+' نفسه. الطبقات الأولى تصنع '+E('features')+' جديدة من المدخلات، والطبقة الأخيرة تقرر.','فينتهي المساق حيث بدأ. في الأسبوع الأول اخترنا الـ'+E('features')+' بأيدينا، وهنا يتعلمها النموذج من البيانات. وهذا هو الجسر إلى '+E('deep learning')+'.'],
+  fig:'w12',cap:'رقمان يدخلان، وطبقتان تصنعان '+'features'+' جديدة، ثم قرار.',
+  take:'طبقات خطية متراكبة تصنع حدودًا مرنة و'+E('features')+' جديدة.',leave:null}
+];
+const THD={
+ dist:'تبدأ المسافة في الأسبوع 2 أداةً لقياس القرب من مركز، ثم تصير في الأسبوع 6 قربًا من الجيران أنفسهم، وفي الأسبوع 9 نرى كيف تفقد معناها حين تكثر الأبعاد، وتعود في الأسبوع 11 أساسًا للعنقدة.',
+ prob:'لغة يتعلمها الطالب في الأسبوع 3، ويتخذ بها أفضل قرار في الأسبوع 4، ويبني بها نموذجًا من البيانات في الأسبوع 5، ثم يراها تعود من باب آخر في الانحدار اللوجستي في الأسبوع 7.',
+ bound:'كل مصنِّف يرسم حدًا. مستقيم بين مركزين في الأسبوع 2، ومستقيم أو منحنٍ حسب شكل الغيوم في الأسبوع 5، وخط يُتعلَّم في الأسبوع 7، وأفضل خط في الأسبوع 8، ومستطيلات في الأسبوع 10، وحدود مرنة في الأسبوع 12.',
+ feat:'تمثيل الشيء بأرقام في الأسبوع 1، وتجهيزها وتطبيعها في الأسبوع 2، واختيارها أو اختصارها في الأسبوع 9، ثم نموذج يتعلمها بنفسه في الأسبوع 12.',
+ eval:'من دقة على '+'test data'+' في الأسبوع 2، إلى المقارنة العادلة بين المصنِّفات في الأسبوع 6، ثم الحكم على اختيار الـfeatures في الأسبوع 9، وعلاج '+'overfitting'+' بالغابات في الأسبوع 10. ومن بعدها في كل معمل.'
+};
+
+// ---------- edited texts (from Journey_Text.json) ----------
+const TXT={"hero.title": "سؤال واحد، وطرق مختلفة للإجابة", "hero.question": "وصلتنا عيّنة جديدة: سمكة، أو صورة، أو إشارة. إلى أي class (فئة) تنتمي؟", "hero.lead.1": "هذا هو السؤال الذي سنعمل عليه طوال المساق. السؤال ثابت، لكن طريقة الإجابة تتغيّر من أسبوع إلى آخر. سنتعرّف في كل مرة إلى طريقة جديدة، ونرى متى تفيدنا، وما المشكلات التي قد تواجهها.", "hero.lead.2": "كل طريقة ستترك وراءها سؤالًا جديدًا، يقودنا إلى الطريقة التالية. لذلك لا تنظر إلى الأسابيع على أنها موضوعات منفصلة؛ بل رحلة نبدأ فيها بمشكلة، ونتعلّم حلًا لها، ثم نكتشف ما الذي ما زال ينقصنا.", "part1.title": "نحوّل البيانات إلى صورة نفهمها", "part1.intro": "نبدأ برسم نقاط تمثّل العينات، وننظر إلى المسافات بينها. لا نحتاج الآن إلى الاحتمالات أو المعادلات المعقدة؛ يكفينا أن نرى كيف تبدو البيانات، فهذه هي نقطة البداية.", "part2.title": "نختار رغم وجود الشك", "part2.intro": "في البيانات الحقيقية، لا تكون الـclasses منفصلة دائمًا. فقد يشبه بعض السلمون سمك القاروص في اللون أو الحجم. المسافة وحدها لا توضّح لنا مقدار الشك، لذلك نحتاج إلى طريقة تعبّر عنه.", "part3.title": "طرق لا تفترض شكل البيانات مسبقًا", "part3.intro": "بدل أن نفترض شكل البيانات من البداية، يمكننا أن نترك العينات ترشدنا إلى شكلها، أو أن ندرّب النموذج على تعلّم الحد الفاصل بين الـclasses مباشرة.", "part4.title": "ننظر إلى البيانات من زاوية أوسع", "part4.intro": "بعد أن نتعرّف إلى طرق التصنيف، سنعود إلى الـfeatures ونفكر في اختيارها وتمثيلها. وسنجرب حدودًا مختلفة بين الفئات، ثم ننتقل إلى بيانات لا نملك لها إجابات جاهزة.", "w1.title": "من الشيء إلى الأرقام", "w1.arrive": "كيف يتعامل الحاسوب مع سمكة؟", "w1.story.1": "عندما ننظر إلى سمكة، نعرف أنها سمكة من شكلها ولونها وحجمها. أما الحاسوب، فيحتاج إلى تمثيل هذه الصفات بأرقام. نسمّي كل صفة مفيدة feature، مثل عرض السمكة أو درجة إضاءتها في الصورة.", "w1.story.2": "إذا مثّلنا كل سمكة برقمين، يمكننا وضعها كنقطة على رسم ذي محورين. هذا الرسم هو feature space، أي فضاء الخصائص. ومهمّة الـclassifier (المصنّف) هي أن يحدد أي منطقة تنتمي إليها السمكة: منطقة السلمون أم منطقة القاروص. سنعود إلى فكرة النقاط والحدود هذه طوال المساق.", "w1.caption": "نحوّل السمكة إلى أرقام، ثم يستخدم المصنّف هذه الأرقام ليختار الفئة المناسبة.", "w1.take": "عينة، ثم features، ثم classifier، ثم قرار.", "w1.leave": "أصبحنا نرى العينات على الرسم. لكن كيف نحدد بالأرقام أي منطقة أقرب إلى العينة الجديدة؟", "w2.title": "المركز الأقرب يختار", "w2.arrive": "كيف نعرف أي مركز أقرب؟", "w2.story.1": "لنبدأ بفكرة بسيطة: نحسب مركز كل class، أي متوسط مواقع العينات التي تنتمي إليه. ثم نضع السمكة الجديدة مع الفئة التي يكون مركزها أقرب إليها. هذه الطريقة اسمها nearest-mean، وتعني اختيار الفئة ذات المتوسط الأقرب.", "w2.story.2": "لكننا نكتشف أمرين مهمّين. أولًا، تتأثر المسافة بوحدات القياس؛ فتغيير عرض السمكة من السنتيمتر إلى المليمتر قد يؤثر في القرار. لذلك نستخدم normalization أو تطبيع الـfeatures لتصبح المقارنة أكثر عدلًا. ثانيًا، لا يكفي أن ينجح المصنّف مع البيانات التي تدرّب عليها؛ علينا اختباره على test data، أي بيانات لم يرها من قبل.", "w2.caption": "العينات العشر مأخوذة من الـNotes، والنجمة تمثّل السمكة الجديدة (7.0، 18.0). جرّب تغيير وحدة قياس العرض ولاحظ ما يحدث.", "w2.take": "المسافة، وتطبيع البيانات، وأول مصنّف، واختبار الأداء على بيانات جديدة.", "w2.leave": "تخبرنا المسافة أي مركز أقرب، لكنها لا تخبرنا بمدى ثقتنا في القرار. فماذا يحدث عندما تتداخل الفئات؟", "w3.title": "كيف نصف الشك بالأرقام؟", "w3.arrive": "كيف نمثّل تداخل الفئات؟", "w3.story.1": "لنفترض أننا سجّلنا درجات إضاءة السمكات، ثم عددنا كم سمكة تقع ضمن كل مدى. يمكن عرض هذه الأعداد في histogram، أي مدرّج تكراري. ومع زيادة البيانات وتقسيمها إلى فواصل أصغر، يمكننا تقدير منحنى ناعم يصف انتشار القيم؛ وهذا ما نسمّيه probability density function أو PDF (دالة الكثافة الاحتمالية).", "w3.story.2": "هنا نميّز بين احتمال قيمة منفصلة، نرمز له بـ P، وكثافة قيمة متصلة، نرمز لها بـ p. في البيانات المتصلة، لا تمثّل قيمة الكثافة وحدها احتمالًا؛ بل نحصل على الاحتمال من المساحة تحت المنحنى ضمن مدى محدد. سنستخدم هذه الفكرة في الأسبوع القادم لاتخاذ قرار بين الفئات.", "w3.caption": "الأعمدة تبيّن عدد السمكات في كل مدى، والمنحنى يقدّر كيف تتوزع القيم. في المنطقة الوسطى، تتداخل الفئتان.", "w3.take": "نستخدم P للاحتمال، وp للكثافة؛ والمساحة تحت منحنى الكثافة تمثّل احتمالًا ضمن مدى.", "w3.leave": "أصبح لدينا منحنى يصف كل class. كيف نستخدم هذه المنحنيات لنختار الفئة المناسبة؟", "w4.title": "كيف نختار القرار الأفضل؟", "w4.arrive": "أين نضع الحد عندما تتداخل المنحنيات؟", "w4.story.1": "تجمع قاعدة Bayes بين معلومتين: مدى شيوع هذه القيمة داخل كل class، ومدى شيوع الفئة نفسها بين جميع العينات. ومنهما نحسب posterior probability، أي احتمال انتماء العينة إلى فئة بعد أن نلاحظ خصائصها. إذا كانت كلفة الأخطاء متساوية، نختار الفئة ذات الاحتمال الأكبر لنقلّل عدد الأخطاء.", "w4.story.2": "لكن الأخطاء ليست متساوية دائمًا. فمثلًا، قد يكون اعتبار مريض مصابًا على أنه سليم أخطر من اعتباره مصابًا وهو سليم. في هذه الحالة نغيّر حد القرار لنراعي كلفة كل خطأ. نختار القرار الذي يقلّل المخاطرة المتوقعة، وهذا ما يُعرف بـ minimum risk.", "w4.caption": "المناطق الملوّنة تمثّل حالات التصنيف الخاطئ: سلمون صُنّف على أنه قاروص، أو قاروص صُنّف على أنه سلمون. حرّك المنزلق ولاحظ كيف يتغيّر الحد.", "w4.take": "posterior probability، وتقليل عدد الأخطاء، ومراعاة كلفة الخطأ عند اتخاذ القرار.", "w4.leave": "تعتمد قاعدة Bayes هنا على معرفة المنحنيات، لكن ما نملكه عادة هو عينات محدودة. كيف نقدّر المنحنى من هذه العينات؟", "w5.title": "نقدّر التوزيع من العينات", "w5.arrive": "كيف نقدّر منحنى من عدد محدود من العينات؟", "w5.story.1": "يمكننا أن نفترض أن بيانات كل class تتبع توزيعًا طبيعيًا. في بُعد واحد يبدو التوزيع مثل جرس، وفي بُعدين قد يظهر كغيمة بيضاوية. بعد ذلك نقدّر شكل التوزيع من بيانات التدريب: يحدد المتوسط مركزه، ويصف التغاير مدى انتشار البيانات واتجاهه.", "w5.story.2": "لاحظ أن المتوسط هنا هو نفسه المركز الذي استخدمناه في الأسبوع الثاني. وإذا كانت الغيمتان دائريتين ومتساويتين في الانتشار، فقد يعطي قرار Bayes الحد نفسه الذي يعطيه nearest-mean. أي إن المصنّف البسيط الذي بدأنا به يمكن أن يكون حالة خاصة من طريقة أعمّ. أما إذا اختلف شكل التوزيعين، فقد يصبح الحد خطيًا في LDA أو منحنيًا في QDA.", "w5.caption": "الخط المتقطع هو حد nearest-mean. أما المناطق الملوّنة فتمثّل قرار Bayes عندما يختلف شكل توزيع السلمون عن توزيع القاروص.", "w5.take": "نستخدم المتوسط والتغاير لتقدير التوزيع، ويؤثر التغاير في شكل الحد الفاصل.", "w5.leave": "ماذا لو لم تتبع البيانات توزيعًا طبيعيًا؟ تذكّر الفئة التي تتكوّن من مجموعتين منفصلتين، والتي أربكت nearest-mean.", "w6.title": "دع الجيران يساعدونك", "w6.arrive": "هل يمكن التصنيف دون افتراض شكل التوزيع؟", "w6.story.1": "طريقة k-NN لا تحتاج إلى حساب مراكز أو افتراض منحنيات. عندما تصل سمكة جديدة، تبحث عن أقرب k عينات إليها، ثم تختار الفئة التي حصلت على أكبر عدد من الأصوات. ولأن القرار يعتمد على الجيران القريبين، يمكنها التعامل مع أشكال لا يناسبها الاعتماد على مركز واحد.", "w6.story.2": "لدينا الآن عدة مصنّفات، ونحتاج إلى مقارنتها بطريقة واضحة. تساعدنا confusion matrix (مصفوفة الالتباس) على معرفة أنواع الأخطاء، وتوضّح ROC كيف تتغيّر النتائج عند تغيير threshold (عتبة القرار). أما cross-validation (التحقق المتقاطع) فيساعدنا على تقييم النموذج عندما تكون البيانات محدودة.", "w6.caption": "يتكوّن السلمون هنا من مجموعتين، بينما يقع القاروص بينهما. ينظر k-NN إلى الجيران حول كل نقطة، لذلك يمكنه تكوين مناطق منفصلة.", "w6.take": "مصنّف يعتمد على أقرب الجيران، وأدوات تساعدنا على مقارنة المصنّفات وتقييمها.", "w6.leave": "يحتاج k-NN إلى الاحتفاظ ببيانات التدريب وحساب المسافات إلى عينات كثيرة عند كل قرار جديد. هل يمكن أن نتعلّم الحد الفاصل نفسه بدلًا من ذلك؟", "w7.title": "نتعلّم الحد مباشرة", "w7.arrive": "هل يمكن للنموذج أن يتعلّم الخط الفاصل؟", "w7.story.1": "نبدأ بخط أولي، ثم نعدّله كلما أخطأ في تصنيف عينة. في Perceptron، تغيّر هذه التعديلات موضع الخط واتجاهه حتى يتحسن الفصل بين الفئات. وتسمّى طريقة التعديل التدريجي باستخدام معلومات الخطأ gradient descent، وسنراها مرة أخرى في نهاية المساق.", "w7.story.2": "بعد ذلك نستخدم logistic regression. بدل أن يعطي النموذج قرارًا مباشرًا فقط، يحسب قيمة يمكن تفسيرها على أنها احتمال الانتماء إلى فئة. وهكذا نعود إلى الاحتمالات التي تعلمناها في الأسبوع الرابع، لكن هذه المرة نتعلّم الاحتمال من البيانات مباشرة، من دون تقدير منحنى مستقل لكل class.", "w7.caption": "يخطئ الخط في تصنيف بعض العينات، فيُعدّل النموذج موضعه بخطوات صغيرة لتحسين القرار.", "w7.take": "نتعلّم الحد من خلال تحديثات متكررة، ونتعرّف إلى مصنّف خطي يقدّر الاحتمالات.", "w7.leave": "قد تفصل عدة خطوط بين العينات بشكل صحيح. كيف نختار الخط الأفضل بينها؟", "w8.title": "نختار الخط ذي الهامش الأكبر", "w8.arrive": "إذا نجحت عدة خطوط، فأيها نختار؟", "w8.story.1": "يبحث SVM عن الحد الذي يترك أكبر مسافة ممكنة بينه وبين أقرب العينات من الفئتين. تسمّى هذه المسافة margin أو الهامش. الفكرة أن يكون الحد بعيدًا قدر الإمكان عن العينات الأقرب إليه، حتى لا يتأثر بسهولة باختلافات صغيرة في بيانات جديدة.", "w8.story.2": "العينات الأقرب إلى الحد، والتي تحدد موضعه، تسمّى support vectors. وإذا لم يكن الخط المستقيم مناسبًا للفصل بين الفئات، يمكن استخدام kernel لتكوين حد أكثر تعقيدًا، مع الاحتفاظ بفكرة الهامش الأكبر.", "w8.caption": "الخط الأوسط هو الحد الفاصل، والعينات المحاطة بدوائر هي support vectors التي تحدد موضعه. قد لا يؤثر حذف بعض العينات الأخرى في الحد.", "w8.take": "في SVM، نبحث عن حد يحقق أكبر هامش ممكن بين الفئتين.", "w8.leave": "حتى الآن استخدمنا اثنتين فقط من الـfeatures لتسهيل الرسم. لكن البيانات الحقيقية قد تحتوي على عشرات أو مئات الـfeatures. هل تساعدنا زيادتها دائمًا؟", "w9.title": "نختار الخصائص الأهم", "w9.arrive": "ماذا نفعل عندما يزداد عدد الـfeatures؟", "w9.story.1": "كلما زاد عدد الـfeatures، قد تصبح المسافات أقل فائدة في التمييز بين العينات. تُعرف هذه المشكلة باسم curse of dimensionality، أو لعنة الأبعاد. يمكننا اختيار الخصائص الأكثر فائدة، أو تحويلها إلى عدد أقل من الخصائص الجديدة. وبعد ذلك نستخدم أدوات التقييم التي تعلمناها لنرى إن كان هذا التغيير قد حسّن الأداء.", "w9.story.2": "تبحث PCA عن الاتجاه الذي تنتشر فيه البيانات أكثر، مستفيدة من فكرة التغاير التي تعلمناها سابقًا. أما Fisher، فيبحث عن اتجاه يساعد على الفصل بين الـclasses. الطريقتان تقلّلان عدد الأبعاد، لكنهما لا تبحثان عن الشيء نفسه.", "w9.caption": "بدل أن نمثّل كل نقطة برقمين، نختصرها في رقم واحد. يكون الاختصار مفيدًا عندما تنتشر البيانات أساسًا في اتجاه واحد.", "w9.take": "نختار الـfeatures المهمة أو نختصرها، ثم نقيّم أثر ذلك في أداء المصنّف.", "w9.leave": "كانت حدودنا حتى الآن خطوطًا أو منحنيات. ماذا لو أردنا نموذجًا يشرح قراره على هيئة قواعد واضحة؟", "w10.title": "قرار يمكن شرحه بقواعد", "w10.arrive": "هل يمكننا فهم سبب قرار المصنّف؟", "w10.story.1": "تعمل Decision Tree (شجرة القرار) عبر أسئلة متتابعة. قد تبدأ بسؤال مثل: هل الإضاءة أقل من 4.8؟ ثم تنتقل إلى سؤال آخر عن العرض. كل سؤال يقسم البيانات إلى أجزاء، وفي نهاية المسار نصل إلى قاعدة من نوع if-then يمكن للإنسان قراءتها وفهمها.", "w10.story.2": "لكن شجرة واحدة قد تتأثر كثيرًا بتفاصيل بيانات التدريب، فتتعلمها جيدًا ولا تعمم على بيانات جديدة. هذه المشكلة تسمّى overfitting. لتقليلها، يمكننا استخدام random forest، أي غابة من أشجار القرار تتدرّب بطرق مختلفة ثم تجمع نتائجها بالتصويت.", "w10.caption": "تستخدم هذه الشجرة ثلاثة أسئلة لتصنيف العينات العشر. كل مستطيل ملوّن يمثّل ورقة من أوراق الشجرة.", "w10.take": "قواعد قرار يسهل قراءتها، وغابة من الأشجار تجمع نتائج عدة نماذج.", "w10.leave": "احتجنا في كل ما سبق إلى بيانات نعرف فئاتها مسبقًا. فكيف نكتشف المجموعات إذا لم تكن لدينا هذه الإجابات؟", "w11.title": "نكتشف مجموعات دون أسماء", "w11.arrive": "هل يمكن أن نجد مجموعات داخل البيانات دون معرفة فئاتها؟", "w11.story.1": "أحيانًا نملك بيانات كثيرة، لكن لا توجد labels (تسميات) توضّح الفئة الصحيحة لكل عينة. نريد عندها معرفة ما إذا كانت العينات تتجمع في مجموعات طبيعية. تستخدم k-means فكرة أقرب مركز التي رأيناها في الأسبوع الثاني، لكن المهمة معكوسة: سابقًا عرفنا الفئات وبحثنا عن مركزها، أما الآن فنبحث عن المراكز والمجموعات معًا.", "w11.story.2": "نبدأ بمراكز أولية، ثم نضع كل نقطة مع أقرب مركز، ونحسب المراكز من جديد، ونكرر الخطوات حتى تستقر النتائج أو تتوقف عن التغيّر كثيرًا. وهنا تعود أهمية المسافة وتطبيع البيانات؛ لأن اختلاف وحدات القياس قد يغيّر المجموعات التي نحصل عليها.", "w11.caption": "تبدأ المراكز في أماكن غير مناسبة. اضغط «خطوة» وشاهد كيف تتغير مواقعها مع إعادة توزيع النقاط.", "w11.take": "نستخدم المسافة لاكتشاف المجموعات دون الحاجة إلى labels.", "w11.leave": "بقي سؤال بدأنا به في الأسبوع الأول: من يختار الـfeatures التي نمثّل بها البيانات؟", "w12.title": "شبكة تتعلّم الـfeatures", "w12.arrive": "هل يستطيع النموذج تعلّم الخصائص بنفسه؟", "w12.story.1": "يتكوّن MLP (الشبكة متعددة الطبقات) من طبقات متتابعة من الوحدات التي تحسب تحويلات للمدخلات. تتدرّب الشبكة باستخدام gradient descent، الذي تعرفنا إليه في الأسبوع السابع. تتعلّم الطبقات الأولى تمثيلات جديدة للبيانات، ثم تستخدم الطبقات التالية هذه التمثيلات للوصول إلى القرار النهائي.", "w12.story.2": "وهكذا نعود إلى نقطة البداية. في الأسبوع الأول اخترنا الـfeatures بأنفسنا، أما هنا فيتعلّم النموذج تمثيلات مفيدة من البيانات أثناء التدريب. هذه إحدى الأفكار التي تمهّد لفهم deep learning (التعلّم العميق).", "w12.caption": "تدخل قيمتان إلى الشبكة، وتحوّلهما الطبقات إلى تمثيلات جديدة، ثم تنتج الشبكة قرارًا.", "w12.take": "تتعلّم الطبقات المتتابعة تمثيلات جديدة، وتساعد الشبكة على بناء حدود قرار أكثر مرونة.", "threads.title": "خمسة خيوط تربط الأسابيع", "threads.intro": "الموضوعات ليست منفصلة؛ فبعض الأفكار تظهر في أكثر من أسبوع، وفي كل مرة نستخدمها بطريقة جديدة. اختر خيطًا لترى كيف يتطور عبر المساق.", "threads.default": "تمثّل كل دائرة أسبوعًا تظهر فيه الفكرة. اختر أحد الخيوط لتتابع قصته، وستصبح الأسابيع الأخرى أقل بروزًا.", "thread.dist": "نستخدم المسافة في الأسبوع الثاني لمعرفة المركز الأقرب، ثم في الأسبوع السادس للعثور على أقرب الجيران. وفي الأسبوع التاسع نرى كيف تقل فائدتها مع كثرة الأبعاد، قبل أن نستخدمها من جديد في العنقدة في الأسبوع الحادي عشر.", "thread.prob": "نتعرّف إلى الاحتمال في الأسبوع الثالث، ونستخدمه لاختيار القرار في الأسبوع الرابع، ثم نقدّر التوزيعات من البيانات في الأسبوع الخامس. وفي الأسبوع السابع نراه مرة أخرى في logistic regression، ولكن بطريقة مختلفة.", "thread.bound": "كل مصنّف يفصل بين الفئات بطريقة ما: خط بين المراكز في الأسبوع الثاني، وحد يتأثر بشكل التوزيعات في الأسبوع الخامس، وحد نتعلّمه مباشرة في الأسبوع السابع، ثم حد بأكبر هامش في الأسبوع الثامن. وفي الأسبوع العاشر تظهر الحدود على شكل مناطق تحددها شجرة القرار، وفي الأسبوع الثاني عشر تصبح أكثر مرونة.", "thread.feat": "نبدأ بتمثيل الأشياء على هيئة features في الأسبوع الأول، ونتعلّم تطبيعها في الأسبوع الثاني. وفي الأسبوع التاسع نختار الخصائص أو نختصرها، ثم نصل في الأسبوع الثاني عشر إلى نموذج يتعلّم تمثيلاتها من البيانات.", "thread.eval": "نبدأ بتقييم المصنّف على test data في الأسبوع الثاني، ثم نتعلّم في الأسبوع السادس كيف نقارن بين المصنّفات. ونقيّم أثر اختيار الـfeatures في الأسبوع التاسع، ونناقش overfitting مع random forest في الأسبوع العاشر. وسيبقى التقييم جزءًا أساسيًا من العمل في المختبرات.", "end.title": "كيف نجمع كل ذلك في المشروع النهائي؟", "end.1": "في المشروع النهائي، ستطبّق أفكار المساق على مشكلة تختارها. ستحدد الـfeatures المناسبة وتشرح سبب اختيارها، ثم تجرّب أكثر من مصنّف وتقارن بينها باستخدام تقييم واضح على بيانات لم يتدرّب عليها النموذج.", "end.2": "سنعود إلى هذه الصفحة في بداية كل أسبوع لنعرف أين وصلنا في الرحلة. وإذا بدا لك موضوع جديد وكأنه منفصل عمّا سبق، فارجع إليها: ستجد المشكلة التي يحاول هذا الموضوع حلّها، وكيف يرتبط بما تعلمناه من قبل."};
+const enw=t=>t.replace(/[A-Za-z][A-Za-z0-9\-]*(?:[ \-][A-Za-z][A-Za-z0-9\-]*)*/g,m=>'<span class="en">'+m+'</span>').split('\n\n').join('</p><p>');
+PARTS.forEach(P=>{P.title=enw(TXT['part'+P.n+'.title']);P.intro=enw(TXT['part'+P.n+'.intro'])});
+W.forEach(x=>{const p='w'+x.w+'.';x.title=enw(TXT[p+'title']);x.arrive=enw(TXT[p+'arrive']);x.story=x.story.map((_,k)=>enw(TXT[p+'story.'+(k+1)]));x.cap=enw(TXT[p+'caption']);x.take=enw(TXT[p+'take']);if(x.leave)x.leave=enw(TXT[p+'leave'])});
+Object.keys(THD).forEach(k=>THD[k]=enw(TXT['thread.'+k]));
+[['t-hero-title','hero.title'],['t-hero-question','hero.question'],['t-hero-lead-1','hero.lead.1'],['t-hero-lead-2','hero.lead.2'],['th','threads.title'],['t-threads-intro','threads.intro'],['t-end-title','end.title'],['t-end-1','end.1'],['t-end-2','end.2']].forEach(([id,k])=>{const e=document.getElementById(id);if(e)e.innerHTML=enw(TXT[k])});
+
+// ---------- current week ----------
+function weekFromDate(){const pub=Date.UTC(2026,9,8);const now=Date.now();const k=Math.floor((now-pub)/(7*864e5))+1;return Math.max(1,Math.min(12,k))}
+function hashWeek(){const m=/^#w(\d{1,2})$/.exec(location.hash||'');if(m){const k=+m[1];if(k>=1&&k<=12)return k}return null}
+let HERE=hashWeek()||weekFromDate();
+
+// ---------- render ----------
+const rail=document.getElementById('rail');
+rail.innerHTML=W.map(x=>`<a href="#w${x.w}" data-w="${x.w}" class="${[5,6,9].includes(x.w)?'':''}${x.w===3||x.w===6||x.w===9?' sep':''}" aria-label="الأسبوع ${x.w}">${x.w}</a>`).join('');
+const main=document.getElementById('parts');
+main.innerHTML=PARTS.map(P=>`<section class="wrap part" aria-labelledby="p${P.n}"><div class="tag">الجزء ${P.n} · ${P.weeks}</div><h2 id="p${P.n}">${P.title}</h2><p>${P.intro}</p><div class="path">`+
+ W.filter(x=>x.p===P.n).map(x=>`<article class="st" id="w${x.w}" data-th="${x.th.join(' ')}">
+   <div class="node">${x.w}</div>
+   <div class="meta"><span>الأسبوع ${x.w}</span><span class="pill here-p" data-here hidden>أنت هنا</span><span class="threads-tags">${x.th.map(t=>`<span class="pill">${TH[t]}</span>`).join('')}</span></div>
+   <h3>${x.title}</h3>
+   <p class="arrive">${x.arrive}</p>
+   <div class="story">${x.story.map(s=>`<p>${s}</p>`).join('')}</div>
+   <figure><div id="fig-${x.w}"></div>${x.interactive?`<div class="ctrl" id="ctl-${x.w}"></div>`:''}<figcaption>${x.cap}</figcaption></figure>
+   <p class="take"><b>ما تأخذه معك:</b> ${x.take}</p>
+   ${x.leave?`<a class="bridge" href="#w${x.w+1}"><span class="bl">المشكلة التي يتركها هذا الأسبوع، وتحلّها المحطة ${x.w+1}</span>${x.leave}</a>`:''}
+ </article>`).join('')+`</div></section>`).join('');
+
+// static figures
+['w1','w3','w5','w6','w7','w8','w9','w10','w12'].forEach(k=>{document.getElementById('fig-'+k.slice(1)).innerHTML=FIG[k]()});
+// W2 interactive
+(function(){const c=document.getElementById('ctl-2');c.innerHTML=`<span>وحدة العرض:</span><span class="seg" role="group" aria-label="وحدة العرض"><button type="button" id="u-cm" aria-pressed="true">cm</button><button type="button" id="u-mm" aria-pressed="false">mm</button></span><span class="readout" id="w2r"></span>`;
+  const draw=u=>{const r=w2svg(u);document.getElementById('fig-2').innerHTML=r.svg;document.getElementById('w2r').innerHTML=`المسافة إلى السلمون <b>${r.d[0].toFixed(2)}</b> · إلى القاروص <b>${r.d[1].toFixed(2)}</b> · القرار: <b>${r.dec}</b>`;document.getElementById('u-cm').setAttribute('aria-pressed',u==='cm');document.getElementById('u-mm').setAttribute('aria-pressed',u==='mm')};
+  document.getElementById('u-cm').onclick=()=>draw('cm');document.getElementById('u-mm').onclick=()=>draw('mm');draw('cm')})();
+// W4 interactive
+(function(){const c=document.getElementById('ctl-4');c.innerHTML=`<label for="cost">كم أغلى أن نقول عن السلمون قاروصًا؟</label><input type="range" id="cost" min="0" max="16" step="1" value="8"><span class="readout" id="w4r"></span>`;
+  const vals=[1/8,1/6,1/5,1/4,1/3,1/2.5,1/2,1/1.5,1,1.5,2,2.5,3,4,5,6,8];
+  const draw=()=>{const r=vals[+document.getElementById('cost').value];const o=w4svg(r);document.getElementById('fig-4').innerHTML=o.svg;
+    const lab=r>=1?`أغلى ${+r.toFixed(1)} مرة`:`أرخص ${+(1/r).toFixed(1)} مرة`;
+    document.getElementById('w4r').innerHTML=`${r===1?'الخطآن بالكلفة نفسها':lab} · الحد عند إضاءة <b>${o.t.toFixed(2)}</b> · سلمون نخطئ فيه <b>${Math.round(o.eS*100)}%</b> · قاروص نخطئ فيه <b>${Math.round(o.eB*100)}%</b>`};
+  document.getElementById('cost').oninput=draw;draw()})();
+// W11 interactive
+(function(){const c=document.getElementById('ctl-11');c.innerHTML=`<button type="button" class="btn" id="kstep">خطوة</button><button type="button" class="btn" id="kreset">من البداية</button><span class="readout" id="w11r"></span>`;
+  const draw=()=>{document.getElementById('fig-11').innerHTML=w11svg();const st=kmState;let m;
+    if(st.step===0)m='ثلاثة مراكز مخمَّنة، والنقاط بلا مجموعات بعد.';else if(st.done)m=`استقرت المراكز بعد ${st.step} خطوة. لم تتغير أي مجموعة.`;else m=(st.step%2===1)?'إسناد: كل نقطة أخذت لون أقرب مركز.':'تحديث: كل مركز انتقل إلى متوسط نقاطه.';
+    document.getElementById('w11r').textContent=m;document.getElementById('kstep').disabled=st.done};
+  document.getElementById('kstep').onclick=()=>{kmStep();draw()};document.getElementById('kreset').onclick=()=>{kmReset();draw()};draw()})();
+
+// where are we
+function setHere(k){HERE=k;document.querySelectorAll('[data-here]').forEach(e=>e.hidden=true);const st=document.getElementById('w'+k);if(st){st.querySelector('[data-here]').hidden=false;document.querySelectorAll('.st').forEach(s=>s.classList.toggle('is-here',s===st))}
+  rail.querySelectorAll('a').forEach(a=>a.classList.toggle('is-here',+a.dataset.w===k));
+  document.getElementById('hereTxt').innerHTML='الأسبوع '+k+': '+W[k-1].title}
+setHere(HERE);
+document.getElementById('hereGo').onclick=()=>document.getElementById('w'+HERE).scrollIntoView({block:'start'});
+window.addEventListener('hashchange',()=>{const k=hashWeek();if(k)setHere(k)});
+// rail tracking
+const io=('IntersectionObserver' in window)?new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const k=+e.target.id.slice(1);rail.querySelectorAll('a').forEach(a=>a.classList.toggle('on',+a.dataset.w===k));const a=rail.querySelector(`a[data-w="${k}"]`);if(a&&a.scrollIntoView)try{a.scrollIntoView({inline:'nearest',block:'nearest'})}catch(_){}}})},{rootMargin:'-45% 0px -50% 0px'}):null;
+if(io)document.querySelectorAll('.st').forEach(s=>io.observe(s));
+document.querySelectorAll('.st').forEach(s=>s.style.scrollMarginTop='64px');
+
+// threads
+const chips=document.getElementById('chips');let cur=null;
+chips.innerHTML=Object.keys(TH).map(k=>`<button type="button" class="chip" data-t="${k}" aria-pressed="false">${TH[k]}</button>`).join('');
+function mx(){const keys=Object.keys(TH),cw=40,lw=104,W0=lw+12*cw+12,H0=keys.length*34+34;let s='';
+  const X=w=>W0-lw-(w-.5)*cw; // RTL: week 1 on the right, next to the labels
+  for(let w=1;w<=12;w++)s+=txt(X(w),16,w,{s:12,c:'var(--muted)'});
+  keys.forEach((k,i)=>{const y=40+i*34,on=!cur||cur===k;
+    s+=`<text x="${W0-6}" y="${y+6}" font-size="15" fill="var(--fg)" text-anchor="start" direction="rtl" font-family="Almarai, Tahoma, sans-serif" opacity="${on?1:.35}">${TH[k]}</text>`;
+    s+=`<line x1="${X(12)}" y1="${y}" x2="${X(1)}" y2="${y}" stroke="var(--line)"/>`;
+    const ws=W.filter(x=>x.th.includes(k)).map(x=>x.w);
+    if(ws.length>1)s+=`<line x1="${X(ws[ws.length-1])}" y1="${y}" x2="${X(ws[0])}" y2="${y}" stroke="${on?'var(--fg)':'var(--line)'}" stroke-width="2" opacity="${on?.9:.5}"/>`;
+    ws.forEach(w=>s+=`<circle cx="${X(w)}" cy="${y}" r="8" fill="${on?'var(--fg)':'var(--line)'}"/>`)});
+  document.getElementById('mx').innerHTML=`<svg viewBox="0 0 ${W0} ${H0}" style="width:100%;min-width:${W0}px" role="img" aria-label="الخيوط عبر الأسابيع">${s}</svg>`}
+function setThread(k){cur=(cur===k)?null:k;chips.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.t===cur));
+  document.getElementById('tdesc').innerHTML=cur?THD[cur]:enw(TXT['threads.default'])||'كل دائرة في الجدول أسبوعٌ يظهر فيه الخيط. اختر خيطًا لترى قصته، وستخفت الأسابيع التي لا يمر بها في الصفحة كلها.';
+  document.querySelectorAll('.st').forEach(s=>s.classList.toggle('dim',!!cur&&!s.dataset.th.split(' ').includes(cur)));
+  rail.querySelectorAll('a').forEach(a=>{const x=W[+a.dataset.w-1];a.classList.toggle('dim',!!cur&&!x.th.includes(cur))});mx()}
+chips.onclick=e=>{const b=e.target.closest('.chip');if(b)setThread(b.dataset.t)};
+setThread(null);
+if(hashWeek())setTimeout(()=>{const el=document.getElementById('w'+HERE);if(el)el.scrollIntoView({block:'start'})},60);
+})();
+</script>
+
+</body>
+</html>

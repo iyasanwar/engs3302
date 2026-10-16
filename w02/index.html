@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{margin:0}</style>
+<title>Distance and Scaling Explorer</title>
+<style>
+/* Layout: lab instrument (same token system as the Week 1 and Week 4 explorers): controls left, feature-space plot right, distance readout under it. */
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --ink:#1b2130; --muted:#5c6577; --line:#dfe3ea; --grid:#eceff4;
+  --salmon:#d9822b; --bass:#2d5bc4; --rS:rgba(217,130,43,.10); --rB:rgba(45,91,196,.10);
+  --focus:#2d5bc4; --accent:#2d5bc4; --good:#1f7a4d; --bad:#b3261e;
+  --f-body:"Palatino Linotype",Palatino,"Book Antiqua","TeX Gyre Pagella",Georgia,serif;
+  --f-ui:"Segoe UI","Helvetica Neue",Arial,system-ui,sans-serif;
+  --f-num:ui-monospace,"SFMono-Regular",Menlo,Consolas,"DejaVu Sans Mono",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12151c; --panel:#1a1f29; --ink:#e7eaf0; --muted:#9aa3b3; --line:#2b3240; --grid:#232a36;
+  --salmon:#f0a65c; --bass:#7ea3f2; --rS:rgba(240,166,92,.14); --rB:rgba(126,163,242,.14);
+  --focus:#7ea3f2; --accent:#7ea3f2; --good:#5cc592; --bad:#f28b82; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12151c; --panel:#1a1f29; --ink:#e7eaf0; --muted:#9aa3b3; --line:#2b3240; --grid:#232a36;
+  --salmon:#f0a65c; --bass:#7ea3f2; --rS:rgba(240,166,92,.14); --rB:rgba(126,163,242,.14);
+  --focus:#7ea3f2; --accent:#7ea3f2; --good:#5cc592; --bad:#f28b82; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:22px 40px;display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+.wrap>*{min-width:0}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600}
+h1{margin:2px 0 4px;font-family:var(--f-body);font-size:clamp(24px,3.4vw,32px);text-wrap:balance}
+.lede{margin:0;color:var(--muted);max-width:72ch;font-family:var(--f-body);font-size:16px}
+.main{display:grid;grid-template-columns:300px minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:820px){.main{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.controls{display:grid;gap:14px}
+.group{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.group:first-child{border-top:none;padding-top:0}
+.group h2{margin:0;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.seg{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{flex:1;border:none;border-radius:0;background:transparent;font:inherit;font-size:13px;color:var(--ink);padding:6px 8px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--panel)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.ctl{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;font-size:14px}
+.ctl output{font-family:var(--f-num);font-size:13px;font-variant-numeric:tabular-nums}
+.ctl input{grid-column:1/-1;width:100%;accent-color:var(--accent)}
+canvas{display:block;width:100%;height:400px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:var(--muted);margin-top:8px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.sq{border-radius:2px}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:2px}
+.chip .k{font-size:12px;color:var(--muted)}
+.chip .v{font-family:var(--f-num);font-size:18px;font-variant-numeric:tabular-nums}
+.v.s{color:var(--salmon)} .v.b{color:var(--bass)}
+.calc{font-family:var(--f-num);font-size:13px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;overflow-x:auto;white-space:pre;line-height:1.6}
+.note{color:var(--muted);font-size:13px;margin:0;max-width:80ch}
+.tasks{margin:0;padding-left:20px;display:grid;gap:4px;font-size:14px}
+</style></head><body>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">ENGS 3302 · Week 2 · Notes §2.2–2.5</div>
+  <h1>Distance and Scaling Explorer</h1>
+  <p class="lede">Ten fish, two class centres and one new fish. Change the unit of width, the normalization and the distance, and watch the nearest-mean decision change.</p>
+</header>
+
+<div class="main">
+  <aside class="panel controls" aria-label="Controls">
+    <div class="group">
+      <h2>New fish</h2>
+      <div class="ctl"><label for="lx">Lightness</label><output id="lxo"></output><input type="range" id="lx" min="2" max="8" step="0.1" value="7.0"></div>
+      <div class="ctl"><label for="wx">Width (cm)</label><output id="wxo"></output><input type="range" id="wx" min="15" max="22" step="0.1" value="18.0"></div>
+    </div>
+    <div class="group">
+      <h2>Width measured in</h2>
+      <div class="seg" role="group" aria-label="Unit of width">
+        <button type="button" id="u-cm" aria-pressed="true">cm</button><button type="button" id="u-mm" aria-pressed="false">mm</button>
+      </div>
+    </div>
+    <div class="group">
+      <h2>Normalization</h2>
+      <div class="seg" role="group" aria-label="Normalization">
+        <button type="button" id="n-none" aria-pressed="true">None</button><button type="button" id="n-mm" aria-pressed="false">Min-max</button><button type="button" id="n-z" aria-pressed="false">z-score</button>
+      </div>
+    </div>
+    <div class="group">
+      <h2>Distance</h2>
+      <div class="seg" role="group" aria-label="Distance">
+        <button type="button" id="d-e" aria-pressed="true">Euclidean</button><button type="button" id="d-m" aria-pressed="false">Manhattan</button>
+      </div>
+    </div>
+    <div class="group">
+      <h2>Try</h2>
+      <ol class="tasks">
+        <li>Switch width to <b>mm</b>. Which class wins now?</li>
+        <li>Keep mm and choose <b>z-score</b>. Does the unit still matter?</li>
+        <li>Find a fish where Euclidean and Manhattan disagree.</li>
+      </ol>
+    </div>
+  </aside>
+
+  <section class="panel" aria-label="Feature space">
+    <canvas id="cv" role="img" aria-label="Scatter plot of the ten fish, the two class centres, the new fish and the decision regions"></canvas>
+    <div class="legend">
+      <span><span class="dot" style="background:var(--salmon)"></span>salmon</span>
+      <span><span class="dot sq" style="background:var(--bass)"></span>sea bass</span>
+      <span>✕ class centre</span><span>☆ new fish</span>
+      <span>shading = region of the nearest centre</span>
+    </div>
+  </section>
+</div>
+
+<div class="readout" aria-live="polite">
+  <div class="chip"><span class="k">Distance to salmon centre</span><span class="v s" id="ds"></span></div>
+  <div class="chip"><span class="k">Distance to sea bass centre</span><span class="v b" id="db"></span></div>
+  <div class="chip"><span class="k">Decision</span><span class="v" id="dec"></span></div>
+  <div class="chip"><span class="k">Training fish misclassified</span><span class="v" id="err"></span></div>
+</div>
+<div class="panel"><div class="calc" id="calc"></div>
+<p class="note" style="margin-top:8px">Normalization numbers (min, max, mean, standard deviation) always come from the ten training fish, then are applied to the new fish. Axes are stretched to fit, so the plot is not to scale; trust the numbers.</p></div>
+</div>
+
+<script>
+(function(){
+// The ten fish of the Notes: [lightness, width in cm]; 0 = salmon, 1 = sea bass.
+const FISH=[[2.5,16.0],[3.0,19.3],[3.8,16.5],[4.5,18.0],[5.6,17.0],[4.2,20.5],[5.2,19.0],[6.0,21.0],[6.8,19.5],[7.5,20.0]];
+const Y=[0,0,0,0,0,1,1,1,1,1];
+const S={unit:"cm",norm:"none",dist:"e",q:[7.0,18.0]};
+const $=id=>document.getElementById(id), css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+// Pure model: transform data and query, compute centres, distances, decision.
+function model(st){
+  const k=st.unit==="mm"?10:1;
+  const raw=FISH.map(p=>[p[0],p[1]*k]), q0=[st.q[0],st.q[1]*k];
+  let f=v=>v;
+  const col=j=>raw.map(p=>p[j]);
+  const stats=[0,1].map(j=>{const c=col(j),n=c.length,m=c.reduce((a,b)=>a+b,0)/n;
+    return {min:Math.min(...c),max:Math.max(...c),mean:m,sd:Math.sqrt(c.reduce((a,b)=>a+(b-m)**2,0)/n)};});
+  if(st.norm==="mm") f=p=>p.map((v,j)=>(v-stats[j].min)/(stats[j].max-stats[j].min));
+  if(st.norm==="z")  f=p=>p.map((v,j)=>(v-stats[j].mean)/stats[j].sd);
+  const X=raw.map(f), q=f(q0);
+  const C=[0,1].map(c=>{const pts=X.filter((_,i)=>Y[i]===c);return [0,1].map(j=>pts.reduce((a,p)=>a+p[j],0)/pts.length);});
+  const D=(a,b)=>st.dist==="e"?Math.hypot(a[0]-b[0],a[1]-b[1]):Math.abs(a[0]-b[0])+Math.abs(a[1]-b[1]);
+  const cls=p=>D(p,C[0])<=D(p,C[1])?0:1;
+  const d=[D(q,C[0]),D(q,C[1])];
+  return {X,q,C,d,dec:d[0]<=d[1]?0:1,err:X.reduce((a,p,i)=>a+(cls(p)!==Y[i]),0),cls,stats,k};
+}
+window.__model=model;
+
+const cv=$("cv"),ctx=cv.getContext("2d");
+function render(){
+  $("lxo").textContent=S.q[0].toFixed(1); $("wxo").textContent=S.q[1].toFixed(1);
+  const M=model(S), names=["salmon","sea bass"];
+  $("ds").textContent=M.d[0].toFixed(2); $("db").textContent=M.d[1].toFixed(2);
+  $("dec").textContent=names[M.dec]; $("dec").className="v "+(M.dec?"b":"s");
+  $("err").textContent=M.err+" of 10";
+  const f=v=>v.toFixed(2), op=S.dist==="e"?"Euclidean":"Manhattan";
+  $("calc").textContent=`new fish (transformed): (${f(M.q[0])}, ${f(M.q[1])})\n`+
+    `salmon centre:   (${f(M.C[0][0])}, ${f(M.C[0][1])})   ${op} distance ${f(M.d[0])}\n`+
+    `sea bass centre: (${f(M.C[1][0])}, ${f(M.C[1][1])})   ${op} distance ${f(M.d[1])}`;
+  draw(M);
+}
+function draw(M){
+  const dpr=window.devicePixelRatio||1,W=cv.clientWidth,H=cv.clientHeight;
+  cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+  const pad={l:52,r:14,t:12,b:40};
+  const all=M.X.concat([M.q],M.C), xs=all.map(p=>p[0]), ys=all.map(p=>p[1]);
+  const span=(a)=>{let lo=Math.min(...a),hi=Math.max(...a),m=(hi-lo)*0.12||1;return [lo-m,hi+m];};
+  const [x0,x1]=span(xs),[y0,y1]=span(ys);
+  const X=v=>pad.l+(v-x0)/(x1-x0)*(W-pad.l-pad.r), Yp=v=>H-pad.b-(v-y0)/(y1-y0)*(H-pad.t-pad.b);
+  // regions
+  const step=6;
+  for(let px=pad.l;px<W-pad.r;px+=step)for(let py=pad.t;py<H-pad.b;py+=step){
+    const vx=x0+(px-pad.l)/(W-pad.l-pad.r)*(x1-x0), vy=y0+(H-pad.b-py)/(H-pad.t-pad.b)*(y1-y0);
+    ctx.fillStyle=M.cls([vx,vy])?css("--rB"):css("--rS");ctx.fillRect(px,py,step,step);}
+  // axes and ticks
+  ctx.strokeStyle=css("--line");ctx.fillStyle=css("--muted");ctx.font="12px "+css("--f-ui");ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,H-pad.b);ctx.lineTo(W-pad.r,H-pad.b);ctx.stroke();
+  const ticks=(lo,hi)=>{const r=hi-lo,st=Math.pow(10,Math.floor(Math.log10(r/5)));const s=[1,2,5,10].map(m=>m*st).find(m=>r/m<=7);const out=[];for(let v=Math.ceil(lo/s)*s;v<=hi;v+=s)out.push(+v.toFixed(6));return out;};
+  ticks(x0,x1).forEach(v=>{ctx.textAlign="center";ctx.fillText(+v.toFixed(2),X(v),H-pad.b+16);});
+  ticks(y0,y1).forEach(v=>{ctx.textAlign="right";ctx.fillText(+v.toFixed(2),pad.l-6,Yp(v)+4);});
+  const unitW=S.norm==="none"?(S.unit==="mm"?"width (mm)":"width (cm)"):(S.norm==="z"?"width (z-score)":"width (min-max)");
+  const unitL=S.norm==="none"?"lightness":(S.norm==="z"?"lightness (z-score)":"lightness (min-max)");
+  ctx.textAlign="center";ctx.fillText(unitL,(pad.l+W-pad.r)/2,H-6);
+  ctx.save();ctx.translate(14,(pad.t+H-pad.b)/2);ctx.rotate(-Math.PI/2);ctx.fillText(unitW,0,0);ctx.restore();
+  // lines to centres
+  [0,1].forEach(c=>{ctx.strokeStyle=css(c?"--bass":"--salmon");ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(X(M.q[0]),Yp(M.q[1]));
+    if(S.dist==="e")ctx.lineTo(X(M.C[c][0]),Yp(M.C[c][1]));else{ctx.lineTo(X(M.C[c][0]),Yp(M.q[1]));ctx.lineTo(X(M.C[c][0]),Yp(M.C[c][1]));}ctx.stroke();});
+  // fish
+  M.X.forEach((p,i)=>{ctx.fillStyle=css(Y[i]?"--bass":"--salmon");if(Y[i])ctx.fillRect(X(p[0])-5,Yp(p[1])-5,10,10);else{ctx.beginPath();ctx.arc(X(p[0]),Yp(p[1]),5.5,0,7);ctx.fill();}});
+  // centres
+  M.C.forEach((c,i)=>{const x=X(c[0]),y=Yp(c[1]);ctx.strokeStyle=css(i?"--bass":"--salmon");ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(x-8,y-8);ctx.lineTo(x+8,y+8);ctx.moveTo(x+8,y-8);ctx.lineTo(x-8,y+8);ctx.stroke();});
+  // new fish star
+  const sx=X(M.q[0]),sy=Yp(M.q[1]);ctx.beginPath();for(let i=0;i<10;i++){const r=i%2?5:12,a=-Math.PI/2+i*Math.PI/5;ctx.lineTo(sx+r*Math.cos(a),sy+r*Math.sin(a));}ctx.closePath();
+  ctx.fillStyle=css("--panel");ctx.fill();ctx.strokeStyle=css("--ink");ctx.lineWidth=1.5;ctx.stroke();
+}
+function seg(ids,key,vals){ids.forEach((id,i)=>$(id).onclick=()=>{S[key]=vals[i];ids.forEach(j=>$(j).setAttribute("aria-pressed",j===id));render();});}
+seg(["u-cm","u-mm"],"unit",["cm","mm"]);
+seg(["n-none","n-mm","n-z"],"norm",["none","mm","z"]);
+seg(["d-e","d-m"],"dist",["e","m"]);
+$("lx").oninput=e=>{S.q[0]=+e.target.value;render();};
+$("wx").oninput=e=>{S.q[1]=+e.target.value;render();};
+window.addEventListener("resize",render);
+matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",render);
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+render();
+})();
+</script>
+
+</body></html>

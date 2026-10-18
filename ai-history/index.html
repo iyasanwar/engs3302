@@ -1,0 +1,549 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>مفاصل الذكاء الاصطناعي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a signal rail of milestones (read right→left) above one detail card; keystone milestones carry a double ring. */
+:root{
+  --bg:#F3F5F9; --surface:#FFFFFF; --ink:#141C2A; --muted:#5A6577; --line:#D5DBE5;
+  --accent:#2346C8; --accent-soft:#E3E9FB; --winter:#8FA6C2; --story:#FBF3E6; --story-line:#E7C995;
+  --c-theory:#6B4FB8; --c-arch:#2346C8; --c-train:#0E7C66; --c-data:#B4630A; --c-land:#B42350; --c-wall:#5A6577;
+  --f-display:"Reem Kufi","IBM Plex Sans Arabic",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans Arabic","Segoe UI",Tahoma,system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D121C; --surface:#151C2A; --ink:#E6EBF4; --muted:#9AA5B8; --line:#273145;
+  --accent:#8AA4FF; --accent-soft:#1D2742; --winter:#4E6280; --story:#241E14; --story-line:#6B5631;
+  --c-theory:#B39CFF; --c-arch:#8AA4FF; --c-train:#4FD1AE; --c-data:#F2A24B; --c-land:#FF7FA3; --c-wall:#9AA5B8;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D121C; --surface:#151C2A; --ink:#E6EBF4; --muted:#9AA5B8; --line:#273145;
+  --accent:#8AA4FF; --accent-soft:#1D2742; --winter:#4E6280; --story:#241E14; --story-line:#6B5631;
+  --c-theory:#B39CFF; --c-arch:#8AA4FF; --c-train:#4FD1AE; --c-data:#F2A24B; --c-land:#FF7FA3; --c-wall:#9AA5B8;
+  color-scheme:dark}
+*{box-sizing:border-box}
+html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.8}
+img{max-width:100%}
+.wrap{max-width:1360px;margin:0 auto;padding-inline:max(16px,clamp(20px,3vw,40px));padding-block:24px 40px;display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+header{display:grid;gap:8px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;color:var(--muted);direction:ltr;text-align:right}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(26px,2.6vw,38px);line-height:1.3;margin:0;text-wrap:balance}
+.lede{margin:0;max-width:78ch;color:var(--muted);font-size:15.5px;line-height:1.8}
+.lede b{color:var(--ink);font-weight:600}
+.thread{margin:0;font-size:14px;color:var(--muted);max-width:90ch}
+.thread span{color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{font:inherit;font-size:13.5px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:4px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.chip .dot{width:9px;height:9px;border-radius:50%;background:var(--c)}
+.chip .en{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);direction:ltr}
+.chip.keychip{border-color:var(--accent);color:var(--accent);font-weight:600}
+.chip.keychip .ring{width:12px;height:12px;border-radius:50%;border:2px solid var(--accent);box-shadow:0 0 0 2px var(--surface),0 0 0 3.5px var(--accent)}
+.chip[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.chip.keychip[aria-pressed="true"]{background:var(--accent);color:var(--surface);border-color:var(--accent);box-shadow:none}
+.chip.keychip[aria-pressed="true"] .ring{border-color:var(--surface);box-shadow:none}
+.sep{width:1px;height:22px;background:var(--line)}
+.chip:focus-visible,.node:focus-visible,.nav button:focus-visible,a:focus-visible,.opens button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* rail */
+.rail-box{overflow-x:auto;padding-block:6px 10px;scrollbar-width:thin}
+.rail{display:flex;min-width:1080px;width:100%}
+.era{display:grid;grid-template-rows:auto auto;flex:var(--n) 1 0;min-width:0;padding-inline:4px}
+.era-label{font-size:12.5px;color:var(--muted);padding-inline:4px;padding-bottom:6px;border-bottom:1px dashed var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.era-label .en{font-family:var(--f-mono);font-size:11px;opacity:.85}
+.era-nodes{display:flex}
+.rail-row{display:flex;justify-content:space-between;align-items:center;gap:12px 20px;flex-wrap:wrap}
+.legend{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i.w{display:inline-block;width:34px;height:3px;background:repeating-linear-gradient(90deg,var(--winter) 0 6px,transparent 6px 11px)}
+.legend i.k{display:inline-block;width:12px;height:12px;border-radius:50%;border:2px solid var(--muted);box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--muted)}
+.node{font:inherit;background:none;border:0;color:var(--ink);cursor:pointer;display:grid;justify-items:center;gap:4px;padding:14px 2px 6px;flex:1 1 0;min-width:0;position:relative;border-radius:8px}
+.node:hover{background:var(--accent-soft)}
+.node::before{content:"";position:absolute;top:24px;inset-inline:0;height:3px;background:var(--accent)}
+.node.cold::before{background:repeating-linear-gradient(90deg,var(--winter) 0 6px,transparent 6px 11px)}
+.node .pip{width:20px;height:20px;border-radius:50%;background:var(--surface);border:3px solid var(--c);position:relative;z-index:1;transition:transform .2s}
+.node.key .pip{box-shadow:0 0 0 3px var(--bg),0 0 0 5.5px var(--c)}
+.node .yr{font-family:var(--f-mono);font-size:13px;font-weight:500;font-variant-numeric:tabular-nums}
+.node .nm{font-size:11.5px;color:var(--muted);line-height:1.35;text-align:center;direction:ltr}
+.node.key .nm{color:var(--ink);font-weight:600}
+.node[aria-current="true"] .pip{background:var(--c);transform:scale(1.25)}
+.node[aria-current="true"] .yr{color:var(--accent)}
+.node.dim{opacity:.28}
+.nav{display:flex;gap:12px;align-items:center}
+.nav button{font:inherit;font-size:14px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 14px;cursor:pointer}
+.nav button:disabled{opacity:.4;cursor:default}
+.count{font-family:var(--f-mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* card */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:clamp(18px,2.4vw,32px);display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:0 clamp(24px,3vw,44px);border-top:5px solid var(--c)}
+.main,.side{display:grid;gap:18px;align-content:start;min-width:0}
+.side{border-inline-start:1px solid var(--line);padding-inline-start:clamp(24px,3vw,44px)}
+@media (max-width:900px){.card{grid-template-columns:1fr;gap:22px}.side{border:0;padding:0}}
+.card-head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 20px;align-items:center}
+.card-head .meta{grid-column:1/-1}
+.card-head .big-year{grid-row:2/4}
+.meta{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:13.5px;color:var(--muted)}
+.cat{display:inline-flex;align-items:center;gap:6px;color:var(--c);font-weight:600}
+.cat::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--c)}
+.date{font-family:var(--f-mono);direction:ltr}
+.keybadge{font-size:12.5px;font-weight:600;color:var(--surface);background:var(--accent);border-radius:999px;padding:1px 10px}
+.big-year{font-family:var(--f-mono);font-size:clamp(42px,4.6vw,64px);font-weight:500;line-height:1;color:var(--c);font-variant-numeric:tabular-nums}
+.title-ar{font-family:var(--f-display);font-weight:700;font-size:clamp(22px,2.2vw,30px);line-height:1.4;margin:0;text-wrap:balance}
+.title-en{font-family:var(--f-mono);font-size:15px;color:var(--muted);direction:ltr;text-align:right;margin:0;unicode-bidi:isolate}
+.verdict{font-size:18px;font-weight:500;margin:0;max-width:68ch;padding-inline-start:14px;border-inline-start:3px solid var(--c);line-height:1.7}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media (max-width:1100px){.cols{grid-template-columns:1fr}}
+.blk{min-width:0;display:grid;gap:6px;align-content:start}
+.blk h3,.viz h3,.refs h3,.terms h3,.why h3,.story h3{margin:0;font-size:13px;letter-spacing:.02em;color:var(--muted);font-weight:600}
+.blk p{margin:0}
+.why{border:1px solid var(--accent);border-radius:10px;padding:12px 16px;display:grid;gap:4px;background:var(--accent-soft)}
+.why h3{color:var(--accent)}
+.why p{margin:0;font-weight:500}
+.story{border-inline-start:3px solid var(--story-line);background:var(--story);border-radius:0 10px 10px 0;padding:12px 16px;display:grid;gap:4px}
+.story p{margin:0}
+.formula-box{display:grid;gap:6px}
+.formula{font-family:var(--f-mono);direction:ltr;text-align:left;background:var(--accent-soft);border-radius:8px;padding:10px 14px;font-size:14.5px;overflow-x:auto;white-space:nowrap}
+.fnote{margin:0;font-size:13.5px;color:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0}
+.fact{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:2px;min-width:0}
+.fact dt{font-size:12.5px;color:var(--muted)}
+.fact dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.viz{display:grid;gap:8px}
+.viz svg{width:100%;height:auto;display:block}
+.terms{display:grid;gap:8px}
+.terms ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.terms a{display:inline-grid;gap:0;text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:4px 10px;color:var(--ink);line-height:1.4}
+.terms a:hover{border-color:var(--accent);background:var(--accent-soft)}
+.terms .t-en{font-family:var(--f-mono);font-size:13px;direction:ltr;text-align:right;color:var(--accent)}
+.terms .t-ar{font-size:12.5px;color:var(--muted)}
+.terms small{font-size:12px;color:var(--muted)}
+.refs{display:grid;gap:6px;font-size:14px}
+.refs ul{margin:0;padding-inline-start:18px;display:grid;gap:4px}
+.refs a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:3px;direction:ltr;unicode-bidi:isolate;overflow-wrap:anywhere}
+.opens{font-size:14px;color:var(--muted);margin:0}
+.opens button{font:inherit;color:var(--accent);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+footer{font-size:13px;color:var(--muted);max-width:78ch;display:grid;gap:6px}
+footer p{margin:0}
+@media (prefers-reduced-motion:reduce){.node .pip{transition:none}}
+footer .sig{margin-top:14px;font-size:14px;color:var(--muted)}
+</style>
+</head><body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">1943 → 2025 · 17 MILESTONES · 7 KEYSTONES</div>
+    <h1>المفاصل التي صنعت الذكاء الاصطناعي الحديث</h1>
+    <p class="lede">سبع عشرة محطة، اختيرت كل واحدة منها لأنها أزالت عقبة حقيقية أو فتحت بابًا جديدًا. <b>سبع منها مفاصل كبرى</b> غيّرت اتجاه المجال كله، وتظهر على الخط بحلقة مزدوجة. اضغط على أي سنة لترى المشكلة التي كانت قائمة، والفكرة التي حلّتها، والأرقام الموثّقة، والمصطلحات الإنجليزية التي تبحث بها، والمرجع الأصلي.</p>
+    <p class="thread">الخيط الذي يربطها: <span>عصبون يحسب</span> ← <span>عصبون يتعلّم</span> ← <span>شبكة عميقة تتدرّب</span> ← <span>بيانات ضخمة ومعالجات رسوميات</span> ← <span>معمارية تتوسّع</span> ← <span>نماذج تتبع التعليمات</span> ← <span>نماذج تستدل</span></p>
+  </header>
+
+  <div class="chips" id="chips" role="group" aria-label="تصفية المحطات"></div>
+
+  <div>
+    <div class="rail-box"><div class="rail" id="rail"></div></div>
+    <div class="rail-row">
+      <div class="legend">
+        <span><i class="k"></i> مفصل كبير (Keystone)</span>
+        <span><i class="w"></i> فترة ركود أبحاث الشبكات العصبية (AI Winter)</span>
+      </div>
+      <div class="nav">
+        <button id="prev" type="button">→ السابق</button>
+        <span class="count" id="count"></span>
+        <button id="next" type="button">التالي ←</button>
+      </div>
+    </div>
+  </div>
+
+  <article class="card" id="card" aria-live="polite"></article>
+
+  <footer>
+    <p>التواريخ والأرقام مأخوذة من الأوراق الأصلية أو الإعلانات الرسمية المذكورة في كل بطاقة. حين يختلف تاريخ النشر الأول عن تاريخ المؤتمر، اعتُمد تاريخ الظهور الأول.</p>
+    <p>كل مصطلح في قسم «مصطلحات للبحث» رابط يفتح بحثًا في Google Scholar مباشرة.</p>
+    <p>للتنقل بلوحة المفاتيح: السهمان الأيمن والأيسر.</p>
+    <p class="sig">Iyas A. I. Alshaikhkhalil · <span>جامعة الأقصى</span> · <span class="en">ENGS 3302</span></p>
+  </footer>
+</div>
+
+<script>
+const CATS = {
+  theory:{ar:"نظرية وأسس",en:"Theory",c:"--c-theory"},
+  arch:{ar:"معمارية الشبكة",en:"Architecture",c:"--c-arch"},
+  train:{ar:"تقنية تدريب",en:"Training",c:"--c-train"},
+  data:{ar:"بيانات وحوسبة",en:"Data & Compute",c:"--c-data"},
+  land:{ar:"إنجاز فارق",en:"Breakthrough",c:"--c-land"},
+  wall:{ar:"عقبة",en:"Roadblock",c:"--c-wall"}
+};
+const ERAS = {
+  a:["الأسس","Foundations"],
+  b:["الشتاء والعودة","AI Winter & Revival"],
+  c:["انفجار التعلّم العميق","Deep Learning Boom"],
+  d:["عصر المحوّلات والنماذج الكبيرة","Transformers & LLMs"]
+};
+const M = [
+ {id:"neuron",y:"1943",date:"Dec 1943",era:"a",cat:"theory",
+  en:"McCulloch–Pitts Neuron",ar:"العصبون الاصطناعي الأول",short:"Neuron",
+  verdict:"أول نموذج رياضي يصف الخلية العصبية كوحدة حسابية بسيطة.",
+  problem:"لم يكن هناك نموذج رياضي يربط عمل الخلايا العصبية (Neurons) في الدماغ بالحساب أو المنطق.",
+  idea:"وارن ماكالوك (Warren McCulloch) ووالتر بيتس (Walter Pitts) وصفا العصبون كوحدة ثنائية (Binary unit): تجمع مدخلاتها، فإذا تجاوز المجموع عتبة (Threshold) معينة أخرجت 1، وإلا أخرجت 0. ثم بيّنا أن شبكة من هذه الوحدات تستطيع تنفيذ العمليات المنطقية AND وOR وNOT، وبالتالي أي تعبير منطقي.",
+  formula:"y = 1  if  Σ wᵢ·xᵢ ≥ θ   else 0",
+  fnote:"x المدخلات، w الأوزان (Weights)، θ العتبة. في النموذج الأصلي لا تتغيّر الأوزان ولا تتعلّم؛ هذه كتابة حديثة مبسّطة له.",
+  facts:[["المجلة","Bulletin of Mathematical Biophysics"],["المجلد","5 · ص 115–133"]],
+  terms:[["McCulloch-Pitts neuron","عصبون ماكالوك-بيتس"],["Artificial neuron","العصبون الاصطناعي"],["Threshold logic unit","وحدة منطق العتبة"]],
+  refs:[["McCulloch & Pitts (1943), DOI","https://doi.org/10.1007/BF02478259"]],
+  opens:"perceptron"},
+
+ {id:"perceptron",y:"1958",date:"1958 → 1960",era:"a",cat:"arch",key:true,
+  en:"Perceptron",ar:"البيرسبترون: أول نموذج يتعلّم",short:"Perceptron",
+  verdict:"أول نموذج يتعلّم أوزانه (Weights) من الأمثلة بدل أن يضبطها الإنسان.",
+  problem:"أوزان عصبون ماكالوك وبيتس ثابتة، يحددها الإنسان يدويًا لكل مسألة.",
+  idea:"فرانك روزنبلات (Frank Rosenblatt) وضع قاعدة تعلّم بسيطة: عندما يخطئ النموذج في تصنيف مثال، تُعدَّل الأوزان قليلًا باتجاه الإجابة الصحيحة، وعندما يصيب لا يتغيّر شيء. هذا هو التعلّم الخاضع للإشراف (Supervised Learning) في أبسط صوره. عُرضت الفكرة على حاسوب IBM 704 عام 1958، ثم بُنيت آلة Mark I Perceptron وعُرضت علنًا في يونيو 1960.",
+  formula:"w ← w + η (y − ŷ) x",
+  fnote:"η معدل التعلّم (Learning rate)، y الإجابة الصحيحة، ŷ إجابة النموذج. إذا أصاب النموذج فإن (y − ŷ) = 0 ولا تتغيّر الأوزان.",
+  why:"هنا وُلدت فكرة «التعلّم من البيانات» التي يقوم عليها المجال كله حتى اليوم.",
+  story:"في يوليو 1958 نقلت صحيفة نيويورك تايمز توقّع البحرية الأمريكية بأن هذه الآلة ستمشي وتتكلم وتعي وجودها يومًا ما. هذه التوقعات المبالغ فيها جعلت خيبة الأمل بعد سنوات أشد، وهو درس يتكرر في تاريخ المجال.",
+  facts:[["المطوّر","Frank Rosenblatt"],["الجهة","Cornell Aeronautical Laboratory"],["التمويل","Office of Naval Research"]],
+  terms:[["Perceptron","البيرسبترون"],["Perceptron learning rule","قاعدة تعلّم البيرسبترون"],["Supervised learning","التعلّم الخاضع للإشراف"],["Linear classifier","المصنِّف الخطي"]],
+  refs:[["Rosenblatt (1958), Psychological Review 65(6)","https://doi.org/10.1037/h0042519"],["Perceptron — history and Mark I","https://en.wikipedia.org/wiki/Perceptron"]],
+  opens:"xor"},
+
+ {id:"xor",y:"1969",date:"1969",era:"a",cat:"wall",
+  en:"Perceptrons (book) — the XOR limit",ar:"حدود البيرسبترون ومشكلة XOR",short:"XOR limit",
+  verdict:"برهان رياضي على حدود البيرسبترون، أسهم في دخول أبحاث الشبكات العصبية مرحلة ركود طويلة.",
+  problem:"كتاب «Perceptrons» لمارفن مينسكي (Marvin Minsky) وسيمور بابرت (Seymour Papert) بيّن أن البيرسبترون ذا الطبقة الواحدة لا يستطيع إلا رسم خط فاصل مستقيم بين الفئتين. لذلك يعجز عن أي مسألة غير قابلة للفصل الخطي (Not linearly separable)، وأبسط مثال عليها دالة XOR.",
+  idea:"الحل كان معروفًا من حيث المبدأ: إضافة طبقات خفية (Hidden layers) بين المدخل والمخرج. لكن لم تكن هناك طريقة عملية لتدريب هذه الطبقات. فانتقل التمويل والاهتمام إلى الذكاء الاصطناعي الرمزي (Symbolic AI) والأنظمة الخبيرة (Expert systems) لقرابة عقدين.",
+  formula:"XOR: (0,0)→0   (0,1)→1   (1,0)→1   (1,1)→0",
+  fnote:"لا يوجد خط مستقيم واحد يفصل النقطتين (0,1) و(1,0) عن النقطتين (0,0) و(1,1).",
+  viz:"xor",
+  facts:[["المؤلفان","Marvin Minsky · Seymour Papert"],["الناشر","MIT Press"]],
+  terms:[["Linear separability","قابلية الفصل الخطي"],["XOR problem","مشكلة XOR"],["Hidden layer","الطبقة الخفية"],["AI winter","شتاء الذكاء الاصطناعي"]],
+  refs:[["Perceptrons (book) — overview","https://en.wikipedia.org/wiki/Perceptrons_(book)"]],
+  opens:"backprop"},
+
+ {id:"backprop",y:"1986",date:"9 Oct 1986",era:"b",cat:"train",cold:true,key:true,
+  en:"Backpropagation",ar:"الانتشار العكسي للخطأ",short:"Backprop",
+  verdict:"الطريقة التي جعلت تدريب الطبقات الخفية ممكنًا، وما زالت كل الشبكات العصبية تُدرَّب بها اليوم.",
+  problem:"الشبكة تخطئ في المخرج. كيف نعرف مقدار مسؤولية كل وزن في طبقة داخلية بعيدة عن هذا الخطأ، لنعدّله بالقدر المناسب؟",
+  idea:"نحسب الخطأ عند المخرج، ثم نرجع به طبقةً طبقة نحو المدخل باستخدام قاعدة السلسلة (Chain rule) من التفاضل. هكذا نحصل في تمريرة عكسية واحدة (Backward pass) على التدرّج (Gradient) لكل الأوزان، ثم نعدّلها بالانحدار التدرّجي (Gradient descent). ورقة ديفيد روملهارت (David Rumelhart) وجيفري هينتون (Geoffrey Hinton) ورونالد ويليامز (Ronald Williams) في مجلة Nature أظهرت أن الطبقات الخفية تتعلّم وحدها تمثيلات (Representations) مفيدة للمسألة. الرياضيات نفسها ظهرت قبل ذلك (لينايما Linnainmaa عام 1970، ووربوس Werbos عام 1974)، لكن هذه الورقة هي التي نشرت الفكرة وأقنعت المجتمع العلمي.",
+  formula:"∂L/∂wᵢ = ∂L/∂y · ∂y/∂h · ∂h/∂wᵢ",
+  fnote:"L دالة الخسارة (Loss function). نضرب المشتقات على طول الطريق من الخسارة حتى الوزن.",
+  why:"كل نموذج تراه اليوم، من مصنِّف الصور إلى ChatGPT، يُدرَّب بهذه الخوارزمية. وهي التي حلّت عقدة XOR عمليًا.",
+  story:"واصل هينتون العمل على الشبكات العصبية حين ابتعد عنها معظم الباحثين. نال لاحقًا جائزة تورينغ لعام 2018 مع يوشوا بنجيو ويان لوكون، ثم جائزة نوبل في الفيزياء 2024 مع جون هوبفيلد.",
+  facts:[["المجلة","Nature 323 · ص 533–536"],["جائزة تورينغ 2018","Hinton · Bengio · LeCun"],["نوبل الفيزياء 2024","Hinton · Hopfield"]],
+  terms:[["Backpropagation","الانتشار العكسي"],["Chain rule","قاعدة السلسلة"],["Gradient descent","الانحدار التدرّجي"],["Loss function","دالة الخسارة"],["Multilayer perceptron (MLP)","البيرسبترون متعدد الطبقات"]],
+  refs:[["Rumelhart, Hinton & Williams (1986), Nature","https://www.nature.com/articles/323533a0"],["ACM Turing Award 2018","https://awards.acm.org/about/2018-turing"],["Nobel Prize in Physics 2024","https://www.nobelprize.org/prizes/physics/2024/summary/"]],
+  opens:"cnn"},
+
+ {id:"cnn",y:"1989",date:"1989",era:"b",cat:"arch",cold:true,
+  en:"Convolutional Neural Network (LeNet)",ar:"الشبكة الالتفافية",short:"CNN",
+  verdict:"شبكة مصمَّمة خصيصًا للصور، تتعلّم أكثر بعدد أوزان أقل بكثير.",
+  problem:"لو ربطنا كل بكسل (Pixel) في الصورة بكل عصبون في الطبقة التالية (Fully connected)، لاحتجنا عددًا هائلًا من الأوزان. والأسوأ أن الشبكة تتعلّم شكل الحرف في كل موضع من الصورة على حدة.",
+  idea:"يان لوكون (Yann LeCun) وزملاؤه في Bell Labs استخدموا مرشّحًا صغيرًا (Filter أو Kernel) ينزلق على الصورة كلها بالأوزان نفسها، وهذا ما يسمّى مشاركة الأوزان (Weight sharing). فإذا تعلّم المرشّح اكتشاف حافة أو منحنى، اكتشفه في أي مكان من الصورة. ودُرّبت الشبكة كلها بالانتشار العكسي من البكسل حتى التصنيف، وطُبّقت على قراءة الرموز البريدية المكتوبة باليد لصالح البريد الأمريكي. البنية مستوحاة من شبكة Neocognitron التي قدّمها كونيهيكو فوكوشيما (Kunihiko Fukushima) عام 1980.",
+  formula:"(I ∗ K)(i,j) = Σₘ Σₙ I(i+m, j+n) · K(m,n)",
+  fnote:"I الصورة، K المرشّح. في كل موضع نضرب القيم المتقابلة ونجمعها.",
+  facts:[["المجلة","Neural Computation 1(4)"],["التطبيق","الرموز البريدية الأمريكية"],["السلف","Neocognitron (1980)"]],
+  terms:[["Convolutional Neural Network (CNN)","الشبكة العصبية الالتفافية"],["Convolution","الالتفاف"],["Kernel / Filter","المرشّح"],["Weight sharing","مشاركة الأوزان"],["LeNet","LeNet"]],
+  refs:[["LeCun et al. (1989), DOI","https://doi.org/10.1162/neco.1989.1.4.541"],["Fukushima (1980), Neocognitron","https://doi.org/10.1007/BF00344251"]],
+  opens:"lstm"},
+
+ {id:"lstm",y:"1997",date:"1991 → 1997",era:"b",cat:"train",cold:true,
+  en:"Vanishing Gradient → LSTM",ar:"تلاشي التدرّج وشبكة LSTM",short:"LSTM",
+  verdict:"تشخيص دقيق لمشكلة تلاشي التدرّج، وأول معمارية صُمّمت لتتجاوزها.",
+  problem:"في الانتشار العكسي يُضرب التدرّج في مشتقة (Derivative) كل طبقة أو كل خطوة زمنية (Time step). أقصى قيمة لمشتقة دالة Sigmoid هي 0.25، فبعد عشر خطوات يصبح التدرّج أصغر من جزء من مليون. النتيجة: الطبقات الأولى، أو الكلمات الأولى في الجملة، لا تتعلّم تقريبًا. هذه هي مشكلة تلاشي التدرّج (Vanishing gradient problem)، وقد حلّلها سيب هوكرايتر (Sepp Hochreiter) في رسالته عام 1991.",
+  idea:"هوكرايتر ويورغن شميدهوبر (Jürgen Schmidhuber) صمّما شبكة تكرارية (Recurrent Neural Network, RNN) فيها خلية ذاكرة (Memory cell) يمر عبرها الخطأ دون أن يتضاءل، وسمّيا ذلك «دوّار الخطأ الثابت» (Constant Error Carousel). وأضافا بوابات (Gates) تتعلّم متى تكتب في الذاكرة ومتى تقرأ منها. النتيجة: تعلّم علاقات تفصل بينها أكثر من 1000 خطوة زمنية.",
+  formula:"cₜ = fₜ ⊙ cₜ₋₁ + iₜ ⊙ c̃ₜ",
+  fnote:"c الذاكرة، f بوابة النسيان (Forget gate)، i بوابة الإدخال (Input gate). بوابة النسيان أُضيفت لاحقًا عام 2000 (Gers وزملاؤه).",
+  viz:"vanish",
+  facts:[["التشخيص","Hochreiter, Diploma thesis, 1991"],["الحل","Neural Computation 9(8), 1997"]],
+  terms:[["Vanishing gradient problem","مشكلة تلاشي التدرّج"],["Recurrent Neural Network (RNN)","الشبكة العصبية التكرارية"],["Long Short-Term Memory (LSTM)","الذاكرة الطويلة قصيرة المدى"],["Gating mechanism","آلية البوابات"]],
+  refs:[["Hochreiter & Schmidhuber (1997), DOI","https://doi.org/10.1162/neco.1997.9.8.1735"],["Gers, Schmidhuber & Cummins (2000), Forget gate","https://doi.org/10.1162/089976600300015015"],["Vanishing gradient problem","https://en.wikipedia.org/wiki/Vanishing_gradient_problem"]],
+  opens:"imagenet"},
+
+ {id:"imagenet",y:"2009",date:"Jun 2009",era:"c",cat:"data",
+  en:"ImageNet",ar:"قاعدة بيانات ImageNet",short:"ImageNet",
+  verdict:"البيانات الضخمة الموسومة التي احتاجتها الشبكات العميقة لتُثبت قدرتها.",
+  problem:"قواعد بيانات الصور المتاحة كانت صغيرة: آلاف الصور وعشرات الفئات. النموذج الكبير المدرَّب عليها يحفظ الأمثلة بدل أن يتعلّم منها، وهذا ما يسمّى الإفراط في التوافق (Overfitting).",
+  idea:"فريق في جامعة برينستون بقيادة لي فاي فاي (Fei-Fei Li) بنى قاعدة صور ضخمة مرتبة وفق شجرة مفاهيم WordNet. ولأن وسم (Labeling) ملايين الصور مستحيل على فريق صغير، وُزّع العمل على آلاف العاملين عبر منصة Amazon Mechanical Turk، وهذا ما يسمّى التعهيد الجماعي (Crowdsourcing). ومن هذه القاعدة انطلقت عام 2010 مسابقة ILSVRC السنوية بألف فئة.",
+  story:"رأى كثيرون المشروع آنذاك مضيعة للوقت، لأن الاعتقاد السائد كان أن الخوارزمية الأفضل أهم من البيانات الأكثر. ImageNet أثبت أن البيانات نفسها يمكن أن تكون هي الاختراق.",
+  facts:[["عند الإطلاق","3.2 مليون صورة · 5,247 فئة"],["لاحقًا","أكثر من 14 مليون صورة"],["المؤتمر","CVPR 2009"]],
+  terms:[["ImageNet","ImageNet"],["Labeled dataset","البيانات الموسومة"],["Overfitting","الإفراط في التوافق"],["Crowdsourcing","التعهيد الجماعي"],["ILSVRC","مسابقة ImageNet السنوية"]],
+  refs:[["Deng et al. (2009), DOI","https://doi.org/10.1109/CVPR.2009.5206848"]],
+  opens:"relu"},
+
+ {id:"relu",y:"2011",date:"2010 → 2011",era:"c",cat:"train",
+  en:"ReLU — Rectified Linear Unit",ar:"دالة التفعيل ReLU",short:"ReLU",
+  verdict:"تغيير بسيط في دالة التفعيل جعل الشبكات العميقة قابلة للتدريب مباشرة.",
+  problem:"دالتا التفعيل (Activation functions) Sigmoid وtanh تتشبّعان (Saturation): عندما يكبر المدخل تقترب المشتقة من الصفر، فيتلاشى التدرّج عبر الطبقات. لذلك كانت الشبكات العميقة تحتاج حيلة إضافية هي التدريب المسبق غير الخاضع للإشراف (Unsupervised pre-training) لكل طبقة على حدة.",
+  idea:"استبدالهما بالدالة ReLU: تُخرج المدخل كما هو إذا كان موجبًا، وصفرًا إذا كان سالبًا. مشتقتها تساوي 1 لكل قيمة موجبة، فلا يتضاءل التدرّج عبرها، وحسابها سريع جدًا. أظهر كزافييه غلورو (Xavier Glorot) وأنطوان بوردس (Antoine Bordes) ويوشوا بنجيو (Yoshua Bengio) أن الشبكات العميقة بهذه الدالة تصل إلى أفضل أدائها دون تدريب مسبق. وكان فينود ناير (Vinod Nair) وهينتون قد استخدماها قبلهم عام 2010.",
+  formula:"ReLU(x) = max(0, x)     ReLU′(x) = 1  for x > 0",
+  facts:[["المؤتمر","AISTATS 2011"],["الأثر","الاستغناء عن التدريب المسبق"]],
+  terms:[["ReLU (Rectified Linear Unit)","دالة التفعيل المقوَّمة"],["Activation function","دالة التفعيل"],["Saturation","التشبّع"],["Unsupervised pre-training","التدريب المسبق غير الخاضع للإشراف"]],
+  refs:[["Glorot, Bordes & Bengio (2011)","https://proceedings.mlr.press/v15/glorot11a.html"]],
+  opens:"alexnet"},
+
+ {id:"alexnet",y:"2012",date:"30 Sep 2012",era:"c",cat:"land",key:true,
+  en:"AlexNet",ar:"لحظة AlexNet",short:"AlexNet",
+  verdict:"اللحظة التي اقتنع فيها مجتمع الرؤية الحاسوبية (Computer Vision) بالتعلّم العميق (Deep Learning)، وتحوّل إليه خلال عام أو عامين.",
+  problem:"التعرّف على الصور كان يعتمد على ميزات (Features) يصممها الخبراء يدويًا، مثل SIFT، ثم يُدرَّب مصنِّف بسيط فوقها. التحسّن من سنة إلى أخرى كان بطيئًا.",
+  idea:"أليكس كريجيفسكي (Alex Krizhevsky) وإيليا سوتسكيفر (Ilya Sutskever) وجيفري هينتون جمعوا القطع كلها في نموذج واحد: شبكة التفافية عميقة، ودالة ReLU، وتقنية Dropout التي تمنع الحفظ، وبيانات ImageNet. ودرّبوها على بطاقتي رسوميات (GPU) من نوع GTX 580 مصممتين أصلًا للألعاب. تفوّقت على المركز الثاني بأكثر من 10 نقاط مئوية في نسبة الخطأ.",
+  viz:"alexnet",
+  why:"أثبتت أن الشبكات العميقة مع البيانات الكبيرة ومعالجات الرسوميات تتفوق على عقود من هندسة الميزات اليدوية. ومنذ ذلك الحين أصبحت GPU المحرّك الأساسي لتدريب الذكاء الاصطناعي.",
+  story:"لم يُدرَّب النموذج في مركز بيانات ضخم، بل على بطاقتي ألعاب. وكتب كريجيفسكي بنفسه برنامج cuda-convnet ليشغّل الالتفاف بكفاءة على GPU.",
+  facts:[["خطأ Top-5","15.3٪"],["المركز الثاني","26.2٪"],["البنية","8 طبقات (5 التفافية + 3 كاملة الاتصال) · 60 مليون معامل"]],
+  terms:[["AlexNet","AlexNet"],["Deep learning","التعلّم العميق"],["GPU training","التدريب على معالجات الرسوميات"],["Dropout","الإسقاط العشوائي"],["Feature engineering","هندسة الميزات"],["Top-5 error","خطأ أفضل خمسة"]],
+  refs:[["Krizhevsky, Sutskever & Hinton (NeurIPS 2012)","https://proceedings.neurips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html"]],
+  opens:"resnet"},
+
+ {id:"resnet",y:"2015",date:"10 Dec 2015",era:"c",cat:"train",key:true,
+  en:"Residual Connections (ResNet) + Batch Normalization",ar:"الوصلات المتبقية والتطبيع الدفعي",short:"ResNet",
+  verdict:"فكرة بسيطة، وهي جمع مدخل الكتلة مع مخرجها، حلّت عمليًا مشكلة العمق: من عشرات الطبقات إلى أكثر من 150.",
+  problem:"حتى مع ReLU، لاحظ الباحثون ظاهرة غريبة سمّوها مشكلة التدهور (Degradation problem): شبكة من 56 طبقة كان خطؤها أعلى من شبكة من 20 طبقة، حتى على بيانات التدريب نفسها. إذن المشكلة ليست حفظًا، بل صعوبة في التدريب (Optimization).",
+  idea:"كايمينغ هي (Kaiming He) وزملاؤه في Microsoft Research أضافوا وصلة مختصرة (Skip connection) تنقل مدخل كل كتلة وتجمعه مع مخرجها. فلا تحتاج الكتلة أن تتعلّم التحويل كاملًا، بل الفرق (Residual) فقط. ولأن مشتقة المسار المختصر تساوي 1، يصل التدرّج إلى الطبقات الأولى دون أن يتلاشى. وفي فبراير من العام نفسه نشر سيرغي إيوفي (Sergey Ioffe) وكريستيان سيغيدي (Christian Szegedy) من Google تقنية التطبيع الدفعي (Batch Normalization)، التي تُبقي توزيع مخرجات كل طبقة مستقرًا، فيصبح التدريب أسرع ويقبل معدلات تعلّم أعلى.",
+  formula:"y = x + F(x)   ⇒   ∂y/∂x = 1 + ∂F/∂x",
+  fnote:"x مدخل الكتلة، F(x) ما تتعلّمه الكتلة (الفرق). الرقم 1 هو المسار المختصر الذي يحمي التدرّج.",
+  viz:"resnet",
+  why:"الوصلة المتبقية موجودة اليوم في كل نموذج عميق تقريبًا، ومنها المحوّلات (Transformers) التي تقوم عليها النماذج اللغوية الكبيرة.",
+  facts:[["العمق","152 طبقة (أعمق 8 مرات من VGG)"],["خطأ ImageNet","3.57٪ · المركز الأول ILSVRC 2015"],["Batch Norm","الدقة نفسها بخطوات تدريب أقل 14 مرة"]],
+  terms:[["Residual network (ResNet)","الشبكة المتبقية"],["Skip connection","الوصلة المختصرة"],["Degradation problem","مشكلة التدهور"],["Batch normalization","التطبيع الدفعي"],["Identity mapping","الدالة المطابقة"]],
+  refs:[["He et al. (2015), arXiv:1512.03385","https://arxiv.org/abs/1512.03385"],["Ioffe & Szegedy (2015), arXiv:1502.03167","https://arxiv.org/abs/1502.03167"]],
+  opens:"transformer"},
+
+ {id:"alphago",y:"2016",date:"9–15 Mar 2016",era:"c",cat:"land",
+  en:"AlphaGo vs Lee Sedol",ar:"AlphaGo يهزم لي سيدول",short:"AlphaGo",
+  verdict:"الجمع بين التعلّم العميق والتعلّم المعزّز يهزم أحد أفضل لاعبي العالم في لعبة كان يُتوقع أنها تحتاج عقدًا آخر.",
+  problem:"عدد الأوضاع الممكنة في لعبة Go يفوق عدد الذرات في الكون المرئي، فلا يمكن البحث فيها بالقوة الحاسوبية الخام (Brute force) كما فعل حاسوب Deep Blue في الشطرنج عام 1997.",
+  idea:"شركة DeepMind استخدمت شبكتين عصبيتين: شبكة سياسة (Policy network) تقترح الحركات الواعدة، وشبكة قيمة (Value network) تقدّر من الرابح في أي وضع. ودمجتهما مع بحث شجرة مونت كارلو (Monte Carlo Tree Search, MCTS). تعلّم النظام أولًا من مباريات البشر، ثم تحسّن بالتعلّم المعزّز (Reinforcement Learning) عبر اللعب ضد نفسه (Self-play).",
+  story:"الحركة 37 في المباراة الثانية بدت للمعلّقين خطأً، لأن النظام قدّر احتمال أن يلعبها إنسان بنحو 1 من 10,000. ثم تبيّن أنها حاسمة. وفي المباراة الرابعة ردّ لي سيدول بحركته 78 الشهيرة وفاز.",
+  facts:[["النتيجة","4–1"],["المكان","سيول، كوريا الجنوبية"],["الخصم","لي سيدول، 9-دان"]],
+  terms:[["Reinforcement learning","التعلّم المعزّز"],["Policy network","شبكة السياسة"],["Value network","شبكة القيمة"],["Monte Carlo Tree Search (MCTS)","بحث شجرة مونت كارلو"],["Self-play","اللعب ضد النفس"]],
+  refs:[["Silver et al. (2016), Nature","https://doi.org/10.1038/nature16961"],["AlphaGo versus Lee Sedol","https://en.wikipedia.org/wiki/AlphaGo_versus_Lee_Sedol"]],
+  opens:"alphafold"},
+
+ {id:"transformer",y:"2017",date:"12 Jun 2017",era:"d",cat:"arch",key:true,
+  en:"Transformer — “Attention Is All You Need”",ar:"المحوِّل وآلية الانتباه الذاتي",short:"Transformer",
+  verdict:"المعمارية التي تقوم عليها كل النماذج اللغوية الكبيرة اليوم، وحرف T في اسم GPT هو اختصار Transformer.",
+  problem:"الشبكات التكرارية (RNN وLSTM) تقرأ الجملة كلمة بعد كلمة، فلا يمكن توزيع حسابها على آلاف المعالجات بالتوازي (Parallelization)، ويصبح التدريب على بيانات ضخمة بطيئًا جدًا. كما أن المعلومة بين كلمتين متباعدتين تمر عبر خطوات كثيرة فتضعف.",
+  idea:"ثمانية باحثين من Google Brain وGoogle Research تخلّوا عن التكرار والالتفاف تمامًا، واعتمدوا على آلية الانتباه الذاتي (Self-attention) وحدها: كل رمز (Token)، أي كل كلمة أو جزء كلمة، ينظر مباشرة إلى كل الرموز الأخرى ويقرر أيها أهم لفهمه. فتصبح المسافة بين أي كلمتين خطوة واحدة، وتُعالَج الجملة كلها دفعة واحدة. واستخدم المحوّل الوصلات المتبقية والتطبيع (Layer Normalization) ليُبنى بعمق.",
+  formula:"Attention(Q,K,V) = softmax( QKᵀ / √dₖ ) V",
+  fnote:"Q الاستعلام (Query)، K المفتاح (Key)، V القيمة (Value)، dₖ بُعد المفتاح. ناتج softmax أوزانٌ تقول: كم ينتبه كل رمز لكل رمز آخر.",
+  why:"التوازي جعل التدريب على كميات هائلة من النصوص ممكنًا، وهذا ما فتح الطريق إلى BERT وGPT وكل ما تلاهما. واستُخدمت المعمارية نفسها لاحقًا في الصور والصوت والبروتينات.",
+  facts:[["الترجمة EN→DE","28.4 BLEU (رقم قياسي حينها)"],["تكلفة التدريب","3.5 أيام على 8 GPU"],["المؤلفون","8 باحثين · NeurIPS 2017"]],
+  terms:[["Transformer","المحوِّل"],["Self-attention","الانتباه الذاتي"],["Attention mechanism","آلية الانتباه"],["Token","الرمز"],["Encoder–decoder","المُرمِّز وفاكّ الترميز"],["Layer normalization","تطبيع الطبقة"]],
+  refs:[["Vaswani et al. (2017), arXiv:1706.03762","https://arxiv.org/abs/1706.03762"]],
+  opens:"scaling"},
+
+ {id:"scaling",y:"2020",date:"23 Jan 2020",era:"d",cat:"theory",
+  en:"Neural Scaling Laws",ar:"قوانين التوسّع",short:"Scaling laws",
+  verdict:"جعلت التقدّم قابلًا للتنبؤ: إذا كبّرنا النموذج والبيانات والحوسبة بقدر معروف، نعرف مسبقًا تقريبًا كم سيتحسّن.",
+  problem:"لم يكن واضحًا ما الأجدى: تكبير النموذج أم زيادة البيانات أم إطالة التدريب؟ وهل يستمر التحسّن مع التكبير أم يتوقف عند حد ما؟",
+  idea:"جاريد كابلان (Jared Kaplan) وزملاؤه في OpenAI أجروا عددًا كبيرًا من التجارب، ووجدوا أن خسارة (Loss) النموذج اللغوي تنخفض وفق قانون قوة (Power law) بسيط كلما زاد حجم النموذج (عدد المعاملات Parameters) وحجم البيانات وكمية الحوسبة (Compute). على رسم لوغاريتمي في المحورين (Log–log plot) تظهر العلاقة خطًا مستقيمًا يمتد أحيانًا على أكثر من سبع مراتب عشرية. هذا ما شجّع على بناء GPT-3 بحجم 175 مليار معامل في العام نفسه. وفي 2022 عدّلت دراسة Chinchilla من DeepMind التوصية: يجب زيادة البيانات بالقدر نفسه الذي يزيد به حجم النموذج.",
+  formula:"L(N) ≈ (N_c / N)^α_N",
+  fnote:"N عدد المعاملات، و N_c و α_N ثابتان يُقاسان من التجارب (α_N ≈ 0.076). مضاعفة الحجم تُنقص الخسارة بنسبة ثابتة في كل مرة.",
+  viz:"scaling",
+  facts:[["المدى","أكثر من 7 مراتب عشرية"],["الاستنتاج","النماذج الأكبر أكفأ في استخدام البيانات"],["تصحيح 2022","Chinchilla: البيانات بقدر الحجم"]],
+  terms:[["Neural scaling laws","قوانين التوسّع"],["Power law","قانون القوة"],["Model parameters","معاملات النموذج"],["Training compute","حوسبة التدريب"],["Compute-optimal training (Chinchilla)","التدريب الأمثل حوسبيًا"]],
+  refs:[["Kaplan et al. (2020), arXiv:2001.08361","https://arxiv.org/abs/2001.08361"],["Hoffmann et al. (2022), Chinchilla, arXiv:2203.15556","https://arxiv.org/abs/2203.15556"]],
+  opens:"rlhf"},
+
+ {id:"alphafold",y:"2020",date:"30 Nov 2020",era:"d",cat:"land",key:true,
+  en:"AlphaFold 2",ar:"AlphaFold 2 وطيّ البروتين",short:"AlphaFold 2",
+  verdict:"أول مرة يحل فيها الذكاء الاصطناعي مشكلة علمية كبرى ظلت مفتوحة نحو 50 عامًا، وانتهى الأمر بجائزة نوبل.",
+  problem:"البروتين سلسلة من الأحماض الأمينية (Amino acids) تنطوي في شكل ثلاثي الأبعاد يحدد وظيفته. معرفة هذا الشكل من التسلسل وحده تسمى مشكلة طيّ البروتين (Protein folding problem)، وتحديده تجريبيًا في المختبر قد يستغرق شهورًا أو سنوات.",
+  idea:"فريق DeepMind بقيادة ديميس هاسابيس (Demis Hassabis) وجون جمبر (John Jumper) بنى شبكة عميقة تعتمد على الانتباه (Attention) تتنبأ بالبنية مباشرة من التسلسل. في مسابقة CASP14 لعام 2020 بلغت دقتها مستوى يقارب الطرق المخبرية. على مقياس GDT (من 0 إلى 100) تُعد الدرجة 90 تقريبًا منافسة للتجربة.",
+  viz:"alphafold",
+  why:"أثبت أن الذكاء الاصطناعي ليس أداة للصور والنصوص فقط، بل أداة لاكتشاف علمي حقيقي يسرّع أبحاث الأدوية والأمراض.",
+  story:"في 2022 أتاحت DeepMind مع المعهد الأوروبي للمعلوماتية الحيوية (EMBL-EBI) تنبؤات لأكثر من 200 مليون بنية بروتين مجانًا للباحثين حول العالم، أي تقريبًا كل البروتينات المعروفة.",
+  facts:[["الوسيط GDT","92.4 (كل الأهداف)"],["الأهداف الأصعب","87.0"],["نوبل الكيمياء 2024","Hassabis · Jumper (مع David Baker)"]],
+  terms:[["Protein folding","طيّ البروتين"],["Protein structure prediction","التنبؤ ببنية البروتين"],["CASP","مسابقة التنبؤ ببنية البروتين"],["GDT score","مقياس GDT"],["AlphaFold","AlphaFold"]],
+  refs:[["DeepMind — AlphaFold (Nov 2020)","https://deepmind.google/blog/alphafold-a-solution-to-a-50-year-old-grand-challenge-in-biology/"],["Jumper et al. (2021), Nature","https://doi.org/10.1038/s41586-021-03819-2"],["AlphaFold Protein Structure Database","https://alphafold.ebi.ac.uk/"],["Nobel Prize in Chemistry 2024","https://www.nobelprize.org/prizes/chemistry/2024/summary/"]],
+  opens:"rlhf"},
+
+ {id:"rlhf",y:"2022",date:"Mar → 30 Nov 2022",era:"d",cat:"train",key:true,
+  en:"RLHF (InstructGPT) → ChatGPT",ar:"التعلّم المعزّز من تقييم البشر، ثم ChatGPT",short:"RLHF",
+  verdict:"حوّل النموذج اللغوي من آلة تكمل النصوص إلى مساعد يفهم الطلب ويتّبعه، وأوصل التقنية إلى عامة الناس عبر ChatGPT.",
+  problem:"النموذج اللغوي الكبير (Large Language Model, LLM) مدرَّب على توقّع الرمز التالي (Next-token prediction) في نصوص الإنترنت. هو لا «يعرف» أن المستخدم يريد إجابة مفيدة وصادقة وآمنة؛ هو يكمل النص فقط، وقد يكمله بطريقة لا تفيد.",
+  idea:"ثلاث مراحل: (1) ضبط دقيق خاضع للإشراف (Supervised Fine-Tuning, SFT) على أمثلة إجابات كتبها بشر. (2) يقارن بشر بين إجابتين للنموذج ويختارون الأفضل، ويُدرَّب على هذه التفضيلات نموذج مكافأة (Reward model). (3) يُحسَّن النموذج بالتعلّم المعزّز باستخدام خوارزمية PPO ليحصل على أعلى مكافأة. والنتيجة المفاجئة: المقيّمون فضّلوا إجابات InstructGPT بحجم 1.3 مليار معامل على GPT-3 بحجم 175 مليارًا. وبالطريقة نفسها تقريبًا دُرّب ChatGPT. أما الفكرة الأساسية فقدّمها بول كريستيانو (Paul Christiano) وزملاؤه عام 2017.",
+  formula:"SFT  →  Reward Model  →  PPO",
+  why:"أظهرت أن مواءمة النموذج (Alignment) مع ما يريده البشر قد تكون أهم من تكبير حجمه، وفتحت عصر المساعدات الذكية التي يستخدمها الملايين.",
+  facts:[["InstructGPT","مارس 2022"],["إطلاق ChatGPT","30 نوفمبر 2022"],["الحجم","1.3B مفضَّل على 175B"]],
+  terms:[["RLHF (Reinforcement Learning from Human Feedback)","التعلّم المعزّز من تقييم البشر"],["Large language model (LLM)","النموذج اللغوي الكبير"],["Supervised fine-tuning (SFT)","الضبط الدقيق الخاضع للإشراف"],["Reward model","نموذج المكافأة"],["PPO (Proximal Policy Optimization)","خوارزمية PPO"],["AI alignment","مواءمة الذكاء الاصطناعي"]],
+  refs:[["Ouyang et al. (2022), arXiv:2203.02155","https://arxiv.org/abs/2203.02155"],["Christiano et al. (2017), arXiv:1706.03741","https://arxiv.org/abs/1706.03741"],["OpenAI — Introducing ChatGPT","https://openai.com/index/chatgpt/"]],
+  opens:"o1"},
+
+ {id:"o1",y:"2024",date:"12 Sep 2024",era:"d",cat:"train",
+  en:"Reasoning Models (o1) — Test-time Compute",ar:"نماذج الاستدلال والتفكير قبل الإجابة",short:"Reasoning",
+  verdict:"محور جديد للتحسّن: النموذج يصبح أفضل كلما أُعطي وقتًا أطول ليفكّر قبل أن يجيب.",
+  problem:"النماذج اللغوية كانت تبدأ الإجابة فورًا، فتخطئ في المسائل التي تحتاج خطوات كثيرة ومراجعة، مثل الرياضيات والبرمجة.",
+  idea:"تدريب النموذج بالتعلّم المعزّز على مسائل يمكن التحقق آليًا من صحة حلها. فيتعلّم كتابة سلسلة أفكار (Chain of Thought) طويلة قبل الإجابة، يجرّب فيها ويكتشف أخطاءه ويصحّحها. وأعلنت OpenAI أن الأداء يتحسّن بانتظام مع زيادة التدريب المعزّز، ومع زيادة وقت التفكير عند الإجابة، وهو ما يسمّى حوسبة وقت الاستدلال (Test-time compute). وفي يناير 2025 نشرت DeepSeek نموذج R1 مفتوح الأوزان (Open weights) بنتائج مقاربة، مع شرح مفصّل لطريقة تدريبه.",
+  viz:"o1",
+  facts:[["AIME 2024 · GPT-4o","12٪"],["AIME 2024 · o1","74٪ (محاولة واحدة)"],["نموذج مفتوح","DeepSeek-R1 · يناير 2025"]],
+  terms:[["Reasoning model","نموذج الاستدلال"],["Chain-of-thought","سلسلة الأفكار"],["Test-time compute","حوسبة وقت الاستدلال"],["Verifiable rewards","المكافآت القابلة للتحقق"],["Open-weight model","النموذج مفتوح الأوزان"]],
+  refs:[["OpenAI — Learning to reason with LLMs","https://openai.com/index/learning-to-reason-with-llms/"],["DeepSeek-AI (2025), arXiv:2501.12948","https://arxiv.org/abs/2501.12948"]],
+  opens:"imo"},
+
+ {id:"imo",y:"2025",date:"Jul 2025",era:"d",cat:"land",
+  en:"Gold-medal level at the IMO",ar:"مستوى الذهب في أولمبياد الرياضيات الدولي",short:"IMO gold",
+  verdict:"براهين رياضية كاملة مكتوبة باللغة الطبيعية، في الوقت نفسه المتاح للمتسابقين البشر، بمستوى الميدالية الذهبية.",
+  problem:"في 2024 احتاج نظاما AlphaProof وAlphaGeometry من DeepMind إلى خبراء يترجمون المسائل يدويًا إلى لغة البراهين الرسمية Lean، واستغرق حل بعض المسائل أيامًا، ووصلا إلى مستوى الفضية.",
+  idea:"نسخة متقدمة من Gemini Deep Think تستكشف عدة مسارات للحل بالتوازي، حلّت 5 مسائل من 6 مباشرة من نصّها الرسمي، خلال جلستين مدة كل منهما 4.5 ساعات كما للمتسابقين، وصادق منسّقو الأولمبياد الرسميون على التصحيح. وأعلنت OpenAI نتيجة مماثلة (35 من 42) لنموذج تجريبي صحّحه ثلاثة حائزين سابقين على الذهب.",
+  facts:[["الدرجة","35 من 42"],["المسائل","5 من 6"],["2024 للمقارنة","28 نقطة (فضية)"]],
+  terms:[["International Mathematical Olympiad (IMO)","أولمبياد الرياضيات الدولي"],["Formal proof","البرهان الرسمي"],["Lean theorem prover","مُثبِت المبرهنات Lean"],["Mathematical reasoning","الاستدلال الرياضي"]],
+  refs:[["Google DeepMind — IMO 2025","https://deepmind.google/discover/blog/advanced-version-of-gemini-with-deep-think-officially-achieves-gold-medal-standard-at-the-international-mathematical-olympiad/"]],
+  opens:null}
+];
+
+const rail=document.getElementById('rail'), card=document.getElementById('card'),
+      chips=document.getElementById('chips'), countEl=document.getElementById('count');
+let cur=0, filter=null;
+const idx=id=>M.findIndex(m=>m.id===id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const match=m=>!filter||(filter==='key'?!!m.key:m.cat===filter);
+
+// chips
+function mkChip(id,html,cls){const b=document.createElement('button');b.type='button';b.className='chip'+(cls?' '+cls:'');b.id='chip-'+id;b.dataset.f=id;b.innerHTML=html;b.setAttribute('aria-pressed','false');chips.appendChild(b);return b;}
+mkChip('key','<span class="ring"></span>المفاصل الكبرى فقط','keychip');
+const sep=document.createElement('span');sep.className='sep';chips.appendChild(sep);
+mkChip('all','الكل').setAttribute('aria-pressed','true');
+Object.entries(CATS).forEach(([k,v])=>{const b=mkChip(k,`<span class="dot"></span>${v.ar} <span class="en">${v.en}</span>`);b.style.setProperty('--c',`var(${v.c})`);});
+chips.addEventListener('click',e=>{
+  const b=e.target.closest('.chip'); if(!b) return;
+  const f=b.dataset.f; filter=(f==='all'||filter===f)?null:f;
+  chips.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',String(filter?c.dataset.f===filter:c.dataset.f==='all')));
+  rail.querySelectorAll('.node').forEach(n=>n.classList.toggle('dim',!match(M[+n.dataset.i])));
+  if(!match(M[cur])){const j=M.findIndex(match); if(j>-1) show(j);}
+});
+
+// rail grouped by era
+let eraEl=null,lastEra=null;
+M.forEach((m,i)=>{
+  if(m.era!==lastEra){
+    eraEl=document.createElement('div');eraEl.className='era';
+    eraEl.style.setProperty('--n',M.filter(x=>x.era===m.era).length);
+    eraEl.innerHTML=`<div class="era-label">${ERAS[m.era][0]} · <span class="en">${ERAS[m.era][1]}</span></div><div class="era-nodes"></div>`;
+    rail.appendChild(eraEl);lastEra=m.era;
+  }
+  const b=document.createElement('button');b.type='button';b.className='node'+(m.cold?' cold':'')+(m.key?' key':'');
+  b.dataset.i=i;b.style.setProperty('--c',`var(${CATS[m.cat].c})`);
+  b.setAttribute('aria-label',`${m.y} — ${m.ar}${m.key?' (مفصل كبير)':''}`);
+  b.innerHTML=`<span class="pip"></span><span class="yr">${m.y}</span><span class="nm">${esc(m.short)}</span>`;
+  b.addEventListener('click',()=>show(i));
+  eraEl.querySelector('.era-nodes').appendChild(b);
+});
+
+const AR='font-family="IBM Plex Sans Arabic, sans-serif"', MONO='font-family="IBM Plex Mono, monospace"';
+function bars(rows,max,unit){
+  const W=620,rowH=34,H=rows.length*rowH+8,lab=190,bw=W-lab-60;
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img">`;
+  rows.forEach((r,k)=>{
+    const y=k*rowH+6,w=Math.max(2,(r[1]/max)*bw);
+    s+=`<text x="${W-4}" y="${y+18}" text-anchor="end" font-size="13" fill="var(--muted)" ${AR}>${esc(r[0])}</text>`;
+    s+=`<rect x="${W-lab-w}" y="${y+4}" width="${w}" height="20" rx="3" fill="var(${r[2]})"/>`;
+    s+=`<text x="${W-lab-w-6}" y="${y+19}" text-anchor="end" font-size="12.5" fill="var(--ink)" ${MONO}>${r[1]+unit}</text>`;
+  });
+  return s+'</svg>';
+}
+function vanishViz(){
+  const W=620,H=200,L=40,R=16,T=14,B=34,n=10,pw=(W-L-R)/n;
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="حجم التدرج بعد n طبقة">`;
+  [0,0.5,1].forEach(v=>{const y=T+(1-v)*(H-T-B);s+=`<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" stroke="var(--line)"/><text x="${L-6}" y="${y+4}" text-anchor="end" font-size="11" fill="var(--muted)" ${MONO}>${v}</text>`;});
+  for(let k=1;k<=n;k++){
+    const x=L+(k-1)*pw+pw*0.18,bw=pw*0.3,v=Math.pow(0.25,k),h=v*(H-T-B),y=H-B-h;
+    s+=`<rect x="${x}" y="${T}" width="${bw}" height="${H-T-B}" fill="var(--c-train)" opacity=".85" rx="2"/>`;
+    s+=`<rect x="${x+bw+3}" y="${y}" width="${bw}" height="${Math.max(h,1)}" fill="var(--c-land)" rx="2"/>`;
+    s+=`<text x="${x+bw+1.5}" y="${H-B+16}" text-anchor="middle" font-size="11" fill="var(--muted)" ${MONO}>${k}</text>`;
+  }
+  s+=`<text x="${(W+L)/2}" y="${H-2}" text-anchor="middle" font-size="11.5" fill="var(--muted)" ${AR}>عدد الطبقات أو الخطوات الزمنية n</text></svg>`;
+  return s;
+}
+function xorViz(){
+  const W=620,H=210,ox=220,oy=180,sz=150;
+  const pts=[[0,0,0],[0,1,1],[1,0,1],[1,1,0]];
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="نقاط XOR الأربع">`;
+  s+=`<rect x="${ox}" y="${oy-sz}" width="${sz}" height="${sz}" fill="none" stroke="var(--line)"/>`;
+  s+=`<line x1="${ox-30}" y1="${oy+15}" x2="${ox+sz+30}" y2="${oy-sz-15}" stroke="var(--muted)" stroke-dasharray="5 5"/>`;
+  s+=`<text x="${ox+sz+36}" y="${oy-sz-14}" font-size="12" fill="var(--muted)" ${AR}>أي خط مستقيم يفشل</text>`;
+  pts.forEach(([a,b,c])=>{
+    const x=ox+a*sz,y=oy-b*sz;
+    s+= c? `<circle cx="${x}" cy="${y}" r="11" fill="var(--c-land)"/>` : `<circle cx="${x}" cy="${y}" r="10" fill="var(--surface)" stroke="var(--c-wall)" stroke-width="3"/>`;
+    s+=`<text x="${x+(a?18:-18)}" y="${y+(b?-14:24)}" text-anchor="middle" font-size="12" fill="var(--ink)" ${MONO}>(${a},${b})</text>`;
+  });
+  s+=`<circle cx="70" cy="60" r="8" fill="var(--c-land)"/><text x="84" y="65" font-size="12.5" fill="var(--ink)" ${AR}>المخرج 1</text>`;
+  s+=`<circle cx="70" cy="90" r="7" fill="var(--surface)" stroke="var(--c-wall)" stroke-width="3"/><text x="84" y="95" font-size="12.5" fill="var(--ink)" ${AR}>المخرج 0</text>`;
+  return s+'</svg>';
+}
+function scalingViz(){
+  const W=620,H=210,L=48,R=16,T=12,B=40,x0=3,x1=9,yl=Math.log10(2),yh=Math.log10(8);
+  const X=l=>L+(l-x0)/(x1-x0)*(W-L-R), Y=v=>T+(1-(Math.log10(v)-yl)/(yh-yl))*(H-T-B);
+  const f=l=>Math.pow(8.8e13/Math.pow(10,l),0.076);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="الخسارة مقابل عدد المعاملات">`;
+  [2,4,8].forEach(v=>{s+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${L-8}" y="${Y(v)+4}" text-anchor="end" font-size="11" fill="var(--muted)" ${MONO}>${v}</text>`;});
+  [3,5,7,9].forEach(l=>{s+=`<text x="${X(l)}" y="${H-B+18}" text-anchor="middle" font-size="11" fill="var(--muted)" ${MONO}>10^${l}</text>`;});
+  s+=`<line x1="${X(3)}" y1="${Y(f(3))}" x2="${X(9)}" y2="${Y(f(9))}" stroke="var(--c-theory)" stroke-width="3"/>`;
+  [3,5,7,9].forEach(l=>{s+=`<circle cx="${X(l)}" cy="${Y(f(l))}" r="4.5" fill="var(--c-theory)"/>`;});
+  s+=`<text x="${(W+L)/2}" y="${H-4}" text-anchor="middle" font-size="11.5" fill="var(--muted)" ${AR}>عدد المعاملات N (مقياس لوغاريتمي)</text></svg>`;
+  return s;
+}
+function viz(m){
+  if(!m.viz) return '';
+  let h='',t='';
+  if(m.viz==='vanish'){t='حجم التدرّج بعد n طبقة: دالة Sigmoid في أفضل حالاتها (0.25ⁿ، بالأحمر) مقابل مسار ثابت مثل خلية LSTM أو الوصلة المتبقية (1، بالأخضر). بعد 10 طبقات يصبح التدرّج نحو 0.00000095';h=vanishViz();}
+  if(m.viz==='xor'){t='النقاط الأربع لدالة XOR: لا يفصلها خط مستقيم واحد';h=xorViz();}
+  if(m.viz==='alexnet'){t='خطأ Top-5 في ILSVRC 2012: نسبة الصور التي لم تظهر فئتها الصحيحة ضمن أول 5 تخمينات (الأقل أفضل)';h=bars([['AlexNet',15.3,'--c-land'],['المركز الثاني',26.2,'--c-wall']],30,'٪');}
+  if(m.viz==='resnet'){t='عدد الطبقات في الشبكات الفائزة على ImageNet';h=bars([['ResNet (2015)',152,'--c-train'],['VGG (2014)',19,'--c-wall'],['AlexNet (2012)',8,'--c-wall']],160,'');}
+  if(m.viz==='scaling'){t='منحنى توضيحي بثوابت الورقة: الخسارة مقابل حجم النموذج على محورين لوغاريتميين تظهر خطًا مستقيمًا';h=scalingViz();}
+  if(m.viz==='alphafold'){t='الوسيط على مقياس GDT في CASP14 (نحو 90 ≈ دقة المختبر)';h=bars([['كل الأهداف',92.4,'--c-land'],['الأهداف الأصعب',87.0,'--c-land'],['عتبة المختبر',90,'--c-wall']],100,'');}
+  if(m.viz==='o1'){t='نسبة المسائل المحلولة في امتحان AIME 2024';h=bars([['GPT-4o',12,'--c-wall'],['o1 · محاولة واحدة',74,'--c-train'],['o1 · إجماع 64 محاولة',83,'--c-train']],100,'٪');}
+  return `<div class="viz"><h3>${t}</h3><div>${h}</div></div>`;
+}
+const scholar=q=>'https://scholar.google.com/scholar?q='+encodeURIComponent(q.replace(/\s*\(.*?\)\s*/g,' ').trim());
+
+function show(i){
+  cur=i;const m=M[i],c=CATS[m.cat];
+  card.style.setProperty('--c',`var(${c.c})`);
+  const nextM=m.opens?M[idx(m.opens)]:null;
+  card.innerHTML=`
+   <div class="main">
+    <div class="card-head">
+     <div class="meta">${m.key?'<span class="keybadge">مفصل كبير</span>':''}<span class="cat">${c.ar} · ${c.en}</span><span class="date">${esc(m.date)}</span><span>${ERAS[m.era][0]}</span></div>
+     <div class="big-year">${m.y}</div>
+     <h2 class="title-ar">${esc(m.ar)}</h2>
+     <p class="title-en">${esc(m.en)}</p>
+    </div>
+    <p class="verdict">${esc(m.verdict)}</p>
+    ${m.why?`<div class="why"><h3>لماذا يُعدّ مفصلًا كبيرًا؟</h3><p>${esc(m.why)}</p></div>`:''}
+    <div class="cols">
+     <div class="blk"><h3>المشكلة التي كانت قائمة</h3><p>${esc(m.problem)}</p></div>
+     <div class="blk"><h3>الفكرة التي غيّرت المسار</h3><p>${esc(m.idea)}</p></div>
+    </div>
+    ${m.formula?`<div class="formula-box"><div class="formula">${esc(m.formula)}</div>${m.fnote?`<p class="fnote">${esc(m.fnote)}</p>`:''}</div>`:''}
+    ${m.story?`<div class="story"><h3>من القصة</h3><p>${esc(m.story)}</p></div>`:''}
+   </div>
+   <div class="side">
+    ${viz(m)}
+    <dl class="facts">${m.facts.map(f=>`<div class="fact"><dt>${esc(f[0])}</dt><dd>${esc(f[1])}</dd></div>`).join('')}</dl>
+    <div class="terms"><h3>مصطلحات للبحث <small>(اضغط للبحث في Google Scholar)</small></h3><ul>${m.terms.map(t=>`<li><a href="${scholar(t[0])}" target="_blank" rel="noopener"><span class="t-en">${esc(t[0])}</span><span class="t-ar">${esc(t[1])}</span></a></li>`).join('')}</ul></div>
+    <div class="refs"><h3>المراجع</h3><ul>${m.refs.map(r=>`<li><a href="${r[1]}" target="_blank" rel="noopener">${esc(r[0])}</a></li>`).join('')}</ul></div>
+    ${nextM?`<p class="opens">فتحت الطريق إلى: <button type="button" data-go="${nextM.id}">${esc(nextM.ar)} (${nextM.y})</button></p>`:''}
+   </div>`;
+  rail.querySelectorAll('.node').forEach(n=>n.setAttribute('aria-current',String(+n.dataset.i===i)));
+  const node=rail.querySelector(`.node[data-i="${i}"]`);
+  if(node) node.scrollIntoView({block:'nearest',inline:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  document.getElementById('prev').disabled=i===0;
+  document.getElementById('next').disabled=i===M.length-1;
+  countEl.textContent=`${i+1} / ${M.length}`;
+  try{history.replaceState(null,'','#'+m.id);}catch(e){}
+}
+card.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b) show(idx(b.dataset.go));});
+document.getElementById('prev').addEventListener('click',()=>cur>0&&show(cur-1));
+document.getElementById('next').addEventListener('click',()=>cur<M.length-1&&show(cur+1));
+document.addEventListener('keydown',e=>{
+  if(e.target.closest&&e.target.closest('input,textarea')) return;
+  if(e.key==='ArrowLeft'&&cur<M.length-1) show(cur+1);
+  if(e.key==='ArrowRight'&&cur>0) show(cur-1);
+});
+const start=idx((location.hash||'').slice(1));
+show(start>-1?start:0);
+</script>
+</body></html>

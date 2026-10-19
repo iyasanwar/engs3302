@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Common Is Sea Bass</title>
+<style>
+:root{color-scheme:light;--bg:#fff;--panel:#f5f7fa;--ink:#14233b;--muted:#566173;--line:#dde3ea;--bass:#1d5c8c;--bass-soft:#e6eef6;--salmon:#e4734f;--salmon-ink:#b4472a;--salmon-soft:#fbe9e3;--highlight:#f3e3b5;
+  --f-ui:"Fira Sans",Carlito,sans-serif;--f-num:"JetBrains Mono","DejaVu Sans Mono",monospace;--f-body:Literata,Georgia,serif}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--f-ui);overflow:hidden}
+#fit{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{width:1600px;height:900px;flex:none;transform-origin:center center;position:relative}
+h1{position:absolute;left:40px;top:26px;margin:0;font-family:var(--f-body);font-size:44px}
+.sub{position:absolute;left:40px;top:92px;margin:0;font-size:24px;color:var(--muted)}
+.panel{position:absolute;background:var(--panel);border:2px solid var(--line);border-radius:14px}
+#grid{left:40px;top:140px;width:840px;height:420px;padding:16px 20px}
+#right{left:910px;top:140px;width:650px;height:400px;padding:18px 24px}
+.lab{font-size:22px;color:var(--muted);font-weight:600;letter-spacing:.06em}
+.big{font-family:var(--f-num);font-weight:700;font-size:64px;color:var(--bass)}
+.ctl{position:absolute;left:40px;top:585px;width:1150px;display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;font-size:26px}
+input[type=range]{width:100%;accent-color:var(--bass);height:34px}
+output{font-family:var(--f-num);font-weight:700;font-size:30px;min-width:90px;text-align:right}
+.verdict{position:absolute;left:40px;top:650px;width:1150px;margin:0;font-family:var(--f-body);font-size:28px;line-height:1.35;border-left:6px solid var(--bass);padding:4px 0 4px 16px}
+.src{position:absolute;left:40px;bottom:16px;margin:0;font-size:16px;color:var(--muted)}
+.leg{display:flex;gap:22px;font-size:22px;margin-top:8px} .leg i{display:inline-block;width:14px;height:14px;border-radius:7px;margin-right:6px;vertical-align:-1px}
+button{font:inherit;font-size:22px;border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 16px;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--bass);outline-offset:2px}
+</style></head><body>
+<div id="fit"><div id="stage">
+<h1>How common is sea bass?</h1>
+<p class="sub">The fish look the same every day: 0.933 of sea bass are light, 0.075 of salmon are light. Only the share of sea bass changes.</p>
+<div class="panel" id="grid"><span class="lab">1,000 FISH IN THE CATCH · BRIGHT = LIGHT</span>
+<svg id="dots" width="800" height="320" viewBox="0 0 800 320" style="display:block;margin-top:10px" role="img" aria-label="1,000 fish"></svg>
+<div class="leg"><span><i style="background:var(--bass)"></i>sea bass</span><span><i style="background:var(--salmon)"></i>salmon</span><span id="cnt" style="font-family:var(--f-num)"></span></div></div>
+<div class="panel" id="right"><span class="lab">THE FISH IS LIGHT. P(SEA BASS | LIGHT)</span><div class="big" id="post"></div>
+<svg id="curve" width="600" height="250" viewBox="0 0 600 250" role="img" aria-label="P(sea bass | light) for every share of sea bass"></svg></div>
+<div class="ctl"><label for="pi">sea bass in the catch</label><input type="range" id="pi" min="1" max="99" step="1" value="60"><output id="pio"></output></div>
+<p class="verdict" id="verdict" aria-live="polite"></p>
+<p class="src">ENGS 3302 · Week 3 · Video 3.2 · Bayes’ rule with P(light | sea bass) = 56/60 and P(light | salmon) = 3/40 from the day’s catch table.</p>
+</div></div>
+<script>
+(function(){
+const $=id=>document.getElementById(id), A=0.9333333333333333, B=0.075;
+const post=p=>A*p/(A*p+B*(1-p)); window.__post=post;
+// the curve: share of sea bass (0..1) on x, P(sea bass | light) on y
+const cx=p=>60+p*520, cy=v=>20+(1-v)*190;
+let d="";for(let i=1;i<=99;i++){d+=(i>1?" L":"M")+cx(i/100).toFixed(1)+","+cy(post(i/100)).toFixed(1);}
+let g='<line x1="60" x2="580" y1="210" y2="210" stroke="#566173"/><line x1="60" x2="60" y1="20" y2="210" stroke="#566173"/>';
+[0,0.5,1].forEach(v=>g+=`<text x="50" y="${cy(v)+7}" text-anchor="end" font-size="18" fill="#566173">${v}</text>`);
+[0,25,50,75,100].forEach(v=>g+=`<text x="${cx(v/100)}" y="236" text-anchor="middle" font-size="18" fill="#566173">${v}%</text>`);
+[0.05,0.2,0.6].forEach(p=>g+=`<circle cx="${cx(p)}" cy="${cy(post(p))}" r="5" fill="#fff" stroke="#566173" stroke-width="2"/>`);
+g+=`<path d="${d}" fill="none" stroke="#1d5c8c" stroke-width="4"/><line id="vl" stroke="#e4734f" stroke-width="2" stroke-dasharray="5 5"/><circle id="pt" r="10" fill="#e4734f"/>`;
+$("curve").innerHTML=g;
+const dots=[];let h="";for(let i=0;i<1000;i++){h+=`<circle cx="${(i%50)*16+8}" cy="${Math.floor(i/50)*16+8}" r="6.2"/>`;}$("dots").innerHTML=h;
+const cs=[...$("dots").querySelectorAll("circle")];
+// which fish are light: spread evenly so the picture does not jump around
+const lightIdx=(n,k)=>{const s=new Set();for(let j=0;j<k;j++)s.add(Math.floor((j+0.5)*n/k));return s;};
+function render(){
+  const p=+$("pi").value/100, nb=Math.round(1000*p), lb=Math.round(nb*A), ls=Math.round((1000-nb)*B);
+  const LB=lightIdx(nb,lb), LS=lightIdx(1000-nb,ls);
+  cs.forEach((c,i)=>{const b=i<nb, l=b?LB.has(i):LS.has(i-nb);c.setAttribute("fill",b?"#1d5c8c":"#e4734f");c.setAttribute("opacity",l?1:0.16);});
+  $("pio").textContent=Math.round(p*100)+"%";
+  const v=post(p);$("post").textContent=v.toFixed(3);
+  $("pt").setAttribute("cx",cx(p));$("pt").setAttribute("cy",cy(v));
+  $("vl").setAttribute("x1",cx(p));$("vl").setAttribute("x2",cx(p));$("vl").setAttribute("y1",210);$("vl").setAttribute("y2",cy(v));
+  $("cnt").textContent=`light: ${lb} sea bass + ${ls} salmon`;
+  $("verdict").textContent=`With ${Math.round(p*100)}% sea bass, about ${lb} of the ${lb+ls} light fish are sea bass. `+(v<0.5?"A light fish is probably a salmon.":"A light fish is probably a sea bass.");
+}
+$("pi").oninput=render;
+const fit=()=>{const s=Math.min(innerWidth/1600,innerHeight/900);$("stage").style.transform=`scale(${s})`;};
+addEventListener("resize",fit);fit();render();window.__render=render;
+})();
+</script>
+</body></html>

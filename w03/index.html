@@ -55,15 +55,86 @@ canvas{display:block;width:100%;height:380px}
 .calc{font-family:var(--f-num);font-size:13px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;overflow-x:auto;white-space:pre;line-height:1.6}
 .note{color:var(--muted);font-size:13px;margin:0;max-width:80ch}
 .tasks{margin:0;padding-left:20px;display:grid;gap:4px;font-size:14px}
+.part{font-family:var(--f-body);font-size:20px;margin:6px 0 0}
+.part small{display:block;font-family:var(--f-ui);font-size:13px;color:var(--muted);font-weight:400;margin-top:2px}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
+.presets button{font:inherit;font-size:12.5px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:4px 10px;cursor:pointer}
+.chk{display:flex;gap:8px;align-items:center;font-size:14px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;align-items:start}
+.step{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--panel);display:grid;gap:4px}
+.step h3{margin:0;font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+.step .row{display:flex;justify-content:space-between;gap:10px;font-size:14px;border-top:1px dashed var(--line);padding-top:4px}
+.step .row:first-of-type{border-top:none}
+.step .row b{font-family:var(--f-num);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.verdict{font-family:var(--f-body);font-size:16px;margin:0;padding:10px 12px;border-left:4px solid var(--accent);background:var(--bg);border-radius:0 8px 8px 0}
+#cv1{height:330px}
 </style>
 
 <div class="wrap">
 <header>
-  <div class="eyebrow">ENGS 3302 · Week 3 · Notes §3.5–3.7</div>
+  <div class="eyebrow">ENGS 3302 · Week 3 · Notes §3.5–3.7 · Worked example 3.5</div>
   <h1>Density Explorer</h1>
-  <p class="lede">342 real penguins. Turn a histogram of counts into a density, fit a normal curve, and read a probability as an area. Change the unit and watch the height of the density change while the areas stay the same.</p>
+  <p class="lede">342 real penguins. Part 1: a density is a count per mm, like people per km². See that the height of a bar tells you how crowded the penguins are, and only the area tells you how many. Part 2: a whole histogram, a normal curve, and probability as an area.</p>
 </header>
 
+<h2 class="part">Part 1 · One bar: how crowded, how many<small>Flipper length of all 342 penguins, recorded in whole mm. Grey: the real number of penguins at each mm.</small></h2>
+<div class="main">
+  <aside class="panel controls" aria-label="Part 1 controls">
+    <div class="group">
+      <h2>What to do</h2>
+      <div class="seg" role="group" aria-label="Mode">
+        <button type="button" id="m-two" aria-pressed="true">Compare bars</button><button type="button" id="m-shrink" aria-pressed="false">Shrink a bar</button>
+      </div>
+    </div>
+    <div class="group" id="g-two">
+      <h2><span style="color:var(--bass)">Bar A</span></h2>
+      <div class="ctl"><label for="a1">From</label><output id="a1o"></output><input type="range" id="a1" min="170" max="235" step="1" value="190"></div>
+      <div class="ctl"><label for="b1">To</label><output id="b1o"></output><input type="range" id="b1" min="170" max="235" step="1" value="194"></div>
+      <label class="chk"><input type="checkbox" id="useB"> <span style="color:var(--salmon);font-weight:600">Bar B</span>&nbsp;to compare</label>
+      <div id="bctl" style="display:none;gap:8px">
+        <div class="ctl"><label for="a2">From</label><output id="a2o"></output><input type="range" id="a2" min="170" max="235" step="1" value="190"></div>
+        <div class="ctl"><label for="b2">To</label><output id="b2o"></output><input type="range" id="b2" min="170" max="235" step="1" value="199"></div>
+      </div>
+      <div class="presets"><button type="button" id="p-35">Example 3.5: 190–194</button><button type="button" id="p-wide">vs one bar 190–199</button></div>
+    </div>
+    <div class="group" id="g-shrink" style="display:none">
+      <h2>Bar around a point</h2>
+      <div class="ctl"><label for="c3">Centre</label><output id="c3o"></output><input type="range" id="c3" min="175" max="230" step="1" value="195"></div>
+      <div class="ctl"><label for="w3">Width</label><output id="w3o"></output><input type="range" id="w3" min="0" max="10" step="1" value="10"></div>
+      <p class="note">Move the width down to 1 mm, then to 0.</p>
+    </div>
+    <div class="group">
+      <h2>Height shows</h2>
+      <div class="seg" role="group" aria-label="Height shows">
+        <button type="button" id="y-cnt" aria-pressed="true">Penguins per mm</button><button type="button" id="y-den" aria-pressed="false">Density (÷ 342)</button>
+      </div>
+      <div class="seg" role="group" aria-label="Part 1 unit">
+        <button type="button" id="v-mm" aria-pressed="true">per mm</button><button type="button" id="v-m" aria-pressed="false">per m</button>
+      </div>
+    </div>
+    <div class="group">
+      <h2>Try</h2>
+      <ol class="tasks">
+        <li>Example 3.5: how many penguins per mm in 190–194? Is every mm the same?</li>
+        <li>Turn on Bar B, 190–199. Which bar is taller? Which holds more penguins?</li>
+        <li>Shrink a bar around 195, from 19 mm to 1 mm. The height only moves up and down a little. What happens to the area? And at width 0?</li>
+        <li>Switch to <b>per m</b>. Which numbers change, and which stay the same?</li>
+      </ol>
+    </div>
+  </aside>
+  <section class="panel" aria-label="Bar chart">
+    <canvas id="cv1" role="img" aria-label="Penguins at each mm of flipper length, with the chosen bars drawn at their average height"></canvas>
+    <div class="legend">
+      <span><span class="sw" style="background:var(--bar)"></span>real penguins at each mm</span>
+      <span><span class="sw" style="background:var(--bass)"></span>bar A: average height over its width</span>
+      <span id="lgB" style="display:none"><span class="sw" style="background:var(--salmon)"></span>bar B</span>
+    </div>
+    <div class="steps" id="steps" aria-live="polite" style="margin-top:12px"></div>
+    <p class="verdict" id="verdict" style="margin-top:10px"></p>
+  </section>
+</div>
+
+<h2 class="part">Part 2 · The whole histogram and the normal curve<small>Choose a measurement and a species, change the bin width and the unit, and compare the data with a normal model.</small></h2>
 <div class="main">
   <aside class="panel controls" aria-label="Controls">
     <div class="group">
@@ -218,7 +289,7 @@ function setRange(id,r,val){const e=$(id);e.min=r[0];e.max=r[1];e.step=r[2];e.va
 function setFeat(f){S.feat=f;const F=FEAT[f];S.bw=F.bw[3];S.a=F.ab[3];S.b=F.ab[4];S.u=0;
   setRange("bw",F.bw,S.bw);setRange("ia",F.ab,S.a);setRange("ib",F.ab,S.b);
   ["u-1","u-2"].forEach((j,i)=>$(j).setAttribute("aria-pressed",i===0));}
-function seg(ids,fn){ids.forEach((id,i)=>$(id).onclick=()=>{fn(i);ids.forEach(j=>$(j).setAttribute("aria-pressed",j===id));render();});}
+function seg(ids,fn,r){ids.forEach((id,i)=>$(id).onclick=()=>{fn(i);ids.forEach(j=>$(j).setAttribute("aria-pressed",j===id));(r||render)();});}
 seg(["f-flipper","f-bill","f-mass"],i=>setFeat(["flipper","bill","mass"][i]));
 seg(["s-All","s-Adelie","s-Chinstrap","s-Gentoo"],i=>S.sp=["All","Adelie","Chinstrap","Gentoo"][i]);
 seg(["h-count","h-dens"],i=>S.h=i?"dens":"count");
@@ -227,11 +298,103 @@ seg(["n-off","n-on"],i=>S.curve=!!i);
 $("bw").oninput=e=>{S.bw=+e.target.value;render();};
 $("ia").oninput=e=>{S.a=+e.target.value;render();};
 $("ib").oninput=e=>{S.b=+e.target.value;render();};
+
+// ---------- Part 1: one bar, count per mm and area (pure functions) ----------
+const FL=[].concat(DATA.Adelie.flipper,DATA.Chinstrap.flipper,DATA.Gentoo.flipper), NALL=FL.length;
+const PERMM={}; FL.forEach(v=>{PERMM[v]=(PERMM[v]||0)+1;});
+// bar over the recorded values lo..hi (whole mm) covers lo-0.5 .. hi+0.5, width hi-lo+1 mm
+function bar(lo,hi,unitK){
+  const a=Math.min(lo,hi), b=Math.max(lo,hi), k=unitK||1;
+  if(b<a) return null;
+  let n=0; for(let v=a;v<=b;v++) n+=PERMM[v]||0;
+  const wmm=b-a+1, w=wmm*k;
+  const perUnit=n/w, dens=n/(NALL*w), area=dens*w;
+  return {a,b,n,wmm,w,perUnit,dens,area,prob:n/NALL,each:Array.from({length:wmm},(_,i)=>PERMM[a+i]||0)};
+}
+function shrink(c,wIdx){ // widths 0,1,3,5,...,19 mm around the centre
+  const wmm=wIdx===0?0:2*wIdx-1; if(wmm===0) return {a:c,b:c,n:0,wmm:0,w:0,perUnit:NaN,dens:NaN,area:0,prob:0,zero:true,c};
+  const h=(wmm-1)/2; const r=bar(c-h,c+h,1); r.c=c; return r;}
+window.__bar=bar; window.__shrink=shrink; window.__NALL=NALL;
+const P={mode:"two",a1:190,b1:194,useB:false,a2:190,b2:199,c:195,wi:10,y:"cnt",u:1};
+const cv1=$("cv1"),c1=cv1.getContext("2d");
+const f3=v=>Number.isFinite(v)?(Math.abs(v)>=100?v.toFixed(0):Math.abs(v)>=10?v.toFixed(1):Math.abs(v)>=1?v.toFixed(2):v.toFixed(4)):"—";
+function stepCard(r,label,col,uName){
+  if(!r) return "";
+  if(r.zero) return `<div class="step" style="border-color:${col}"><h3 style="color:${col}">${label}: width 0, one exact point</h3>
+    <div class="row"><span>Penguins with exactly ${r.c}.000… mm</span><b>no width, no area</b></div>
+    <div class="row"><span>Probability = area</span><b>0</b></div>
+    <div class="row"><span>The height (density) does not drop to 0. Only the area does.</span><b></b></div></div>`;
+  const wTxt=P.u===1?`${r.wmm} mm`:`${(r.wmm/1000).toFixed(3)} m`;
+  return `<div class="step" style="border-color:${col}"><h3 style="color:${col}">${label}: ${r.a}–${r.b} mm (${r.a-0.5} to ${r.b+0.5})</h3>
+    <div class="row"><span>Penguins in the bar</span><b>${r.n}</b></div>
+    <div class="row"><span>Width</span><b>${wTxt}</b></div>
+    <div class="row"><span>① Crowding: ${r.n} ÷ ${wTxt}</span><b>${f3(r.perUnit)} penguins per ${uName}</b></div>
+    <div class="row"><span>② Density: ${f3(r.perUnit)} ÷ ${NALL}</span><b>${f3(r.dens)} per ${uName}</b></div>
+    <div class="row"><span>③ Area: ${f3(r.dens)} × ${wTxt}</span><b>${r.area.toFixed(3)} = ${r.n}/${NALL}</b></div></div>`;
+}
+function render1(){
+  const k=P.u===1?1:0.001, uName=P.u===1?"mm":"m";
+  $("g-two").style.display=P.mode==="two"?"grid":"none"; $("g-shrink").style.display=P.mode==="shrink"?"grid":"none";
+  $("bctl").style.display=P.useB?"grid":"none"; $("lgB").style.display=(P.mode==="two"&&P.useB)?"inline":"none";
+  ["a1","b1","a2","b2"].forEach(id=>$(id+"o").textContent=P[id]+" mm");
+  const W3=P.wi===0?0:2*P.wi-1; $("c3o").textContent=P.c+" mm"; $("w3o").textContent=W3+" mm";
+  let A,B=null;
+  if(P.mode==="two"){A=bar(P.a1,P.b1,k); if(P.useB) B=bar(P.a2,P.b2,k);} else {A=shrink(P.c,P.wi); if(!A.zero){A=bar(A.a,A.b,k);} }
+  $("steps").innerHTML=stepCard(A,P.mode==="two"?"Bar A":"The bar",css("--bass"),uName)+(B?stepCard(B,"Bar B",css("--salmon"),uName):"");
+  if(P.mode==="shrink"){ let rows=""; for(let i=10;i>=0;i--){const r=shrink(P.c,i); const rr=r.zero?r:bar(r.a,r.b,k); const cur=i===P.wi;
+      rows+=`<tr style="${cur?"font-weight:700;color:var(--accent)":""}"><td>${r.zero?0:r.wmm} mm</td><td>${r.zero?"—":f3(rr.dens)}</td><td>${rr.area.toFixed(3)}</td></tr>`;}
+    $("steps").innerHTML+=`<div class="step"><h3>All widths around ${P.c} mm</h3><table style="width:100%;border-collapse:collapse;font-family:var(--f-num);font-size:13px;text-align:right"><thead><tr style="color:var(--muted)"><th style="text-align:right;font-weight:600">width</th><th style="text-align:right;font-weight:600">height (per ${uName})</th><th style="text-align:right;font-weight:600">area</th></tr></thead><tbody>${rows}</tbody></table></div>`; }
+  let v="";
+  if(P.mode==="two"){
+    if(B){const tA=A.dens>B.dens, mA=A.n>B.n;
+      v=(A.dens===B.dens)?"The two bars have the same height.":`Bar ${tA?"A":"B"} is taller (more crowded). `;
+      v+=(A.n===B.n)?"They hold the same number of penguins.":`Bar ${mA?"A":"B"} holds more penguins (${Math.max(A.n,B.n)} against ${Math.min(A.n,B.n)}). `;
+      v+=(tA!==mA&&A.n!==B.n&&A.dens!==B.dens)?"The taller bar is not the one with more penguins: a height is not a probability; an area is.":"Height and area agree here; try a wider Bar B.";
+    } else v=`On average ${f3(A.perUnit)} penguins per ${uName}. But look at the grey bars: the real counts in this range go from ${Math.min(...A.each)} to ${Math.max(...A.each)} per mm. The bar shows the average crowding.`;
+  } else v=A.zero?"Width 0: one exact value has no width, so its probability is 0, even where the penguins are crowded.":`Width ${A.wmm} mm: the height is about ${f3(A.dens)} per ${uName}, and the area (probability) is ${A.area.toFixed(3)}. Make the bar thinner: the area keeps falling.`;
+  $("verdict").textContent=v;
+  draw1(A,B,k);
+}
+function draw1(A,B,k){
+  const dpr=window.devicePixelRatio||1,W=cv1.clientWidth,H=cv1.clientHeight;
+  cv1.width=W*dpr;cv1.height=H*dpr;c1.setTransform(dpr,0,0,dpr,0,0);c1.clearRect(0,0,W,H);
+  const pad={l:58,r:14,t:14,b:42}, x0=169.5, x1=235.5, den=P.y==="den";
+  const conv=v=>den?v/(NALL*k):v/k; // a count per mm -> shown unit
+  let ymax=0; for(let v=170;v<=235;v++) ymax=Math.max(ymax,PERMM[v]||0); ymax=conv(ymax)*1.12;
+  const X=v=>pad.l+(v-x0)/(x1-x0)*(W-pad.l-pad.r), Y=v=>H-pad.b-v/ymax*(H-pad.t-pad.b);
+  c1.fillStyle=css("--bar"); c1.globalAlpha=.55;
+  for(let v=170;v<=235;v++){const c=PERMM[v]||0; if(!c) continue; const xa=X(v-0.5),xb=X(v+0.5); c1.fillRect(xa+0.5,Y(conv(c)),Math.max(1,xb-xa-1),H-pad.b-Y(conv(c)));}
+  c1.globalAlpha=1;
+  const box=(r,col,side)=>{ if(!r) return;
+    if(r.zero){c1.strokeStyle=col;c1.lineWidth=2.5;c1.beginPath();c1.moveTo(X(r.c),pad.t);c1.lineTo(X(r.c),H-pad.b);c1.stroke();return;}
+    const h=conv(r.n/r.wmm), xa=X(r.a-0.5), xb=X(r.b+0.5);
+    c1.globalAlpha=.28;c1.fillStyle=col;c1.fillRect(xa,Y(h),xb-xa,H-pad.b-Y(h));c1.globalAlpha=1;
+    c1.strokeStyle=col;c1.lineWidth=2.5;c1.strokeRect(xa,Y(h),xb-xa,H-pad.b-Y(h));
+    c1.fillStyle=col;c1.font="600 12px "+css("--f-ui");c1.textAlign=side==="r"?"right":"left";c1.fillText(f3(h),side==="r"?xb:xa,Y(h)-6);};
+  box(B,css("--salmon"),"r"); box(A,css("--bass"),"l");
+  c1.strokeStyle=css("--line");c1.fillStyle=css("--muted");c1.font="12px "+css("--f-ui");c1.lineWidth=1;
+  c1.beginPath();c1.moveTo(pad.l,pad.t);c1.lineTo(pad.l,H-pad.b);c1.lineTo(W-pad.r,H-pad.b);c1.stroke();
+  const st=W<500?10:5; for(let v=170;v<=235;v+=st){c1.textAlign="center";c1.fillText(v,X(v),H-pad.b+16);}
+  const r=ymax,s0=Math.pow(10,Math.floor(Math.log10(r/5))),s=[1,2,5,10].map(m=>m*s0).find(m=>r/m<=6);
+  for(let v=0;v<=ymax+1e-12;v+=s){c1.textAlign="right";c1.fillText(+v.toPrecision(4),pad.l-6,Y(v)+4);}
+  c1.textAlign="center";c1.fillText("flipper length (mm)",(pad.l+W-pad.r)/2,H-6);
+  c1.save();c1.translate(14,(pad.t+H-pad.b)/2);c1.rotate(-Math.PI/2);c1.fillText(den?`density (per ${P.u===1?"mm":"m"})`:`penguins per ${P.u===1?"mm":"m"}`,0,0);c1.restore();
+}
+seg(["m-two","m-shrink"],i=>P.mode=i?"shrink":"two",render1);
+seg(["y-cnt","y-den"],i=>P.y=i?"den":"cnt",render1);
+seg(["v-mm","v-m"],i=>P.u=i?2:1,render1);
+["a1","b1","a2","b2"].forEach(id=>$(id).oninput=e=>{P[id]=+e.target.value;render1();});
+$("c3").oninput=e=>{P.c=+e.target.value;render1();}; $("w3").oninput=e=>{P.wi=+e.target.value;render1();};
+$("useB").onchange=e=>{P.useB=e.target.checked;render1();};
+const setv=(id,v)=>{$(id).value=v;P[id]=v;};
+$("p-35").onclick=()=>{setv("a1",190);setv("b1",194);P.useB=false;$("useB").checked=false;render1();};
+$("p-wide").onclick=()=>{setv("a1",190);setv("b1",194);setv("a2",190);setv("b2",199);P.useB=true;$("useB").checked=true;render1();};
+window.__p1=P; window.__render1=render1;
 window.__state=S; window.__render=render;
-window.addEventListener("resize",render);
-matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",render);
-new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
-render();
+window.addEventListener("resize",()=>{render();render1();});
+matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",()=>{render();render1();});
+new MutationObserver(()=>{render();render1();}).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+render();render1();
 })();
 </script>
 

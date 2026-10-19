@@ -8,8 +8,8 @@
 /* A 16:9 stage (1600 x 900 design units) scaled to fit any window or slide frame, so nothing is cut and text scales with the slide. */
 :root{--bg:#ffffff;--panel:#f6f7f9;--ink:#1b2130;--muted:#5c6577;--line:#dfe3ea;--bar:#b9bec8;--bass:#2d5bc4;--salmon:#d9822b;--accent:#2d5bc4;
   --f-ui:"Segoe UI","Helvetica Neue",Arial,system-ui,sans-serif;--f-num:ui-monospace,"SFMono-Regular",Menlo,Consolas,"DejaVu Sans Mono",monospace;--f-body:"Palatino Linotype",Palatino,Georgia,serif}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#12151c;--panel:#1a1f29;--ink:#e7eaf0;--muted:#9aa3b3;--line:#2b3240;--bar:#5b6372;--bass:#7ea3f2;--salmon:#f0a65c;--accent:#7ea3f2}}
-:root[data-theme="dark"]{--bg:#12151c;--panel:#1a1f29;--ink:#e7eaf0;--muted:#9aa3b3;--line:#2b3240;--bar:#5b6372;--bass:#7ea3f2;--salmon:#f0a65c;--accent:#7ea3f2}
+/* Always light: a live slide matches the deck, whatever the system theme. */
+:root{color-scheme:light}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--f-ui);overflow:hidden}
 #fit{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
@@ -42,6 +42,8 @@ input[type=range]{width:100%;accent-color:var(--accent);height:30px}
 .chk{display:flex;align-items:center;gap:6px;font-size:24px;white-space:nowrap;width:64px;flex:none}
 .chk input{width:24px;height:24px}
 .src{grid-column:1/-1;font-size:16px;color:var(--muted);text-align:right;margin:0}
+/* ?cam=1 (inside the recorded deck): keep the bottom right clear for the presenter camera */
+.cam footer{padding-right:340px} .cam .src{text-align:left;justify-self:start}
 button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 </style>
 </head>
@@ -49,9 +51,8 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 <div id="fit"><div id="stage">
   <header>
     <h1>How crowded, how many?</h1>
-    <div class="seg" role="group" aria-label="Mode"><button type="button" id="m-two" aria-pressed="true">Compare bars</button><button type="button" id="m-shrink" aria-pressed="false">Shrink a bar</button></div>
     <span class="sp"></span>
-    <div class="seg" role="group" aria-label="Height shows"><button type="button" id="y-cnt" aria-pressed="true">penguins</button><button type="button" id="y-den" aria-pressed="false">÷ 342</button></div>
+    <div class="seg" role="group" aria-label="Height shows"><button type="button" id="y-cnt" aria-pressed="true">count density</button><button type="button" id="y-den" aria-pressed="false">probability density</button></div>
     <div class="seg" role="group" aria-label="Unit"><button type="button" id="v-mm" aria-pressed="true">per mm</button><button type="button" id="v-m" aria-pressed="false">per m</button></div>
   </header>
   <section class="chart" aria-label="Chart">
@@ -70,10 +71,6 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
       <div class="ctl" id="cb1"><label for="a2">from</label><input type="range" id="a2" min="170" max="235" step="1" value="190"><output id="a2o"></output></div>
       <div class="ctl" id="cb2"><label for="b2">to</label><input type="range" id="b2" min="170" max="235" step="1" value="199"><output id="b2o"></output></div>
     </div>
-    <div class="grp" id="f-shrink" style="display:none">
-      <div class="ctl"><label for="c3">centre</label><input type="range" id="c3" min="175" max="230" step="1" value="195"><output id="c3o"></output></div>
-      <div class="ctl"><label for="w3">width</label><input type="range" id="w3" min="0" max="10" step="1" value="10"><output id="w3o"></output></div>
-    </div>
   </footer>
   <p class="src">ENGS 3302 · Week 3 · Worked example 3.5 · Palmer Penguins (CC0): 342 penguins, flipper length in whole mm</p>
 </div></div>
@@ -86,37 +83,30 @@ const PERMM={}; FL.forEach(v=>{PERMM[v]=(PERMM[v]||0)+1;});
 // Pure model: a bar over the recorded values lo..hi (whole mm) has width hi-lo+1 mm.
 function bar(lo,hi,k){const a=Math.min(lo,hi),b=Math.max(lo,hi);k=k||1;let n=0;for(let v=a;v<=b;v++)n+=PERMM[v]||0;
   const wmm=b-a+1,w=wmm*k;return {a,b,n,wmm,w,perUnit:n/w,dens:n/(N*w),area:n/N,each:Array.from({length:wmm},(_,i)=>PERMM[a+i]||0)};}
-function shrink(c,wi,k){if(wi===0)return {zero:true,c,area:0};const wmm=2*wi-1,h=(wmm-1)/2;const r=bar(c-h,c+h,k);r.c=c;return r;}
-window.__bar=bar; window.__shrink=shrink;
-const P={mode:"two",a1:190,b1:194,useB:false,a2:190,b2:199,c:195,wi:10,y:"cnt",u:1};
+window.__bar=bar;
+const P={a1:190,b1:194,useB:false,a2:190,b2:199,y:"cnt",u:1};
 const f=v=>Number.isFinite(v)?(Math.abs(v)>=100?v.toFixed(0):Math.abs(v)>=10?v.toFixed(1):Math.abs(v)>=1?v.toFixed(2):v.toFixed(4)):"—";
+if(/[?&]cam/.test(location.search)) document.body.classList.add("cam");
 const fit=()=>{const s=Math.min(innerWidth/1600,innerHeight/900);$("stage").style.transform=`scale(${s})`;};
 function card(r,label,col,u){
   const wT=P.u===1?`${r.wmm} mm`:`${(r.wmm/1000).toFixed(3)} m`;
   return `<div class="card" style="border-color:${col}"><h3 style="color:${col}">${label}: ${r.a}–${r.b} mm</h3>
    <div class="row"><span>penguins</span><b>${r.n}</b></div>
-   <div class="row"><span>① ${r.n} ÷ ${wT}</span><b>${f(r.perUnit)} per ${u}</b></div>
-   <div class="row"><span>② ÷ ${N}</span><b>${f(r.dens)} per ${u}</b></div>
+   <div class="row"><span>① ÷ ${wT}: count density</span><b>${f(r.perUnit)} per ${u}</b></div>
+   <div class="row"><span>② ÷ ${N}: probability density</span><b>${f(r.dens)} per ${u}</b></div>
    <div class="row"><span>③ area × ${wT}</span><b>${r.area.toFixed(3)}</b></div></div>`;}
 function render(){
   const k=P.u===1?1:0.001,u=P.u===1?"mm":"m";
-  document.querySelectorAll(".f-two").forEach(e=>e.style.display=P.mode==="two"?"flex":"none"); $("f-shrink").style.display=P.mode==="shrink"?"flex":"none";
   ["cb1","cb2"].forEach(id=>$(id).style.visibility=P.useB?"visible":"hidden");
   ["a1","b1","a2","b2"].forEach(id=>$(id+"o").textContent=P[id]+" mm");
-  $("c3o").textContent=P.c+" mm"; $("w3o").textContent=(P.wi?2*P.wi-1:0)+" mm";
   let A,B=null,html="",v="";
-  if(P.mode==="two"){
+  {
     A=bar(P.a1,P.b1,k); if(P.useB) B=bar(P.a2,P.b2,k);
     html=card(A,"A",css("--bass"),u)+(B?card(B,"B",css("--salmon"),u):"");
     if(B){const tA=A.dens>B.dens,mA=A.n>B.n;
       v=(A.dens===B.dens?"Same height. ":`${tA?"A":"B"} is taller (more crowded). `)+(A.n===B.n?"Same number of penguins.":`${mA?"A":"B"} holds more penguins (${Math.max(A.n,B.n)} vs ${Math.min(A.n,B.n)}).`);
       if(tA!==mA&&A.n!==B.n&&A.dens!==B.dens) v+=" Height is not probability; area is.";}
     else v=`On average ${f(A.perUnit)} penguins per ${u}. The real counts inside go from ${Math.min(...A.each)} to ${Math.max(...A.each)} per mm: the bar is their average.`;
-  } else {
-    A=shrink(P.c,P.wi,k); let rows="";
-    for(let i=10;i>=0;i--){const r=shrink(P.c,i,k);rows+=`<tr class="${i===P.wi?"cur":""}"><td>${r.zero?0:r.wmm} mm</td><td>${r.zero?"—":f(r.dens)}</td><td>${r.area.toFixed(3)}</td></tr>`;}
-    html=`<div class="card"><h3>Around ${P.c} mm</h3><table><thead><tr><th>width</th><th>height (÷342, per ${u})</th><th>area</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-    v=A.zero?"Width 0: one exact value has no width, so its probability (area) is 0. The penguins there are still crowded.":`Width ${A.wmm} mm: height ${f(A.dens)} per ${u}, area ${A.area.toFixed(3)}. Thinner bar: the height stays near the same, the area keeps falling.`;
   }
   $("side").innerHTML=html; $("verdict").textContent=v; draw(A,B,k);
 }
@@ -129,7 +119,6 @@ function draw(A,B,k){
   c.fillStyle=css("--bar");
   for(let v=170;v<=235;v++){const n=PERMM[v]||0;if(!n)continue;const xa=X(v-0.5),xb=X(v+0.5);c.fillRect(xa+1,Y(conv(n)),Math.max(1,xb-xa-2),H-pad.b-Y(conv(n)));}
   const box=(r,col,side)=>{if(!r)return; c.lineWidth=4;
-    if(r.zero){c.strokeStyle=col;c.beginPath();c.moveTo(X(r.c),pad.t);c.lineTo(X(r.c),H-pad.b);c.stroke();return;}
     const h=conv(r.n/r.wmm),xa=X(r.a-0.5),xb=X(r.b+0.5);
     c.globalAlpha=.25;c.fillStyle=col;c.fillRect(xa,Y(h),xb-xa,H-pad.b-Y(h));c.globalAlpha=1;c.strokeStyle=col;c.strokeRect(xa,Y(h),xb-xa,H-pad.b-Y(h));
     c.fillStyle=col;c.font="700 24px "+css("--f-ui");c.textAlign=side==="r"?"right":"left";c.fillText(f(h),side==="r"?xb:xa,Y(h)-8);};
@@ -140,12 +129,11 @@ function draw(A,B,k){
   const st0=Math.pow(10,Math.floor(Math.log10(ym/4))),st=[1,2,5,10].map(m=>m*st0).find(m=>ym/m<=5);
   for(let v=0;v<=ym+1e-12;v+=st){c.textAlign="right";c.fillText(+v.toPrecision(4),pad.l-10,Y(v)+7);}
   c.textAlign="center";c.fillText("flipper length (mm)",(pad.l+W-pad.r)/2,H-8);
-  c.save();c.translate(22,(pad.t+H-pad.b)/2);c.rotate(-Math.PI/2);c.fillText(den?`fraction per ${P.u===1?"mm":"m"}`:`penguins per ${P.u===1?"mm":"m"}`,0,0);c.restore();
+  c.save();c.translate(22,(pad.t+H-pad.b)/2);c.rotate(-Math.PI/2);c.fillText(den?`probability density (fraction per ${P.u===1?"mm":"m"})`:`count density (penguins per ${P.u===1?"mm":"m"})`,0,0);c.restore();
 }
 function seg(ids,fn){ids.forEach((id,i)=>$(id).onclick=()=>{fn(i);ids.forEach(j=>$(j).setAttribute("aria-pressed",j===id));render();});}
-seg(["m-two","m-shrink"],i=>P.mode=i?"shrink":"two"); seg(["y-cnt","y-den"],i=>P.y=i?"den":"cnt"); seg(["v-mm","v-m"],i=>P.u=i?2:1);
+seg(["y-cnt","y-den"],i=>P.y=i?"den":"cnt"); seg(["v-mm","v-m"],i=>P.u=i?2:1);
 ["a1","b1","a2","b2"].forEach(id=>$(id).oninput=e=>{P[id]=+e.target.value;render();});
-$("c3").oninput=e=>{P.c=+e.target.value;render();}; $("w3").oninput=e=>{P.wi=+e.target.value;render();};
 $("useB").onchange=e=>{P.useB=e.target.checked;render();};
 window.__p=P; window.__render=render;
 addEventListener("resize",()=>{fit();render();}); fit(); render();

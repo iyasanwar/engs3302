@@ -80,12 +80,6 @@ canvas{display:block;width:100%;height:380px}
 <h2 class="part">Part 1 · One bar: how crowded, how many<small>Flipper length of all 342 penguins, recorded in whole mm. Grey: the real number of penguins at each mm.</small></h2>
 <div class="main">
   <aside class="panel controls" aria-label="Part 1 controls">
-    <div class="group">
-      <h2>What to do</h2>
-      <div class="seg" role="group" aria-label="Mode">
-        <button type="button" id="m-two" aria-pressed="true">Compare bars</button><button type="button" id="m-shrink" aria-pressed="false">Shrink a bar</button>
-      </div>
-    </div>
     <div class="group" id="g-two">
       <h2><span style="color:var(--bass)">Bar A</span></h2>
       <div class="ctl"><label for="a1">From</label><output id="a1o"></output><input type="range" id="a1" min="170" max="235" step="1" value="190"></div>
@@ -97,16 +91,10 @@ canvas{display:block;width:100%;height:380px}
       </div>
       <div class="presets"><button type="button" id="p-35">Example 3.5: 190–194</button><button type="button" id="p-wide">vs one bar 190–199</button></div>
     </div>
-    <div class="group" id="g-shrink" style="display:none">
-      <h2>Bar around a point</h2>
-      <div class="ctl"><label for="c3">Centre</label><output id="c3o"></output><input type="range" id="c3" min="175" max="230" step="1" value="195"></div>
-      <div class="ctl"><label for="w3">Width</label><output id="w3o"></output><input type="range" id="w3" min="0" max="10" step="1" value="10"></div>
-      <p class="note">Move the width down to 1 mm, then to 0.</p>
-    </div>
     <div class="group">
       <h2>Height shows</h2>
       <div class="seg" role="group" aria-label="Height shows">
-        <button type="button" id="y-cnt" aria-pressed="true">Penguins per mm</button><button type="button" id="y-den" aria-pressed="false">Density (÷ 342)</button>
+        <button type="button" id="y-cnt" aria-pressed="true">Count density</button><button type="button" id="y-den" aria-pressed="false">Probability density</button>
       </div>
       <div class="seg" role="group" aria-label="Part 1 unit">
         <button type="button" id="v-mm" aria-pressed="true">per mm</button><button type="button" id="v-m" aria-pressed="false">per m</button>
@@ -117,7 +105,6 @@ canvas{display:block;width:100%;height:380px}
       <ol class="tasks">
         <li>Example 3.5: how many penguins per mm in 190–194? Is every mm the same?</li>
         <li>Turn on Bar B, 190–199. Which bar is taller? Which holds more penguins?</li>
-        <li>Shrink a bar around 195, from 19 mm to 1 mm. The height only moves up and down a little. What happens to the area? And at width 0?</li>
         <li>Switch to <b>per m</b>. Which numbers change, and which stay the same?</li>
       </ol>
     </div>
@@ -134,7 +121,7 @@ canvas{display:block;width:100%;height:380px}
   </section>
 </div>
 
-<h2 class="part">Part 2 · The whole histogram and the normal curve<small>Choose a measurement and a species, change the bin width and the unit, and compare the data with a normal model.</small></h2>
+<h2 class="part" id="part2">Part 2 · The whole histogram and the normal curve<small>Choose a measurement and a species, change the bin width and the unit, and compare the data with a normal model.</small></h2>
 <div class="main">
   <aside class="panel controls" aria-label="Controls">
     <div class="group">
@@ -311,47 +298,35 @@ function bar(lo,hi,unitK){
   const perUnit=n/w, dens=n/(NALL*w), area=dens*w;
   return {a,b,n,wmm,w,perUnit,dens,area,prob:n/NALL,each:Array.from({length:wmm},(_,i)=>PERMM[a+i]||0)};
 }
-function shrink(c,wIdx){ // widths 0,1,3,5,...,19 mm around the centre
-  const wmm=wIdx===0?0:2*wIdx-1; if(wmm===0) return {a:c,b:c,n:0,wmm:0,w:0,perUnit:NaN,dens:NaN,area:0,prob:0,zero:true,c};
-  const h=(wmm-1)/2; const r=bar(c-h,c+h,1); r.c=c; return r;}
-window.__bar=bar; window.__shrink=shrink; window.__NALL=NALL;
-const P={mode:"two",a1:190,b1:194,useB:false,a2:190,b2:199,c:195,wi:10,y:"cnt",u:1};
+window.__bar=bar; window.__NALL=NALL;
+const P={a1:190,b1:194,useB:false,a2:190,b2:199,y:"cnt",u:1};
 const cv1=$("cv1"),c1=cv1.getContext("2d");
 const f3=v=>Number.isFinite(v)?(Math.abs(v)>=100?v.toFixed(0):Math.abs(v)>=10?v.toFixed(1):Math.abs(v)>=1?v.toFixed(2):v.toFixed(4)):"—";
 function stepCard(r,label,col,uName){
   if(!r) return "";
-  if(r.zero) return `<div class="step" style="border-color:${col}"><h3 style="color:${col}">${label}: width 0, one exact point</h3>
-    <div class="row"><span>Penguins with exactly ${r.c}.000… mm</span><b>no width, no area</b></div>
-    <div class="row"><span>Probability = area</span><b>0</b></div>
-    <div class="row"><span>The height (density) does not drop to 0. Only the area does.</span><b></b></div></div>`;
   const wTxt=P.u===1?`${r.wmm} mm`:`${(r.wmm/1000).toFixed(3)} m`;
   return `<div class="step" style="border-color:${col}"><h3 style="color:${col}">${label}: ${r.a}–${r.b} mm (${r.a-0.5} to ${r.b+0.5})</h3>
     <div class="row"><span>Penguins in the bar</span><b>${r.n}</b></div>
     <div class="row"><span>Width</span><b>${wTxt}</b></div>
-    <div class="row"><span>① Crowding: ${r.n} ÷ ${wTxt}</span><b>${f3(r.perUnit)} penguins per ${uName}</b></div>
-    <div class="row"><span>② Density: ${f3(r.perUnit)} ÷ ${NALL}</span><b>${f3(r.dens)} per ${uName}</b></div>
+    <div class="row"><span>① Count density: ${r.n} ÷ ${wTxt}</span><b>${f3(r.perUnit)} penguins per ${uName}</b></div>
+    <div class="row"><span>② Probability density: ${f3(r.perUnit)} ÷ ${NALL}</span><b>${f3(r.dens)} per ${uName}</b></div>
     <div class="row"><span>③ Area: ${f3(r.dens)} × ${wTxt}</span><b>${r.area.toFixed(3)} = ${r.n}/${NALL}</b></div></div>`;
 }
 function render1(){
   const k=P.u===1?1:0.001, uName=P.u===1?"mm":"m";
-  $("g-two").style.display=P.mode==="two"?"grid":"none"; $("g-shrink").style.display=P.mode==="shrink"?"grid":"none";
-  $("bctl").style.display=P.useB?"grid":"none"; $("lgB").style.display=(P.mode==="two"&&P.useB)?"inline":"none";
+  $("bctl").style.display=P.useB?"grid":"none"; $("lgB").style.display=P.useB?"inline":"none";
   ["a1","b1","a2","b2"].forEach(id=>$(id+"o").textContent=P[id]+" mm");
-  const W3=P.wi===0?0:2*P.wi-1; $("c3o").textContent=P.c+" mm"; $("w3o").textContent=W3+" mm";
   let A,B=null;
-  if(P.mode==="two"){A=bar(P.a1,P.b1,k); if(P.useB) B=bar(P.a2,P.b2,k);} else {A=shrink(P.c,P.wi); if(!A.zero){A=bar(A.a,A.b,k);} }
-  $("steps").innerHTML=stepCard(A,P.mode==="two"?"Bar A":"The bar",css("--bass"),uName)+(B?stepCard(B,"Bar B",css("--salmon"),uName):"");
-  if(P.mode==="shrink"){ let rows=""; for(let i=10;i>=0;i--){const r=shrink(P.c,i); const rr=r.zero?r:bar(r.a,r.b,k); const cur=i===P.wi;
-      rows+=`<tr style="${cur?"font-weight:700;color:var(--accent)":""}"><td>${r.zero?0:r.wmm} mm</td><td>${r.zero?"—":f3(rr.dens)}</td><td>${rr.area.toFixed(3)}</td></tr>`;}
-    $("steps").innerHTML+=`<div class="step"><h3>All widths around ${P.c} mm</h3><table style="width:100%;border-collapse:collapse;font-family:var(--f-num);font-size:13px;text-align:right"><thead><tr style="color:var(--muted)"><th style="text-align:right;font-weight:600">width</th><th style="text-align:right;font-weight:600">height (per ${uName})</th><th style="text-align:right;font-weight:600">area</th></tr></thead><tbody>${rows}</tbody></table></div>`; }
+  A=bar(P.a1,P.b1,k); if(P.useB) B=bar(P.a2,P.b2,k);
+  $("steps").innerHTML=stepCard(A,"Bar A",css("--bass"),uName)+(B?stepCard(B,"Bar B",css("--salmon"),uName):"");
   let v="";
-  if(P.mode==="two"){
+  {
     if(B){const tA=A.dens>B.dens, mA=A.n>B.n;
       v=(A.dens===B.dens)?"The two bars have the same height.":`Bar ${tA?"A":"B"} is taller (more crowded). `;
       v+=(A.n===B.n)?"They hold the same number of penguins.":`Bar ${mA?"A":"B"} holds more penguins (${Math.max(A.n,B.n)} against ${Math.min(A.n,B.n)}). `;
       v+=(tA!==mA&&A.n!==B.n&&A.dens!==B.dens)?"The taller bar is not the one with more penguins: a height is not a probability; an area is.":"Height and area agree here; try a wider Bar B.";
     } else v=`On average ${f3(A.perUnit)} penguins per ${uName}. But look at the grey bars: the real counts in this range go from ${Math.min(...A.each)} to ${Math.max(...A.each)} per mm. The bar shows the average crowding.`;
-  } else v=A.zero?"Width 0: one exact value has no width, so its probability is 0, even where the penguins are crowded.":`Width ${A.wmm} mm: the height is about ${f3(A.dens)} per ${uName}, and the area (probability) is ${A.area.toFixed(3)}. Make the bar thinner: the area keeps falling.`;
+  }
   $("verdict").textContent=v;
   draw1(A,B,k);
 }
@@ -366,7 +341,6 @@ function draw1(A,B,k){
   for(let v=170;v<=235;v++){const c=PERMM[v]||0; if(!c) continue; const xa=X(v-0.5),xb=X(v+0.5); c1.fillRect(xa+0.5,Y(conv(c)),Math.max(1,xb-xa-1),H-pad.b-Y(conv(c)));}
   c1.globalAlpha=1;
   const box=(r,col,side)=>{ if(!r) return;
-    if(r.zero){c1.strokeStyle=col;c1.lineWidth=2.5;c1.beginPath();c1.moveTo(X(r.c),pad.t);c1.lineTo(X(r.c),H-pad.b);c1.stroke();return;}
     const h=conv(r.n/r.wmm), xa=X(r.a-0.5), xb=X(r.b+0.5);
     c1.globalAlpha=.28;c1.fillStyle=col;c1.fillRect(xa,Y(h),xb-xa,H-pad.b-Y(h));c1.globalAlpha=1;
     c1.strokeStyle=col;c1.lineWidth=2.5;c1.strokeRect(xa,Y(h),xb-xa,H-pad.b-Y(h));
@@ -378,13 +352,11 @@ function draw1(A,B,k){
   const r=ymax,s0=Math.pow(10,Math.floor(Math.log10(r/5))),s=[1,2,5,10].map(m=>m*s0).find(m=>r/m<=6);
   for(let v=0;v<=ymax+1e-12;v+=s){c1.textAlign="right";c1.fillText(+v.toPrecision(4),pad.l-6,Y(v)+4);}
   c1.textAlign="center";c1.fillText("flipper length (mm)",(pad.l+W-pad.r)/2,H-6);
-  c1.save();c1.translate(14,(pad.t+H-pad.b)/2);c1.rotate(-Math.PI/2);c1.fillText(den?`density (per ${P.u===1?"mm":"m"})`:`penguins per ${P.u===1?"mm":"m"}`,0,0);c1.restore();
+  c1.save();c1.translate(14,(pad.t+H-pad.b)/2);c1.rotate(-Math.PI/2);c1.fillText(den?`probability density (per ${P.u===1?"mm":"m"})`:`count density (penguins per ${P.u===1?"mm":"m"})`,0,0);c1.restore();
 }
-seg(["m-two","m-shrink"],i=>P.mode=i?"shrink":"two",render1);
 seg(["y-cnt","y-den"],i=>P.y=i?"den":"cnt",render1);
 seg(["v-mm","v-m"],i=>P.u=i?2:1,render1);
 ["a1","b1","a2","b2"].forEach(id=>$(id).oninput=e=>{P[id]=+e.target.value;render1();});
-$("c3").oninput=e=>{P.c=+e.target.value;render1();}; $("w3").oninput=e=>{P.wi=+e.target.value;render1();};
 $("useB").onchange=e=>{P.useB=e.target.checked;render1();};
 const setv=(id,v)=>{$(id).value=v;P[id]=v;};
 $("p-35").onclick=()=>{setv("a1",190);setv("b1",194);P.useB=false;$("useB").checked=false;render1();};

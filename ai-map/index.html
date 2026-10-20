@@ -1,0 +1,1011 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box;height:100%}</style>
+<title>أطلس الذكاء الاصطناعي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@600;700&family=Fira+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: a topographic atlas. Nested "islands" (AI > ML > DL > GenAI) sit on a sea grid,
+   the course island (PR) straddles the AI coast, applications line the coast, foundations are the bedrock band,
+   responsible AI is the halo. Header on top; detail panel slides in at the inline end. */
+:root{
+  --bg:#eaf0f5; --paper:#ffffff; --ink:#14233b; --muted:#566173; --line:#d3dbe4; --grid:#d3dde8;
+  --hl:#f3e3b5; --accent:#1d5c8c; --on-accent:#ffffff; --shadow:0 12px 32px rgba(20,35,59,.16);
+  --g-land:#6a5aa6; --g-ml:#1d5c8c; --g-pr:#b07c00; --g-dl:#28724f; --g-gen:#a8366a;
+  --g-apps:#c4552f; --g-found:#5d6b7e; --g-resp:#b3343d;
+  --pr-soft:#f7e8be; --pr-ink:#6e4c00; --fill-a:.075;
+  --f-disp:"Noto Naskh Arabic","IBM Plex Sans Arabic","Amiri",serif;
+  --f-ar:"IBM Plex Sans Arabic","Noto Sans Arabic",Tahoma,sans-serif;
+  --f-en:"Fira Sans","Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono","DejaVu Sans Mono",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c1420; --paper:#131d2c; --ink:#e6ebf2; --muted:#9aa6b8; --line:#263347; --grid:#18263a;
+    --hl:#3d3517; --accent:#74aee0; --on-accent:#0f1724; --shadow:0 12px 32px rgba(0,0,0,.5);
+    --g-land:#a99be6; --g-ml:#74aee0; --g-pr:#f0b84f; --g-dl:#63c08f; --g-gen:#ea8bb6;
+    --g-apps:#f08a6a; --g-found:#a3afc0; --g-resp:#ef8088;
+    --pr-soft:#3b2e0b; --pr-ink:#f5c96a; --fill-a:.11; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0c1420; --paper:#131d2c; --ink:#e6ebf2; --muted:#9aa6b8; --line:#263347; --grid:#18263a;
+  --hl:#3d3517; --accent:#74aee0; --on-accent:#0f1724; --shadow:0 12px 32px rgba(0,0,0,.5);
+  --g-land:#a99be6; --g-ml:#74aee0; --g-pr:#f0b84f; --g-dl:#63c08f; --g-gen:#ea8bb6;
+  --g-apps:#f08a6a; --g-found:#a3afc0; --g-resp:#ef8088;
+  --pr-soft:#3b2e0b; --pr-ink:#f5c96a; --fill-a:.11; color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ar);font-size:15px}
+.app{height:100%;display:grid;grid-template-rows:auto 1fr}
+button,input,select{font:inherit;color:inherit}
+.lat{font-family:var(--f-en);unicode-bidi:isolate}
+
+/* header */
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;padding-block:10px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  background:var(--paper);border-bottom:1px solid var(--line);position:relative;z-index:6}
+.brand{min-width:0}
+.brand h1{font:700 23px/1.25 var(--f-disp);margin:0;text-wrap:balance}
+.brand p{margin:0;color:var(--muted);font-size:13px}
+.brand p .code{font:500 12px var(--f-mono);color:var(--pr-ink);background:var(--pr-soft);padding:1px 7px;border-radius:999px;unicode-bidi:isolate}
+.tools{display:flex;gap:8px;align-items:center;margin-inline-start:auto;flex-wrap:wrap}
+.search{position:relative}
+#q{height:38px;width:min(290px,62vw);border:1px solid var(--line);border-radius:999px;background:var(--bg);padding:0 16px}
+#q:focus{outline:3px solid var(--accent);outline-offset:1px}
+.results{position:absolute;top:calc(100% + 6px);inset-inline-start:0;width:min(360px,90vw);background:var(--paper);
+  border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:6px;margin:0;list-style:none;z-index:20;max-height:60vh;overflow:auto}
+.results button{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:center;width:100%;text-align:start;background:none;border:0;border-radius:10px;padding:8px 10px;cursor:pointer}
+.results button:hover,.results button:focus-visible{background:var(--bg);outline:none}
+.results i{grid-row:span 2;width:10px;height:10px;border-radius:50%;background:var(--c)}
+.results .rn{font-weight:600}
+.results .re{font:400 12px var(--f-en);color:var(--muted);unicode-bidi:isolate}
+.results .empty{padding:10px;color:var(--muted)}
+.btn{height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font-weight:500;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{background:var(--bg)}
+.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.btn.icon{width:38px;padding:0;justify-content:center;font:500 19px var(--f-en)}
+.menu-wrap{position:relative}
+.menu{position:absolute;top:calc(100% + 6px);inset-inline-end:0;width:min(320px,90vw);background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:6px;z-index:20}
+.menu button{display:block;width:100%;text-align:start;background:none;border:0;border-radius:10px;padding:9px 12px;cursor:pointer}
+.menu button:hover,.menu button:focus-visible{background:var(--bg);outline:none}
+.menu b{display:block;font-weight:600}
+.menu span{color:var(--muted);font-size:13px}
+
+/* stage */
+.stage{position:relative;overflow:hidden;min-height:0}
+#map{width:100%;height:100%;display:block;touch-action:none;cursor:grab;direction:ltr}
+#map:active{cursor:grabbing}
+.levels{position:absolute;top:12px;inset-inline-start:max(12px,env(safe-area-inset-right,0px));display:flex;gap:2px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:3px;box-shadow:0 2px 8px rgba(20,35,59,.08)}
+.lv{border:0;background:none;border-radius:999px;padding:5px 12px;font-size:13px;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.lv .n{font:600 11px var(--f-mono)}
+.lv.on{background:var(--accent);color:var(--on-accent)}
+.lv:disabled{cursor:default;opacity:.55}
+.lv:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+.hint{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:7px 16px;font-size:13.5px;color:var(--muted);white-space:nowrap;box-shadow:0 2px 8px rgba(20,35,59,.08);transition:opacity .3s}
+.legend{position:absolute;bottom:12px;inset-inline-start:max(12px,env(safe-area-inset-right,0px));background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px 14px;font-size:12.5px;max-width:300px;box-shadow:0 2px 8px rgba(20,35,59,.08)}
+.legend summary{cursor:pointer;font-weight:600;font-size:13px;list-style:none}
+.legend summary::-webkit-details-marker{display:none}
+.legend summary::after{content:" ▾";color:var(--muted)}
+.legend[open] summary::after{content:" ▴"}
+.lg-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 14px;margin-top:8px}
+.sw{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--c);margin-inline-end:6px;vertical-align:-1px}
+.sw.pr{box-shadow:0 0 0 2px var(--paper),0 0 0 3.5px var(--g-pr)}
+.lg-lines{display:grid;gap:4px;margin-top:9px;padding-top:8px;border-top:1px solid var(--line)}
+.lg-lines span{display:flex;align-items:center;gap:8px}
+.lg-lines svg{flex:none}
+.legend .sig{margin:9px 0 0;padding-top:8px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+.back{font-size:14px;color:var(--accent);text-decoration:none;white-space:nowrap}
+.back:hover{text-decoration:underline}
+
+/* panel */
+.panel{position:absolute;top:12px;bottom:12px;inset-inline-end:max(12px,env(safe-area-inset-left,0px));width:min(400px,calc(100% - 24px));background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:auto;padding:18px 22px 22px;z-index:4;overscroll-behavior:contain}
+.p-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;padding:4px 11px;border-radius:999px;border:1px solid var(--line)}
+.chip i{width:9px;height:9px;border-radius:50%;background:var(--c)}
+.chip.course{background:var(--pr-soft);color:var(--pr-ink);border-color:transparent}
+.x{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:none;cursor:pointer;font:400 18px var(--f-en);display:grid;place-items:center}
+.x:focus-visible{outline:3px solid var(--accent)}
+.p-title{font:700 27px/1.35 var(--f-disp);margin:12px 0 0;text-wrap:balance}
+.p-en{font:500 15px/1.4 var(--f-en);color:var(--muted);margin:2px 0 0;unicode-bidi:isolate}
+.p-desc{font-size:16px;line-height:1.9;margin:14px 0 0;max-width:65ch}
+.p-note{font-size:14.5px;line-height:1.8;margin:10px 0 0;color:var(--muted)}
+.panel h3{font-size:13px;font-weight:600;color:var(--muted);margin:22px 0 9px;display:flex;align-items:center;gap:10px}
+.panel h3::after{content:"";flex:1;height:1px;background:var(--line)}
+.ex{background:var(--bg);border-radius:12px;padding:10px 14px;line-height:1.85;font-size:15px;margin:0}
+.kids,.rels,.steps{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.kid{border:1px solid var(--line);border-radius:12px;padding:10px 14px;transition:background-color .4s}
+.kid.flash{background:var(--hl)}
+.kid .kn{display:block;font-weight:600;font-size:15.5px}
+.kid .ke{display:block;font:400 12.5px var(--f-en);color:var(--muted);text-align:right;unicode-bidi:isolate}
+.kid p{margin:4px 0 0;font-size:14.5px;line-height:1.8}
+.rel{display:grid;gap:3px;padding-block:4px}
+.rel+.rel{border-top:1px solid var(--line);padding-top:10px}
+.rel-h{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.link{font-weight:600;font-size:15px;color:var(--accent);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.rtype{font-size:11.5px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:0 8px;line-height:20px}
+.rel p{margin:0;font-size:14.5px;line-height:1.8}
+.members{display:flex;flex-wrap:wrap;gap:6px}
+.members button{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:none;border-radius:999px;padding:4px 11px;cursor:pointer;font-size:13.5px}
+.members button:hover{background:var(--bg)}
+.members i{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.steps{counter-reset:s}
+.steps li{display:grid;grid-template-columns:30px 1fr;gap:4px 10px;align-items:start}
+.steps .num{width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--on-accent);font:700 13px/26px var(--f-mono);text-align:center}
+.steps p{margin:2px 0 0;font-size:14px;line-height:1.75;color:var(--muted);grid-column:2}
+.pf{display:grid;gap:6px;margin-top:4px}
+.pf label{font-size:13px;color:var(--muted)}
+.pf select{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 10px}
+.pf select:focus{outline:3px solid var(--accent)}
+
+@media (max-width:760px){
+  .brand h1{font-size:20px}
+  .brand p{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:calc(100vw - 32px)}
+  .tools{width:100%;flex-wrap:nowrap}
+  .search{flex:1;min-width:0}
+  #q{width:100%}
+  #zin,#zout{display:none}
+  .panel{top:auto;bottom:0;inset-inline:0;width:auto;max-height:56%;border-radius:20px 20px 0 0;border-bottom:0;
+    padding-bottom:calc(22px + env(safe-area-inset-bottom,0px));
+    padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+  .app.panel-open .legend,.app.panel-open .hint{display:none}
+  .hint{white-space:normal;width:max-content;max-width:calc(100% - 32px);text-align:center;bottom:64px}
+  .levels .lt{display:none}
+}
+
+/* map drawing */
+.grat line{stroke:var(--grid);stroke-width:1.3;stroke-dasharray:2 8}
+.grat text{font:500 11px var(--f-mono);fill:var(--muted);opacity:.55}
+.region .fill{fill:var(--c);fill-opacity:var(--fill-a);stroke:var(--c);stroke-width:2.2;stroke-opacity:.6}
+.region .contour{fill:none;stroke:var(--c);stroke-opacity:.2;stroke-width:1.2}
+.region .contour.c2{stroke-opacity:.1}
+.region.pr .fill{stroke-width:4;stroke-opacity:.95;fill-opacity:calc(var(--fill-a) * 1.7)}
+.region .ring{fill:none;stroke:var(--c);stroke-width:3.2;stroke-dasharray:.5 10;stroke-linecap:round;stroke-opacity:.75}
+.rim{fill:none;stroke:var(--c);stroke-opacity:.12;stroke-width:58;stroke-linecap:round}
+.halo-soft{fill:none;stroke:var(--c);stroke-opacity:.07;stroke-width:46;stroke-linecap:round}
+.halo-line{fill:none;stroke:var(--c);stroke-width:2.2;stroke-dasharray:8 10;stroke-opacity:.7}
+.band{fill:var(--c);fill-opacity:var(--fill-a);stroke:var(--c);stroke-opacity:.5;stroke-width:2}
+.strata{fill:none;stroke:var(--c);stroke-opacity:.2;stroke-width:1.2}
+.rtitle{cursor:pointer;transition:opacity .3s}
+.rtitle .ar{font-family:var(--f-disp);font-weight:700;fill:var(--ink);text-anchor:middle}
+.rtitle .en{font-family:var(--f-en);font-weight:600;letter-spacing:.16em;fill:var(--muted);text-anchor:middle}
+.rtitle:focus{outline:none}
+.rtitle:focus-visible .ar,.rtitle:hover .ar{fill:var(--accent)}
+.badge rect{fill:var(--pr-soft);stroke:var(--g-pr);stroke-width:1.5}
+.badge text{font:600 15px var(--f-ar);fill:var(--pr-ink);text-anchor:middle}
+.halo{paint-order:stroke;stroke:var(--bg);stroke-width:6px;stroke-linejoin:round}
+.edge{fill:none;stroke:var(--ink);stroke-opacity:.14;stroke-width:1.6;transition:stroke-opacity .25s,stroke-width .25s}
+.edge.uses,.edge.overlap{stroke-dasharray:7 6}
+.edge.vs{stroke-dasharray:1 6;stroke-linecap:round;stroke-width:2.2}
+.edge.l0e{stroke:var(--c);stroke-opacity:.0}
+.edge-hit{fill:none;stroke:transparent;stroke-width:18;cursor:pointer}
+.edge.hl{stroke-opacity:.8;stroke-width:2.4}
+.node{cursor:pointer;transition:opacity .3s}
+.node .dot{fill:var(--c);stroke:var(--bg);stroke-width:3;transform-box:fill-box;transform-origin:center;transition:transform .3s}
+.node .ring{fill:none;stroke:var(--c);stroke-width:2;opacity:0;transition:opacity .3s}
+.node .ar{font:600 19px var(--f-ar);fill:var(--ink);text-anchor:middle;transition:opacity .3s}
+.node .en{font:400 12.5px var(--f-en);fill:var(--muted);text-anchor:middle;transition:opacity .3s}
+.node .hit{fill:transparent}
+.node:focus{outline:none}
+.node:focus-visible .ring,.node.sel .ring,.node.onpath .ring{opacity:1}
+.node.sel .dot,.node.onpath .dot{transform:scale(1.5)}
+.node:hover .ar{fill:var(--accent)}
+#map.l0 .edge:not(.l0e),#map.l0 .edge-hit,#map.l0 .sats,#map.l0 .satback{display:none}
+#map.l0 .edge.l0e{stroke-opacity:.22;stroke-width:6}
+#map.l0 .node{pointer-events:none}
+#map.l0 .node text{opacity:0}
+#map.l0 .node .dot{transform:scale(.7)}
+#map.focus .node:not(.hi){opacity:.14}
+#map.focus .edge:not(.hi){stroke-opacity:.05}
+#map.focus .edge.hi{stroke-opacity:.85;stroke-width:2.6}
+#map.focus .rtitle:not(.hi){opacity:.4}
+.satback{fill:var(--bg);fill-opacity:.82}
+.sat line{stroke:var(--c);stroke-opacity:.65;stroke-width:1.6}
+.sat .sdot{fill:var(--paper);stroke:var(--c);stroke-width:2.5;transition:fill .3s}
+.sat .ar{font:600 15px var(--f-ar);fill:var(--ink)}
+.sat .en{font:400 10.5px var(--f-en);fill:var(--muted)}
+.sat g.s{cursor:pointer}
+.sat g.s:hover .ar{fill:var(--accent)}
+.sat g.s.on .sdot{fill:var(--c)}
+.sat{animation:pop .35s ease-out both}
+@keyframes pop{from{opacity:0}to{opacity:1}}
+.pathseg{fill:none;stroke:var(--accent);stroke-width:5;stroke-linecap:round;stroke-opacity:.9}
+.pnum circle{fill:var(--accent);stroke:var(--bg);stroke-width:3}
+.pnum text{font:700 14px var(--f-mono);fill:var(--on-accent);text-anchor:middle}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none!important;animation:none!important}
+}
+</style>
+</head><body>
+
+<div class="app" id="app" dir="rtl" lang="ar">
+  <header class="bar">
+    <div class="brand">
+      <a class="back" href="../">← صفحة المساق</a>
+      <h1>أطلس الذكاء الاصطناعي</h1>
+      <p>خريطة المجالات والعلاقات بينها · <span class="code">ENGS 3302</span> مساق التعرّف على الأنماط</p>
+    </div>
+    <div class="tools">
+      <div class="search">
+        <input id="q" type="search" placeholder="ابحث عن مصطلح… (عربي أو English)" autocomplete="off" aria-label="ابحث عن مصطلح">
+        <ul class="results" id="results" hidden></ul>
+      </div>
+      <div class="menu-wrap">
+        <button class="btn" id="pathsBtn" aria-expanded="false" aria-controls="pathsMenu">مسارات</button>
+        <div class="menu" id="pathsMenu" hidden></div>
+      </div>
+      <button class="btn icon" id="zin" aria-label="تكبير" title="تكبير">+</button>
+      <button class="btn icon" id="zout" aria-label="تصغير" title="تصغير">−</button>
+      <button class="btn" id="home">النظرة العامة</button>
+    </div>
+  </header>
+  <main class="stage" id="stage">
+    <svg id="map" role="img" aria-label="خريطة تفاعلية لمجالات الذكاء الاصطناعي">
+      <g id="world">
+        <g id="lGrat" class="grat"></g>
+        <g id="lRegions"></g>
+        <g id="lEdges"></g>
+        <g id="lSatBack"></g>
+        <g id="lTitles"></g>
+        <g id="lNodes"></g>
+        <g id="lPath"></g>
+        <g id="lSats"></g>
+      </g>
+    </svg>
+    <div class="levels" role="group" aria-label="مستوى التكبير">
+      <button class="lv" data-l="0"><span class="n">0</span><span class="lt">نظرة عامة</span></button>
+      <button class="lv" data-l="1"><span class="n">1</span><span class="lt">المفاهيم</span></button>
+      <button class="lv" data-l="2" disabled><span class="n">2</span><span class="lt">التفاصيل</span></button>
+    </div>
+    <div class="hint" id="hint">اضغط على أي جزيرة لتكبيرها، أو اسحب وكبّر بعجلة الفأرة أو بإصبعين</div>
+    <details class="legend" id="legend" open>
+      <summary>دليل الخريطة</summary>
+      <div class="lg-grid" id="lgGroups"></div>
+      <div class="lg-lines">
+        <span><svg width="34" height="8"><line x1="1" y1="4" x2="33" y2="4" stroke="currentColor" stroke-width="2"/></svg>متصل: احتواء (جزء من)</span>
+        <span><svg width="34" height="8"><line x1="1" y1="4" x2="33" y2="4" stroke="currentColor" stroke-width="2" stroke-dasharray="7 5"/></svg>متقطع: استخدام أو تداخل</span>
+        <span><svg width="34" height="8"><line x1="2" y1="4" x2="33" y2="4" stroke="currentColor" stroke-width="2.4" stroke-dasharray="1 5" stroke-linecap="round"/></svg>منقّط: نهجان متقابلان</span>
+      </div>
+      <p class="sig"><span class="lat" dir="ltr">Iyas A. I. Alshaikhkhalil</span> · جامعة الأقصى · <span class="lat" dir="ltr">ENGS 3302</span></p>
+    </details>
+    <aside class="panel" id="panel" hidden aria-live="polite"></aside>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+/* ===================== DATA (agreed text, v2) ===================== */
+const GROUPS = {
+  land:{ar:"مظلة الذكاء الاصطناعي",en:"AI Landscape",d:"ما هو الذكاء الاصطناعي، ومدارسه الرمزية والتطورية."},
+  ml:{ar:"تعلّم الآلة",en:"Machine Learning",d:"كيف تتعلّم الآلة من البيانات، بأنماط التعلّم والخوارزميات الكلاسيكية."},
+  pr:{ar:"التعرّف على الأنماط",en:"Pattern Recognition",d:"جزيرة المساق، وهي متداخلة جزئياً مع جزيرة تعلّم الآلة."},
+  dl:{ar:"التعلّم العميق والشبكات العصبية",en:"Deep Learning & Neural Networks",d:"شبكات عصبية بطبقات كثيرة، ومعمارياتها الرئيسية."},
+  gen:{ar:"الذكاء التوليدي",en:"Generative AI",d:"النماذج اللغوية الكبيرة وما حولها."},
+  apps:{ar:"مجالات التطبيق",en:"Application Domains",d:"الرؤية، واللغة، والكلام، والروبوتات..."},
+  found:{ar:"الأسس والعلوم المجاورة",en:"Foundations & Neighbors",d:"الرياضيات، والإحصاء، والبيانات، والإشارات."},
+  resp:{ar:"الذكاء المسؤول",en:"Responsible AI",d:"التفسير، والعدالة، والخصوصية."}
+};
+const GORDER = ["land","ml","pr","dl","gen","apps","found","resp"];
+
+/* region circles: c = centre, r = radius, t = title anchor (baseline), fs = title size */
+const REG = {
+  ai:{g:"land",c:[1300,950],r:800,t:[1300,246],fs:58},
+  ml:{g:"ml",c:[1410,1040],r:570,t:[1410,532],fs:44},
+  dl:{g:"dl",c:[1550,1130],r:390,t:[1550,800],fs:34},
+  gen:{g:"gen",c:[1610,1195],r:255,t:[1610,996],fs:28},
+  pr:{g:"pr",c:[820,1320],r:290,t:[820,1112],fs:34}
+};
+const OUT = {ai:["ml","pr"],ml:["dl","pr"],pr:["dl"],dl:["gen"],gen:[]};
+const GRP = {apps:{t:[2222,690],fs:30},found:{t:[2238,1916],fs:26},resp:{t:[452,322],fs:30}};
+
+const NODES = [
+ /* region concepts */
+ {id:"ai",kind:"region",g:"land",ar:"الذكاء الاصطناعي",en:"Artificial Intelligence (AI)",
+  d:"المظلة الكبرى. يهدف إلى أن يقوم الحاسوب بأعمال نعدّها «ذكية» لو قام بها إنسان، مثل الإدراك والاستنتاج والتعلّم واتخاذ القرار.",
+  ex:"المساعدات الذكية، السيارات ذاتية القيادة، برامج الشطرنج."},
+ {id:"ml",kind:"region",g:"ml",ar:"تعلّم الآلة",en:"Machine Learning (ML)",
+  d:"فرع من الذكاء الاصطناعي يتعلّم فيه الحاسوب القاعدة من الأمثلة والبيانات بدل أن يكتبها المبرمج. وهو اليوم الطريقة السائدة في بناء الذكاء الاصطناعي.",
+  ex:"فلترة الرسائل المزعجة، توقّع أسعار البيوت، اقتراح الأفلام."},
+ {id:"pr",kind:"region",g:"pr",ar:"التعرّف على الأنماط",en:"Pattern Recognition (PR)",
+  d:"علم اكتشاف الانتظامات في البيانات وتصنيفها إلى فئات: ترى شيئاً فتقول «هذا من النوع الفلاني». جذوره هندسية من معالجة الإشارات والإحصاء، ويُعدّ هو وتعلّم الآلة وجهين لمجال واحد تقريباً (Bishop).",
+  ex:"قراءة الأرقام المكتوبة بخط اليد، بصمة الإصبع، تمييز أنواع الأسماك (مثال Duda الشهير)."},
+ {id:"dl",kind:"region",g:"dl",ar:"التعلّم العميق",en:"Deep Learning (DL)",
+  d:"فرع من تعلّم الآلة يستخدم شبكات عصبية بطبقات كثيرة تتعلّم الخصائص بنفسها، بدل أن يصمّمها الإنسان. انطلق بقوة منذ 2012 بفضل البيانات الضخمة ومعالجات الرسوم (GPU).",
+  ex:"التعرّف على الوجوه، الترجمة الآلية الحديثة، توليد الصور."},
+ {id:"gen",kind:"region",g:"gen",ar:"الذكاء الاصطناعي التوليدي",en:"Generative AI",
+  d:"نماذج تُنتج محتوى جديداً من نص أو صورة أو صوت أو فيديو أو كود، بدل أن تكتفي بالتصنيف أو التنبؤ. الفرق الجوهري أن النموذج التمييزي يتعلّم p(y|x)، بينما النموذج التوليدي يتعلّم توزيع البيانات نفسها p(x).",
+  ex:"ChatGPT وClaude، توليد الصور، توليد الموسيقى والفيديو."},
+ {id:"apps",kind:"group",g:"apps",ar:"مجالات التطبيق",en:"Application Domains",d:"الرؤية، واللغة، والكلام، والروبوتات... هنا تُستخدم أدوات تعلّم الآلة والتعلّم العميق. تقع هذه المجالات على «ساحل» الذكاء الاصطناعي لأنها أقدم من تعلّم الآلة وتستعمل كل أدواته."},
+ {id:"found",kind:"group",g:"found",ar:"الأسس والعلوم المجاورة",en:"Foundations & Neighbors",d:"الرياضيات، والإحصاء، والبيانات، والإشارات. هي «الأرض الصخرية» التي يقوم عليها كل ما فوقها."},
+ {id:"resp",kind:"group",g:"resp",ar:"الذكاء المسؤول",en:"Responsible AI",d:"التفسير، والعدالة، والخصوصية. طبقة تحيط بكل الجزر."},
+
+ /* 1. landscape */
+ {id:"agi",g:"land",reg:"ai",p:[1000,400],ar:"الذكاء الضيق مقابل الذكاء العام",lab:"الذكاء الضيق والعام",en:"Narrow AI vs. AGI",enl:"Narrow AI vs. AGI",
+  d:"كل الأنظمة الموجودة اليوم «ضيقة»، أي متقنة لمهام محددة. أما الذكاء العام (Artificial General Intelligence) فهو نظام افتراضي يضاهي الإنسان في كل المهام، وما زال هدفاً بحثياً ومحل نقاش.",
+  ex:"نظام كشف أورام = ذكاء ضيق. «مساعد يتقن أي عمل بشري» = ذكاء عام (غير موجود بعد)."},
+ {id:"symbolic",g:"land",reg:"ai",p:[780,640],ar:"الذكاء الرمزي",en:"Symbolic AI / GOFAI",
+  d:"المدرسة «الكلاسيكية»: تمثيل المعرفة برموز وقواعد منطقية يكتبها الإنسان، ثم الاستنتاج منها، بلا تعلّم من البيانات.",
+  ex:"أنظمة التشخيص بالقواعد، لغة Prolog.",
+  kids:[
+   {ar:"الأنظمة الخبيرة",en:"Expert Systems",d:"قواعد «إذا... فإن...» مأخوذة من خبراء بشر. مثال: نظام MYCIN للتشخيص الطبي (السبعينات)."},
+   {ar:"تمثيل المعرفة والاستدلال",en:"Knowledge Representation & Reasoning",d:"طرق تخزين الحقائق والعلاقات بشكل يستطيع الحاسوب الاستنتاج منه. مثال: الرسوم المعرفية (Knowledge Graphs) التي يستخدمها Google."},
+   {ar:"البحث والتخطيط",en:"Search & Planning",d:"إيجاد سلسلة أفعال توصل إلى هدف. مثال: خوارزمية A* لإيجاد أقصر طريق، وبرامج الشطرنج."},
+   {ar:"المنطق الضبابي",en:"Fuzzy Logic",d:"منطق يقبل درجات من الصحة («دافئ نوعاً ما») بدل صح أو خطأ فقط. مثال: التحكم في الغسالات والمكيفات."}]},
+ {id:"evo",g:"land",reg:"ai",p:[690,930],ar:"الحوسبة التطورية",en:"Evolutionary Computation",enl:"Evolutionary Computation",
+  d:"خوارزميات تحاكي الانتقاء الطبيعي: مجموعة حلول «تتكاثر وتتحوّر»، ويبقى منها الأفضل.",
+  ex:"الخوارزميات الجينية (Genetic Algorithms) لتصميم هوائيات أو جداول دراسية، وأسراب الجسيمات (PSO)."},
+
+ /* 2. machine learning */
+ {id:"sup",g:"ml",reg:"ml",p:[1020,770],ar:"التعلّم الموجَّه",en:"Supervised Learning",
+  d:"أمثلة معها الإجابات الصحيحة (Labels)، والنموذج يتعلّم الربط بين المدخل والإجابة.",
+  kids:[
+   {ar:"التصنيف",en:"Classification",d:"المخرج فئة. مثال: هل البريد مزعج أم لا؟"},
+   {ar:"الانحدار",en:"Regression",d:"المخرج رقم. مثال: كم سعر هذا البيت؟"}]},
+ {id:"unsup",g:"ml",reg:"ml",p:[960,960],ar:"التعلّم غير الموجَّه",en:"Unsupervised Learning",
+  d:"أمثلة بلا إجابات، والنموذج يكتشف البنية المخفية.",
+  kids:[
+   {ar:"التجميع",en:"Clustering",d:"تقسيم البيانات إلى مجموعات متشابهة. مثال: تقسيم العملاء، وخوارزمية k-means."},
+   {ar:"تقليل الأبعاد",en:"Dimensionality Reduction",d:"ضغط خصائص كثيرة في عدد أقل مع الحفاظ على المعلومة. مثال: PCA، وt-SNE لرسم بيانات عالية الأبعاد."},
+   {ar:"كشف الحالات الشاذة",en:"Anomaly Detection",d:"إيجاد ما يخالف النمط المعتاد. مثال: كشف الاحتيال في البطاقات البنكية."}]},
+ {id:"semi",g:"ml",reg:"ml",p:[1200,650],ar:"التعلّم شبه الموجَّه",en:"Semi-Supervised Learning",enl:"Semi-Supervised",
+  d:"قليل من البيانات المصنّفة مع كثير غير مصنّف.",
+  ex:"تصنيف صور طبية حين يكون وقت الطبيب المتاح للتصنيف محدوداً."},
+ {id:"selfsup",g:"ml",reg:"ml",p:[1420,690],ar:"التعلّم الذاتي الإشراف",en:"Self-Supervised Learning",enl:"Self-Supervised",
+  d:"النموذج يصنع «الإجابات» من البيانات نفسها، مثل أن يخفي كلمة ثم يحاول تخمينها. هكذا تُدرَّب النماذج الكبيرة على كميات هائلة من البيانات بلا تصنيف بشري.",
+  ex:"تدريب GPT وBERT."},
+ {id:"rl",g:"ml",reg:"ml",p:[1640,650],ar:"التعلّم بالتعزيز",en:"Reinforcement Learning (RL)",enl:"Reinforcement Learning",
+  d:"وكيل يتعلّم بالتجربة والخطأ داخل بيئة، فيأخذ مكافأة على الفعل الجيد وعقوبة على السيئ.",
+  ex:"AlphaGo، تدريب الروبوتات على المشي، ضبط ردود النماذج اللغوية (RLHF)."},
+ {id:"transfer",g:"ml",reg:"ml",p:[1830,800],ar:"نقل التعلّم والضبط الدقيق",lab:"نقل التعلّم",en:"Transfer Learning & Fine-tuning",enl:"Transfer Learning",
+  d:"نأخذ نموذجاً تعلّم مهمة كبيرة ونكيّفه لمهمة جديدة ببيانات قليلة.",
+  ex:"نموذج مدرَّب على ملايين الصور يُضبط ليكشف أمراض النباتات."},
+ {id:"classical",g:"ml",reg:"ml",p:[1080,1140],ar:"الخوارزميات الكلاسيكية",en:"Classical ML Algorithms",enl:"Classical Algorithms",
+  d:"خوارزميات ما قبل التعلّم العميق، وما زالت ممتازة للبيانات الجدولية والصغيرة.",
+  kids:[
+   {ar:"الانحدار الخطي واللوجستي",en:"Linear & Logistic Regression",d:"أبسط النماذج وأكثرها قابلية للتفسير."},
+   {ar:"أقرب الجيران",en:"k-Nearest Neighbors (k-NN)",d:"صنّف العنصر حسب أقرب أمثلة له."},
+   {ar:"أشجار القرار والغابات العشوائية",en:"Decision Trees & Random Forests",d:"أسئلة متتالية بنعم أو لا، والغابة تجمع أشجاراً كثيرة."},
+   {ar:"آلات المتجهات الداعمة",en:"Support Vector Machines (SVM)",d:"تبحث عن أعرض حدّ فاصل بين الفئات."},
+   {ar:"التعزيز التجميعي",en:"Ensembles / Boosting",d:"تجمع نماذج ضعيفة في نموذج قوي. مثال: XGBoost، الذي يفوز كثيراً في مسابقات Kaggle."}]},
+ {id:"evalu",g:"ml",reg:"ml",p:[1210,1460],ar:"التقييم والتعميم",en:"Evaluation & Generalization",enl:"Evaluation",
+  d:"هل يعمل النموذج على بيانات لم يرها من قبل؟",
+  kids:[
+   {ar:"الإفراط في التوافق",en:"Overfitting",d:"النموذج «يحفظ» بيانات التدريب ولا يعمّم."},
+   {ar:"التحقق المتقاطع",en:"Cross-Validation",d:"تقسيم البيانات لتقييم عادل."},
+   {ar:"مقاييس الأداء",en:"Metrics",d:"الدقة (Accuracy)، والضبط والاستدعاء (Precision/Recall)، ومصفوفة الالتباس (Confusion Matrix)."}]},
+
+ /* 3. pattern recognition */
+ {id:"pipeline",g:"pr",reg:"pr",p:[930,1185],ar:"دورة نظام التعرّف",en:"The PR Pipeline",
+  d:"استشعار ← معالجة أولية ← استخراج خصائص ← تصنيف ← قرار.",
+  ex:"كاميرا ← صورة سمكة ← (الطول، اللمعان) ← سلمون أم قاروص؟"},
+ {id:"features",g:"pr",reg:"pr",p:[650,1350],ar:"استخراج الخصائص واختيارها",lab:"استخراج الخصائص",en:"Feature Extraction & Selection",enl:"Feature Extraction",
+  d:"تحويل البيانات الخام إلى أرقام قليلة معبّرة، واختيار الأنفع منها. في الأنظمة الكلاسيكية يصمّمها الإنسان، وفي التعلّم العميق تتعلّمها الشبكة بنفسها.",
+  ex:"طول السمكة، تكرارات الصوت (MFCC)، حواف الصورة (HOG)."},
+ {id:"bayes",g:"pr",reg:"pr",p:[720,1195],ar:"نظرية القرار البايزية",en:"Bayesian Decision Theory",enl:"Bayesian Decision Theory",
+  d:"الأساس النظري للتصنيف: اختر الفئة الأكثر احتمالاً بعد رؤية البيانات (Posterior)، مع مراعاة كلفة الخطأ.",
+  ex:"المصنّف البايزي البسيط (Naive Bayes) في فلترة الرسائل المزعجة."},
+ {id:"density",g:"pr",reg:"pr",p:[835,1335],ar:"تقدير الكثافة",en:"Density Estimation",
+  d:"تقدير توزيع البيانات في كل فئة.",
+  kids:[
+   {ar:"الطرق البارامترية",en:"Parametric",d:"نفترض شكل التوزيع (غاوسي مثلاً) ونقدّر معاملاته (MLE)."},
+   {ar:"الطرق اللابارامترية",en:"Non-parametric",d:"بلا افتراض شكل. مثال: نوافذ بارزن، وأقرب الجيران."},
+   {ar:"نماذج الخليط الغاوسي",en:"Gaussian Mixture Models (GMM)",d:"توزيع مكوّن من عدة «قِباب» غاوسية."}]},
+ {id:"lindisc",g:"pr",reg:"pr",p:[1010,1335],ar:"المميِّزات الخطية",en:"Linear Discriminants",
+  d:"حدود قرار خطية تفصل الفئات.",
+  ex:"البيرسبترون، ومميِّز فيشر (LDA)."},
+ {id:"prapps",g:"pr",reg:"pr",p:[810,1495],ar:"تطبيقات كلاسيكية",en:"Classic PR Applications",enl:"Classic Applications",
+  kids:[
+   {ar:"التعرّف الضوئي على الحروف",en:"Optical Character Recognition (OCR)",d:"تحويل صورة نص إلى نص."},
+   {ar:"القياسات الحيوية",en:"Biometrics",d:"البصمة، والوجه، والقزحية، والصوت."},
+   {ar:"التشخيص من الإشارات",en:"Signal-based Diagnosis",d:"تخطيط القلب (ECG)، وأعطال الآلات من الاهتزاز."}]},
+
+ /* 4. deep learning */
+ {id:"nn",g:"dl",reg:"dl",p:[1290,905],ar:"الشبكات العصبية",en:"Neural Networks",
+  d:"نموذج رياضي مستوحى بشكل مبسّط من الدماغ، فيه عُقد مرتبة في طبقات تمرّر الأرقام وتعدّلها بأوزان قابلة للتعلّم.",
+  kids:[
+   {ar:"البيرسبترون",en:"Perceptron",d:"أبسط عصبون، من عام 1958."},
+   {ar:"الشبكة متعددة الطبقات",en:"Multi-Layer Perceptron (MLP)",d:"طبقات متتالية من العصبونات."},
+   {ar:"الانتشار العكسي",en:"Backpropagation",d:"الخوارزمية التي تحسب كيف نعدّل كل وزن لتقليل الخطأ."},
+   {ar:"دوال التفعيل",en:"Activation Functions",d:"مثل ReLU وSigmoid، وهي التي تعطي الشبكة قدرتها غير الخطية."}]},
+ {id:"cnn",g:"dl",reg:"dl",p:[1240,1110],ar:"الشبكات الالتفافية",en:"Convolutional Neural Networks (CNN)",enl:"CNN",
+  d:"مصمَّمة للصور: تمسح الصورة بمرشّحات صغيرة فتلتقط الحواف، ثم الأشكال، ثم الأشياء.",
+  ex:"AlexNet وResNet، وتحليل صور الأشعة."},
+ {id:"rnn",g:"dl",reg:"dl",p:[1270,1310],ar:"الشبكات التكرارية",en:"Recurrent Neural Networks (RNN / LSTM)",enl:"RNN / LSTM",
+  d:"مصمَّمة للتسلسلات: تحمل «ذاكرة» من الخطوة السابقة إلى التالية. استبدلت بها المحوِّلات إلى حد كبير.",
+  ex:"التنبؤ بالسلاسل الزمنية، والتعرّف على الكلام قديماً."},
+ {id:"transformers",g:"dl",reg:"dl",p:[1500,885],ar:"المحوِّلات وآلية الانتباه",lab:"المحوِّلات",en:"Transformers & Attention",enl:"Transformers",
+  d:"معمارية ظهرت عام 2017 («Attention Is All You Need»)، وفيها كل عنصر «ينتبه» إلى بقية العناصر ليفهم السياق، مع معالجة متوازية سريعة.",
+  ex:"أساس GPT وClaude وGemini، والمحوِّلات البصرية (ViT) للصور."},
+ {id:"embed",g:"dl",reg:"dl",p:[1770,925],ar:"التضمينات",en:"Embeddings",
+  d:"تمثيل الكلمات أو الصور أو أي شيء آخر كمتجهات أرقام، بحيث تكون المعاني المتقاربة متقاربة في الفضاء.",
+  ex:"Word2Vec («ملك − رجل + امرأة ≈ ملكة»)، والبحث الدلالي."},
+ {id:"autoenc",g:"dl",reg:"dl",p:[1420,1450],ar:"المرمِّزات الذاتية",en:"Autoencoders",
+  d:"شبكة تضغط المدخل في تمثيل صغير ثم تعيد بناءه، فتتعلّم أهم ما فيه.",
+  ex:"إزالة الضجيج من الصور، وكشف الحالات الشاذة."},
+
+ /* 5. generative */
+ {id:"llm",g:"gen",reg:"gen",p:[1530,1090],ar:"النماذج اللغوية الكبيرة",en:"Large Language Models (LLMs)",enl:"LLMs",
+  d:"محوِّلات ضخمة دُرّبت على كميات هائلة من النصوص لتتنبأ بالكلمة التالية، فصارت قادرة على الكتابة والإجابة والتلخيص والبرمجة.",
+  ex:"GPT، Claude، Gemini، Llama، والنماذج العربية مثل Jais وALLaM."},
+ {id:"foundation",g:"gen",reg:"gen",p:[1700,1090],ar:"النماذج الأساسية",en:"Foundation Models",
+  d:"نماذج ضخمة تُدرَّب مرة واحدة على بيانات واسعة، ثم تُكيَّف لمهام كثيرة.",
+  ex:"النماذج اللغوية الكبيرة، وCLIP، وSAM لتقطيع الصور."},
+ {id:"diffusion",g:"gen",reg:"gen",p:[1465,1225],ar:"نماذج الانتشار",en:"Diffusion Models",
+  d:"تبدأ من تشويش عشوائي، ثم تزيله خطوة بعد خطوة حتى تظهر صورة تطابق الوصف.",
+  ex:"Stable Diffusion، Midjourney، DALL·E، ونماذج توليد الفيديو."},
+ {id:"gan",g:"gen",reg:"gen",p:[1610,1235],ar:"الشبكات التوليدية التنافسية",lab:"الشبكات التنافسية",en:"Generative Adversarial Networks (GANs)",enl:"GANs",
+  d:"شبكتان تتنافسان: مولِّد يزيّف ومميِّز يكشف التزييف، حتى يتقن المولِّد.",
+  ex:"وجوه أشخاص غير موجودين، والتزييف العميق (Deepfakes)."},
+ {id:"vae",g:"gen",reg:"gen",p:[1755,1240],ar:"المرمِّز الذاتي التبايني",lab:"المرمِّز التبايني",en:"Variational Autoencoder (VAE)",enl:"VAE",
+  d:"مرمِّز ذاتي احتمالي يمكن أن نأخذ منه عينات جديدة.",
+  ex:"توليد الصور، ويُستخدم داخل Stable Diffusion."},
+ {id:"multimodal",g:"gen",reg:"gen",p:[1540,1355],ar:"النماذج متعددة الوسائط",lab:"متعددة الوسائط",en:"Multimodal Models",
+  d:"تفهم أكثر من نوع من البيانات معاً، مثل النص والصورة والصوت.",
+  ex:"أن تسأل النموذج عن صورة أو رسم بياني فيجيبك."},
+ {id:"llmtech",g:"gen",reg:"gen",p:[1690,1355],ar:"تقنيات استخدام النماذج اللغوية الكبيرة",lab:"تقنيات الاستخدام",en:"Using LLMs: Prompting, RAG",enl:"Prompting & RAG",
+  kids:[
+   {ar:"هندسة الأوامر",en:"Prompt Engineering",d:"صياغة التعليمات للحصول على أفضل إجابة."},
+   {ar:"التوليد المعزَّز بالاسترجاع",en:"Retrieval-Augmented Generation (RAG)",d:"النموذج يبحث في مستنداتك أولاً ثم يجيب منها، فتقلّ الهلوسة."},
+   {ar:"الهلوسة",en:"Hallucination",d:"حين يولّد النموذج معلومة خاطئة بثقة."}]},
+ {id:"agents",g:"gen",reg:"ai",p:[1560,345],ar:"الوكلاء الأذكياء",en:"AI Agents",
+  d:"أنظمة مبنية على نموذج لغوي كبير، تخطط وتستخدم أدوات (بحث، كود، تطبيقات) وتنفّذ مهاماً متعددة الخطوات بنفسها.",
+  ex:"مساعد يبحث ثم يكتب تقريراً، أو يصلح كوداً، أو يحجز موعداً."},
+
+ /* 6. applications (on the coast) */
+ {id:"robotics",g:"apps",reg:"apps",ang:-55,rr:800,ar:"الروبوتات",en:"Robotics",
+  d:"آلات تتحرك وتتفاعل مع العالم الحقيقي: ترى، ثم تخطط، ثم تتحكم.",
+  ex:"روبوتات المستودعات، الطائرات المسيّرة، الأذرع الجراحية، السيارات ذاتية القيادة."},
+ {id:"cv",g:"apps",reg:"apps",ang:-30,rr:800,ar:"رؤية الحاسوب",en:"Computer Vision (CV)",enl:"Computer Vision",
+  d:"أن يفهم الحاسوب الصور والفيديو.",
+  ex:"فتح الهاتف بالوجه، كشف المشاة في السيارات، قراءة لوحات السيارات.",
+  kids:[
+   {ar:"تصنيف الصور",en:"Image Classification",d:"ماذا في الصورة؟"},
+   {ar:"كشف الأجسام",en:"Object Detection",d:"أين هي؟ مع مربعات حولها. مثال: YOLO."},
+   {ar:"التقطيع",en:"Segmentation",d:"تحديد كل بكسل لأي جسم ينتمي."},
+   {ar:"التعرّف على الوجوه",en:"Face Recognition",d:"من صاحب هذا الوجه؟"}]},
+ {id:"nlp",g:"apps",reg:"apps",ang:-5,rr:800,ar:"معالجة اللغة الطبيعية",en:"Natural Language Processing (NLP)",enl:"NLP",
+  d:"أن يفهم الحاسوب لغة البشر ويولّدها.",
+  note:"تحديات العربية: التشكيل، والصرف الغني، واللهجات.",
+  kids:[
+   {ar:"الترجمة الآلية",en:"Machine Translation",d:"نقل النص من لغة إلى أخرى."},
+   {ar:"تحليل المشاعر",en:"Sentiment Analysis",d:"هل التعليق إيجابي أم سلبي؟"},
+   {ar:"استخراج الكيانات",en:"Named Entity Recognition (NER)",d:"الأسماء والأماكن والتواريخ."},
+   {ar:"التلخيص والإجابة عن الأسئلة",en:"Summarization & QA",d:"اختصار النص، والإجابة عن سؤال منه."}]},
+ {id:"speech",g:"apps",reg:"apps",ang:20,rr:800,ar:"معالجة الكلام",en:"Speech Processing",
+  kids:[
+   {ar:"التعرّف على الكلام",en:"Automatic Speech Recognition (ASR)",d:"من صوت إلى نص. مثال: Whisper."},
+   {ar:"تحويل النص إلى كلام",en:"Text-to-Speech (TTS)",d:"من نص إلى صوت طبيعي."},
+   {ar:"التعرّف على المتحدث",en:"Speaker Recognition",d:"من يتكلم؟"}]},
+ {id:"medical",g:"apps",reg:"apps",ang:45,rr:800,ar:"الذكاء الاصطناعي في الطب",lab:"الذكاء في الطب",en:"Medical AI",
+  ex:"قراءة صور الأشعة، تحليل تخطيط القلب، اكتشاف الأدوية (AlphaFold لطيّ البروتينات)."},
+ {id:"timeseries",g:"apps",reg:"apps",ang:70,rr:800,ar:"السلاسل الزمنية والتنبؤ",lab:"السلاسل الزمنية",en:"Time-Series Analysis & Forecasting",enl:"Time Series",
+  d:"بيانات مرتبة زمنياً، والهدف التنبؤ بقيمها القادمة.",
+  ex:"الطقس، استهلاك الكهرباء، أسعار الأسهم."},
+ {id:"recsys",g:"apps",reg:"apps",ang:95,rr:800,ar:"أنظمة التوصية",en:"Recommender Systems",
+  d:"تتنبأ بما قد يعجبك اعتماداً على سلوكك وسلوك من يشبهونك.",
+  ex:"يوتيوب، نتفليكس، أمازون."},
+
+ /* 7. foundations (bedrock band) */
+ {id:"cog",g:"found",reg:"found",p:[545,1905],fixed:true,ar:"العلوم المعرفية وعلم الأعصاب",lab:"العلوم المعرفية",en:"Cognitive Science & Neuroscience",enl:"Cognitive Science",
+  d:"دراسة العقل والدماغ البشريين، وهي مصدر إلهام تاريخي للشبكات العصبية وللتعلّم بالتعزيز.",
+  ex:"الشبكات الالتفافية مستوحاة من القشرة البصرية (Hubel & Wiesel)."},
+ {id:"signal",g:"found",reg:"found",p:[790,1905],fixed:true,ar:"معالجة الإشارات والصور",lab:"معالجة الإشارات",en:"Signal & Image Processing",
+  d:"تنظيف الإشارات والصور وتحسينها واستخراج خصائص منها بالرياضيات، مثل تحويل فورييه والمرشّحات.",
+  ex:"إزالة الضجيج من الصوت، تحسين تباين الصورة، كشف الحواف."},
+ {id:"math",g:"found",reg:"found",p:[1035,1905],fixed:true,ar:"الرياضيات الأساسية",en:"Mathematical Foundations",enl:"Mathematics",
+  kids:[
+   {ar:"الجبر الخطي",en:"Linear Algebra",d:"متجهات ومصفوفات، فكل البيانات والأوزان مصفوفات."},
+   {ar:"الاحتمالات",en:"Probability",d:"للتعامل مع عدم اليقين."},
+   {ar:"التفاضل",en:"Calculus",d:"المشتقات التي يقوم عليها التدريب."},
+   {ar:"التحسين",en:"Optimization",d:"إيجاد أفضل الأوزان. مثال: الانحدار التدرّجي (Gradient Descent)."}]},
+ {id:"stats",g:"found",reg:"found",p:[1280,1905],fixed:true,ar:"الإحصاء",en:"Statistics",
+  d:"علم جمع البيانات وتحليلها واستنتاج النتائج منها مع تقدير درجة اليقين. كثير من خوارزميات تعلّم الآلة أصلها إحصائي.",
+  ex:"الانحدار، اختبار الفرضيات، التقدير."},
+ {id:"mining",g:"found",reg:"found",p:[1525,1905],fixed:true,ar:"تنقيب البيانات",en:"Data Mining",
+  d:"البحث عن أنماط مفيدة ومخفية في قواعد بيانات كبيرة.",
+  ex:"«من يشتري الخبز يشتري الحليب غالباً» (قواعد الارتباط)، كشف الاحتيال البنكي."},
+ {id:"ds",g:"found",reg:"found",p:[1770,1905],fixed:true,ar:"علم البيانات",en:"Data Science",
+  d:"مجال عملي يجمع الإحصاء والبرمجة وتعلّم الآلة ومعرفة المجال لاستخراج قرارات من البيانات.",
+  ex:"تحليل مبيعات شركة، لوحات المؤشرات."},
+ {id:"bigdata",g:"found",reg:"found",p:[2015,1905],fixed:true,ar:"البيانات الضخمة",en:"Big Data",
+  d:"بيانات أكبر وأسرع وأكثر تنوعاً من أن تعالجها الأدوات التقليدية، وهي «الوقود» الذي جعل التعلّم العميق ممكناً.",
+  ex:"سجلات منصات التواصل، بيانات المستشعرات (IoT)، وأدوات مثل Hadoop وSpark."},
+
+ /* 8. responsible AI (halo) */
+ {id:"xai",g:"resp",reg:"resp",ang:-170,rr:880,ar:"الذكاء الاصطناعي القابل للتفسير",lab:"القابل للتفسير",en:"Explainable AI (XAI)",enl:"Explainable AI",
+  d:"طرق تشرح لماذا اتخذ النموذج قراره.",
+  ex:"SHAP، وخرائط الانتباه التي تُظهر أين «نظر» النموذج في الصورة."},
+ {id:"fair",g:"resp",reg:"resp",ang:-150,rr:880,ar:"العدالة والتحيّز",en:"Fairness & Bias",
+  d:"النموذج يرث تحيّزات بياناته.",
+  ex:"نظام توظيف يميّز ضد فئة معينة، أو نظام وجوه أضعف مع بشرة معينة."},
+ {id:"privacy",g:"resp",reg:"resp",ang:-130,rr:880,ar:"الخصوصية والأمان",en:"Privacy & Security",
+  d:"حماية بيانات الأفراد، ومقاومة الهجمات على النماذج.",
+  ex:"التعلّم الموحَّد (Federated Learning)، والأمثلة الخادعة (Adversarial Examples)، وكسر قيود النماذج (Jailbreaks)."},
+ {id:"ethics",g:"resp",reg:"resp",ang:-110,rr:880,ar:"أخلاقيات الذكاء الاصطناعي وحوكمته",lab:"الأخلاقيات والحوكمة",en:"AI Ethics & Governance",enl:"Ethics & Governance",
+  d:"مَن المسؤول؟ وما الاستخدامات المقبولة؟",
+  ex:"قانون الذكاء الاصطناعي الأوروبي (EU AI Act)، ومخاطر التزييف العميق والمعلومات المضللة."}
+];
+
+/* edges: [a, b, type, text, flags]   type: contain | uses | overlap | vs
+   flags: "hidden" = shown by nesting, not drawn;  "l0" = island-level link drawn in the overview */
+const T5="التطبيقات هي «أين» نستخدم الأدوات.";
+const T15="بدأت هذه المجالات تاريخياً كمسائل تعرّف على أنماط، مثل الحروف والأصوات والوجوه.";
+const T35="تجمع رؤية الحاسوب ومعالجة اللغة في نموذج واحد.";
+const T38="يرى ثم يقرّر ثم يتحرّك.";
+const T39="أنظمة التوصية تعتمد على تعلّم الآلة وتنقيب البيانات والتضمينات.";
+const T40="علم البيانات يجمع الإحصاء وتعلّم الآلة في التطبيق.";
+const T45="مخاطر التزييف العميق: محتوى مولَّد يبدو حقيقياً.";
+const TNN="نوع من معماريات الشبكات العصبية.";
+const EDGES = [
+ ["ml","ai","contain","تعلّم الآلة هو إحدى طرق بناء الذكاء الاصطناعي، وهي السائدة اليوم.","hidden"],
+ ["dl","ml","contain","كل تعلّم عميق هو تعلّم آلة، وليس العكس.","hidden"],
+ ["gen","dl","contain","عملياً، كل النماذج التوليدية الحديثة شبكات عميقة.","hidden"],
+ ["pr","ml","overlap","تداخل كبير، فهما وجهان لمجال واحد. التعرّف على الأنماط يصف المسألة (صنِّف هذا النمط)، وتعلّم الآلة يصف الطريقة (تعلَّم من البيانات). الأول جاء من الهندسة، والثاني من علوم الحاسوب.","hidden"],
+ ["apps","ml","uses",T5,"l0"],
+ ["apps","dl","uses",T5,"l0"],
+ ["found","ai","uses","الرياضيات والإحصاء تحت كل شيء.","l0"],
+ ["resp","ai","overlap","طبقة تحيط بكل الجزر.","l0"],
+ ["symbolic","ml","vs","نهجان مختلفان. القواعد يكتبها الإنسان، أو القواعد تُستخرج من البيانات. والاتجاه الحديث (Neuro-symbolic) يحاول الجمع بينهما."],
+ ["pr","stats","overlap","أدواته الأساسية إحصائية، مثل قاعدة بايز وتقدير التوزيعات."],
+ ["bayes","math","uses","التصنيف الأمثل هو حساب احتمالات."],
+ ["pr","sup","overlap","التصنيف بالأمثلة المصنّفة هو قلب التعرّف على الأنماط."],
+ ["pr","unsup","overlap","التجميع ونماذج الخليط الغاوسي من أدواته."],
+ ["features","signal","uses","الخصائص الكلاسيكية تُستخرج بأدوات المعالجة."],
+ ["features","dl","overlap","نقطة التحول الكبرى. في الأنظمة الكلاسيكية يصمّم الإنسان الخصائص، وفي التعلّم العميق تتعلّمها الشبكة بنفسها."],
+ ["pr","cv","uses",T15],
+ ["pr","speech","uses",T15],
+ ["lindisc","nn","uses","البيرسبترون مميِّز خطي، وهو جدّ الشبكات العصبية كلها."],
+ ["unsup","autoenc","overlap","تقليل الأبعاد (PCA) والمرمِّزات الذاتية: المرمِّز الذاتي الخطي يكافئ PCA."],
+ ["dl","nn","uses","«العميق» يعني شبكة عصبية بطبقات كثيرة."],
+ ["dl","bigdata","uses","لولا البيانات الضخمة ومعالجات الرسوم لما نجح التعلّم العميق."],
+ ["nn","math","uses","التدريب كله انحدار تدرّجي وانتشار عكسي، أي تحسين وتفاضل."],
+ ["cv","cnn","uses","ثورة 2012 (AlexNet)."],
+ ["cv","signal","uses","المعالجة تجهّز الصورة، والرؤية تفهمها."],
+ ["nlp","transformers","uses","المحوِّلات وُلدت لمسألة الترجمة."],
+ ["nlp","llm","overlap","النماذج الكبيرة صارت أداتها الرئيسية اليوم."],
+ ["nlp","embed","uses","الكلمات تتحوّل إلى متجهات."],
+ ["speech","signal","overlap","الصوت إشارة، فيُعالج أولاً ثم يُفهم."],
+ ["speech","nlp","overlap","صوت ← نص ← فهم."],
+ ["rnn","transformers","uses","المحوِّلات حلّت محل الشبكات التكرارية في معالجة التسلسلات."],
+ ["llm","transformers","uses","كل النماذج اللغوية الكبيرة الحالية مبنية على المحوِّلات."],
+ ["llm","selfsup","uses","هكذا تتعلّم بلا تصنيف بشري."],
+ ["llm","rl","uses","تُضبط ردودها بتقييم البشر (RLHF)."],
+ ["llm","foundation","contain","النماذج اللغوية الكبيرة نوع من النماذج الأساسية."],
+ ["foundation","transfer","uses","تُدرَّب مرة وتُكيَّف لمهام كثيرة."],
+ ["diffusion","cv","overlap","التوليد وجه معاكس للفهم، فالرؤية تفهم الصورة والانتشار يصنعها."],
+ ["multimodal","cv","overlap",T35],
+ ["multimodal","nlp","overlap",T35],
+ ["agents","llm","uses","النموذج اللغوي هو «عقل» الوكيل."],
+ ["agents","symbolic","uses","البحث والتخطيط: فكرة قديمة من الذكاء الرمزي تعود بثوب جديد."],
+ ["robotics","cv","uses",T38],
+ ["robotics","rl","uses",T38],
+ ["recsys","ml","uses",T39],
+ ["recsys","mining","uses",T39],
+ ["recsys","embed","uses",T39],
+ ["ds","stats","overlap",T40],
+ ["ds","ml","overlap",T40],
+ ["mining","ml","overlap","خوارزميات مشتركة، لكن هدف التنقيب اكتشاف معرفة، وهدف تعلّم الآلة التنبؤ."],
+ ["nn","cog","uses","الإلهام الأصلي من الدماغ."],
+ ["xai","dl","overlap","كلما زاد عمق النموذج صار «صندوقاً أسود» أكثر، فاحتجنا التفسير أكثر."],
+ ["fair","bigdata","overlap","التحيّز يبدأ من البيانات."],
+ ["gan","ethics","overlap",T45],
+ ["diffusion","ethics","overlap",T45],
+ ["cnn","nn","contain",TNN],
+ ["rnn","nn","contain",TNN],
+ ["transformers","nn","contain",TNN],
+ ["autoenc","nn","contain",TNN]
+].map((e,i)=>({i,a:e[0],b:e[1],type:e[2],t:e[3],flag:e[4]||""}));
+
+const PATHS = [
+ {t:"من المساق إلى ChatGPT",s:"كيف يقود التعرّف على الأنماط إلى النماذج اللغوية الكبيرة",ids:["pr","lindisc","nn","dl","transformers","llm"]},
+ {t:"من البكسل إلى الفهم",s:"من معالجة الصورة إلى نموذج يفهم الصورة والنص معاً",ids:["signal","features","cnn","cv","multimodal"]},
+ {t:"من القواعد إلى البيانات",s:"من الأنظمة الخبيرة إلى الوكلاء الأذكياء",ids:["symbolic","ml","dl","agents"]}
+];
+const TYPE_AR = {contain:"احتواء",uses:"استخدام",overlap:"تداخل",vs:"نهجان متقابلان",member:"داخل الجزيرة"};
+
+/* ===================== GEOMETRY ===================== */
+const byId = new Map(NODES.map(n=>[n.id,n]));
+const AIC = REG.ai.c;
+function polar(a,r){const t=a*Math.PI/180;return [AIC[0]+r*Math.cos(t),AIC[1]+r*Math.sin(t)];}
+const MAPNODES = NODES.filter(n=>!n.kind);
+MAPNODES.forEach(n=>{
+  if(n.ang!=null){[n.x,n.y]=polar(n.ang,n.rr);n.fixed=true;}
+  else {[n.x,n.y]=n.p;}
+});
+/* relaxation: keep nodes apart, inside their island and out of nested islands / titles */
+(function relax(){
+  const mov = MAPNODES.filter(n=>!n.fixed);
+  const obst = Object.values(REG).map(r=>({x:r.t[0],y:r.t[1]-r.fs*0.25,rad:r.fs*1.9+44}));
+  const M=50;
+  for(let it=0;it<500;it++){
+    for(let i=0;i<MAPNODES.length;i++)for(let j=i+1;j<MAPNODES.length;j++){
+      const a=MAPNODES[i],b=MAPNODES[j];
+      if(a.fixed&&b.fixed)continue;
+      const gg=(a.reg==="gen"&&b.reg==="gen"), WX=gg?158:172, WY=gg?82:92;
+      const dx=b.x-a.x,dy=b.y-a.y,dn=Math.hypot(dx/WX,dy/WY)||0.01;
+      if(dn<1){const f=(1-dn)/dn*0.5, px=dx*f, py=dy*f;
+        if(a.fixed){b.x+=px*2;b.y+=py*2;}
+        else if(b.fixed){a.x-=px*2;a.y-=py*2;}
+        else{a.x-=px;a.y-=py;b.x+=px;b.y+=py;}}
+    }
+    for(const n of mov){
+      for(const o of obst){const dx=n.x-o.x,dy=n.y-o.y,d=Math.hypot(dx,dy)||0.01;if(d<o.rad){n.x=o.x+dx/d*o.rad;n.y=o.y+dy/d*o.rad;}}
+      const R=REG[n.reg]; if(!R)continue;
+      for(const oid of (OUT[n.reg]||[])){const O=REG[oid];const dx=n.x-O.c[0],dy=n.y-O.c[1],d=Math.hypot(dx,dy)||0.01;
+        if(d<O.r+M){n.x=O.c[0]+dx/d*(O.r+M);n.y=O.c[1]+dy/d*(O.r+M);}}
+      if(n.reg==="ai"){for(const oid of ["ml","pr"]){const O=REG[oid];const dx=n.x-O.c[0],dy=n.y-O.c[1],d=Math.hypot(dx,dy)||0.01;if(d<O.r+M){n.x=O.c[0]+dx/d*(O.r+M);n.y=O.c[1]+dy/d*(O.r+M);}}}
+      const dx=n.x-R.c[0],dy=n.y-R.c[1],d=Math.hypot(dx,dy)||0.01,lim=R.r-M-(n.reg==="gen"?0:6);
+      if(d>lim){n.x=R.c[0]+dx/d*lim;n.y=R.c[1]+dy/d*lim;}
+    }
+  }
+})();
+function pos(id){
+  const n=byId.get(id);
+  if(REG[id]) return [REG[id].t[0],REG[id].t[1]-REG[id].fs*0.35];
+  if(GRP[id]) return [GRP[id].t[0],GRP[id].t[1]-GRP[id].fs*0.35];
+  return [n.x,n.y];
+}
+function curve(a,b,bend=0.12){
+  const [x1,y1]=a,[x2,y2]=b,dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy)||1,off=Math.min(90,L*bend);
+  const cx=(x1+x2)/2-dy/L*off,cy=(y1+y2)/2+dx/L*off;
+  return `M${x1.toFixed(1)},${y1.toFixed(1)} Q${cx.toFixed(1)},${cy.toFixed(1)} ${x2.toFixed(1)},${y2.toFixed(1)}`;
+}
+function arcPath(r,a0,a1){const [x0,y0]=polar(a0,r),[x1,y1]=polar(a1,r);const large=Math.abs(a1-a0)>180?1:0;return `M${x0},${y0} A${r},${r} 0 ${large} 1 ${x1},${y1}`;}
+const C = g=>`var(--g-${g})`;
+const nameOf = id=>{const n=byId.get(id);return n?(n.ar):id;};
+
+/* ===================== RENDER ===================== */
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const svg = d3.select("#map"), world = d3.select("#world");
+const WB = {x0:330,y0:70,x1:2380,y1:1990};
+
+/* graticule */
+(function(){
+  const g=d3.select("#lGrat");
+  for(let x=400;x<=2400;x+=200) g.append("line").attr("x1",x).attr("x2",x).attr("y1",-400).attr("y2",2400);
+  for(let y=0;y<=2200;y+=200) g.append("line").attr("y1",y).attr("y2",y).attr("x1",-400).attr("x2",2900);
+})();
+
+/* islands */
+const lR = d3.select("#lRegions");
+// responsible halo (behind)
+const halo = lR.append("g").attr("class","region-shape").style("--c",C("resp"));
+halo.append("path").attr("class","halo-soft").attr("d",arcPath(880,-182,-98));
+halo.append("path").attr("class","halo-line").attr("d",arcPath(880,-182,-98));
+// foundations band
+const band = lR.append("g").attr("class","region-shape").style("--c",C("found"));
+band.append("rect").attr("class","band").attr("x",420).attr("y",1846).attr("width",1940).attr("height",124).attr("rx",62);
+band.append("path").attr("class","strata").attr("d","M470,1868 C900,1858 1500,1878 2310,1866");
+band.append("path").attr("class","strata").attr("d","M470,1948 C1000,1956 1600,1940 2310,1950");
+["ai","ml","pr","dl","gen"].forEach(id=>{
+  const R=REG[id],g=lR.append("g").attr("class","region "+id).style("--c",C(R.g));
+  g.append("circle").attr("class","fill").attr("cx",R.c[0]).attr("cy",R.c[1]).attr("r",R.r);
+  g.append("circle").attr("class","contour").attr("cx",R.c[0]).attr("cy",R.c[1]).attr("r",R.r-16);
+  g.append("circle").attr("class","contour c2").attr("cx",R.c[0]).attr("cy",R.c[1]).attr("r",R.r-32);
+  if(id==="pr") g.append("circle").attr("class","ring").attr("cx",R.c[0]).attr("cy",R.c[1]).attr("r",R.r+12);
+  if(id==="ai"){ // application coast
+    const rim=lR.append("g").attr("class","region-shape").style("--c",C("apps"));
+    rim.append("path").attr("class","rim").attr("d",arcPath(800,-62,102));
+  }
+});
+
+/* edges */
+const lE = d3.select("#lEdges");
+EDGES.forEach(e=>{
+  if(e.flag==="hidden")return;
+  const d=curve(pos(e.a),pos(e.b), e.flag==="l0"?0.18:0.12);
+  const g=lE.append("g").attr("data-e",e.i);
+  e.el=g.append("path").attr("class",`edge ${e.type} ${e.flag==="l0"?"l0e":""}`).attr("d",d)
+    .style("--c",C(byId.get(e.a).g)).node();
+  g.append("path").attr("class","edge-hit").attr("d",d)
+    .on("click",ev=>{ev.stopPropagation();selectEdge(e.i);})
+    .append("title").text(`${nameOf(e.a)} · ${nameOf(e.b)}`);
+});
+
+/* titles */
+const lT = d3.select("#lTitles");
+function addTitle(id,t,fs,g,ar,en){
+  let tg=lT.append("g").attr("class","rtitle").attr("data-id",id).style("--c",C(g))
+    .attr("transform",`translate(${t[0]},${t[1]})`).attr("tabindex",0).attr("role","button").attr("aria-label",ar);
+  const tg0=tg; tg0.datum({fs}); tg=tg.append("g").attr("class","ts");
+  if(id==="pr"){
+    const b=tg.append("g").attr("class","badge").attr("transform",`translate(0,${-fs*1.45})`);
+    b.append("rect").attr("x",-92).attr("y",-17).attr("width",184).attr("height",30).attr("rx",15);
+    b.append("text").attr("y",4).text("ENGS 3302 · مساقنا");
+  }
+  tg.append("text").attr("class","ar halo").attr("font-size",fs).text(ar);
+  tg.append("text").attr("class","en halo").attr("font-size",Math.max(12,fs*0.34)).attr("y",fs*0.62).text(en.toUpperCase());
+  tg0.on("click",ev=>{ev.stopPropagation();selectRegion(id);})
+    .on("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();selectRegion(id);}});
+}
+addTitle("ai",REG.ai.t,REG.ai.fs,"land","الذكاء الاصطناعي","Artificial Intelligence");
+addTitle("ml",REG.ml.t,REG.ml.fs,"ml","تعلّم الآلة","Machine Learning");
+addTitle("dl",REG.dl.t,REG.dl.fs,"dl","التعلّم العميق","Deep Learning");
+addTitle("gen",REG.gen.t,REG.gen.fs,"gen","الذكاء التوليدي","Generative AI");
+addTitle("pr",REG.pr.t,REG.pr.fs,"pr","التعرّف على الأنماط","Pattern Recognition");
+addTitle("apps",GRP.apps.t,GRP.apps.fs,"apps","مجالات التطبيق","Applications");
+addTitle("found",GRP.found.t,GRP.found.fs,"found","الأسس","Foundations");
+addTitle("resp",GRP.resp.t,GRP.resp.fs,"resp","الذكاء المسؤول","Responsible AI");
+
+/* nodes */
+const lN = d3.select("#lNodes");
+MAPNODES.forEach(n=>{
+  const g=lN.append("g").attr("class","node").attr("data-id",n.id).style("--c",C(n.g))
+    .attr("transform",`translate(${n.x.toFixed(1)},${n.y.toFixed(1)})`)
+    .attr("tabindex",0).attr("role","button").attr("aria-label",`${n.ar} (${n.en})`);
+  g.append("rect").attr("class","hit").attr("x",-82).attr("y",-22).attr("width",164).attr("height",80);
+  g.append("circle").attr("class","ring").attr("r",19);
+  g.append("circle").attr("class","dot").attr("r",8.5);
+  g.append("text").attr("class","ar halo").attr("y",33).text(n.lab||n.ar);
+  g.append("text").attr("class","en halo").attr("y",50).text(n.enl||n.en);
+  g.on("click",ev=>{ev.stopPropagation();selectNode(n.id);})
+   .on("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();selectNode(n.id);}})
+   .on("mouseenter",()=>hoverEdges(n.id,true)).on("mouseleave",()=>hoverEdges(n.id,false));
+  n.el=g.node();
+});
+function hoverEdges(id,on){EDGES.forEach(e=>{if(e.el&&(e.a===id||e.b===id))e.el.classList.toggle("hl",on);});}
+
+/* legend */
+d3.select("#lgGroups").selectAll("span").data(GORDER).join("span")
+  .html(g=>`<i class="sw ${g==="pr"?"pr":""}" style="--c:${C(g)}"></i>${GROUPS[g].ar}`);
+
+/* ===================== ZOOM ===================== */
+let level=0, sel=null;
+const stage=document.getElementById("stage"), panel=document.getElementById("panel"), app=document.getElementById("app");
+const zoom=d3.zoom().scaleExtent([0.1,3.2]).on("zoom",ev=>{world.attr("transform",ev.transform);setLevel(ev.transform.k);});
+svg.call(zoom).on("dblclick.zoom",null);
+function view(){
+  const r=svg.node().getBoundingClientRect();let x0=0,x1=r.width,y0=0,y1=r.height;
+  if(!panel.hidden){ if(r.width>760){x0=panel.offsetWidth+24;} else {y1=r.height-panel.offsetHeight;} }
+  return {x0,x1,y0,y1,W:r.width,H:r.height};
+}
+function fitTo(bx0,by0,bx1,by1,{maxK=3,minK=0,dur=800}={}){
+  const v=view(),vw=Math.max(80,v.x1-v.x0-40),vh=Math.max(80,v.y1-v.y0-40);
+  let k=Math.min(vw/(bx1-bx0),vh/(by1-by0));k=Math.max(minK,Math.min(maxK,k));
+  const cx=(bx0+bx1)/2,cy=(by0+by1)/2;
+  const t=d3.zoomIdentity.translate((v.x0+v.x1)/2-cx*k,(v.y0+v.y1)/2-cy*k).scale(k);
+  (reduce||!dur?svg:svg.transition().duration(dur).ease(d3.easeCubicInOut)).call(zoom.transform,t);
+}
+function fitAll(dur=800){const m=innerWidth<600?170:0;fitTo(WB.x0-m,WB.y0,WB.x1+m,WB.y1,{dur});}
+function kAll(){const r=svg.node().getBoundingClientRect();return Math.min(r.width/(WB.x1-WB.x0),r.height/(WB.y1-WB.y0));}
+const L1K=0.6;
+function setLevel(k){
+  lT.selectAll(".rtitle").each(function(d){const s=Math.min(3,Math.max(1,17/(d.fs*k)));this.firstChild.setAttribute("transform",`scale(${s.toFixed(3)})`);});
+  const L=k<L1K?0:1;
+  if(L!==level){level=L;}
+  svg.classed("l0",L===0).classed("l1",L===1);
+  document.getElementById("hint").style.opacity = (L===0&&!sel)?1:0;
+  updateLevelChips();
+}
+function updateLevelChips(){
+  const cur = level===0?0:(sel&&sel.type==="node"&&(byId.get(sel.id).kids||[]).length?2:1);
+  document.querySelectorAll(".lv").forEach(b=>{const l=+b.dataset.l;b.classList.toggle("on",l===cur);b.setAttribute("aria-pressed",l===cur);});
+  document.querySelector('.lv[data-l="2"]').disabled = !(sel&&sel.type==="node");
+}
+document.querySelectorAll(".lv").forEach(b=>b.addEventListener("click",()=>{
+  const l=+b.dataset.l;
+  if(l===0){clearSel();fitAll();}
+  else if(l===1){const t=d3.zoomTransform(svg.node());if(t.k<0.8){const v=view();const cx=((v.x0+v.x1)/2-t.x)/t.k,cy=((v.y0+v.y1)/2-t.y)/t.k;fitTo(cx-500,cy-380,cx+500,cy+380,{minK:0.8});}}
+  else if(sel&&sel.type==="node"){focusNode(sel.id);}
+}));
+document.getElementById("zin").onclick=()=>svg.transition().duration(reduce?0:300).call(zoom.scaleBy,1.4);
+document.getElementById("zout").onclick=()=>svg.transition().duration(reduce?0:300).call(zoom.scaleBy,1/1.4);
+document.getElementById("home").onclick=()=>{clearSel();fitAll();};
+
+/* background click */
+function regionAt(x,y){
+  for(const id of ["gen","dl","pr","ml","ai"]){const R=REG[id];if(Math.hypot(x-R.c[0],y-R.c[1])<=R.r)return id;}
+  if(y>1830&&y<1990)return "found";
+  const d=Math.hypot(x-AIC[0],y-AIC[1]),a=Math.atan2(y-AIC[1],x-AIC[0])*180/Math.PI;
+  if(d>820&&d<960&&a<-95)return "resp";
+  if(d>780&&d<900&&a>-65&&a<105)return "apps";
+  return null;
+}
+svg.on("click",ev=>{
+  if(ev.defaultPrevented)return;
+  if(level===0){const t=d3.zoomTransform(svg.node());const [px,py]=d3.pointer(ev,svg.node());const r=regionAt(...t.invert([px,py]));if(r){selectRegion(r);return;}}
+  if(sel)clearSel();
+});
+
+/* ===================== SELECTION ===================== */
+const nodeEls = id=>document.querySelector(`.node[data-id="${id}"]`);
+function resetClasses(){
+  svg.classed("focus",false);
+  document.querySelectorAll("#map .hi,#map .sel,#map .onpath").forEach(el=>el.classList.remove("hi","sel","onpath"));
+  d3.select("#lSats").selectAll("*").remove();d3.select("#lSatBack").selectAll("*").remove();d3.select("#lPath").selectAll("*").interrupt().remove();
+}
+function markHi(ids,edgeIdx){
+  svg.classed("focus",true);
+  ids.forEach(id=>{const n=nodeEls(id);if(n)n.classList.add("hi");const t=document.querySelector(`.rtitle[data-id="${id}"]`);if(t)t.classList.add("hi");});
+  edgeIdx.forEach(i=>{const e=EDGES[i];if(e.el){e.el.classList.add("hi");}});
+}
+function clearSel(){
+  sel=null;resetClasses();panel.hidden=true;app.classList.remove("panel-open");updateLevelChips();
+  document.getElementById("hint").style.opacity=level===0?1:0;
+}
+function openPanel(html){
+  panel.innerHTML=html;panel.hidden=false;panel.scrollTop=0;app.classList.add("panel-open");
+  panel.querySelector(".x").onclick=()=>clearSel();
+  panel.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
+  panel.querySelectorAll("[data-edge]").forEach(b=>b.onclick=()=>selectEdge(+b.dataset.edge));
+  const pf=panel.querySelector("#pf");
+  if(pf)pf.onchange=()=>{if(pf.value)findPath(sel.id,pf.value);};
+  document.getElementById("hint").style.opacity=0;
+}
+function go(id){ if(REG[id]||GRP[id])selectRegion(id); else selectNode(id); }
+
+/* text helpers */
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const rich=s=>esc(s).replace(/[A-Za-z][A-Za-z0-9.*·'’\-\/&]*(?:[ ][A-Za-z0-9][A-Za-z0-9.*·'’\-\/&]*)*/g,m=>`<span class="lat" dir="ltr">${m}</span>`);
+function chip(g){return `<span class="chip ${g==="pr"?"course":""}" style="--c:${C(g)}"><i></i>${GROUPS[g].ar}${g==="pr"?" · مساقنا":""}</span>`;}
+function pTop(g){return `<div class="p-top">${chip(g)}<button class="x" aria-label="إغلاق">×</button></div>`;}
+function relItem(e,selfId){
+  const other=e.a===selfId?e.b:e.a;
+  return `<li class="rel"><div class="rel-h"><button class="link" data-go="${other}">${esc(nameOf(other))}</button><span class="rtype">${TYPE_AR[e.type]}</span></div><p>${rich(e.t)}</p></li>`;
+}
+function relsFor(id){return EDGES.filter(e=>e.a===id||e.b===id);}
+function pathSelect(){
+  const opts=NODES.filter(n=>n.id!==sel.id).map(n=>[n.id,n.ar]).sort((a,b)=>a[1].localeCompare(b[1],"ar"));
+  return `<h3>المسار إلى مصطلح آخر</h3><div class="pf"><label for="pf">اختر مصطلحاً لترى كيف يرتبط بهذا المصطلح على الخريطة</label><select id="pf"><option value="">اختر…</option>${opts.map(o=>`<option value="${o[0]}">${esc(o[1])}</option>`).join("")}</select></div>`;
+}
+
+function selectNode(id,kidIdx){
+  const n=byId.get(id); if(!n)return; if(n.kind){selectRegion(id);return;}
+  resetClasses(); sel={type:"node",id};
+  const rels=relsFor(id);
+  const ids=new Set([id]); rels.forEach(e=>{ids.add(e.a);ids.add(e.b);}); ids.add(n.reg);
+  markHi([...ids],rels.map(e=>e.i)); nodeEls(id).classList.add("sel");
+  drawSats(n);
+  let h=pTop(n.g)+`<h2 class="p-title">${esc(n.ar)}</h2><p class="p-en" dir="ltr">${esc(n.en)}</p>`;
+  if(n.d)h+=`<p class="p-desc">${rich(n.d)}</p>`;
+  if(n.note)h+=`<p class="p-note">${rich(n.note)}</p>`;
+  if(n.ex)h+=`<h3>أمثلة</h3><p class="ex">${rich(n.ex)}</p>`;
+  if(n.kids)h+=`<h3>التفاصيل (${n.kids.length})</h3><ul class="kids">${n.kids.map((k,i)=>`<li class="kid" id="kid${i}"><span class="kn">${esc(k.ar)}</span><span class="ke" dir="ltr">${esc(k.en)}</span><p>${rich(k.d)}</p></li>`).join("")}</ul>`;
+  const where = REG[n.reg]||GRP[n.reg] ? `<li class="rel"><div class="rel-h"><button class="link" data-go="${n.reg}">${esc(nameOf(n.reg))}</button><span class="rtype">${TYPE_AR.member}</span></div></li>`:"";
+  h+=`<h3>العلاقات (${rels.length+(where?1:0)})</h3><ul class="rels">${where}${rels.map(e=>relItem(e,id)).join("")}</ul>`;
+  h+=pathSelect();
+  openPanel(h); updateLevelChips(); focusNode(id);
+  if(kidIdx!=null)flashKid(kidIdx);
+}
+function focusNode(id){const n=byId.get(id);const R=n.kids?190:120;fitTo(n.x-R-150,n.y-R-30,n.x+R+150,n.y+R+70,{minK:0.95,maxK:1.6});}
+function flashKid(i){
+  const el=panel.querySelector("#kid"+i);if(!el)return;
+  el.scrollIntoView({block:"nearest",behavior:reduce?"auto":"smooth"});
+  el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1600);
+  d3.selectAll("#lSats g.s").classed("on",(d,j)=>j===i);
+}
+function drawSats(n){
+  const kids=n.kids||[]; if(!kids.length)return;
+  const R=128+kids.length*6;
+  d3.select("#lSatBack").append("circle").attr("class","satback").attr("cx",n.x).attr("cy",n.y).attr("r",R+92);
+  const g=d3.select("#lSats").append("g").attr("class","sat").style("--c",C(n.g));
+  kids.forEach((k,i)=>{
+    const a=(-210+(i+0.5)*240/kids.length)*Math.PI/180, ca=Math.cos(a), sa=Math.sin(a);
+    const x=n.x+R*ca, y=n.y+R*sa;
+    g.append("line").attr("x1",n.x+ca*22).attr("y1",n.y+sa*22).attr("x2",x-ca*9).attr("y2",y-sa*9);
+    const s=g.append("g").attr("class","s").attr("transform",`translate(${x.toFixed(1)},${y.toFixed(1)})`).attr("tabindex",0).attr("role","button").attr("aria-label",k.ar);
+    s.append("circle").attr("class","sdot").attr("r",7);
+    let anchor="middle",tx=0,ty1=-30,ty2=-15;
+    if(ca>0.3){anchor="start";tx=14;ty1=5;ty2=20;} else if(ca<-0.3){anchor="end";tx=-14;ty1=5;ty2=20;}
+    s.append("text").attr("class","ar halo").attr("text-anchor",anchor).attr("x",tx).attr("y",ty1).text(k.ar);
+    s.append("text").attr("class","en halo").attr("text-anchor",anchor).attr("x",tx).attr("y",ty2).text(k.en);
+    s.on("click",ev=>{ev.stopPropagation();flashKid(i);}).on("keydown",ev=>{if(ev.key==="Enter"){flashKid(i);}});
+  });
+}
+
+function selectRegion(id){
+  const n=byId.get(id); resetClasses(); sel={type:"region",id};
+  const members = MAPNODES.filter(m=>m.reg===id);
+  const childRegs = {ai:["ml","pr"],ml:["dl"],dl:["gen"]}[id]||[];
+  const rels = relsFor(id);
+  markHi([id,...members.map(m=>m.id),...childRegs],rels.filter(e=>e.el).map(e=>e.i));
+  const g=n.g;
+  let h=pTop(g)+`<h2 class="p-title">${esc(n.ar)}</h2><p class="p-en" dir="ltr">${esc(n.en)}</p><p class="p-desc">${rich(n.d)}</p>`;
+  if(n.ex)h+=`<h3>أمثلة</h3><p class="ex">${rich(n.ex)}</p>`;
+  if(childRegs.length||members.length){
+    h+=`<h3>في هذه الجزيرة</h3><div class="members">${childRegs.map(c=>`<button data-go="${c}" style="--c:${C(REG[c].g)}"><i></i>${esc(nameOf(c))}</button>`).join("")}${members.map(m=>`<button data-go="${m.id}" style="--c:${C(m.g)}"><i></i>${esc(m.lab||m.ar)}</button>`).join("")}</div>`;
+  }
+  if(rels.length)h+=`<h3>العلاقات (${rels.length})</h3><ul class="rels">${rels.map(e=>relItem(e,id)).join("")}</ul>`;
+  if(REG[id])h+=pathSelect();
+  openPanel(h); updateLevelChips();
+  if(REG[id]){const R=REG[id];fitTo(R.c[0]-R.r-30,R.c[1]-R.r-30,R.c[0]+R.r+30,R.c[1]+R.r+30,{minK:id==="ai"?0:0.66});}
+  else {const pts=members.map(m=>[m.x,m.y]).concat([GRP[id].t]);
+    const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);fitTo(Math.min(...xs)-120,Math.min(...ys)-80,Math.max(...xs)+120,Math.max(...ys)+90,{minK:0.62});}
+}
+
+function selectEdge(i){
+  const e=EDGES[i]; resetClasses(); sel={type:"edge",id:i};
+  markHi([e.a,e.b],[i]);
+  const ga=byId.get(e.a).g;
+  let h=pTop(ga)+`<h2 class="p-title">علاقة: ${TYPE_AR[e.type]}</h2>
+   <div class="rel-h" style="margin-top:12px"><button class="link" data-go="${e.a}">${esc(nameOf(e.a))}</button><span class="rtype">${TYPE_AR[e.type]}</span><button class="link" data-go="${e.b}">${esc(nameOf(e.b))}</button></div>
+   <p class="p-desc">${rich(e.t)}</p>`;
+  openPanel(h); updateLevelChips();
+  const [a,b]=[pos(e.a),pos(e.b)];
+  fitTo(Math.min(a[0],b[0])-140,Math.min(a[1],b[1])-110,Math.max(a[0],b[0])+140,Math.max(a[1],b[1])+120,{maxK:1.3});
+}
+
+/* ===================== PATHS ===================== */
+const ADJ=new Map();
+function link(a,b,info){if(!ADJ.has(a))ADJ.set(a,[]);if(!ADJ.has(b))ADJ.set(b,[]);ADJ.get(a).push([b,info]);ADJ.get(b).push([a,info]);}
+EDGES.forEach(e=>link(e.a,e.b,{edge:e.i}));
+MAPNODES.forEach(n=>link(n.id,n.reg,{member:true}));
+link("pr","ai",{member:true});
+function stepInfo(a,b){
+  const e=EDGES.find(e=>(e.a===a&&e.b===b)||(e.a===b&&e.b===a));
+  if(e)return rich(e.t);
+  const na=byId.get(a),nb=byId.get(b);
+  if(na&&na.reg===b)return `${esc(na.lab||na.ar)} داخل جزيرة ${esc(nameOf(b))}.`;
+  if(nb&&nb.reg===a)return `${esc(nb.lab||nb.ar)} داخل جزيرة ${esc(nameOf(a))}.`;
+  return "";
+}
+function findPath(from,to){
+  const prev=new Map([[from,null]]),q=[from];
+  while(q.length){const c=q.shift();if(c===to)break;for(const [nx] of (ADJ.get(c)||[]))if(!prev.has(nx)){prev.set(nx,c);q.push(nx);}}
+  if(!prev.has(to))return;
+  const ids=[];for(let c=to;c!=null;c=prev.get(c))ids.unshift(c);
+  runPath({t:`من «${nameOf(from)}» إلى «${nameOf(to)}»`,s:`أقصر طريق على الخريطة: ${ids.length-1} خطوات`,ids});
+}
+function runPath(p){
+  resetClasses(); sel={type:"path"};
+  const pts=p.ids.map(pos);
+  markHi(p.ids,[]);
+  p.ids.forEach(id=>{const n=nodeEls(id);if(n)n.classList.add("onpath");});
+  let h=`<div class="p-top"><span class="chip">مسار</span><button class="x" aria-label="إغلاق">×</button></div><h2 class="p-title">${esc(p.t)}</h2><p class="p-en">${esc(p.s)}</p><h3>الخطوات</h3><ol class="steps">`;
+  p.ids.forEach((id,i)=>{h+=`<li><span class="num">${i+1}</span><button class="link" data-go="${id}">${esc(nameOf(id))}</button>${i>0?`<p>${stepInfo(p.ids[i-1],id)}</p>`:""}</li>`;});
+  h+=`</ol>`;
+  openPanel(h); updateLevelChips();
+  const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);
+  fitTo(Math.min(...xs)-140,Math.min(...ys)-110,Math.max(...xs)+140,Math.max(...ys)+120,{maxK:1.2,minK:0.62});
+  const L=d3.select("#lPath");
+  pts.forEach((pt,i)=>{
+    const delay=reduce?0:900+i*550;
+    if(i>0){
+      const path=L.append("path").attr("class","pathseg").attr("d",curve(pts[i-1],pt,0.1));
+      const len=path.node().getTotalLength();
+      if(reduce)path.attr("stroke-dasharray",null);
+      else path.attr("stroke-dasharray",`${len} ${len}`).attr("stroke-dashoffset",len).transition().delay(delay-450).duration(450).ease(d3.easeCubicOut).attr("stroke-dashoffset",0);
+    }
+    const b=L.append("g").attr("class","pnum").attr("transform",`translate(${pt[0]+20},${pt[1]-22})`).style("opacity",reduce?1:0);
+    b.append("circle").attr("r",14);b.append("text").attr("y",5).text(i+1);
+    if(!reduce)b.transition().delay(delay).duration(250).style("opacity",1);
+  });
+}
+const pm=document.getElementById("pathsMenu"),pb=document.getElementById("pathsBtn");
+pm.innerHTML=PATHS.map((p,i)=>`<button data-p="${i}"><b>${esc(p.t)}</b><span>${esc(p.s)}</span></button>`).join("");
+pb.onclick=e=>{e.stopPropagation();pm.hidden=!pm.hidden;pb.setAttribute("aria-expanded",!pm.hidden);};
+pm.querySelectorAll("button").forEach(b=>b.onclick=()=>{pm.hidden=true;pb.setAttribute("aria-expanded",false);runPath(PATHS[+b.dataset.p]);});
+
+/* ===================== SEARCH ===================== */
+const norm=s=>String(s).toLowerCase().replace(/[ً-ْـ]/g,"").replace(/[أإآ]/g,"ا").replace(/ة/g,"ه").replace(/ى/g,"ي");
+const INDEX=[];
+NODES.forEach(n=>{INDEX.push({id:n.id,ar:n.ar,en:n.en,g:n.g,key:norm(n.ar+" "+n.en+" "+(n.lab||""))});
+  (n.kids||[]).forEach((k,i)=>INDEX.push({id:n.id,kid:i,ar:k.ar,en:k.en+" · "+(n.lab||n.ar),g:n.g,key:norm(k.ar+" "+k.en)}));});
+const q=document.getElementById("q"),res=document.getElementById("results");
+function showResults(){
+  const v=norm(q.value.trim());
+  if(!v){res.hidden=true;return;}
+  const hits=INDEX.filter(x=>x.key.includes(v)).sort((a,b)=>(a.kid!=null)-(b.kid!=null)).slice(0,9);
+  res.innerHTML=hits.length?hits.map((x,i)=>`<li><button data-i="${INDEX.indexOf(x)}" style="--c:${C(x.g)}"><i></i><span class="rn">${esc(x.ar)}</span><span class="re" dir="ltr">${esc(x.en)}</span></button></li>`).join(""):`<li class="empty">لا يوجد مصطلح بهذا الاسم على الخريطة.</li>`;
+  res.hidden=false;
+  res.querySelectorAll("button").forEach(b=>b.onclick=()=>{const x=INDEX[+b.dataset.i];res.hidden=true;q.value="";q.blur();
+    if(x.kid!=null)selectNode(x.id,x.kid);else go(x.id);});
+}
+q.addEventListener("input",showResults);
+q.addEventListener("keydown",e=>{if(e.key==="Enter"){const f=res.querySelector("button");if(f)f.click();}if(e.key==="ArrowDown"){const f=res.querySelector("button");if(f){e.preventDefault();f.focus();}}});
+document.addEventListener("click",e=>{if(!e.target.closest(".search"))res.hidden=true;if(!e.target.closest(".menu-wrap"))pm.hidden=true;});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){res.hidden=true;pm.hidden=true;if(sel)clearSel();}});
+
+/* ===================== START ===================== */
+function init(){
+  zoom.scaleExtent([kAll()*0.8,3.2]);
+  if(innerWidth<760)document.getElementById("legend").open=false;
+  fitAll(0);
+}
+init();
+let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>{zoom.scaleExtent([kAll()*0.8,3.2]);if(!sel)fitAll(0);},150);});
+const hash=location.hash.slice(1);if(hash&&byId.has(hash))setTimeout(()=>go(hash),300);
+</script>
+
+</body></html>

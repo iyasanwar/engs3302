@@ -7,15 +7,15 @@
 <title>سؤال واحد، وطرق مختلفة للإجابة</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=El+Messiri:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700&family=Fira+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Literata:opsz,wght@7..72,600;7..72,700&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <style>
 /* Layout: one reading column; a vertical path on the right (RTL) with 12 stations in 4 parts; sticky week rail on top. */
 :root{
   --bg:#F5F7FB; --surface:#FFFFFF; --fg:#1B2130; --muted:#5C6577; --line:#DCE1EA; --soft:#EEF2FB;
   --bass:#2D5BC4; --salmon:#D9822B; --third:#1F7A4D; --here:#B8860B; --herebg:#FFF4D6;
   --bass-a:rgba(45,91,196,.13); --salmon-a:rgba(217,130,43,.15); --third-a:rgba(31,122,77,.14);
-  --f-body:"Almarai","Noto Sans Arabic",Tahoma,"Segoe UI",sans-serif;
-  --f-disp:"El Messiri","Almarai","Noto Sans Arabic",Tahoma,sans-serif;
+  --f-body:"Fira Sans","Cairo","Tajawal","Noto Sans Arabic",Tahoma,sans-serif;
+  --f-disp:"Literata","Cairo","Tajawal",Georgia,serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0F131B; --surface:#161C27; --fg:#E7EAF1; --muted:#9BA4B6; --line:#283042; --soft:#1C2433;
@@ -154,12 +154,12 @@ function gauss(r){let u=0,v=0;while(!u)u=r();while(!v)v=r();return Math.sqrt(-2*
 // ---------- svg helpers ----------
 const S=(w,h,inner,label)=>`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${label||''}" direction="ltr">${inner}</svg>`;
 const anc=o=>{const a=o.a||'middle';return o.rtl&&a!=='middle'?(a==='start'?'end':'start'):a};
-const txt=(x,y,t,o={})=>`<text x="${x}" y="${y}" font-size="${((o.s||12)*1.5).toFixed(1)}" fill="${o.c||'var(--muted)'}" text-anchor="${anc(o)}" font-family="Almarai, Tahoma, sans-serif" ${o.w?'font-weight="'+o.w+'"':''} ${o.rtl?'direction="rtl"':''}>${t}</text>`;
+const txt=(x,y,t,o={})=>`<text x="${x}" y="${y}" font-size="${((o.s||12)*1.5).toFixed(1)}" fill="${o.c||'var(--muted)'}" text-anchor="${anc(o)}" font-family="Fira Sans, Cairo, Tajawal, Tahoma, sans-serif" ${o.w?'font-weight="'+o.w+'"':''} ${o.rtl?'direction="rtl"':''}>${t}</text>`;
 const dot=(x,y,c,r=4.2)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/>`;
 const sq=(x,y,c,s=8)=>`<rect x="${x-s/2}" y="${y-s/2}" width="${s}" height="${s}" fill="${c}"/>`;
 const star=(x,y,r=9,c='var(--fg)')=>{let p='';for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r*.45:r;p+=(i?'L':'M')+(x+rr*Math.cos(a)).toFixed(1)+' '+(y+rr*Math.sin(a)).toFixed(1)}return `<path d="${p}Z" fill="var(--surface)" stroke="${c}" stroke-width="1.8"/>`};
 const cross=(x,y,c,s=7)=>`<path d="M${x-s} ${y-s}L${x+s} ${y+s}M${x-s} ${y+s}L${x+s} ${y-s}" stroke="var(--surface)" stroke-width="5" stroke-linecap="round"/><path d="M${x-s} ${y-s}L${x+s} ${y+s}M${x-s} ${y+s}L${x+s} ${y-s}" stroke="${c}" stroke-width="2.6" stroke-linecap="round"/>`;
-function frame(x0,y0,w,h,xl,yl){return `<rect x="${x0}" y="${y0}" width="${w}" height="${h}" fill="none" stroke="var(--line)"/>`+(xl?txt(x0+w/2,y0+h+36,xl,{rtl:1}):'')+(yl?`<text transform="translate(${x0-40} ${y0+h/2}) rotate(-90)" font-size="17" fill="var(--muted)" text-anchor="middle" font-family="Almarai, Tahoma, sans-serif">${yl}</text>`:'')}
+function frame(x0,y0,w,h,xl,yl){return `<rect x="${x0}" y="${y0}" width="${w}" height="${h}" fill="none" stroke="var(--line)"/>`+(xl?txt(x0+w/2,y0+h+36,xl,{rtl:1}):'')+(yl?`<text transform="translate(${x0-40} ${y0+h/2}) rotate(-90)" font-size="17" fill="var(--muted)" text-anchor="middle" font-family="Fira Sans, Cairo, Tajawal, Tahoma, sans-serif">${yl}</text>`:'')}
 function grid(x0,y0,w,h,nx,ny,f){ // f(u,v) -> color or null, u,v in [0,1]
   let s='';const cw=w/nx,ch=h/ny;
   for(let i=0;i<nx;i++)for(let j=0;j<ny;j++){const c=f((i+.5)/nx,1-(j+.5)/ny);if(c)s+=`<rect x="${(x0+i*cw).toFixed(2)}" y="${(y0+j*ch).toFixed(2)}" width="${(cw+.4).toFixed(2)}" height="${(ch+.4).toFixed(2)}" fill="${c}"/>`}
@@ -482,7 +482,7 @@ function mx(){const keys=Object.keys(TH),cw=40,lw=104,W0=lw+12*cw+12,H0=keys.len
   const X=w=>W0-lw-(w-.5)*cw; // RTL: week 1 on the right, next to the labels
   for(let w=1;w<=12;w++)s+=txt(X(w),16,w,{s:12,c:'var(--muted)'});
   keys.forEach((k,i)=>{const y=40+i*34,on=!cur||cur===k;
-    s+=`<text x="${W0-6}" y="${y+6}" font-size="15" fill="var(--fg)" text-anchor="start" direction="rtl" font-family="Almarai, Tahoma, sans-serif" opacity="${on?1:.35}">${TH[k]}</text>`;
+    s+=`<text x="${W0-6}" y="${y+6}" font-size="15" fill="var(--fg)" text-anchor="start" direction="rtl" font-family="Fira Sans, Cairo, Tajawal, Tahoma, sans-serif" opacity="${on?1:.35}">${TH[k]}</text>`;
     s+=`<line x1="${X(12)}" y1="${y}" x2="${X(1)}" y2="${y}" stroke="var(--line)"/>`;
     const ws=W.filter(x=>x.th.includes(k)).map(x=>x.w);
     if(ws.length>1)s+=`<line x1="${X(ws[ws.length-1])}" y1="${y}" x2="${X(ws[0])}" y2="${y}" stroke="${on?'var(--fg)':'var(--line)'}" stroke-width="2" opacity="${on?.9:.5}"/>`;

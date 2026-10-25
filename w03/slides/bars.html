@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crowding and Area</title>
+<style>
+@font-face{font-family:"Literata";src:url("fonts/Literata-700.woff2") format("woff2");font-weight:700}
+@font-face{font-family:"Fira Sans";src:url("fonts/FiraSans-400.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"Fira Sans";src:url("fonts/FiraSans-600.woff2") format("woff2");font-weight:600}
+@font-face{font-family:"Fira Sans";src:url("fonts/FiraSans-700.woff2") format("woff2");font-weight:700}
+@font-face{font-family:"JetBrains Mono";src:url("fonts/JetBrainsMono-400.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"JetBrains Mono";src:url("fonts/JetBrainsMono-700.woff2") format("woff2");font-weight:700}
+/* A 16:9 stage (1600 x 900 design units) scaled to fit any window or slide frame, so nothing is cut and text scales with the slide. */
+:root{--bg:#ffffff;--panel:#f5f7fa;--ink:#14233b;--muted:#566173;--line:#dde3ea;--bar:#bcc4cd;--bass:#1d5c8c;--salmon:#e4734f;--accent:#1d5c8c;
+  --f-ui:"Fira Sans",Carlito,sans-serif;--f-num:"JetBrains Mono","DejaVu Sans Mono",monospace;--f-body:Literata,Georgia,serif}
+/* Always light: a live slide matches the deck, whatever the system theme. */
+:root{color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--f-ui);overflow:hidden}
+#fit{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{width:1600px;height:900px;flex:none;transform-origin:center center;display:grid;grid-template-columns:1010px 1fr;grid-template-rows:auto 1fr auto auto;gap:14px 26px;padding:24px 36px 14px}
+header{grid-column:1/-1;display:flex;align-items:center;gap:22px;flex-wrap:nowrap}
+h1{margin:0;font-family:var(--f-body);font-size:40px;font-weight:700;white-space:nowrap}
+.seg{display:flex;border:2px solid var(--line);border-radius:999px;overflow:hidden;flex:none}
+.seg button{border:none;background:transparent;font:inherit;font-size:22px;color:var(--ink);padding:8px 18px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--bg)}
+.sp{flex:1}
+.chart{background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:10px 12px;display:grid;grid-template-rows:1fr auto;min-height:0}
+canvas{width:100%;height:100%;display:block;min-height:0}
+.verdict{margin:6px 6px 2px;font-family:var(--f-body);font-size:25px;line-height:1.3;border-left:6px solid var(--accent);padding:4px 0 4px 14px;min-height:72px}
+.side{display:grid;gap:14px;align-content:start;min-height:0}
+.card{border:3px solid var(--line);border-radius:14px;padding:12px 16px;background:var(--bg);display:grid;gap:6px}
+.card h3{margin:0;font-size:22px;letter-spacing:.02em}
+.row{display:flex;justify-content:space-between;gap:12px;font-size:22px;border-top:1px dashed var(--line);padding-top:5px}
+.row:first-of-type{border-top:none}
+.row b{font-family:var(--f-num);font-variant-numeric:tabular-nums;white-space:nowrap}
+table{width:100%;border-collapse:collapse;font-family:var(--f-num);font-size:21px;text-align:right}
+th{font-family:var(--f-ui);font-size:18px;color:var(--muted);font-weight:600;padding-bottom:4px}
+td{padding:2px 4px}
+tr.cur td{color:var(--accent);font-weight:700}
+footer{grid-column:1/-1;display:grid;gap:6px}
+.ctl{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;font-size:22px;flex:1}
+.ctl output{font-family:var(--f-num);min-width:96px;text-align:right}
+input[type=range]{width:100%;accent-color:var(--accent);height:30px}
+.grp{display:flex;gap:22px;align-items:center}
+.lab{font-weight:700;font-size:24px;white-space:nowrap;width:64px;flex:none}
+.chk{display:flex;align-items:center;gap:6px;font-size:24px;white-space:nowrap;width:64px;flex:none}
+.chk input{width:24px;height:24px}
+.src{grid-column:1/-1;font-size:16px;color:var(--muted);text-align:right;margin:0}
+/* ?cam=1 (inside the recorded deck): keep the bottom right clear for the presenter camera */
+.cam footer{padding-right:340px} .cam .src{text-align:left;justify-self:start}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<div id="fit"><div id="stage">
+  <header>
+    <h1>How crowded, how many?</h1>
+    <span class="sp"></span>
+    <div class="seg" role="group" aria-label="Height shows"><button type="button" id="y-cnt" aria-pressed="true">count density</button><button type="button" id="y-den" aria-pressed="false">probability density</button></div>
+    <div class="seg" role="group" aria-label="Unit"><button type="button" id="v-mm" aria-pressed="true">per mm</button><button type="button" id="v-m" aria-pressed="false">per m</button></div>
+  </header>
+  <section class="chart" aria-label="Chart">
+    <canvas id="cv" role="img" aria-label="Penguins at each mm of flipper length, with the chosen bars at their average height"></canvas>
+    <p class="verdict" id="verdict" aria-live="polite"></p>
+  </section>
+  <aside class="side" id="side" aria-live="polite"></aside>
+  <footer>
+    <div class="grp f-two">
+      <span class="lab" style="color:var(--bass)">A</span>
+      <div class="ctl"><label for="a1">from</label><input type="range" id="a1" min="170" max="235" step="1" value="190"><output id="a1o"></output></div>
+      <div class="ctl"><label for="b1">to</label><input type="range" id="b1" min="170" max="235" step="1" value="194"><output id="b1o"></output></div>
+    </div>
+    <div class="grp f-two">
+      <label class="chk lab"><input type="checkbox" id="useB"><span style="color:var(--salmon)">B</span></label>
+      <div class="ctl" id="cb1"><label for="a2">from</label><input type="range" id="a2" min="170" max="235" step="1" value="190"><output id="a2o"></output></div>
+      <div class="ctl" id="cb2"><label for="b2">to</label><input type="range" id="b2" min="170" max="235" step="1" value="199"><output id="b2o"></output></div>
+    </div>
+  </footer>
+  <p class="src">ENGS 3302 · Week 3 · Worked example 3.5 · Palmer Penguins (CC0): 342 penguins, flipper length in whole mm</p>
+</div></div>
+<script>
+(function(){
+const DATA={"Adelie":{"flipper":[181,186,195,193,190,181,195,193,190,186,180,182,191,198,185,195,197,184,194,174,180,189,185,180,187,183,187,172,180,178,178,188,184,195,196,190,180,181,184,182,195,186,196,185,190,182,179,190,191,186,188,190,200,187,191,186,193,181,194,185,195,185,192,184,192,195,188,190,198,190,190,196,197,190,195,191,184,187,195,189,196,187,193,191,194,190,189,189,190,202,205,185,186,187,208,190,196,178,192,192,203,183,190,193,184,199,190,181,197,198,191,193,197,191,196,188,199,189,189,187,198,176,202,186,199,191,195,191,210,190,197,193,199,187,190,191,200,185,193,193,187,188,190,192,185,190,184,195,193,187,201],"bill":[39.1,39.5,40.3,36.7,39.3,38.9,39.2,34.1,42.0,37.8,37.8,41.1,38.6,34.6,36.6,38.7,42.5,34.4,46.0,37.8,37.7,35.9,38.2,38.8,35.3,40.6,40.5,37.9,40.5,39.5,37.2,39.5,40.9,36.4,39.2,38.8,42.2,37.6,39.8,36.5,40.8,36.0,44.1,37.0,39.6,41.1,37.5,36.0,42.3,39.6,40.1,35.0,42.0,34.5,41.4,39.0,40.6,36.5,37.6,35.7,41.3,37.6,41.1,36.4,41.6,35.5,41.1,35.9,41.8,33.5,39.7,39.6,45.8,35.5,42.8,40.9,37.2,36.2,42.1,34.6,42.9,36.7,35.1,37.3,41.3,36.3,36.9,38.3,38.9,35.7,41.1,34.0,39.6,36.2,40.8,38.1,40.3,33.1,43.2,35.0,41.0,37.7,37.8,37.9,39.7,38.6,38.2,38.1,43.2,38.1,45.6,39.7,42.2,39.6,42.7,38.6,37.3,35.7,41.1,36.2,37.7,40.2,41.4,35.2,40.6,38.8,41.5,39.0,44.1,38.5,43.1,36.8,37.5,38.1,41.1,35.6,40.2,37.0,39.7,40.2,40.6,32.1,40.7,37.3,39.0,39.2,36.6,36.0,37.8,36.0,41.5],"mass":[3750,3800,3250,3450,3650,3625,4675,3475,4250,3300,3700,3200,3800,4400,3700,3450,4500,3325,4200,3400,3600,3800,3950,3800,3800,3550,3200,3150,3950,3250,3900,3300,3900,3325,4150,3950,3550,3300,4650,3150,3900,3100,4400,3000,4600,3425,2975,3450,4150,3500,4300,3450,4050,2900,3700,3550,3800,2850,3750,3150,4400,3600,4050,2850,3950,3350,4100,3050,4450,3600,3900,3550,4150,3700,4250,3700,3900,3550,4000,3200,4700,3800,4200,3350,3550,3800,3500,3950,3600,3550,4300,3400,4450,3300,4300,3700,4350,2900,4100,3725,4725,3075,4250,2925,3550,3750,3900,3175,4775,3825,4600,3200,4275,3900,4075,2900,3775,3350,3325,3150,3500,3450,3875,3050,4000,3275,4300,3050,4000,3325,3500,3500,4475,3425,3900,3175,3975,3400,4250,3400,3475,3050,3725,3000,3650,4250,3475,3450,3750,3700,4000]},"Chinstrap":{"flipper":[192,196,193,188,197,198,178,197,195,198,193,194,185,201,190,201,197,181,190,195,181,191,187,193,195,197,200,200,191,205,187,201,187,203,195,199,195,210,192,205,210,187,196,196,196,201,190,212,187,198,199,201,193,203,187,197,191,203,202,194,206,189,195,207,202,193,210,198],"bill":[46.5,50.0,51.3,45.4,52.7,45.2,46.1,51.3,46.0,51.3,46.6,51.7,47.0,52.0,45.9,50.5,50.3,58.0,46.4,49.2,42.4,48.5,43.2,50.6,46.7,52.0,50.5,49.5,46.4,52.8,40.9,54.2,42.5,51.0,49.7,47.5,47.6,52.0,46.9,53.5,49.0,46.2,50.9,45.5,50.9,50.8,50.1,49.0,51.5,49.8,48.1,51.4,45.7,50.7,42.5,52.2,45.2,49.3,50.2,45.6,51.9,46.8,45.7,55.8,43.5,49.6,50.8,50.2],"mass":[3500,3900,3650,3525,3725,3950,3250,3750,4150,3700,3800,3775,3700,4050,3575,4050,3300,3700,3450,4400,3600,3400,2900,3800,3300,4150,3400,3800,3700,4550,3200,4300,3350,4100,3600,3900,3850,4800,2700,4500,3950,3650,3550,3500,3675,4450,3400,4300,3250,3675,3325,3950,3600,4050,3350,3450,3250,4050,3800,3525,3950,3650,3650,4000,3400,3775,4100,3775]},"Gentoo":{"flipper":[211,230,210,218,215,210,211,219,209,215,214,216,214,213,210,217,210,221,209,222,218,215,213,215,215,215,216,215,210,220,222,209,207,230,220,220,213,219,208,208,208,225,210,216,222,217,210,225,213,215,210,220,210,225,217,220,208,220,208,224,208,221,214,231,219,230,214,229,220,223,216,221,221,217,216,230,209,220,215,223,212,221,212,224,212,228,218,218,212,230,218,228,212,224,214,226,216,222,203,225,219,228,215,228,216,215,210,219,208,209,216,229,213,230,217,230,217,222,214,215,222,212,213],"bill":[46.1,50.0,48.7,50.0,47.6,46.5,45.4,46.7,43.3,46.8,40.9,49.0,45.5,48.4,45.8,49.3,42.0,49.2,46.2,48.7,50.2,45.1,46.5,46.3,42.9,46.1,44.5,47.8,48.2,50.0,47.3,42.8,45.1,59.6,49.1,48.4,42.6,44.4,44.0,48.7,42.7,49.6,45.3,49.6,50.5,43.6,45.5,50.5,44.9,45.2,46.6,48.5,45.1,50.1,46.5,45.0,43.8,45.5,43.2,50.4,45.3,46.2,45.7,54.3,45.8,49.8,46.2,49.5,43.5,50.7,47.7,46.4,48.2,46.5,46.4,48.6,47.5,51.1,45.2,45.2,49.1,52.5,47.4,50.0,44.9,50.8,43.4,51.3,47.5,52.1,47.5,52.2,45.5,49.5,44.5,50.8,49.4,46.9,48.4,51.1,48.5,55.9,47.2,49.1,47.3,46.8,41.7,53.4,43.3,48.1,50.5,49.8,43.5,51.5,46.2,55.1,44.5,48.8,47.2,46.8,50.4,45.2,49.9],"mass":[4500,5700,4450,5700,5400,4550,4800,5200,4400,5150,4650,5550,4650,5850,4200,5850,4150,6300,4800,5350,5700,5000,4400,5050,5000,5100,4100,5650,4600,5550,5250,4700,5050,6050,5150,5400,4950,5250,4350,5350,3950,5700,4300,4750,5550,4900,4200,5400,5100,5300,4850,5300,4400,5000,4900,5050,4300,5000,4450,5550,4200,5300,4400,5650,4700,5700,4650,5800,4700,5550,4750,5000,5100,5200,4700,5800,4600,6000,4750,5950,4625,5450,4725,5350,4750,5600,4600,5300,4875,5550,4950,5400,4750,5650,4850,5200,4925,4875,4625,5250,4850,5600,4975,5500,4725,5500,4700,5500,4575,5500,5000,5950,4650,5500,4375,5850,4875,6000,4925,4850,5750,5200,5400]}};
+const $=id=>document.getElementById(id), css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const FL=[].concat(DATA.Adelie.flipper,DATA.Chinstrap.flipper,DATA.Gentoo.flipper), N=FL.length;
+const PERMM={}; FL.forEach(v=>{PERMM[v]=(PERMM[v]||0)+1;});
+// Pure model: a bar over the recorded values lo..hi (whole mm) has width hi-lo+1 mm.
+function bar(lo,hi,k){const a=Math.min(lo,hi),b=Math.max(lo,hi);k=k||1;let n=0;for(let v=a;v<=b;v++)n+=PERMM[v]||0;
+  const wmm=b-a+1,w=wmm*k;return {a,b,n,wmm,w,perUnit:n/w,dens:n/(N*w),area:n/N,each:Array.from({length:wmm},(_,i)=>PERMM[a+i]||0)};}
+window.__bar=bar;
+const P={a1:190,b1:194,useB:false,a2:190,b2:199,y:"cnt",u:1};
+const f=v=>Number.isFinite(v)?(Math.abs(v)>=100?v.toFixed(0):Math.abs(v)>=10?v.toFixed(1):Math.abs(v)>=1?v.toFixed(2):v.toFixed(4)):"—";
+if(/[?&]cam/.test(location.search)) document.body.classList.add("cam");
+const fit=()=>{const s=Math.min(innerWidth/1600,innerHeight/900);$("stage").style.transform=`scale(${s})`;};
+function card(r,label,col,u){
+  const wT=P.u===1?`${r.wmm} mm`:`${(r.wmm/1000).toFixed(3)} m`;
+  return `<div class="card" style="border-color:${col}"><h3 style="color:${col}">${label}: ${r.a}–${r.b} mm</h3>
+   <div class="row"><span>penguins</span><b>${r.n}</b></div>
+   <div class="row"><span>① ÷ ${wT}: count density</span><b>${f(r.perUnit)} per ${u}</b></div>
+   <div class="row"><span>② ÷ ${N}: probability density</span><b>${f(r.dens)} per ${u}</b></div>
+   <div class="row"><span>③ area × ${wT}</span><b>${r.area.toFixed(3)}</b></div></div>`;}
+function render(){
+  const k=P.u===1?1:0.001,u=P.u===1?"mm":"m";
+  ["cb1","cb2"].forEach(id=>$(id).style.visibility=P.useB?"visible":"hidden");
+  ["a1","b1","a2","b2"].forEach(id=>$(id+"o").textContent=P[id]+" mm");
+  let A,B=null,html="",v="";
+  {
+    A=bar(P.a1,P.b1,k); if(P.useB) B=bar(P.a2,P.b2,k);
+    html=card(A,"A",css("--bass"),u)+(B?card(B,"B",css("--salmon"),u):"");
+    if(B){const tA=A.dens>B.dens,mA=A.n>B.n;
+      v=(A.dens===B.dens?"Same height. ":`${tA?"A":"B"} is taller (more crowded). `)+(A.n===B.n?"Same number of penguins.":`${mA?"A":"B"} holds more penguins (${Math.max(A.n,B.n)} vs ${Math.min(A.n,B.n)}).`);
+      if(tA!==mA&&A.n!==B.n&&A.dens!==B.dens) v+=" Height is not probability; area is.";}
+    else v=`On average ${f(A.perUnit)} penguins per ${u}. The real counts inside go from ${Math.min(...A.each)} to ${Math.max(...A.each)} per mm: the bar is their average.`;
+  }
+  $("side").innerHTML=html; $("verdict").textContent=v; draw(A,B,k);
+}
+function draw(A,B,k){
+  const cv=$("cv"),c=cv.getContext("2d"),s=Math.min(innerWidth/1600,innerHeight/900),dpr=(window.devicePixelRatio||1)*Math.max(1,s);
+  const W=cv.clientWidth,H=cv.clientHeight; cv.width=W*dpr; cv.height=H*dpr; c.setTransform(dpr,0,0,dpr,0,0); c.clearRect(0,0,W,H);
+  const pad={l:84,r:16,t:30,b:58},x0=169.5,x1=235.5,den=P.y==="den",conv=v=>den?v/(N*k):v/k;
+  let ym=0;for(let v=170;v<=235;v++)ym=Math.max(ym,PERMM[v]||0); ym=conv(ym)*1.1;
+  const X=v=>pad.l+(v-x0)/(x1-x0)*(W-pad.l-pad.r),Y=v=>H-pad.b-v/ym*(H-pad.t-pad.b);
+  c.fillStyle=css("--bar");
+  for(let v=170;v<=235;v++){const n=PERMM[v]||0;if(!n)continue;const xa=X(v-0.5),xb=X(v+0.5);c.fillRect(xa+1,Y(conv(n)),Math.max(1,xb-xa-2),H-pad.b-Y(conv(n)));}
+  const box=(r,col,side)=>{if(!r)return; c.lineWidth=4;
+    const h=conv(r.n/r.wmm),xa=X(r.a-0.5),xb=X(r.b+0.5);
+    c.globalAlpha=.25;c.fillStyle=col;c.fillRect(xa,Y(h),xb-xa,H-pad.b-Y(h));c.globalAlpha=1;c.strokeStyle=col;c.strokeRect(xa,Y(h),xb-xa,H-pad.b-Y(h));
+    c.fillStyle=col;c.font="700 24px "+css("--f-ui");c.textAlign=side==="r"?"right":"left";c.fillText(f(h),side==="r"?xb:xa,Y(h)-8);};
+  box(B,css("--salmon"),"r"); box(A,css("--bass"),"l");
+  c.strokeStyle=css("--muted");c.lineWidth=1.5;c.beginPath();c.moveTo(pad.l,pad.t);c.lineTo(pad.l,H-pad.b);c.lineTo(W-pad.r,H-pad.b);c.stroke();
+  c.fillStyle=css("--muted");c.font="20px "+css("--f-ui");
+  for(let v=170;v<=235;v+=5){c.textAlign="center";c.fillText(v,X(v),H-pad.b+26);}
+  const st0=Math.pow(10,Math.floor(Math.log10(ym/4))),st=[1,2,5,10].map(m=>m*st0).find(m=>ym/m<=5);
+  for(let v=0;v<=ym+1e-12;v+=st){c.textAlign="right";c.fillText(+v.toPrecision(4),pad.l-10,Y(v)+7);}
+  c.textAlign="center";c.fillText("flipper length (mm)",(pad.l+W-pad.r)/2,H-8);
+  c.save();c.translate(22,(pad.t+H-pad.b)/2);c.rotate(-Math.PI/2);c.fillText(den?`probability density (fraction per ${P.u===1?"mm":"m"})`:`count density (penguins per ${P.u===1?"mm":"m"})`,0,0);c.restore();
+}
+function seg(ids,fn){ids.forEach((id,i)=>$(id).onclick=()=>{fn(i);ids.forEach(j=>$(j).setAttribute("aria-pressed",j===id));render();});}
+seg(["y-cnt","y-den"],i=>P.y=i?"den":"cnt"); seg(["v-mm","v-m"],i=>P.u=i?2:1);
+["a1","b1","a2","b2"].forEach(id=>$(id).oninput=e=>{P[id]=+e.target.value;render();});
+$("useB").onchange=e=>{P.useB=e.target.checked;render();};
+window.__p=P; window.__render=render;
+addEventListener("resize",()=>{fit();render();}); fit(); render();
+})();
+</script>
+<script>
+if(window.parent!==window){addEventListener("keydown",e=>{const t=e.target,onRange=t&&t.type==="range";
+ const go=m=>{e.preventDefault();window.parent.postMessage(JSON.stringify({method:m}),"*");};
+ if(e.key==="PageDown"||e.key==="n"||(!onRange&&(e.key==="ArrowRight"||e.key===" ")))go("next");
+ else if(e.key==="PageUp"||e.key==="p"||(!onRange&&e.key==="ArrowLeft"))go("prev");});}
+</script>
+</body>
+</html>

@@ -1,0 +1,1809 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Lab 2 Code Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700&family=Fira+Sans:wght@400;600;700&family=Literata:opsz,wght@7..72,600;7..72,700&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>
+/* Layout: one notebook cell per view (hash route). Top bar with progress, side navigation (stacks above on phones),
+   and inside a cell a fixed reading order: 1 formula, 2 code line by line (the explanation card opens under its line,
+   with the live panel inside it), 3 the variables the cell makes (structure view opens inline), 4 try in the notebook. */
+:root{
+ --bg:#F5F7FA;--surface:#FFFFFF;--sunk:#EEF1F5;--fg:#14233B;--muted:#566173;--line:#DDE3EA;
+ --bass:#1D5C8C;--onbass:#FFFFFF;--basstint:#E6EEF6;--salmon:#E4734F;--salink:#B4472A;--saltint:#FBE9E3;
+ --sand:#F3E3B5;--sandfg:#6E5310;--sandline:#F3E3B5;--good:#28724F;--goodbg:#E3F4EA;--greentint:#E6F3EC;
+ --bad:#B3261E;--badbg:#FBE9E7;--warn:#9A5B00;--warnbg:#FFF4E0;--faint:#A3ADB8;
+ --py:#6A3FB0;--pybg:#F0EAFB;--np:#0D7377;--npbg:#E0F2F2;--pd:#A3346E;--pdbg:#F8E6EF;--plt:#A85A12;--pltbg:#FBEEDF;--sp:#2E6B30;--spbg:#E6F2E6;
+ --codebg:#14233B;--codefg:#E6EBF3;--codecm:#8EA0B8;--codeno:#627083;--codeline:#263347;--codehead:#D5DDE8;--tk:#F3E3B5;
+ --hkw:#D7A6F5;--hco:#7FB8F0;--hst:#F2A98A;--hnu:#C7E3A8;--hfn:#F3E3A0;--hmo:#6FD8C8;--hva:#B9DBF7;--hka:#F0C48A;
+ --kA:#9CC3E6;--kAbg:rgba(116,174,224,.25);--kAu:#74AEE0;--kB:#A8E0C0;--kBbg:rgba(99,192,143,.25);--kCu:#F08A6A;
+ --cA:#D8742B;--cC:#2E8B57;--cG:#2F6FB0;--dv:#6B3FB8;--dvbg:#F4EFFC;
+ --f-body:"Fira Sans","Cairo","Tajawal","Noto Sans Arabic",Tahoma,sans-serif;
+ --f-ar:"Cairo","Tajawal","Noto Sans Arabic",Tahoma,sans-serif;
+ --f-disp:"Literata","Cairo","Tajawal",Georgia,serif;
+ --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+ --bg:#0F141C;--surface:#161D29;--sunk:#1C2433;--fg:#E6EAF1;--muted:#9AA4B6;--line:#2A3344;
+ --bass:#79B3E3;--onbass:#0F141C;--basstint:#1B2C40;--salmon:#F29A7B;--salink:#F29A7B;--saltint:#3A221A;
+ --sand:#4A3F22;--sandfg:#F0D58C;--sandline:#8A7434;--good:#7FD3A6;--goodbg:#163225;--greentint:#16301F;
+ --bad:#F2A097;--badbg:#3A1B19;--warn:#F2C17A;--warnbg:#3A2A12;--faint:#5E6A7E;
+ --py:#C3A6F2;--pybg:#2A2140;--np:#6FD0D3;--npbg:#133233;--pd:#F09AC6;--pdbg:#3A1C2C;--plt:#F2B36E;--pltbg:#3A2914;--sp:#93D195;--spbg:#1A3019;
+ --codebg:#0A0F16;--codefg:#E6EBF3;--codecm:#7F90A8;--codeno:#56647A;--codeline:#1E2838;--codehead:#C9D2DF;--tk:#4A3F22;
+ --kA:#9CC3E6;--kAbg:rgba(116,174,224,.22);--kAu:#74AEE0;--kB:#A8E0C0;--kBbg:rgba(99,192,143,.22);--kCu:#F08A6A;
+ --cA:#F0A066;--cC:#6FCF97;--cG:#7DB1EA;--dv:#C3A6F2;--dvbg:#221B33;color-scheme:dark}}
+:root[data-theme="dark"]{
+ --bg:#0F141C;--surface:#161D29;--sunk:#1C2433;--fg:#E6EAF1;--muted:#9AA4B6;--line:#2A3344;
+ --bass:#79B3E3;--onbass:#0F141C;--basstint:#1B2C40;--salmon:#F29A7B;--salink:#F29A7B;--saltint:#3A221A;
+ --sand:#4A3F22;--sandfg:#F0D58C;--sandline:#8A7434;--good:#7FD3A6;--goodbg:#163225;--greentint:#16301F;
+ --bad:#F2A097;--badbg:#3A1B19;--warn:#F2C17A;--warnbg:#3A2A12;--faint:#5E6A7E;
+ --py:#C3A6F2;--pybg:#2A2140;--np:#6FD0D3;--npbg:#133233;--pd:#F09AC6;--pdbg:#3A1C2C;--plt:#F2B36E;--pltbg:#3A2914;--sp:#93D195;--spbg:#1A3019;
+ --codebg:#0A0F16;--codefg:#E6EBF3;--codecm:#7F90A8;--codeno:#56647A;--codeline:#1E2838;--codehead:#C9D2DF;--tk:#4A3F22;
+ --kA:#9CC3E6;--kAbg:rgba(116,174,224,.22);--kAu:#74AEE0;--kB:#A8E0C0;--kBbg:rgba(99,192,143,.22);--kCu:#F08A6A;
+ --cA:#F0A066;--cC:#6FCF97;--cG:#7DB1EA;--dv:#C3A6F2;--dvbg:#221B33;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-padding-top:90px}
+body{background:var(--bg);color:var(--fg);margin:0;font-family:var(--f-body);font-size:17px;line-height:1.85;overflow-x:hidden}
+.app{direction:rtl;text-align:right;min-height:100vh}
+h1{font-family:var(--f-disp);font-size:clamp(26px,4.4vw,34px);line-height:1.4;margin:0;text-wrap:balance}
+h2{font-family:var(--f-disp);font-size:clamp(21px,3vw,25px);line-height:1.45;margin:0;text-wrap:balance}
+h3{font-size:18px;margin:0;line-height:1.6}
+h1 bdi,h2 bdi{font-family:var(--f-body);font-weight:600;color:var(--muted);font-size:.7em}
+p{margin:0}
+a{color:var(--bass)}
+.lead{color:var(--muted);max-width:70ch}
+code,.mono{font-family:var(--f-mono);font-size:.86em;direction:ltr;unicode-bidi:isolate}
+.mono{display:inline-block}
+code{background:var(--sunk);border-radius:5px;padding:1px 5px;overflow-wrap:anywhere}
+bdi{unicode-bidi:isolate}
+:focus-visible{outline:2px solid var(--salmon);outline-offset:2px}
+.sub{font-weight:400;color:var(--muted);font-size:14px}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;background:var(--surface);border-bottom:1px solid var(--line);
+ padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
+.tb-title{display:flex;flex-direction:column;flex:1 1 220px;min-width:0}
+.tb-eyebrow{font-size:13px;font-weight:600;color:var(--muted);direction:ltr;text-align:right}
+.tb-name{font-family:var(--f-disp);font-size:22px;font-weight:700;line-height:1.4}
+.tb-prog{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+.bar{width:160px;height:8px;border-radius:999px;background:var(--line);overflow:hidden;display:flex}
+.bar i{display:block;height:100%;background:var(--bass);width:0;transition:width .3s}
+.tb-nav{display:flex;gap:8px;flex-wrap:wrap}
+.navbtn{min-height:44px;border-radius:999px;padding:8px 16px;font-weight:600;font-size:15px;border:1px solid var(--line);background:var(--surface);color:var(--fg);text-decoration:none;display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-family:inherit}
+.navbtn:hover{border-color:var(--fg)}
+.navbtn.primary{background:var(--bass);border-color:var(--bass);color:var(--onbass)}
+.navbtn[aria-disabled="true"]{opacity:.4;pointer-events:none}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;direction:ltr}
+.seg button{font-family:var(--f-mono);font-size:13px;background:var(--surface);color:var(--fg);border:0;border-inline-start:1px solid var(--line);padding:5px 9px;cursor:pointer;min-width:30px;min-height:40px}
+.seg button:first-child{border-inline-start:0}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--surface)}
+.seg button:focus-visible{outline:2px solid var(--salmon);outline-offset:-2px}
+#themeseg button{font-family:var(--f-body)}
+@media (max-width:860px){.topbar{position:static}.tb-name{font-size:19px}.bar{width:110px}}
+
+/* ---------- shell and side navigation ---------- */
+.shell{display:flex;gap:28px;align-items:flex-start;max-width:1400px;margin:0 auto;
+ padding:24px max(16px,env(safe-area-inset-right,0px)) 80px max(16px,env(safe-area-inset-left,0px))}
+.side{flex:0 0 250px;position:sticky;top:92px;display:flex;flex-direction:column;gap:3px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+.side .sh{font-size:13px;font-weight:700;color:var(--muted);padding:0 8px 4px}
+.nv{text-decoration:none;color:var(--fg);display:flex;gap:10px;align-items:center;padding:7px 10px;border-radius:8px;font-size:15px;min-height:40px;line-height:1.5}
+.nv:hover{background:var(--sunk)}
+.nv .nk{font-family:var(--f-mono);font-size:13px;color:var(--muted);min-width:46px;direction:ltr;text-align:right;white-space:nowrap}
+.nv.done{color:var(--muted)}
+.nv.done .nk{color:var(--good)}
+.nv.done .nk::before{content:"✓ "}
+.nv[aria-current="page"]{background:var(--basstint);color:var(--fg);font-weight:700}
+.nv[aria-current="page"] .nk{color:var(--bass)}
+.nv[aria-current="page"] .nk::before{content:"● "}
+.nv .nk.tr{color:var(--salink)}
+.side .sep{height:1px;background:var(--line);margin:6px 0}
+.side .scope{margin:8px 6px 2px;font-size:13px}
+main{flex:1 1 0;min-width:0}
+@media (max-width:860px){
+ .shell{flex-direction:column;gap:14px;padding-top:14px}
+ .side{position:static;flex:none;width:100%;flex-direction:row;overflow-x:auto;gap:6px;padding:8px;scrollbar-width:thin}
+ .side .sh,.side .sep,.side .scope{display:none}
+ .nv{flex:none;white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+ .nv .nk{min-width:0}
+}
+
+/* ---------- a view ---------- */
+.view{display:grid;gap:20px;min-width:0}
+.cellhead{display:grid;gap:6px}
+.cellno{font-family:var(--f-mono);font-size:14px;font-weight:700;color:var(--muted);direction:ltr;text-align:right}
+.goal{max-width:72ch;font-size:17.5px}
+.goal b{color:var(--bass)}
+.scope{display:inline-flex;gap:8px;align-items:center;background:var(--sand);color:var(--sandfg);border-radius:8px;padding:4px 12px;font-size:15px;font-weight:600;width:fit-content}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:14px}
+.intro{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 18px;display:grid;gap:10px}
+.steps{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0;padding:0;list-style:none}
+.steps .sl{font-size:14px;font-weight:700;color:var(--muted)}
+.steps .ar{color:var(--faint)}
+.steps button{display:inline-flex;gap:8px;align-items:center;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:15px;font-family:inherit;cursor:pointer;min-height:40px}
+.steps button b{color:var(--bass)}
+.steps button.on{background:var(--fg);color:var(--surface);border-color:var(--fg)}
+.steps button.on b{color:var(--surface)}
+.blk{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 18px}
+details.blk>summary{cursor:pointer;font-weight:700;line-height:1.8;min-height:40px;display:list-item;padding-top:4px}
+summary::marker{color:var(--salmon)}
+.b{display:inline-flex;align-items:center;font-family:var(--f-mono);font-size:12px;font-weight:700;line-height:1;border-radius:5px;padding:4px 7px;white-space:nowrap;direction:ltr}
+.b.py{color:var(--py);background:var(--pybg)}.b.np{color:var(--np);background:var(--npbg)}.b.pd{color:var(--pd);background:var(--pdbg)}
+.b.plt{color:var(--plt);background:var(--pltbg)}.b.sp{color:var(--sp);background:var(--spbg)}
+.b.new{color:var(--surface);background:var(--fg)}.b.rev{color:var(--muted);background:var(--sunk)}.b.trap{color:var(--warn);background:var(--warnbg)}
+a.b{text-decoration:none;min-height:32px;padding:6px 10px}
+a.b:hover{outline:1px solid currentColor}
+.formula{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:center;margin-top:10px}
+.formula .side2{display:grid;gap:2px;min-width:0}
+.formula .lab{font-size:13px;font-weight:700;color:var(--muted)}
+.formula .math{font-family:var(--f-disp);font-size:19px;line-height:1.9;direction:ltr;text-align:center;overflow-x:auto}
+.formula .py{font-family:var(--f-mono);font-size:15px;line-height:2.4;direction:ltr;text-align:center;overflow-x:auto;color:var(--bass)}
+.formula .eq{font-size:22px;color:var(--muted)}
+@media (max-width:640px){.formula{grid-template-columns:1fr}.formula .eq{text-align:center;transform:rotate(90deg)}}
+.pn{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:8px}
+.pn a{text-decoration:none;font-weight:600;color:var(--fg);border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 18px;min-height:44px;display:inline-flex;align-items:center}
+.pn a.primary{color:var(--onbass);background:var(--bass);border-color:var(--bass);margin-inline-start:auto}
+
+/* ---------- code, line by line ---------- */
+.codebox{background:var(--codebg);color:var(--codefg);border-radius:12px;overflow:hidden;min-width:0}
+.codehead{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px 14px;padding:10px 18px;border-bottom:1px solid var(--codeline);color:var(--codehead);font-size:14px;font-weight:700}
+.codehead .src{font-family:var(--f-mono);font-size:12px;font-weight:400;color:#9AA6B8;direction:ltr}
+.lines{direction:ltr;text-align:left;overflow-x:auto;padding:10px 0 12px;font-family:var(--f-mono);font-size:14.5px;line-height:2}
+.lines-in{min-width:100%;width:max-content}
+.ln{display:flex;gap:14px;padding:0 18px 0 10px;white-space:pre;border-left:3px solid transparent}
+.ln .no{color:var(--codeno);width:22px;text-align:right;flex:none;user-select:none;-webkit-user-select:none}
+.ln.cur{background:rgba(243,227,181,.08);border-left-color:var(--sandline)}
+.ln.flash{animation:lnflash 1.8s ease-out}
+@keyframes lnflash{0%,40%{background:rgba(243,227,181,.28)}100%{background:transparent}}
+.lines .hl-cm{color:var(--codecm);font-style:italic}.lines .hl-kw{color:var(--hkw)}.lines .hl-co{color:var(--hco)}.lines .hl-st{color:var(--hst)}
+.lines .hl-nu{color:var(--hnu)}.lines .hl-fn,.lines .hl-bi{color:var(--hfn)}.lines .hl-mo{color:var(--hmo)}.lines .hl-va,.lines .hl-at{color:var(--hva)}
+.lines .hl-kwarg{color:var(--hka)}.lines .hl-op{color:var(--codefg)}.lines .hl-br{color:var(--hco)}.lines .hl-fmt{color:var(--hnu)}
+.tk{font:inherit;color:inherit;background:transparent;border:0;border-bottom:2px dotted var(--codecm);padding:0 1px;margin:0;cursor:pointer;border-radius:3px;line-height:inherit;white-space:pre}
+.tk:hover{background:rgba(243,227,181,.16)}
+.tk:focus-visible{outline:2px solid var(--sand);outline-offset:1px}
+.tk.on{background:var(--tk);color:var(--sandfg);border-bottom-color:transparent}
+.tk.on span{color:inherit;font-style:normal}
+pre.code{display:none}
+
+/* ---------- explanation card under its line ---------- */
+.card{position:sticky;left:0;padding:8px 12px 12px;white-space:normal;font-family:var(--f-body)}
+.card-in{direction:rtl;text-align:right;background:var(--surface);color:var(--fg);border-radius:12px;border-top:4px solid var(--sandline);position:relative;padding:14px 18px 14px;display:grid;gap:12px;font-size:16.5px;line-height:1.85;box-shadow:0 6px 24px rgba(10,15,22,.25)}
+.caret{position:absolute;top:-14px;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:10px solid var(--sandline);transform:translateX(-50%)}
+.ctop{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ctop .name{font-family:var(--f-mono);font-size:16px;font-weight:700;direction:ltr;unicode-bidi:isolate;overflow-wrap:anywhere}
+.ctop .one{font-size:15.5px;color:var(--muted)}
+.xbtn{margin-inline-start:auto;width:44px;height:44px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:22px;line-height:1;cursor:pointer;font-family:var(--f-body)}
+.xbtn:hover{color:var(--fg);border-color:var(--fg)}
+.cbody{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+.ctext{flex:1 1 280px;min-width:0;display:grid;gap:10px}
+.ctext ul{margin:0;padding-inline-start:20px}
+.cside{flex:1.2 1 340px;min-width:0}
+.cside .panel{background:var(--bg)}
+.args{display:grid;gap:6px}
+.arg{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;align-items:baseline;border-top:1px dashed var(--line);padding-top:6px;font-size:15.5px}
+.arg code{font-weight:700;color:var(--np);background:var(--npbg)}
+.trapbox{background:var(--warnbg);color:var(--fg);border-radius:8px;padding:8px 12px;font-size:15.5px}
+.trapbox b{color:var(--warn)}
+.cfoot{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+.cfoot button{font-family:var(--f-mono);font-size:13px;color:var(--bass);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 12px;direction:ltr;cursor:pointer;min-height:40px}
+.cfoot button:hover{border-color:var(--bass)}
+.cfoot .cnt{margin-inline-start:auto}
+@media (max-width:640px){.card{padding:8px 6px 12px}.card-in{padding:12px 12px}}
+
+/* ---------- live panels ---------- */
+.rest{min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:12px;min-width:0}
+.panel .ptitle{font-size:14px;font-weight:700;color:var(--muted)}
+.ctrls{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.ctrl{direction:ltr;display:flex;gap:6px;align-items:center;flex-wrap:wrap;border-radius:8px;padding:2px 4px;transition:box-shadow .3s}
+.ctrl.flash,.dice.flash,.ds.flash{box-shadow:0 0 0 3px var(--salmon)}
+.ctrl label{font-family:var(--f-mono);font-size:13px;direction:ltr}
+input[type=range]{accent-color:var(--bass);width:150px;max-width:100%;min-height:32px}
+.out{font-family:var(--f-mono);font-size:13.5px;direction:ltr;text-align:left;background:var(--sunk);border-radius:8px;padding:8px 12px;white-space:pre;overflow-x:auto;line-height:1.7}
+svg{direction:ltr;display:block;width:100%;height:auto;max-width:100%}
+svg text{font-family:var(--f-mono);font-size:12px;fill:var(--muted)}
+svg .axis{stroke:var(--muted);stroke-width:1}
+svg .grid{stroke:var(--line);stroke-width:1}
+.note{font-size:15px;color:var(--muted)}
+.dice{display:flex;flex-wrap:wrap;gap:6px;direction:ltr;border-radius:8px;transition:box-shadow .3s}
+.die{width:34px;height:34px;border-radius:7px;border:1.5px solid var(--line);display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;background:var(--surface)}
+.die.six{background:var(--salmon);color:var(--surface);border-color:var(--salmon)}
+.chips{display:flex;gap:4px;direction:ltr;flex-wrap:wrap}
+.chip{font-family:var(--f-mono);font-size:13px;border-radius:6px;padding:2px 8px;background:var(--npbg);color:var(--np)}
+.chip.x{background:var(--badbg);color:var(--bad);text-decoration:line-through}
+table.t{border-collapse:collapse;font-family:var(--f-mono);font-size:14px;direction:ltr;margin:0 auto}
+table.t th,table.t td{border:1px solid var(--line);padding:4px 12px;text-align:center}
+table.t th{background:var(--sunk);font-weight:600}
+table.t td.hrow{background:color-mix(in srgb,var(--bass) 14%,transparent)}
+table.t td.hcol{background:color-mix(in srgb,var(--salmon) 18%,transparent)}
+table.t td.hit{background:var(--sand);color:var(--sandfg);font-weight:700}
+table.t td.marg,table.t th.marg{color:var(--muted)}
+.tw{overflow-x:auto;max-width:100%}
+.grid3{display:grid;grid-template-columns:auto repeat(3,52px) 16px 52px;gap:4px;direction:ltr;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:13px}
+.grid3 .c{height:30px;border-radius:5px;display:grid;place-items:center;background:var(--sunk)}
+.grid3 .c.T{background:color-mix(in srgb,var(--bass) 80%,transparent);color:#fff}
+.grid3 .c.F{background:color-mix(in srgb,var(--salmon) 25%,transparent)}
+.grid3 .c.sum{background:var(--sand);color:var(--sandfg);font-weight:700}
+.grid3 .rl{color:var(--muted);padding-right:6px}
+.shape{font-family:var(--f-mono);direction:ltr;text-align:center;font-size:14px}
+.shape b{color:var(--salink)}
+.ds{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;justify-content:center;direction:ltr;border-radius:8px}
+.ds figure{margin:0;display:grid;gap:4px;justify-items:center}
+.ds figcaption{font-size:12px;color:var(--muted);font-family:var(--f-mono)}
+
+/* ---------- variables strip and structure view ---------- */
+.vars{display:grid;gap:10px}
+.vars>h3{font-size:17px}
+.vchips{display:flex;flex-wrap:wrap;gap:10px;direction:ltr}
+.vchip{text-align:left;color:var(--fg);display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:7px 14px;min-width:140px;min-height:44px;cursor:pointer;font-family:inherit}
+.vchip b{font-family:var(--f-mono);font-size:15px}
+.vchip span{font-size:13px;color:var(--muted);font-family:var(--f-mono)}
+.vchip:hover{border-color:var(--bass)}
+.vchip[aria-expanded="true"]{border:2px solid var(--bass);background:var(--basstint);padding:6px 13px}
+.sv{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface);display:grid}
+.svbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--bg)}
+.svbar .back{font-family:inherit;font-weight:600;font-size:15px;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 14px;min-height:44px;cursor:pointer}
+.svbar .back:hover{border-color:var(--fg)}
+.svbar .svt{font-weight:700}
+.svcode{background:var(--codebg);color:var(--codefg);direction:ltr;text-align:left;font-family:var(--f-mono);font-size:14.5px;line-height:2;padding:10px 18px;overflow-x:auto;white-space:pre}
+.svcode .v{background:var(--tk);color:var(--sandfg);border-radius:4px;padding:0 4px;font-weight:700}
+.svcode .kA{background:var(--kAbg);color:var(--kA);border-radius:4px;padding:0 4px}
+.svcode .kB{background:var(--kBbg);color:var(--kB);border-radius:4px;padding:0 4px}
+.svcode .uA{border-bottom:2px solid var(--kAu)}
+.svcode .uC{border-bottom:2px solid var(--kCu)}
+.svcode .dsh{border:1.5px dashed var(--faint);border-radius:4px;padding:0 4px}
+.svcode .cm{color:var(--codecm);font-style:italic}
+.svbody{display:flex;flex-wrap:wrap;gap:24px;padding:18px 20px;align-items:flex-start}
+.svtext{flex:1 1 320px;min-width:0;display:grid;gap:10px}
+.svtext ol{list-style:none;margin:0;padding:0;display:grid;gap:8px;counter-reset:n}
+.svtext li{display:flex;gap:10px;align-items:baseline;counter-increment:n}
+.svtext li::before{content:counter(n);font-family:var(--f-mono);font-size:13px;font-weight:700;color:var(--surface);background:var(--fg);border-radius:50%;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.svtext .shp{background:var(--basstint);border-radius:10px;padding:8px 14px;font-family:var(--f-mono);font-size:14px;direction:ltr;text-align:left;overflow-wrap:anywhere}
+.svtext .shp span{font-family:var(--f-ar);font-size:14px;color:var(--muted);unicode-bidi:isolate;direction:rtl;display:inline-block;margin-left:10px}
+.svtext .dslink{font-size:15px;display:block}
+.card-in:focus,.sv:focus{outline:none}
+
+.svpic{flex:1 1 380px;min-width:0;display:flex;justify-content:center;direction:ltr}
+.frame{border:2px solid var(--sandline);border-radius:10px;overflow:hidden;font-family:var(--f-mono);font-size:14px;max-width:100%}
+.fr-wrap{overflow-x:auto;max-width:100%}
+.kAc{color:var(--bass);font-weight:700}.kBc{color:var(--good);font-weight:700}.kCc{color:var(--salink);font-weight:700}
+.dtab{border-collapse:collapse;font-family:var(--f-mono);font-size:13.5px}
+.dtab th,.dtab td{padding:4px 9px;text-align:left;border-top:1px solid var(--line);white-space:nowrap}
+.dtab thead th{background:var(--bg);font-weight:700;border-top:0}
+.dtab .ix{color:var(--muted)}
+.dtab .cA{background:var(--basstint);color:var(--bass)}
+.dtab .cB{background:var(--greentint);color:var(--good)}
+.dtab td.hit{background:var(--sand);color:var(--sandfg);font-weight:700}
+.dtab .gap td,.dtab .gap th{color:var(--muted)}
+.dtab tr.cut td,.dtab tr.cut th{border-top:2px solid var(--fg)}
+.dtab .dm{color:var(--muted)}
+.dtab .mg{color:var(--muted)}
+.dtab .dl{border-left:1.5px dashed var(--faint)}
+.dtab tr.dt td,.dtab tr.dt th{border-top:1.5px dashed var(--faint)}
+.brk{display:flex;flex-direction:column;font-family:var(--f-mono);font-size:13px}
+.brk div{border-left:3px solid;padding-left:8px;display:flex;align-items:center}
+.cells{display:flex;flex-wrap:wrap;gap:3px;font-family:var(--f-mono);font-size:13px;align-items:center}
+.cells span{border:1px solid var(--faint);border-radius:4px;padding:2px 7px;min-width:28px;text-align:center}
+.cells span.hit{background:var(--sand);color:var(--sandfg);border-color:var(--sandline);font-weight:700}
+.cells span.T{background:color-mix(in srgb,var(--bass) 80%,transparent);color:#fff;border-color:transparent}
+.cells span.F{background:var(--saltint);border-color:transparent}
+.cells span.six{background:var(--salmon);color:#fff;border-color:transparent}
+.cells span.dots{border:0;color:var(--muted);min-width:0}
+.cells span.ix{border:0;color:var(--muted);font-size:11px;min-width:28px;padding:0 2px}
+.pic{display:grid;gap:8px;justify-items:start;padding:12px 14px}
+.pic .cap{font-size:12px;color:var(--muted)}
+.kv{display:grid;grid-template-columns:auto auto auto;gap:4px 10px;align-items:center;font-family:var(--f-mono);font-size:14px}
+.kv .k{color:var(--bass);font-weight:700}
+.kv .ar2{color:var(--muted)}
+.kv .hit{background:var(--sand);color:var(--sandfg);border-radius:4px;padding:0 4px;font-weight:700}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:4px}
+.dsgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.dscard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;transition:box-shadow .3s}
+.dscard.flash{box-shadow:0 0 0 3px var(--salmon)}
+.dscard p{font-size:14.5px;text-align:right}
+.mini{display:flex;gap:3px;direction:ltr;font-family:var(--f-mono);font-size:12px;flex-wrap:wrap;justify-content:center}
+.mini span{border:1px solid var(--faint);border-radius:4px;padding:2px 6px}
+
+/* ---------- setup, tasks, traps, index ---------- */
+.libs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:10px}
+.lib{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:6px;align-content:start}
+.lib h3{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.lib .why{font-size:15px}
+.lib ul{margin:0;padding-inline-start:20px;font-size:15px}
+.tries ol{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:4px}
+.tries details{border-top:1px dashed var(--line);padding-top:6px}
+.tries li:first-child details{border-top:0}
+.tries details summary{cursor:pointer;line-height:1.8;font-weight:400;min-height:40px}
+.tries .ans{background:var(--goodbg);border-radius:8px;padding:8px 12px;margin-top:6px}
+.traps{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px}
+.trapcard{background:var(--surface);border:1px solid var(--line);border-inline-start:4px solid var(--warn);border-radius:10px;padding:12px 16px;display:grid;gap:6px}
+.trapcard h3{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.task{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:8px;transition:box-shadow .3s}
+.task .tools{display:flex;flex-wrap:wrap;gap:6px}
+.task .note.flash,.und.flash{box-shadow:0 0 0 3px var(--salmon);border-radius:8px}
+.glo{width:100%;border-collapse:collapse;font-size:15px}
+.glo th,.glo td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:right;vertical-align:top}
+.glo th{font-size:13px;color:var(--muted)}
+.glo td.n{font-family:var(--f-mono);direction:ltr;text-align:left;white-space:nowrap}
+.glo a{color:var(--bass);display:inline-flex;min-height:32px;align-items:center}
+@media (max-width:640px){.glo td.n{white-space:normal;overflow-wrap:anywhere}.glo .hide-ph{display:none}}
+.howto{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.howto div{background:var(--bg);border-radius:10px;padding:8px 12px;font-size:15px}
+.howto b{display:block;color:var(--bass)}
+.und{border:2px dashed var(--dv);background:var(--dvbg);border-radius:12px;padding:14px 18px;display:grid;gap:10px}
+.undhead{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.undtag{font-size:13px;font-weight:700;color:var(--surface);background:var(--dv);border-radius:6px;padding:2px 10px}
+.und h3{color:var(--dv)}
+.undstep{display:grid;gap:6px}
+.undstep h4{margin:0;font-size:16px}
+.undm{direction:ltr;text-align:left;font-family:var(--f-disp);font-size:18px;background:var(--surface);border-radius:8px;padding:6px 12px;overflow-x:auto;white-space:nowrap}
+.undm .r{background:color-mix(in srgb,var(--bass) 18%,transparent);border-radius:4px;padding:0 3px}
+.undm .c{background:color-mix(in srgb,var(--salmon) 22%,transparent);border-radius:4px;padding:0 3px}
+.undcode{font-size:15px;color:var(--muted)}
+#dv{direction:ltr;text-align:left;--dv:#6a4c93;--dv-soft:#f3eff9;--dv-line:#e3dbef;--ink:#14233B;--muted:#5A6477;--salmon:#E4734F;--good:#1F7A4D;--bar:#8a94a6;--font-text:"Fira Sans","Cairo",sans-serif;--font-display:"Literata",Georgia,serif;--font-mono:"JetBrains Mono",monospace}
+.dvbtn{--dv:#6a4c93;--dv-soft:#f3eff9;font-family:var(--font-text);font-size:20px;font-weight:600;color:var(--dv);background:var(--dv-soft);border:1.5px dashed var(--dv);border-radius:20px;padding:5px 16px 6px;cursor:pointer;letter-spacing:.01em;white-space:nowrap}
+.dvbtn:hover{filter:brightness(.96)}
+.dvbtn::before{content:"⤷ "}
+#dv{position:fixed;inset:0;z-index:900;background:rgba(20,35,59,.45)}
+#dvStage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:50% 50%;font-family:var(--font-text);color:var(--ink);cursor:pointer}
+#dv .dvpanel{position:absolute;left:36px;top:28px;width:1528px;height:846px;border-radius:18px;border:2px solid var(--dv);box-shadow:0 10px 40px rgba(20,35,59,.35);
+  background-color:#fdfcff;background-image:linear-gradient(var(--dv-line) 1px,transparent 1px),linear-gradient(90deg,var(--dv-line) 1px,transparent 1px);background-size:36px 36px;background-position:-1px -1px}
+#dv .dvhead{position:absolute;left:34px;top:24px;right:24px;display:flex;align-items:center;gap:18px}
+#dv .dvtag{font-size:18px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--dv);border-radius:6px;padding:3px 12px}
+#dv .dvtitle{font-family:var(--font-display);font-size:40px;font-weight:700;color:var(--ink)}
+#dv .dvclose{margin-left:auto;width:44px;height:44px;border-radius:50%;border:2px solid var(--dv);background:#fff;color:var(--dv);font-size:30px;line-height:36px;cursor:pointer}
+#dv .dvcols{position:absolute;left:40px;top:112px;width:1140px;height:706px;display:flex;flex-direction:column;flex-wrap:wrap;align-content:flex-start;column-gap:48px;row-gap:24px}
+#dv .dvcols{z-index:1}
+#dv .dvtrail{z-index:2}
+#dv .dvbreak{flex-basis:100%;width:0;margin-left:-48px}
+#dv .dvtrail{position:absolute;left:0;top:0;pointer-events:none;overflow:visible;color:var(--dv)}
+#dv .dvtrail path.tr{fill:none;stroke:var(--dv);stroke-width:1.6;stroke-dasharray:5 6;opacity:.22}
+#dv .dvtrail path.tr.new{opacity:.85;stroke-width:2.4}
+#dv .dvtrail path.tr.fresh{animation:dvin .5s both}
+#dv .dvside{position:absolute;left:1222px;top:112px;width:270px;font-size:19px;color:var(--muted)}
+#dv .dvcount{font-family:var(--font-mono);font-weight:700;font-size:24px;color:var(--dv);margin-bottom:18px}
+#dv .dvkey p{margin:0 0 12px;line-height:1.35}
+#dv .dvk1{display:inline-block;width:34px;border-top:2.5px dashed var(--dv);vertical-align:middle;margin-right:6px}
+#dv .dvk2{font-family:var(--font-mono);position:relative;padding:0 4px;margin-right:6px}
+#dv .dvk2::after{content:"";position:absolute;left:0;right:0;top:52%;height:3px;background:var(--salmon)}
+#dv .dvk3{font-size:15px;font-family:var(--font-mono);background:#fff;border:1.5px solid var(--dv);color:var(--dv);border-radius:6px;padding:1px 6px;margin-right:6px}
+#dv .dvhint{margin-top:22px;font-size:17px;color:var(--bar)}
+#dv .dl{display:flex;flex-direction:column;align-items:flex-start;gap:5px;max-width:530px}
+#dv .dl .ex{font-size:27px;line-height:1.5;white-space:nowrap;background:#fdfcff;border-radius:8px;padding:3px 10px}
+#dv .dl.now .ex{box-shadow:inset 4px 0 0 var(--dv)}
+#dv .dl .note{font-size:20px;color:var(--muted);white-space:normal;max-width:520px;padding:0 10px;background:#fdfcff;border-radius:6px}
+#dv .dl .rule{font-family:var(--font-mono);font-size:17px;color:var(--dv);background:#fff;border:1.5px solid var(--dv);border-radius:7px;padding:2px 9px;margin-left:18px}
+#dv .dl .rule b{font-family:var(--font-text);font-weight:600;margin-right:6px}
+#dv .dl .ok{color:var(--good);font-weight:700}
+#dv .dvcols [data-s]{visibility:hidden}
+#dv .dvcols [data-s].on{visibility:visible}
+#dv .dvcols [data-t]{display:inline-block;position:relative;border-radius:5px}
+#dv .dvcols [data-from]{background:var(--dv-soft)}
+#dv .dvcols [data-t]::after{content:"";position:absolute;left:-3px;right:-3px;top:54%;height:3px;border-radius:2px;background:var(--salmon);transform:scaleX(0);transform-origin:left center;transition:transform .55s ease}
+#dv .dvcols [data-t].struck{color:var(--muted)}
+#dv .dvcols [data-t].struck::after{transform:scaleX(1)}
+#dv .dvcols .inst,#dv .dvcols .inst::after{transition:none!important;animation:none!important}
+#dv .dl.now:not(.inst) .ex{animation:dvtxt .5s .8s both}
+#dv .dl.now:not(.inst) .rule,#dv .dl.now:not(.inst) .note,#dv .dl.now:not(.inst) .lbl{animation:dvin .45s .9s both}
+#dv .dvcols [data-from]{color:var(--ink)}
+#dv @keyframes dvtxt{from{color:transparent;background-color:rgba(255,255,255,0)}
+#dv to{color:var(--ink)}
+#dv }
+.dvcols [data-s]:not(.dl).now:not(.inst){animation:dvin .45s both}
+#dv @keyframes dvin{from{opacity:0}
+#dv to{opacity:1}
+#dv }
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.25;margin:0 3px}
+#dv .fr>span:first-child{border-bottom:2px solid currentColor;padding:0 4px}
+#dv .fr>span:last-child{padding:0 4px}
+#dvStage sup{vertical-align:super;font-size:.66em;line-height:0}
+#dvStage sub{vertical-align:sub;font-size:.66em;line-height:0}
+#dv .dl .lbl{font-family:var(--font-text);font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:5px;padding:1px 7px;margin-left:10px;vertical-align:middle}
+#wb{z-index:1000}
+#dv .dvside p,#dv .dvhint{direction:rtl;text-align:right}
+#dv .dl .note{font-family:var(--f-ar);font-size:19px}
+#dv .dl .rule .ar{font-family:var(--f-ar);font-weight:600;letter-spacing:0;direction:rtl;unicode-bidi:isolate}
+#dv .dvtitle{font-family:"Literata","Cairo",Georgia,serif;font-size:36px;direction:rtl;unicode-bidi:isolate}
+#dv .dvtag{letter-spacing:0;text-transform:none}
+.dvbtn{font-family:var(--f-body);font-size:16px;color:var(--dv);background:var(--dvbg);border-color:var(--dv)}
+.trapcard .tools{display:flex;flex-wrap:wrap;gap:6px}
+
+/* ---------- Week 2 additions: scikit-learn badge, salmon cells, test squares, review link ---------- */
+:root{--sk:#3A4BA8;--skbg:#E7EAF8}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--sk:#AEB9F2;--skbg:#1F2442}}
+:root[data-theme="dark"]{--sk:#AEB9F2;--skbg:#1F2442}
+.b.sk{color:var(--sk);background:var(--skbg)}
+.dtab .cS{background:var(--saltint);color:var(--salink)}
+.sq{display:inline-block;width:13px;height:13px;border-radius:3px;padding:0!important;min-width:0!important;border:0!important}
+.sq.ok{background:var(--good)}.sq.no{background:var(--bad)}
+.revlink{font-size:15px}.revlink a{font-weight:600}
+.glo a.w1{color:var(--muted)}
+#c15-tab{direction:ltr}
+.rest .panel svg{max-width:640px;margin:0 auto}
+.lines .hl-kw{color:var(--hkw)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style></head><body>
+
+<div class="app">
+<header class="topbar">
+ <div class="tb-title"><span class="tb-eyebrow">ENGS 3302 Pattern Recognition · Week 2 · Lab_W02 · Iyas A. I. Alshaikhkhalil</span><span class="tb-name">دليل كود المعمل 2</span></div>
+ <div class="tb-prog"><span id="tbcount" aria-live="polite">الخلية 1 من 7</span><span class="bar" role="progressbar" aria-label="التقدم في الصفحة" aria-valuemin="0" aria-valuemax="100" id="tbbar"><i></i></span></div>
+ <div class="tb-nav"><a class="navbtn" id="tbprev" href="#setup">→ السابق</a><a class="navbtn primary" id="tbnext" href="#c11">التالي ←</a></div>
+ <span class="seg" id="themeseg" role="group" aria-label="لون الصفحة"><button type="button" aria-pressed="false" data-v="light">فاتح</button><button type="button" aria-pressed="false" data-v="dark">داكن</button><button type="button" aria-pressed="true" data-v="auto">تلقائي</button></span>
+</header>
+
+<div class="shell">
+<nav class="side" id="side" aria-label="خلايا الدفتر">
+ <span class="sh">خلايا الدفتر</span>
+ <a class="nv" href="#setup" data-v="setup"><span class="nk">0</span><span>الإعداد</span></a>
+ <a class="nv" href="#c11" data-v="c11"><span class="nk">1.1</span><span>مسافتان</span></a>
+ <a class="nv" href="#c12" data-v="c12"><span class="nk">1.2</span><span>أقرب متوسط باليد</span></a>
+ <a class="nv" href="#c13" data-v="c13"><span class="nk">1.3</span><span>الوحدة تقرّر</span></a>
+ <a class="nv" href="#c14" data-v="c14"><span class="nk">1.4</span><span>التطبيع</span></a>
+ <a class="nv" href="#c15" data-v="c15"><span class="nk">1.5</span><span>جدول فيه فجوات</span></a>
+ <a class="nv" href="#c16" data-v="c16"><span class="nk">1.6</span><span>بيانات حقيقية</span></a>
+ <span class="sep"></span>
+ <a class="nv" href="#tasks" data-v="tasks"><span class="nk">2</span><span>مهامك</span></a>
+ <a class="nv" href="#traps" data-v="traps"><span class="nk tr">!</span><span>الفخاخ</span></a>
+ <a class="nv" href="#index" data-v="index"><span class="nk">A–Z</span><span>فهرس الأسماء</span></a>
+ <span class="scope">للفهم والتطبيق في المعمل. ليست مادة امتحان.</span>
+</nav>
+
+<main id="main">
+
+<!-- ================= SETUP ================= -->
+<section class="view cell" data-view="setup" hidden>
+ <div class="cellhead"><span class="cellno">Setup cell</span><h1>خلية الإعداد: المكتبات <bdi>(libraries)</bdi> والبيانات</h1>
+ <p class="goal"><b>الهدف:</b> نحمّل المكتبات وأدوات scikit-learn الجديدة، ونعرّف دالة <bdi>(function)</bdi> اسمها <code>check</code>. ثم نكتب السمكات العشر، ونعرّف دالة تحمّل جدول البطاريق. شغّل هذه الخلية أولًا في كل مرة تفتح الدفتر.</p></div>
+ <div class="intro">
+  <p class="lead">افتح دفتر <code>Lab_W02.ipynb</code> في Colab، وافتح هذه الصفحة بجانبه. الصفحة تعرض خلية واحدة في كل مرة، بترتيب الدفتر. <b>انقر أي اسم مُسطَّر في الكود</b>، فيفتح شرحه تحت سطره، ومعه لوحة حيّة ترى فيها أثره.</p>
+  <span class="scope">للفهم والتطبيق في المعمل. ليست مادة امتحان.</span>
+  <div class="legend">
+   <span class="b py">Python</span> اللغة نفسها
+   <span class="b np">NumPy</span><span class="b pd">pandas</span><span class="b plt">Matplotlib</span><span class="b sk">scikit-learn</span> المكتبات
+   <span class="b new">NEW</span> أول مرة
+   <span class="b rev">مراجعة</span> مرّ في الأسبوع 1، والشرح الكامل في دليله
+   <span class="b trap">فخ</span> خطأ شائع
+  </div>
+ </div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"><span class="sl">اقرأ بالترتيب:</span>
+  <button type="button" data-step="1"><b>1</b> المكتبات</button><span class="ar">←</span>
+  <button type="button" data-step="2" class="on"><b>2</b> الكود سطرًا سطرًا</button><span class="ar">←</span>
+  <button type="button" data-step="3"><b>3</b> المتغيرات الناتجة</button><span class="ar">←</span>
+  <button type="button" data-step="4"><b>4</b> أشكال البيانات</button></div>
+ <details class="blk" data-step="1"><summary>1 · المكتبات الأربع: ماذا تفعل كل واحدة <span class="sub">(انقر لتفتح)</span></summary>
+ <div class="libs">
+  <div class="lib"><h3><span class="b np">NumPy</span> <span class="b rev">مراجعة</span></h3>
+   <p class="why">مكتبة المصفوفات <bdi>(arrays)</bdi> والحساب. تحسب على كل العناصر مرة واحدة، بلا حلقة <bdi>(loop)</bdi>.</p>
+   <ul><li>الجديد منها هذا الأسبوع: المسافة <code>np.linalg.norm</code>، والقيمة المطلقة <code>np.abs</code>، والمحور <code>axis</code>، و<code>argmin</code>، والبثّ <bdi>(broadcasting)</bdi>، و<code>np.nan</code>.</li></ul></div>
+  <div class="lib"><h3><span class="b pd">pandas</span> <span class="b rev">مراجعة</span></h3>
+   <p class="why">مكتبة الجداول. الجدول اسمه <code>DataFrame</code>، ولكل عمود <bdi>(column)</bdi> اسم.</p>
+   <ul><li>الجديد هذا الأسبوع: قراءة ملف <code>read_csv</code>، والفجوات <code>dropna</code> و<code>isna</code> و<code>fillna</code>، والترميز <code>get_dummies</code>، و<code>map</code>.</li></ul></div>
+  <div class="lib"><h3><span class="b plt">Matplotlib</span> <span class="b rev">مراجعة</span></h3>
+   <p class="why">مكتبة الرسم. نرسم بها نقاط السمك والمراكز في 1.3.</p>
+   <ul><li>الجديد هذا الأسبوع: معاملات <code>scatter</code> مثل <code>marker</code> و<code>s</code> و<code>edgecolor</code>، ونجمة التفريق <code>*</code> مع <code>.T</code>.</li></ul></div>
+  <div class="lib"><h3><span class="b sk">scikit-learn</span> <span class="b new">NEW</span></h3>
+   <p class="why">مكتبة تعلّم الآلة <bdi>(machine learning)</bdi>. في الأسبوع 1 أخذنا منها البيانات فقط (<code>load_iris</code>). هذا الأسبوع نأخذ منها أدوات العمل نفسها.</p>
+   <ul><li><code>StandardScaler</code> و<code>MinMaxScaler</code> للتطبيع <bdi>(normalization)</bdi>، و<code>NearestCentroid</code> مصنِّف <bdi>(classifier)</bdi> أقرب متوسط، و<code>train_test_split</code> للتقسيم، و<code>make_pipeline</code> لربط الخطوات.</li></ul>
+   <p class="why"><b>ميزتها:</b> كل أداة تعمل بالطريقة نفسها: <code>fit</code> تتعلّم، ثم <code>transform</code> أو <code>predict</code> تطبّق.</p></div>
+ </div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W02.ipynb · setup cell</span></div>
+ <pre class="code" data-cell="setup">[[imp|import numpy as np]]
+import pandas as pd
+import matplotlib.pyplot as plt
+[[from|from sklearn.datasets import load_iris]]
+[[skmods|from sklearn.model_selection import train_test_split]]
+[[skmods|from sklearn.preprocessing import StandardScaler, MinMaxScaler]]
+[[skmods|from sklearn.neighbors import NearestCentroid]]
+[[skmods|from sklearn.pipeline import make_pipeline]]
+
+[[def|def check(label, got, expected, tol=1e-2):]]
+    [[doc|"""Prints a green tick if `got` is close to `expected`, otherwise a red cross."""]]
+    [[try|try:]]
+        if [[isinst|isinstance(expected, str)]]:
+            ok = [[strc|str(got) == expected]]
+        else:
+            ok = [[allclose|got is not None and np.allclose(...)]]   # (the numbers, as in Week 1)
+    except Exception:
+        ok = False
+    print([[condf|f"✅ {label}" if ok else f"❌ {label}: expected {expected}, got {got}"]])
+
+# The ten fish from the Notes: lightness, width (cm). 0 = salmon, 1 = sea bass.
+fish = [[arr|np.array]]([[2.5, 16.0], [3.0, 19.3], [3.8, 16.5], [4.5, 18.0], [5.6, 17.0],
+                 [4.2, 20.5], [5.2, 19.0], [6.0, 21.0], [6.8, 19.5], [7.5, 20.0]])
+labels = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
+names = [[strarr|np.array(["salmon", "sea bass"])]]
+
+PENGUIN_FEATURES = [[list|["bill_length_mm", "bill_depth_mm", "flipper_length_mm", "body_mass_g"]]]
+def load_penguins():
+    """Returns X (4 measurements), y (0 = Adelie, 1 = Chinstrap, 2 = Gentoo) and the cleaned table."""
+    try:
+        df = [[csv|pd.read_csv("penguins.csv")]]
+    [[fnf|except FileNotFoundError:]]
+        df = pd.read_csv("https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv")
+    df = [[dropna|df.dropna(subset=PENGUIN_FEATURES).reset_index(drop=True)]]   # 2 penguins have no measurements
+    y = [[map|df["species"].map({"Adelie": 0, "Chinstrap": 1, "Gentoo": 2})]][[tonp|.to_numpy()]]
+    [[ret3|return]] [[colsel|df[PENGUIN_FEATURES]]].to_numpy(), y, df
+print("Ready.")</pre></section>
+ <div class="rest" data-cell="setup">
+  <div class="panel" id="p-setup"><span class="ptitle">ماذا تعيد <code>load_penguins()</code> حين تستدعيها في 1.6</span>
+   <div class="ds" id="setup-ds"></div>
+   <p class="note" id="setup-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="setup" data-step="3"></section>
+ <section class="blk" id="ds" data-step="4" style="display:grid;gap:10px">
+  <h3>4 · أشكال البيانات <span class="sub">(مرة واحدة هنا، ثم نعود إليها من كل خلية)</span></h3>
+  <div class="dsgrid">
+   <div class="dscard" id="ds-list"><b>قائمة <bdi>(list)</bdi></b>
+    <div class="mini"><span>"bill_length_mm"</span><span>…</span><span>"body_mass_g"</span></div><span class="mono" style="color:var(--muted)">len = 4</span>
+    <p>قيم بالترتيب بين قوسين مربعين <code>[ ]</code>. نصل إلى العنصر برقمه <bdi>(index)</bdi>، والعدّ من 0.</p></div>
+   <div class="dscard" id="ds-tuple"><b>صف ثابت <bdi>(tuple)</bdi></b>
+    <div class="mini"><span>X</span><span>y</span><span>df</span></div><span class="mono" style="color:var(--muted)">(X, y, df)</span>
+    <p>قيم بالترتيب بين قوسين عاديين <code>( )</code>، أو بفواصل فقط. مثل القائمة، لكن لا نغيّرها. الدالة التي تعيد عدة قيم تعيد صفًّا ثابتًا.</p></div>
+   <div class="dscard" id="ds-dict"><b>قاموس <bdi>(dict)</bdi></b>
+    <div class="kv" style="direction:ltr"><span class="k">"Adelie"</span><span class="ar2">→</span><span>0</span><span class="k">"Gentoo"</span><span class="ar2">→</span><span>2</span></div><span style="color:var(--muted);font-size:14px">مفتاح <bdi>(key)</bdi> ← قيمة <bdi>(value)</bdi></span>
+    <p>أزواج بين قوسين معقوصين <code>{ }</code>. نصل إلى القيمة بمفتاحها، لا برقم مكانها.</p></div>
+   <div class="dscard" id="ds-array"><b>مصفوفة <bdi>(array)</bdi></b>
+    <div style="display:grid;grid-template-columns:repeat(2,18px);gap:2px"><span style="height:12px;background:var(--salmon);border-radius:2px"></span><span style="height:12px;background:var(--salmon);border-radius:2px"></span><span style="height:12px;background:var(--salmon);border-radius:2px"></span><span style="height:12px;background:var(--salmon);border-radius:2px"></span><span style="height:12px;background:var(--bass);border-radius:2px"></span><span style="height:12px;background:var(--bass);border-radius:2px"></span></div><span class="mono" style="color:var(--muted)">shape (rows, cols)</span>
+    <p>أرقام من نوع واحد في شبكة. الشكل <bdi>(shape)</bdi> يقول كم صفًا وكم عمودًا. <code>fish</code> شكلها (10, 2): عشر سمكات وخاصيتان.</p></div>
+   <div class="dscard" id="ds-df"><b>جدول <bdi>(DataFrame)</bdi></b>
+    <div style="display:grid;grid-template-columns:30px 30px;gap:2px;font-size:10px;font-family:var(--f-mono)"><span style="background:var(--basstint);text-align:center">a</span><span style="background:var(--greentint);text-align:center">b</span><span style="border:1px solid var(--line);height:10px"></span><span style="border:1px solid var(--line);height:10px"></span></div><span style="color:var(--muted);font-size:14px">أعمدة بأسماء</span>
+    <p>صفوف وأعمدة، ولكل عمود اسم. العمود الواحد وحده اسمه <code>Series</code>: قيم مع رقم كل صف <bdi>(index)</bdi>.</p></div>
+  </div>
+ </section>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.1 ================= -->
+<section class="view cell" data-view="c11" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.1</span><h1>مسافتان بين سمكتين: الإقليدية <bdi>(Euclidean)</bdi> ومانهاتن <bdi>(Manhattan)</bdi></h1>
+ <p class="goal"><b>الهدف:</b> نأخذ سمكة سلمون <code>fish[0]</code> وسمكة قاروص <code>fish[5]</code>. نحسب بُعدهما في فضاء الخصائص <bdi>(feature space)</bdi> بطريقتين: الخط المستقيم (4.81)، والمشي على المحاور (6.2).</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §2.2، المثال 2.1)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">Euclidean: ‖a − b‖ = √ Σ (a<sub>i</sub> − b<sub>i</sub>)²<br>Manhattan: Σ |a<sub>i</sub> − b<sub>i</sub>|</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">np.linalg.norm(a - b)<br>np.sum(np.abs(a - b))</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W02.ipynb · cell 1.1</span></div>
+ <pre class="code" data-cell="c11">[[tuple2|a, b = fish[0], fish[5]]]          # a salmon and a sea bass
+print("a =", a, " b =", b)
+print("Euclidean:", [[norm|np.linalg.norm(]][[vecsub|a - b]][[norm|)]])       # 4.81
+print("Manhattan:", [[sum|np.sum(]][[abs|np.abs(a - b)]][[sum|)]])       # 6.2</pre></section>
+ <div class="rest" data-cell="c11">
+  <div class="panel" id="p-c11"><span class="ptitle">اختر سمكتين، وقارن المسافتين</span>
+   <div class="ctrls">
+    <div class="ctrl" id="c11-a"><label>a = fish[</label><span class="seg" id="aseg"></span><label>]</label></div>
+    <div class="ctrl" id="c11-b"><label>b = fish[</label><span class="seg" id="bseg"></span><label>]</label></div>
+   </div>
+   <div class="ctrls">
+    <div class="ctrl" id="c11-m"><label>show</label><span class="seg" id="mseg"><button type="button" aria-pressed="false" data-v="e">Euclidean</button><button type="button" aria-pressed="false" data-v="m">Manhattan</button><button type="button" aria-pressed="true" data-v="b">both</button></span></div>
+    <div class="ctrl" id="c11-abs"><label>np.sum(</label><span class="seg" id="absseg"><button type="button" aria-pressed="true" data-v="1">np.abs(a - b)</button><button type="button" aria-pressed="false" data-v="0">a - b</button></span><label>)</label></div>
+   </div>
+   <svg id="c11-svg" viewBox="0 0 560 300" role="img" aria-label="السمكات العشر في فضاء الخصائص، والمسافة بين سمكتين"></svg>
+   <div class="out" id="c11-out"></div>
+   <p class="note" id="c11-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c11" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(3 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>اكتب <code>fish[1]</code> بدل <code>fish[5]</code>، أي سمكتي سلمون. هل المسافة أصغر؟</summary><div class="ans">نعم: الإقليدية 3.3377 ومانهاتن 3.8000000000000007. السمكتان من الصنف نفسه أقرب. الرقم الطويل خطأ تقريب صغير في الحاسوب <bdi>(floating-point error)</bdi>، وهو طبيعي.</div></details></li>
+  <li><details><summary>احذف <code>np.abs</code>، واكتب <code>np.sum(a - b)</code>. توقّع الرقم قبل التشغيل.</summary><div class="ans">−6.2. الفرقان سالبان (−1.7 و−4.5)، فالمجموع سالب. والمسافة لا تكون سالبة أبدًا. لو كان فرق موجبًا وآخر سالبًا لأُلغي بعضهما. جرّب الزر <code>a - b</code> في اللوحة.</div></details></li>
+  <li><details><summary>احسب الإقليدية خطوة خطوة: <code>np.sqrt(np.sum((a - b)**2))</code>.</summary><div class="ans">4.810405388322278، الرقم نفسه. <code>np.linalg.norm</code> تفعل هذه الخطوات الثلاث: تربّع، تجمع، تأخذ الجذر.</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.2 ================= -->
+<section class="view cell" data-view="c12" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.2</span><h1>مصنِّف أقرب متوسط <bdi>(nearest-mean classifier)</bdi>، باليد</h1>
+ <p class="goal"><b>الهدف:</b> نحسب مركزًا <bdi>(centre)</bdi> لكل صنف: متوسط سمكاته. ثم نقيس بُعد سمكة جديدة <code>[7.0, 18.0]</code> عن المركزين. الأقرب يفوز: 2.26 أصغر من 3.18، فهي قاروص <bdi>(sea bass)</bdi>.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §2.5، المثال 2.4)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">μ<sub>i</sub> = mean of the samples of class i<br>choose the class i with the smallest ‖x − μ<sub>i</sub>‖</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">fish[labels == c].mean(axis=0)<br>np.linalg.norm(centres - new, axis=1).argmin()</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W02.ipynb · cell 1.2</span></div>
+ <pre class="code" data-cell="c12">centres = np.array([[listcomp|[]][[mask|fish[labels == c]]][[meanax|.mean(axis=0)]][[listcomp| for c in (0, 1)]]])
+print("centres:\n", centres)                     # salmon (3.88, 17.36), sea bass (5.94, 20.0)
+
+new = np.array([7.0, 18.0])
+d = [[normax|np.linalg.norm(]][[bcast|centres - new]][[normax|, axis=1)]]        # distance to each centre
+print("distances:", [[round2|d.round(2)]], "->", [[argmin|names[d.argmin()]]])</pre></section>
+ <div class="rest" data-cell="c12">
+  <div class="panel" id="p-c12"><span class="ptitle">حرّك السمكة الجديدة، وانظر أي مركز أقرب</span>
+   <div class="ctrls">
+    <div class="ctrl" id="c12-xy"><label for="c12-x">new = [</label><input type="range" id="c12-x" min="2" max="8" step="0.1" value="7" style="width:110px"><span class="mono" id="c12-xv">7.0</span><label for="c12-y">,</label><input type="range" id="c12-y" min="15.5" max="21.5" step="0.1" value="18" style="width:110px"><span class="mono" id="c12-yv">18.0</span><label>]</label></div>
+    <div class="ctrl" id="c12-nax"><label>np.linalg.norm(centres - new</label><span class="seg" id="naxseg"><button type="button" aria-pressed="true" data-v="1">, axis=1</button><button type="button" aria-pressed="false" data-v="0">(no axis)</button></span><label>)</label></div>
+   </div>
+   <svg id="c12-svg" viewBox="0 0 560 300" role="img" aria-label="السمكات العشر، والمركزان، والحدّ بين الصنفين، والسمكة الجديدة"></svg>
+   <div class="out" id="c12-out"></div>
+   <div class="ctrls"><div class="ctrl" id="c12-ax"><label>fish[labels == 0].mean(</label><span class="seg" id="axseg"><button type="button" aria-pressed="true" data-v="0">axis=0</button><button type="button" aria-pressed="false" data-v="1">axis=1</button><button type="button" aria-pressed="false" data-v="n">(no axis)</button></span><label>)</label></div></div>
+   <div class="grid3" id="c12-grid"></div>
+   <p class="shape" id="c12-shape"></p>
+   <p class="note" id="c12-note"></p>
+  </div>
+ </div>
+ <div class="und" id="c12-dv">
+  <div class="undhead"><span class="undtag">للفهم</span><h3>لماذا الحدّ بين الصنفين خط مستقيم؟</h3></div>
+  <p>على الحدّ <bdi>(boundary)</bdi> تكون السمكة على البعد نفسه من المركزين. إذا كتبنا هذا الشرط وفتحنا المربعات، يختفي مربع x، فيبقى خط مستقيم. هذا الخط المتقطع في اللوحة فوق.</p>
+  <div><button class="dvbtn" type="button" data-dv="line" title="الاشتقاق خطوة خطوة (D أو ي)">الاشتقاق الرياضي خطوة خطوة، كما في الشرائح</button></div>
+  <template id="dv-line" data-title="حدّ مصنِّف أقرب متوسط خط مستقيم"><div class="dl" data-s="1"><span class="ex">‖x − μ<sub>0</sub>‖² = ‖x − μ<sub>1</sub>‖²</span><span class="rule"><b>boundary</b>Notes §2.5</span><span class="note" dir="rtl">على الحدّ: البعد عن المركزين متساوٍ. التربيع لا يغيّر التساوي.</span></div><div class="dl" data-s="2"><span class="ex"><i data-t="xa">‖x‖²</i> − 2 μ<sub>0</sub>·x + ‖μ<sub>0</sub>‖² = <i data-t="xb">‖x‖²</i> − 2 μ<sub>1</sub>·x + ‖μ<sub>1</sub>‖²</span><span class="rule"><b>(a − b)² = a² − 2ab + b²</b></span><span class="note" dir="rtl">نفتح المربع على الطرفين.</span></div><div class="dl" data-s="3"><span class="ex"><i data-t="xa2" data-from="xa" data-x="4">‖x‖²</i> = <i data-t="xb2" data-from="xb" data-x="4">‖x‖²</i></span><span class="note" dir="rtl">الحدّ نفسه على الطرفين، فيُختصر. لا يبقى مربع لـ x.</span></div><div class="dl" data-s="5"><span class="ex">2 (μ<sub>1</sub> − μ<sub>0</sub>)·x = ‖μ<sub>1</sub>‖² − ‖μ<sub>0</sub>‖²</span><span class="rule"><b>collect</b><span class="ar">ننقل الحدود</span></span></div><div class="dl" data-s="6"><span class="ex">w·x = c,  w = μ<sub>1</sub> − μ<sub>0</sub>,  c = <span class="fr"><span>‖μ<sub>1</sub>‖² − ‖μ<sub>0</sub>‖²</span><span>2</span></span> <span class="ok">✓</span></span><span class="note" dir="rtl">x بالقوة 1 فقط: هذه معادلة خط مستقيم (في بعدين).</span></div><div class="dvbreak"></div><div class="dl" data-s="7"><span class="ex">w = μ<sub>1</sub> − μ<sub>0</sub> = (2.06, 2.64)</span><span class="rule"><b>numbers</b><span class="ar">مراكز 1.2</span></span><span class="note" dir="rtl">(5.94 − 3.88، 20.00 − 17.36)</span></div><div class="dl" data-s="8"><span class="ex">c = <span class="fr"><span>435.2836 − 316.424</span><span>2</span></span> = 59.4298</span></div><div class="dl" data-s="9"><span class="ex">2.06 x<sub>1</sub> + 2.64 x<sub>2</sub> = 59.4298</span><span class="note" dir="rtl">هذا الخط المتقطع. يمرّ بمنتصف المركزين (4.91, 18.68)، ويقطع الخط بينهما بزاوية قائمة.</span></div><div class="dl" data-s="10"><span class="ex">2.06 × 7 + 2.64 × 18 = 61.94 &gt; 59.43 <span class="ok">✓</span></span><span class="note" dir="rtl">السمكة الجديدة (7.0, 18.0): الطرف أكبر من c، فهي في جهة μ<sub>1</sub>، أي القاروص (sea bass). النتيجة نفسها التي طبعها الكود.</span></div></template>
+  <p class="undcode">في الكود لا نحسب الخط أبدًا: <code>argmin</code> تختار الأقرب مباشرة. الخط نتيجة لهذه القاعدة، لا خطوة فيها.</p>
+ </div>
+ <section class="vars blk" data-cell="c12" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(3 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>احذف <code>, axis=1</code> من <code>np.linalg.norm</code>. ماذا يُطبع؟</summary><div class="ans"><code>distances: 3.91 -&gt; salmon</code>. رقم واحد بدل رقمين، والقرار خاطئ. بلا محور <bdi>(axis)</bdi> تحسب <code>norm</code> طول المصفوفة كلها، و<code>argmin</code> لرقم واحد تعطي 0 دائمًا. لا رسالة خطأ.</div></details></li>
+  <li><details><summary>اكتب <code>new = np.array([4.0, 18.0])</code>. توقّع الصنف.</summary><div class="ans"><code>distances: [0.65 2.79] -&gt; salmon</code>. السمكة صارت قريبة جدًا من مركز السلمون (3.88, 17.36).</div></details></li>
+  <li><details><summary>اطبع <code>centres.shape</code>.</summary><div class="ans"><code>(2, 2)</code>: صفّان (مركز لكل صنف)، وعمودان (خاصيتان). الصف 0 مركز السلمون، والصف 1 مركز القاروص.</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.3 ================= -->
+<section class="view cell" data-view="c13" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.3</span><h1>الوحدة <bdi>(unit)</bdi> تقرّر: العرض بالمليمتر</h1>
+ <p class="goal"><b>الهدف:</b> نكتب العرض بالمليمتر بدل السنتيمتر، أي نضرب العمود 1 في 10. السمكة نفسها، والمراكز نفسها، لكن القرار ينقلب: 7.12 أصغر من 20.03، فصارت سلمونًا <bdi>(salmon)</bdi>.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §2.3، المثال 2.2، الشكل 1)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">cm: √(3.12² + 0.64²) ≈ 3.18,  √(1.06² + 2.00²) ≈ 2.26<br>mm: √(3.12² + 6.4²) ≈ 7.12,  √(1.06² + 20²) ≈ 20.03</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">fish * np.array([1, 10])<br>np.linalg.norm(centres_mm - new_mm, axis=1)</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W02.ipynb · cell 1.3</span></div>
+ <pre class="code" data-cell="c13">to_mm = np.array([1, 10])
+fish_mm, new_mm = [[scalecol|fish * to_mm]], new * to_mm
+centres_mm = np.array([fish_mm[labels == c].mean(axis=0) for c in (0, 1)])
+d_mm = np.linalg.norm(centres_mm - new_mm, axis=1)
+print("distances in mm:", d_mm.round(2), "->", names[d_mm.argmin()])
+
+fig, axs = [[subplots|plt.subplots(1, 2, figsize=(9, 3.5))]]
+[[forzip|for ax, F, C, q, unit in]] [(axs[0], fish, centres, new, "cm"), (axs[1], fish_mm, centres_mm, new_mm, "mm")]:
+    [[scatter|ax.scatter(]][[star|*]][[Ttr|F[labels == 0].T]], c="tab:orange", label="salmon")
+    ax.scatter(*F[labels == 1].T, c="tab:blue", [[mk|marker="s"]], label="sea bass")
+    ax.scatter(*C.T, c=["tab:orange", "tab:blue"], [[mk|marker="X", s=200, edgecolor="k"]])
+    ax.scatter(*q, c="white", edgecolor="k", marker="*", s=300)
+    [[setlabel|ax.set_xlabel("lightness"); ax.set_ylabel(f"width ({unit})")]]
+[[legend|axs[0].legend(); plt.tight_layout(); plt.show()]]</pre></section>
+ <div class="rest" data-cell="c13">
+  <div class="panel" id="p-c13"><span class="ptitle">السمكات نفسها، بوحدتين</span>
+   <div class="ctrls">
+    <div class="ctrl" id="c13-u"><label>to_mm = np.array([1,</label><span class="seg" id="useg"><button type="button" aria-pressed="false" data-v="cm">1</button><button type="button" aria-pressed="true" data-v="mm">10</button></span><label>])</label></div>
+    <div class="ctrl" id="c13-v"><label>picture</label><span class="seg" id="vseg"><button type="button" aria-pressed="true" data-v="nb">as in the notebook</button><button type="button" aria-pressed="false" data-v="eq">what the distance sees</button></span></div>
+   </div>
+   <svg id="c13-svg" viewBox="0 0 560 300" role="img" aria-label="السمكات والمراكز والسمكة الجديدة بالسنتيمتر أو بالمليمتر"></svg>
+   <div class="out" id="c13-out"></div>
+   <p class="note" id="c13-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c13" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(سؤالان، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>اكتب <code>to_mm = np.array([10, 1])</code>: نكبّر الإضاءة بدل العرض.</summary><div class="ans"><code>[31.21 10.79] -&gt; sea bass</code>. الآن الإضاءة تسيطر على المسافة. القرار صار قاروص، لكن لسبب مختلف. الوحدة تختار أي خاصية تقرّر.</div></details></li>
+  <li><details><summary>اطبع <code>np.linalg.norm(fish_mm[0] - fish_mm[5])</code>، وقارنه بـ 4.81 في 1.1.</summary><div class="ans">45.03 تقريبًا. فرق العرض صار 45، وفرق الإضاءة بقي 1.7. فالمسافة كلها تقريبًا من العرض (Math Toolkit §M2.5).</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.4 ================= -->
+<section class="view cell" data-view="c14" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.4</span><h1>التطبيع <bdi>(normalization)</bdi> بـ scikit-learn</h1>
+ <p class="goal"><b>الهدف:</b> نجعل الخاصيتين بمقياس واحد. <code>fit</code> تتعلّم الأرقام (المتوسط والانحراف المعياري، أو الأصغر والأكبر) من بيانات التدريب <bdi>(training data)</bdi>. و<code>transform</code> تطبّق الأرقام نفسها على أي سمكة. ونرى أن الدرجة المعيارية <bdi>(z-score)</bdi> لا تهتم بالوحدة.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §2.4، المثال 2.3، مربع «Use the training numbers»)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">min-max: x′ = (x − min) ÷ (max − min)<br>z-score: z = (x − x̄) ÷ σ</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">MinMaxScaler().fit(fish).transform([new])<br>StandardScaler().fit(fish).transform([new])</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W02.ipynb · cell 1.4</span></div>
+ <pre class="code" data-cell="c14">z = [[ss|StandardScaler()]][[fit|.fit(fish)]]
+print("means:", [[attr|z.mean_]], " std:", z.scale_.round(3))
+print("new fish as z-scores:", [[transform|z.transform([new])]].round(3))     # [1.367, -0.415]
+
+mm = [[mms|MinMaxScaler()]].fit(fish)
+print("new fish after min-max:", mm.transform([new]))          # [0.9, 0.4]
+
+# z-scores do not care about the unit: same result in cm and in mm
+z_mm = StandardScaler().fit(fish_mm)
+print("same fish, in mm:", z_mm.transform([new_mm]).round(3))</pre></section>
+ <div class="rest" data-cell="c14">
+  <div class="panel" id="p-c14"><span class="ptitle">قبل التطبيع وبعده، بالسنتيمتر أو بالمليمتر</span>
+   <div class="ctrls">
+    <div class="ctrl" id="c14-m"><label>scaler</label><span class="seg" id="sclseg"><button type="button" aria-pressed="false" data-v="none">none</button><button type="button" aria-pressed="false" data-v="minmax">MinMaxScaler</button><button type="button" aria-pressed="true" data-v="z">StandardScaler</button></span></div>
+    <div class="ctrl" id="c14-u"><label>width in</label><span class="seg" id="u4seg"><button type="button" aria-pressed="true" data-v="cm">cm</button><button type="button" aria-pressed="false" data-v="mm">mm</button></span></div>
+   </div>
+   <svg id="c14-svg" viewBox="0 0 560 300" role="img" aria-label="السمكات بعد التطبيع، والمراكز، والسمكة الجديدة"></svg>
+   <div class="out" id="c14-out"></div>
+   <p class="note" id="c14-note"></p>
+  </div>
+ </div>
+ <div class="und" id="c14-dv">
+  <div class="undhead"><span class="undtag">للفهم</span><h3>لماذا لا تهتم الدرجة المعيارية بالوحدة؟</h3></div>
+  <p>حين نضرب العرض في 10، يُضرب المتوسط في 10، ويُضرب الانحراف المعياري في 10. فالعشرة في البسط تُختصر مع العشرة في المقام.</p>
+  <div><button class="dvbtn" type="button" data-dv="zunit" title="الاشتقاق خطوة خطوة (D أو ي)">الاشتقاق الرياضي خطوة خطوة، كما في الشرائح</button></div>
+  <template id="dv-zunit" data-title="الدرجة المعيارية لا تتغير حين نغيّر الوحدة"><div class="dl" data-s="1"><span class="ex">x<sub>mm</sub> = 10 x<sub>cm</sub></span><span class="rule"><b>unit</b><span class="ar">كل عرض × 10</span></span></div><div class="dl" data-s="2"><span class="ex">x̄<sub>mm</sub> = <span class="fr"><span>10 x<sub>1</sub> + … + 10 x<sub>n</sub></span><span>n</span></span> = 10 x̄<sub>cm</sub></span><span class="rule"><b>mean</b>Math Toolkit §M2.3</span><span class="note" dir="rtl">العشرة عامل مشترك في المجموع.</span></div><div class="dl" data-s="3"><span class="ex">σ<sub>mm</sub> = √ <span class="fr"><span>Σ (10 x<sub>i</sub> − 10 x̄)²</span><span>n</span></span> = 10 σ<sub>cm</sub></span><span class="rule"><b>std</b>Math Toolkit §M2.4</span><span class="note" dir="rtl">كل فرق × 10، فكل مربع × 100، والجذر يعيد 10.</span></div><div class="dl" data-s="4"><span class="ex">z<sub>mm</sub> = <span class="fr"><span>x<sub>mm</sub> − x̄<sub>mm</sub></span><span>σ<sub>mm</sub></span></span> = <span class="fr"><span><i data-t="t1" data-x="5">10</i> (x − x̄)</span><span><i data-t="t2" data-x="5">10</i> σ</span></span></span><span class="rule"><b>z-score</b>Notes §2.4</span></div><div class="dl" data-s="5"><span class="ex">= <span class="fr"><span>x − x̄</span><span>σ</span></span> = z<sub>cm</sub> <span class="ok">✓</span></span><span class="note" dir="rtl">العشرة تُختصر. الدرجة المعيارية واحدة بالوحدتين.</span></div><div class="dl" data-s="6"><span class="ex">mm: <span class="fr"><span>180 − 186.8</span><span>16.3756</span></span> = −0.415</span><span class="rule"><b>numbers</b><span class="ar">من اللوحة فوق</span></span></div><div class="dl" data-s="7"><span class="ex">cm: <span class="fr"><span>18.0 − 18.68</span><span>1.6376</span></span> = −0.415 <span class="ok">✓</span></span><span class="note" dir="rtl">هذا ما طبعه السطر الأخير في الخلية: same fish, in mm.</span></div></template>
+  <p class="undcode">الشيء نفسه يحدث مع <code>MinMaxScaler</code>: الأصغر والأكبر يُضربان في 10 أيضًا. جرّب <code>mm</code> مع كل مقياس في اللوحة.</p>
+ </div>
+ <section class="vars blk" data-cell="c14" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(3 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>اكتب <code>z.transform(new)</code> بلا القوسين المربعين.</summary><div class="ans">رسالة خطأ: <code>ValueError: Expected 2D array, got 1D array instead</code>. الأداة تنتظر جدولًا: صفًّا لكل سمكة. <code>[new]</code> جدول فيه صف واحد، شكله (1, 2).</div></details></li>
+  <li><details><summary>اطبع <code>z.transform(fish).mean(axis=0)</code> و<code>z.transform(fish).std(axis=0)</code>.</summary><div class="ans"><code>[0. 0.]</code> و<code>[1. 1.]</code>. بعد الدرجة المعيارية، كل خاصية متوسطها 0 وانحرافها المعياري 1، على بيانات التدريب.</div></details></li>
+  <li><details><summary>جرّب <code>mm.transform([[8.0, 22.0]])</code>. هل يبقى الناتج بين 0 و1؟</summary><div class="ans">لا: <code>[[1.1 1.2]]</code>. السمكة أكبر من أكبر سمكة في التدريب. min-max يضمن [0, 1] لبيانات التدريب فقط، لأن min وmax منها.</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.5 ================= -->
+<section class="view cell" data-view="c15" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.5</span><h1>جدول فيه فجوات وخاصية فئوية <bdi>(categorical feature)</bdi></h1>
+ <p class="goal"><b>الهدف:</b> جدول صغير <b>مُختلَق</b> للتدريب فيه قيمتان ناقصتان، وعمود نصّي هو الميناء. نعدّ الفجوات، ونملؤها بمتوسط العمود، ثم نحوّل الميناء إلى أعمدة 0/1، أي الترميز الأحادي <bdi>(one-hot encoding)</bdi>.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §2.1: الخصائص الرقمية والفئوية)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">categorical feature → one 0/1 column per category<br>port = Rafah → (Gaza 0, Khan Younis 0, Rafah 1)</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">pd.get_dummies(filled, columns=["port"], dtype=int)</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W02.ipynb · cell 1.5</span></div>
+ <pre class="code" data-cell="c15">df = [[df|pd.DataFrame({]]
+    "lightness": [2.5, 3.0, [[nan|np.nan]], 4.5, 6.0, 6.8],
+    "width_cm":  [16.0, 19.3, 16.5, 18.0, 21.0, np.nan],
+    "port":      ["Gaza", "Rafah", "Gaza", "Khan Younis", "Rafah", "Gaza"],
+    "species":   ["salmon", "salmon", "salmon", "salmon", "sea bass", "sea bass"]})
+print([[isna|df.isna().sum()]])                          # how many gaps per column
+
+filled = [[fillna|df.fillna(]][[meanno|df.mean(numeric_only=True)]][[fillna|)]]  # fill gaps with the column mean
+coded = [[dummies|pd.get_dummies(filled, columns=["port"], dtype=int)]]   # one 0/1 column per port
+[[show|coded]]</pre></section>
+ <div class="rest" data-cell="c15">
+  <div class="panel" id="p-c15"><span class="ptitle">الجدول خطوة خطوة</span>
+   <div class="ctrls">
+    <div class="ctrl" id="c15-s"><span class="seg" id="stseg"><button type="button" aria-pressed="false" data-v="0">df</button><button type="button" aria-pressed="false" data-v="1">df.isna()</button><button type="button" aria-pressed="false" data-v="2">filled</button><button type="button" aria-pressed="true" data-v="3">coded</button></span></div>
+    <div class="ctrl" id="c15-d"><label>get_dummies(…, dtype=</label><span class="seg" id="dtseg"><button type="button" aria-pressed="true" data-v="int">int</button><button type="button" aria-pressed="false" data-v="none">(not given)</button></span><label>)</label></div>
+   </div>
+   <div class="tw" id="c15-tab"></div>
+   <div class="out" id="c15-out"></div>
+   <p class="note" id="c15-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c15" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(3 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>احذف <code>dtype=int</code> من <code>get_dummies</code>.</summary><div class="ans">الأعمدة الجديدة تصير <code>True</code> و<code>False</code> بدل 1 و0. في الحساب True = 1، لكن 0/1 أوضح في الجدول. جرّب الزر في اللوحة.</div></details></li>
+  <li><details><summary>احذف <code>numeric_only=True</code>، واكتب <code>df.mean()</code>.</summary><div class="ans">رسالة خطأ من نوع <code>TypeError</code>: لا يمكن حساب متوسط عمود نصوص مثل <code>port</code>. <code>numeric_only=True</code> يأخذ الأعمدة الرقمية فقط.</div></details></li>
+  <li><details><summary>اطبع <code>len(df.dropna())</code> بدل الملء. كم صفًا يبقى؟</summary><div class="ans">4 من 6. الحذف يرمي كل الصف، ومعه القياس الصحيح الآخر. مع جدول صغير، الملء يحفظ البيانات.</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.6 ================= -->
+<section class="view cell" data-view="c16" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.6</span><h1>أقرب متوسط على بيانات حقيقية: هل يساعد التطبيع؟</h1>
+ <p class="goal"><b>الهدف:</b> نترك 30% من كل مجموعة بيانات جانبًا: بيانات الاختبار <bdi>(test data)</bdi>. ندرّب على الباقي، ونعدّ الإجابات الصحيحة على الاختبار، أي الدقة <bdi>(accuracy)</bdi>. ونفعل ذلك مرتين: بلا تطبيع، ومع الدرجة المعيارية.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §2.6، مثال Penguins: 65 و100 من 103)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">accuracy = number of correct decisions ÷ number of test samples<br>error rate = 1 − accuracy</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">model.fit(Xtr, ytr).score(Xte, yte)</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W02.ipynb · cell 1.6</span></div>
+ <pre class="code" data-cell="c16">for name, loader in [("Penguins", [[lambda|lambda: load_penguins()]][[slice|[:2]]]), ("Iris", lambda: [[iris|load_iris(return_X_y=True)]])]:
+    [[tuple2|X, y = loader()]]
+    Xtr, Xte, ytr, yte = [[split|train_test_split(X, y, test_size=0.3, random_state=0, stratify=y)]]
+    raw = [[nc|NearestCentroid()]].fit(Xtr, ytr)[[score|.score(Xte, yte)]]
+    scaled = [[pipe|make_pipeline(StandardScaler(), NearestCentroid())]].fit(Xtr, ytr).score(Xte, yte)
+    print(f"{name}: raw {[[fmt|raw:.3f]]}   z-score {scaled:.3f}")</pre></section>
+ <div class="rest" data-cell="c16">
+  <div class="panel" id="p-c16"><span class="ptitle">التقسيم والدقة، بأرقام scikit-learn الحقيقية</span>
+   <div class="ctrls">
+    <div class="ctrl" id="c16-ds"><label>data</label><span class="seg" id="dsseg"><button type="button" aria-pressed="true" data-v="Penguins">Penguins</button><button type="button" aria-pressed="false" data-v="Iris">Iris</button></span></div>
+    <div class="ctrl" id="c16-mo"><label>model</label><span class="seg" id="moseg"><button type="button" aria-pressed="false" data-v="raw">NearestCentroid()</button><button type="button" aria-pressed="true" data-v="sc">make_pipeline(StandardScaler(), …)</button></span></div>
+   </div>
+   <div class="ctrls">
+    <div class="ctrl" id="c16-rs"><label>random_state=</label><span class="seg" id="rsseg"></span></div>
+    <div class="ctrl" id="c16-st"><label>stratify=</label><span class="seg" id="stfseg"><button type="button" aria-pressed="true" data-v="1">y</button><button type="button" aria-pressed="false" data-v="0">None</button></span></div>
+   </div>
+   <svg id="c16-svg" viewBox="0 0 560 150" role="img" aria-label="عدد كل نوع في بيانات التدريب والاختبار"></svg>
+   <div><span class="note">بيانات الاختبار، مربع لكل عيّنة (أخضر صحيح، أحمر خطأ):</span><div class="cells" id="c16-sq" style="gap:2px;margin-top:6px"></div></div>
+   <div class="out" id="c16-out"></div>
+   <p class="note" id="c16-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c16" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(3 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>غيّر <code>random_state=0</code> إلى <code>random_state=1</code>.</summary><div class="ans">Penguins: raw 0.621 وz-score 0.961. Iris: raw 0.889 وz-score 0.822. الأرقام تتغير قليلًا مع كل تقسيم، والصورة العامة تبقى. لهذا نثبّت الرقم: ليرى الجميع النتيجة نفسها.</div></details></li>
+  <li><details><summary>احذف <code>stratify=y</code>.</summary><div class="ans">Penguins: raw 0.553 وz-score 0.981. Iris: raw 0.911 وz-score 0.867. حصة كل نوع في الاختبار لم تعد كحصته في البيانات: مثلًا 17 Chinstrap بدل 21. انظر الأعمدة في اللوحة.</div></details></li>
+  <li><details><summary>اكتب <code>.score(Xtr, ytr)</code> بدل <code>.score(Xte, yte)</code>.</summary><div class="ans">هذه دقة التدريب: Penguins raw 0.586 وz-score 0.971، وIris raw 0.914 وz-score 0.886. هنا الأرقام قريبة من الاختبار، لأن أقرب متوسط نموذج بسيط. لكن نموذجًا يحفظ البيانات يأخذ 1.0 على التدريب، ولا يخبرنا شيئًا (Notes §2.6).</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= TASKS ================= -->
+<section class="view" data-view="tasks" hidden>
+ <div class="cellhead"><span class="cellno">Part 2</span><h1>مهامك في الجزء 2</h1>
+ <p class="lead">هنا لا نعطيك الحل. لكل مهمة: ماذا تحسب، وأي الأسماء في هذه الصفحة تحتاجها، وتلميح. انقر اسمًا ليفتح شرحه في خليته. شغّل خلية التحقق تحت كل مهمة: ✅ يعني أن إجابتك قريبة من الصحيحة بما يكفي.</p></div>
+ <div class="task"><h3>Task 1 · مسافتان</h3>
+  <p>احسب المسافة الإقليدية <bdi>(Euclidean distance)</bdi> ومسافة مانهاتن <bdi>(Manhattan distance)</bdi> بين <code>fish[2]</code> و<code>fish[7]</code>.</p>
+  <div class="tools"><a class="b np" href="#c11--norm">np.linalg.norm</a><a class="b np" href="#c11--abs">np.abs</a><a class="b np" href="#c11--sum">np.sum</a></div>
+  <p class="note">تلميح: الخلية 1.1 تفعل الشيء نفسه لسمكتين أخريين. غيّر رقمي السمكتين فقط. اللوحة في 1.1 لا تعرض هذا الزوج بالذات، فاحسبه أنت.</p></div>
+ <div class="task"><h3>Task 2 · الدرجة المعيارية <bdi>(z-score)</bdi> باليد</h3>
+  <p>احسب الدرجة المعيارية لسمكة جديدة <code>[5.0, 19.0]</code>، بمتوسط <code>fish</code> وانحرافها المعياري <bdi>(standard deviation)</bdi>.</p>
+  <div class="tools"><a class="b np" href="#c12--meanax">mean(axis=0)</a><a class="b np" href="#tasks--t2">np.std</a><a class="b np" href="#c12--bcast">البثّ</a></div>
+  <p class="note" id="t2">تلميح: الصيغة z = (x − x̄) ÷ σ لكل خاصية وحدها. <code>np.mean(fish, axis=0)</code> تعطي متوسطين، عمودًا عمودًا. و<code>np.std(fish, axis=0)</code> تعطي انحرافين معياريين بالطريقة نفسها، وتقسم على n مثل <code>StandardScaler</code>. ثم اطرح واقسم على المصفوفة كلها مرة واحدة. تحقّق بنفسك: لو طبّقت طريقتك على <code>[7.0, 18.0]</code> يجب أن تحصل على <code>[1.367, -0.415]</code> كما في 1.4.</p></div>
+ <div class="task"><h3>Task 3 · مصنِّفك أنت</h3>
+  <p>أكمل دالتين: <code>fit_means(X, y)</code> تعيد مركزًا لكل صنف، صفًّا لكل صنف بالترتيب 0، 1، … و<code>predict(means, X)</code> تعيد صنف أقرب مركز لكل صف في <code>X</code>.</p>
+  <div class="tools"><a class="b py" href="#setup--def">def</a><a class="b py" href="#c12--listcomp">قائمة مختصرة</a><a class="b np" href="#c12--meanax">mean(axis=0)</a><a class="b np" href="#c12--normax">norm(…, axis=1)</a><a class="b np" href="#c12--argmin">argmin</a><a class="b np" href="#tasks--t3">np.unique</a></div>
+  <p class="note" id="t3">تلميح: <code>fit_means</code> هي السطر الأول من 1.2 تقريبًا، لكن بـ <code>X</code> و<code>y</code> بدل <code>fish</code> و<code>labels</code>. و<code>np.unique(y)</code> تعطي الأصناف المختلفة في <code>y</code> مرة واحدة لكل صنف، مرتّبة: لـ Penguins <code>[0 1 2]</code>. في <code>predict</code> عندك صفوف كثيرة: احسب لكل صف بُعده عن المراكز كما في 1.2، وخذ <code>argmin</code>. حلقة على الصفوف تكفي، والنتيجة مصفوفة.</p></div>
+ <div class="task"><h3>Task 4 · التطبيع يغيّر Penguins</h3>
+  <p>بتقسيم Penguins المعطى، احسب دقة <bdi>(accuracy)</bdi> مصنِّفك من Task 3 على الاختبار: (a) على الخصائص كما هي، و(b) بعد <code>StandardScaler</code> مُدرَّب على <code>Xtr</code> فقط.</p>
+  <div class="tools"><a class="b sk" href="#c14--fit">fit</a><a class="b sk" href="#c14--transform">transform</a><a class="b sk" href="#c16--split">train_test_split</a><a class="b sk" href="#c16--score">score</a></div>
+  <p class="note">تلميح: الدقة = عدد الإجابات الصحيحة ÷ عدد عيّنات الاختبار. قارن تنبؤاتك بـ <code>yte</code>: المقارنة تعطي قناعًا <bdi>(mask)</bdi> من True وFalse، ومتوسطه هو الكسر. للتطبيع: <code>fit</code> مرة واحدة على <code>Xtr</code>، ثم <code>transform</code> على <code>Xtr</code> وعلى <code>Xte</code> بالمقياس نفسه.</p></div>
+ <div class="task"><h3>Reflect · لماذا <code>Xtr</code> فقط؟</h3>
+  <p>اكتب جملتين أو ثلاثًا: ما الخطأ في تدريب المقياس على كل <code>X</code>؟ اقرأ عن تسرّب البيانات <bdi>(data leakage)</bdi> في <a href="#c14--fit">شرح fit</a> وفي Notes §2.4.</p></div>
+ <nav class="pn" aria-label="التنقل بين الأقسام"></nav>
+</section>
+
+<!-- ================= TRAPS ================= -->
+<section class="view" data-view="traps" hidden>
+ <div class="cellhead"><span class="cellno">Traps</span><h1>الفخاخ: أخطاء لا تعطي رسالة خطأ <bdi>(error message)</bdi></h1>
+ <p class="lead">أغلب هذه الأخطاء تجعل الكود يعمل، لكن بأرقام خاطئة. لهذا هي خطيرة. انقر الاسم في كل بطاقة لترى شرحه في خليته.</p></div>
+ <div class="traps">
+  <div class="trapcard"><h3><span class="b np">NumPy</span> نسيت <code>np.abs</code></h3><p><code>np.sum(a - b)</code> تجمع فروقًا سالبة وموجبة، فيُلغي بعضها بعضًا. لـ <code>fish[0]</code> و<code>fish[5]</code> تعطي −6.2، والمسافة لا تكون سالبة.</p><div class="tools"><a class="b np" href="#c11--abs">np.abs</a></div></div>
+  <div class="trapcard"><h3><span class="b np">NumPy</span> نسيت <code>axis=1</code></h3><p><code>np.linalg.norm(centres - new)</code> بلا محور <bdi>(axis)</bdi> تعطي رقمًا واحدًا (3.91)، و<code>argmin</code> له 0 دائمًا. فكل سمكة تصير salmon.</p><div class="tools"><a class="b np" href="#c12--normax">norm(…, axis=1)</a> <a class="b np" href="#c12--meanax">mean(axis=0)</a></div></div>
+  <div class="trapcard"><h3><span class="b py">بيانات</span> الوحدة تقرّر</h3><p>مسافة على خصائص بوحدات مختلفة تسمع الخاصية ذات الأرقام الكبيرة فقط. بالمليمتر انقلب قرار السمكة الجديدة. طبّع <bdi>(normalize)</bdi> قبل المسافة.</p><div class="tools"><a class="b np" href="#c13--scalecol">fish * to_mm</a> <a class="b sk" href="#c14--ss">StandardScaler</a></div></div>
+  <div class="trapcard"><h3><span class="b sk">scikit-learn</span> تسرّب البيانات <bdi>(data leakage)</bdi></h3><p>إن دربت المقياس على كل البيانات، أو على بيانات الاختبار، يرى المصنِّف شيئًا من الاختبار. الدقة تبدو أفضل من الحقيقة. <code>fit</code> على <code>Xtr</code> فقط.</p><div class="tools"><a class="b sk" href="#c14--fit">fit</a> <a class="b sk" href="#c16--pipe">make_pipeline</a></div></div>
+  <div class="trapcard"><h3><span class="b pd">pandas</span> <code>std()</code> يقسم على n−1</h3><p>في pandas يقسم الانحراف المعياري <bdi>(standard deviation)</bdi> على n−1. أما <code>np.std</code> و<code>StandardScaler</code> فيقسمان على n. في Task 2 استعمل <code>np.std</code>.</p><div class="tools"><a class="b np" href="#tasks--t2">np.std</a></div></div>
+  <div class="trapcard"><h3><span class="b sk">scikit-learn</span> الدقة على بيانات التدريب</h3><p><code>.score(Xtr, ytr)</code> يقيس المصنِّف على ما رآه. الرقم قد يبدو جيدًا ولا يخبرنا عن عيّنات جديدة. قِس دائمًا على <code>Xte</code>.</p><div class="tools"><a class="b sk" href="#c16--score">score</a></div></div>
+  <div class="trapcard"><h3><span class="b sk">scikit-learn</span> بلا <code>random_state</code></h3><p>كل تشغيل يعطي تقسيمًا آخر ودقة أخرى، فلا تتطابق أرقامك مع زملائك ولا مع خلية التحقق. وبلا <code>stratify</code> تتغير حصة كل نوع في الاختبار.</p><div class="tools"><a class="b sk" href="#c16--split">train_test_split</a></div></div>
+ </div>
+ <nav class="pn" aria-label="التنقل بين الأقسام"></nav>
+</section>
+
+<!-- ================= INDEX ================= -->
+<section class="view" data-view="index" hidden>
+ <div class="cellhead"><span class="cellno">Index</span><h1>فهرس الأسماء</h1>
+ <p class="lead">كل اسم مرّ في هذا المعمل، مع مكتبته ومكان شرحه. انقر الخلية لتفتح الشرح تحت سطره. الفهرس يكبر كل أسبوع: الاسم الذي شُرح في الأسبوع 1 يظهر هنا «مراجعة»، ومعه رابط إلى دليل الأسبوع 1.</p></div>
+ <div class="tw"><table class="glo" id="glo"><thead><tr><th>الاسم</th><th>المكتبة</th><th class="hide-ph">الحالة</th><th>بجملة</th><th>الشرح</th></tr></thead><tbody></tbody></table></div>
+ <nav class="pn" aria-label="التنقل بين الأقسام"></nav>
+</section>
+
+</main>
+</div>
+</div>
+<script>window.Reveal = window.Reveal || {isReady: () => true, getCurrentSlide: () => document.querySelector(".view:not([hidden])") || document.body};</script>
+<script>
+/* Derivation window for ENGS 3302 decks ("how we get this", for understanding).
+   A slide holds a button  <button class="dvbtn" data-dv="ID">  and a  <template id="dv-ID" data-title="...">  with the lines.
+   Inside the template every element with data-s="k" appears at step k. A token <i data-t="name"> with data-from="other"
+   flies from the token "other" (in an earlier line) to its place and leaves a dashed trail. data-x="k" strikes a token at step k.
+   Lines flow into columns (no scrolling). Click or → / Space / PageDown: next step; ← / PageUp: back; Esc or D (ي): back to the slide,
+   which stays at the same slide and step. While the window is open no key reaches the deck. */
+(function(){
+  var dv, stage, cols, svg, cnt, ttl, cur = null, step = 0, max = 0, busy = 0;
+  var NS = 'http://www.w3.org/2000/svg';
+  function scale(){ var k = Math.min(innerWidth / 1600, innerHeight / 900); stage.style.transform = 'translate(-50%,-50%) scale(' + k + ')'; return k; }
+  function K(){ return stage.getBoundingClientRect().width / 1600; }
+  function local(r){ var b = svg.getBoundingClientRect(), k = K(); return {x: (r.left - b.left) / k, y: (r.top - b.top) / k, w: r.width / k, h: r.height / k}; }
+  function build(){
+    dv = document.createElement('div'); dv.id = 'dv'; dv.hidden = true;
+    dv.innerHTML = '<div id="dvStage"><div class="dvpanel"><div class="dvhead"><span class="dvtag">للفهم</span><span class="dvtitle"></span>'
+      + '<button class="dvclose" type="button" aria-label="رجوع إلى الدليل">×</button></div><div class="dvcols"></div>'
+      + '<svg class="dvtrail" width="1600" height="900" viewBox="0 0 1600 900" aria-hidden="true"><defs><marker id="dvar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="currentColor"></path></marker></defs></svg>'
+      + '<div class="dvside"><div class="dvcount"></div><div class="dvkey"><p><span class="dvk1"></span> حدّ ينتقل: الخط المتقطع يدل على مصدره</p>'
+      + '<p><span class="dvk2">a</span> يُختصر: يُشطب</p><p><span class="dvk3">rule</span> القاعدة المستعملة في السطر</p></div>'
+      + '<div class="dvhint">انقر للخطوة التالية، وEsc للرجوع</div></div></div></div>';
+    document.body.appendChild(dv);
+    stage = dv.querySelector('#dvStage'); cols = dv.querySelector('.dvcols'); svg = dv.querySelector('.dvtrail'); cnt = dv.querySelector('.dvcount'); ttl = dv.querySelector('.dvtitle');
+    dv.querySelector('.dvclose').addEventListener('click', function(e){ e.stopPropagation(); close(); });
+    stage.addEventListener('click', function(e){ e.stopPropagation(); go(step + 1); });
+    dv.addEventListener('click', function(e){ e.stopPropagation(); });
+    addEventListener('resize', function(){ if(!dv.hidden){ scale(); trails(step, false); } });
+  }
+  function open(id){
+    var t = document.getElementById('dv-' + id); if(!t) return;
+    cur = id; ttl.innerHTML = t.dataset.title || ''; cols.innerHTML = t.innerHTML;
+    max = 0; cols.querySelectorAll('[data-s]').forEach(function(el){ max = Math.max(max, +el.dataset.s); });
+    cols.querySelectorAll('[data-x]').forEach(function(el){ max = Math.max(max, +el.dataset.x); });
+    dv.hidden = false; scale(); document.body.classList.add('dv-on'); set(1, true);
+  }
+  function close(){ dv.hidden = true; cur = null; document.body.classList.remove('dv-on'); }
+  function go(k){ if(k < 1 || k > max || busy) return; set(k, k === step + 1); }
+  function set(k, anim){
+    step = k; cnt.textContent = 'step ' + k + ' / ' + max;
+    cols.querySelectorAll('[data-s]').forEach(function(el){ var s = +el.dataset.s; el.classList.toggle('on', s <= k); el.classList.toggle('now', s === k); el.classList.toggle('inst', !anim || s !== k); });
+    cols.querySelectorAll('[data-x]').forEach(function(el){ var x = +el.dataset.x; el.classList.toggle('struck', x <= k); el.classList.toggle('inst', !anim || x !== k); });
+    var movers = [].filter.call(cols.querySelectorAll('[data-from]'), function(el){ return +sOf(el) === k; });
+    if(!anim || !movers.length){ trails(k, false); return; }
+    trails(k - 1, false);                     // the old trails stay; the new ones come after the move
+    busy++; var k0 = K();
+    movers.forEach(function(el, i){
+      var src = cols.querySelector('[data-t="' + el.dataset.from + '"]'); if(!src) return;
+      var a = src.getBoundingClientRect(), b = el.getBoundingClientRect();
+      el.style.transition = 'none'; el.style.transform = 'translate(' + ((a.left - b.left) / k0) + 'px,' + ((a.top - b.top) / k0) + 'px)'; el.style.opacity = '1';
+      el.getBoundingClientRect();
+      el.style.transition = 'transform 800ms cubic-bezier(.45,.05,.25,1) ' + (i * 140) + 'ms'; el.style.transform = '';
+    });
+    setTimeout(function(){ movers.forEach(function(el){ el.style.transition = ''; }); busy--; if(step === k) trails(k, true); }, 800 + movers.length * 140 + 60);
+  }
+  function sOf(el){ var p = el; while(p && p !== cols){ if(p.dataset && p.dataset.s) return p.dataset.s; p = p.parentNode; } return 0; }
+  function trails(k, fresh){
+    [].slice.call(svg.querySelectorAll('path.tr')).forEach(function(p){ p.remove(); });
+    cols.querySelectorAll('[data-from]').forEach(function(el){
+      var s = +sOf(el); if(s > k) return;
+      var src = cols.querySelector('[data-t="' + el.dataset.from + '"]'); if(!src) return;
+      var a = local(src.getBoundingClientRect()), b = local(el.getBoundingClientRect());
+      var x1 = a.x + a.w / 2, y1 = a.y + a.h, x2 = b.x + b.w / 2, y2 = b.y, d;
+      if(x2 - x1 > 300 || x1 - x2 > 300){ d = 'M' + x1 + ',' + y1 + ' C' + x1 + ',' + (y1 + 60) + ' ' + x2 + ',' + (y2 - 60) + ' ' + x2 + ',' + (y2 - 3); }
+      else d = 'M' + x1 + ',' + y1 + ' C' + x1 + ',' + (y1 + (y2 - y1) * 0.5) + ' ' + x2 + ',' + (y1 + (y2 - y1) * 0.5) + ' ' + x2 + ',' + (y2 - 3);
+      var p = document.createElementNS(NS, 'path'); p.setAttribute('d', d); p.setAttribute('class', 'tr' + (s === step ? ' new' : '') + (fresh && s === k ? ' fresh' : ''));
+      p.setAttribute('marker-end', 'url(#dvar)'); svg.appendChild(p);
+    });
+  }
+  function init(){
+    build();
+    document.addEventListener('click', function(e){ var b = e.target.closest && e.target.closest('.dvbtn'); if(b){ e.preventDefault(); e.stopPropagation(); b.blur(); open(b.dataset.dv); } }, true);
+    document.addEventListener('keydown', function(e){
+      var t = e.target; if(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+      var wb = document.getElementById('wb'); if(wb && !wb.hidden) return;                    // the whiteboard has the keys
+      var mod = e.ctrlKey || e.metaKey || e.altKey;
+      var isD = !mod && (e.key === 'd' || e.key === 'D' || e.key === 'ي' || e.code === 'KeyD');   // ي = D on an Arabic keyboard
+      var isW = !mod && (e.key === 'w' || e.key === 'W' || e.key === 'ص' || e.code === 'KeyW');
+      if(dv.hidden){
+        if(!isD) return;
+        var b = Reveal.getCurrentSlide().querySelector('.dvbtn'); if(!b) return;
+        e.preventDefault(); e.stopImmediatePropagation(); open(b.dataset.dv); return;
+      }
+      if(isW) return;                                                                         // let the whiteboard open over the window
+      e.preventDefault(); e.stopImmediatePropagation();
+      if(isD || e.key === 'Escape') close();
+      else if(['ArrowRight', 'ArrowDown', ' ', 'PageDown', 'Enter', 'n'].indexOf(e.key) >= 0) go(step + 1);
+      else if(['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace', 'p'].indexOf(e.key) >= 0) go(step - 1);
+    }, true);
+    window.EngsDeriv = {open: open, close: close, go: function(k){ go(k); }, set: function(k){ set(k, false); }, state: function(){ return {id: cur, step: step, max: max}; }};
+  }
+  (function wait(){ if(window.Reveal && Reveal.isReady && Reveal.isReady()) init(); else setTimeout(wait, 50); })();
+})();
+
+</script>
+<script>
+const D = {"fish":[[2.5,16.0],[3.0,19.3],[3.8,16.5],[4.5,18.0],[5.6,17.0],[4.2,20.5],[5.2,19.0],[6.0,21.0],[6.8,19.5],[7.5,20.0]],"labels":[0,0,0,0,0,1,1,1,1,1],"new":[7.0,18.0],"setup":{"rows_csv":344,"rows":342,"cols":7,"per":[151,68,123],"X0":[39.1,18.7,181.0,3750.0],"Xlast":[49.9,16.1,213.0,5400.0],"y0":0,"ylast":2,"head":[["Adelie","Torgersen","39.1","18.7","181.0","3750.0","MALE"],["Adelie","Torgersen","39.5","17.4","186.0","3800.0","FEMALE"],["Adelie","Torgersen","40.3","18.0","195.0","3250.0","FEMALE"]],"last":["Gentoo","Biscoe","49.9","16.1","213.0","5400.0","MALE"],"nan_sex":9,"colnames":["species","island","bill_length_mm","bill_depth_mm","flipper_length_mm","body_mass_g","sex"]},"c11":{"eu":4.810405388322278,"ma":6.2,"nosum":-6.2,"diff":[-1.7,-4.5]},"pairs":{"eu":[[0.0,3.3377,1.3928,2.8284,3.2573,4.8104,4.0361,6.1033,5.5444,6.4031],[3.3377,0.0,2.912,1.9849,3.4713,1.6971,2.2204,3.4482,3.8053,4.5541],[1.3928,2.912,0.0,1.6553,1.8682,4.02,2.8653,null,4.2426,5.0931],[2.8284,1.9849,1.6553,0.0,1.4866,2.5179,1.2207,3.3541,2.7459,3.6056],[3.2573,3.4713,1.8682,1.4866,0.0,3.7696,2.0396,4.02,2.7731,3.5511],[4.8104,1.6971,4.02,2.5179,3.7696,0.0,1.8028,1.8682,2.7857,3.3377],[4.0361,2.2204,2.8653,1.2207,2.0396,1.8028,0.0,2.1541,1.6763,2.508],[6.1033,3.4482,null,3.3541,4.02,1.8682,2.1541,0.0,1.7,1.8028],[5.5444,3.8053,4.2426,2.7459,2.7731,2.7857,1.6763,1.7,0.0,0.8602],[6.4031,4.5541,5.0931,3.6056,3.5511,3.3377,2.508,1.8028,0.8602,0.0]],"ma":[[0.0,3.8,1.8,4.0,4.1,6.2,5.7,8.5,7.8,9.0],[3.8,0.0,3.6,2.8,4.9,2.4,2.5,4.7,4.0,5.2],[1.8,3.6,0.0,2.2,2.3,4.4,3.9,null,6.0,7.2],[4.0,2.8,2.2,0.0,2.1,2.8,1.7,4.5,3.8,5.0],[4.1,4.9,2.3,2.1,0.0,4.9,2.4,4.4,3.7,4.9],[6.2,2.4,4.4,2.8,4.9,0.0,2.5,2.3,3.6,3.8],[5.7,2.5,3.9,1.7,2.4,2.5,0.0,2.8,2.1,3.3],[8.5,4.7,null,4.5,4.4,2.3,2.8,0.0,2.3,2.5],[7.8,4.0,6.0,3.8,3.7,3.6,2.1,2.3,0.0,1.2],[9.0,5.2,7.2,5.0,4.9,3.8,3.3,2.5,1.2,0.0]],"nos":[[0.0,-3.8,-1.8,-4.0,-4.1,-6.2,-5.7,-8.5,-7.8,-9.0],[3.8,0.0,2.0,-0.2,-0.3,-2.4,-1.9,-4.7,-4.0,-5.2],[1.8,-2.0,0.0,-2.2,-2.3,-4.4,-3.9,null,-6.0,-7.2],[4.0,0.2,2.2,0.0,-0.1,-2.2,-1.7,-4.5,-3.8,-5.0],[4.1,0.3,2.3,0.1,0.0,-2.1,-1.6,-4.4,-3.7,-4.9],[6.2,2.4,4.4,2.2,2.1,0.0,0.5,-2.3,-1.6,-2.8],[5.7,1.9,3.9,1.7,1.6,-0.5,0.0,-2.8,-2.1,-3.3],[8.5,4.7,null,4.5,4.4,2.3,2.8,0.0,0.7,-0.5],[7.8,4.0,6.0,3.8,3.7,1.6,2.1,-0.7,0.0,-1.2],[9.0,5.2,7.2,5.0,4.9,2.8,3.3,0.5,1.2,0.0]]},"c12":{"centres":[[3.88,17.36],[5.94,20.0]],"d":[3.184965,2.263537],"pick":"sea bass","argmin":1,"ax0":[3.88,17.36],"ax1":[9.25,11.15,10.15,11.25,11.3],"axn":10.62,"noaxis":3.9074,"diff":[[-3.12,-0.64],[-1.06,2.0]],"train_err":0,"w":[2.06,2.64],"cc":59.4298,"n0":316.424,"n1":435.2836,"mid":[4.91,18.68]},"c13":{"centres_mm":[[3.88,173.6],[5.94,200.0]],"d_mm":[7.12,20.02807],"pick":"salmon","wrong_mm":[1],"eu05_mm":45.0321},"c14":{"mean":[4.91,18.68],"scale":[1.529346,1.637559],"z_new":[1.366597,-0.415252],"mm_new":[0.9,0.4],"z_mm_new":[1.366597,-0.415252],"min":[2.5,16.0],"max":[7.5,21.0],"grid":{"cm_none":{"F":[[2.5,16.0],[3.0,19.3],[3.8,16.5],[4.5,18.0],[5.6,17.0],[4.2,20.5],[5.2,19.0],[6.0,21.0],[6.8,19.5],[7.5,20.0]],"q":[7.0,18.0],"C":[[3.88,17.36],[5.94,20.0]],"d":[3.185,2.2635],"pick":1,"par":null,"err":0},"cm_minmax":{"F":[[0.0,0.0],[0.1,0.66],[0.26,0.1],[0.4,0.4],[0.62,0.2],[0.34,0.9],[0.54,0.6],[0.7,1.0],[0.86,0.7],[1.0,0.8]],"q":[0.9,0.4],"C":[[0.276,0.272],[0.688,0.8]],"d":[0.637,0.4527],"pick":1,"par":{"a":[2.5,16.0],"b":[7.5,21.0]},"err":0},"cm_z":{"F":[[-1.5758,-1.6366],[-1.2489,0.3786],[-0.7258,-1.3312],[-0.2681,-0.4153],[0.4512,-1.0259],[-0.4643,1.1114],[0.1896,0.1954],[0.7127,1.4167],[1.2358,0.5007],[1.6935,0.8061]],"q":[1.3666,-0.4153],"C":[[-0.6735,-0.8061],[0.6735,0.8061]],"d":[2.0772,1.4043],"pick":1,"par":{"a":[4.91,18.68],"b":[1.5293,1.6376]},"err":0},"mm_none":{"F":[[2.5,160.0],[3.0,193.0],[3.8,165.0],[4.5,180.0],[5.6,170.0],[4.2,205.0],[5.2,190.0],[6.0,210.0],[6.8,195.0],[7.5,200.0]],"q":[7.0,180.0],"C":[[3.88,173.6],[5.94,200.0]],"d":[7.12,20.0281],"pick":0,"par":null,"err":1},"mm_minmax":{"F":[[0.0,0.0],[0.1,0.66],[0.26,0.1],[0.4,0.4],[0.62,0.2],[0.34,0.9],[0.54,0.6],[0.7,1.0],[0.86,0.7],[1.0,0.8]],"q":[0.9,0.4],"C":[[0.276,0.272],[0.688,0.8]],"d":[0.637,0.4527],"pick":1,"par":{"a":[2.5,160.0],"b":[7.5,210.0]},"err":0},"mm_z":{"F":[[-1.5758,-1.6366],[-1.2489,0.3786],[-0.7258,-1.3312],[-0.2681,-0.4153],[0.4512,-1.0259],[-0.4643,1.1114],[0.1896,0.1954],[0.7127,1.4167],[1.2358,0.5007],[1.6935,0.8061]],"q":[1.3666,-0.4153],"C":[[-0.6735,-0.8061],[0.6735,0.8061]],"d":[2.0772,1.4043],"pick":1,"par":{"a":[4.91,186.8],"b":[1.5293,16.3756]},"err":0}}},"c15":{"df":{"cols":["lightness","width_cm","port","species"],"rows":[["2.50","16.00","Gaza","salmon"],["3.00","19.30","Rafah","salmon"],["NaN","16.50","Gaza","salmon"],["4.50","18.00","Khan Younis","salmon"],["6.00","21.00","Rafah","sea bass"],["6.80","NaN","Gaza","sea bass"]]},"na":{"lightness":1,"width_cm":1,"port":0,"species":0},"isna":[[false,false,false,false],[false,false,false,false],[true,false,false,false],[false,false,false,false],[false,false,false,false],[false,true,false,false]],"means":{"lightness":4.56,"width_cm":18.16},"means_full":{"lightness":4.5600000000000005,"width_cm":18.16},"filled":{"cols":["lightness","width_cm","port","species"],"rows":[["2.50","16.00","Gaza","salmon"],["3.00","19.30","Rafah","salmon"],["4.56","16.50","Gaza","salmon"],["4.50","18.00","Khan Younis","salmon"],["6.00","21.00","Rafah","sea bass"],["6.80","18.16","Gaza","sea bass"]]},"coded":{"cols":["lightness","width_cm","species","port_Gaza","port_Khan Younis","port_Rafah"],"rows":[["2.50","16.00","salmon","1","0","0"],["3.00","19.30","salmon","0","0","1"],["4.56","16.50","salmon","1","0","0"],["4.50","18.00","salmon","0","1","0"],["6.00","21.00","sea bass","0","0","1"],["6.80","18.16","sea bass","1","0","0"]]},"coded_b":{"cols":["lightness","width_cm","species","port_Gaza","port_Khan Younis","port_Rafah"],"rows":[["2.50","16.00","salmon","True","False","False"],["3.00","19.30","salmon","False","False","True"],["4.56","16.50","salmon","True","False","False"],["4.50","18.00","salmon","False","True","False"],["6.00","21.00","sea bass","False","False","True"],["6.80","18.16","sea bass","True","False","False"]]},"noonly":"TypeError","dtypes":{"lightness":"float64","width_cm":"float64","species":"str","port_Gaza":"int64","port_Khan Younis":"int64","port_Rafah":"int64"},"dtypes_b":{"lightness":"float64","width_cm":"float64","species":"str","port_Gaza":"bool","port_Khan Younis":"bool","port_Rafah":"bool"}},"c16":{"Penguins":{"n":342,"per":[151,68,123],"d":4},"Iris":{"n":150,"per":[50,50,50],"d":4},"splits":{"Penguins_0_1":{"ntr":239,"nte":103,"ctr":[106,47,86],"cte":[45,21,37],"raw":0.6311,"sc":0.9709,"okr":"1111111100010101110001100011111111011111010000110111111101110110111111001000001010110111101101011100010","oks":"1111111111111111101111111111111111111111111111111101111111111111111111111111111111111111111011111111111","yte":"0222021200021102201000200002202012121020010010010112212201220210200022012000002122220002200102022111020"},"Penguins_0_0":{"ntr":239,"nte":103,"ctr":[101,51,87],"cte":[50,17,36],"raw":0.5534,"sc":0.9806,"okr":"0100011111110010010110110101111001011010100100100100001011110001111101000000111010111111010000101111111","oks":"1111111111111111111111111101111111111111111111111111111111111111111111111111111111111111111101111111111","yte":"0202022020011001112020220012220001202120000200211200002020020001000102020020200202202120120010210221220"},"Penguins_1_1":{"ntr":239,"nte":103,"ctr":[106,47,86],"cte":[45,21,37],"raw":0.6214,"sc":0.9612,"okr":"1101111111110010100110101100000111001010100111001111001011110101010111101110110111111101011100001011101","oks":"1101111111111111111111111111111111111111111111111111111111110111111111111111111111111111111110111011111","yte":"2212102002020211210220102020000221020001002100210222010100221012021212202220021000002200000200112102102"},"Penguins_1_0":{"ntr":239,"nte":103,"ctr":[106,50,83],"cte":[45,18,40],"raw":0.6602,"sc":0.9709,"okr":"0111110110111111101111101011110011011111110011000011110010111111100110111010111011101110000001110011100","oks":"1111111110111111111111111111111111011111111111111111111111111111111111111111111111111111111111110111111","yte":"0002220001020102222220202022221120020020211120012020220102210020000220022121020100000220111010021222000"},"Penguins_2_1":{"ntr":239,"nte":103,"ctr":[106,47,86],"cte":[45,21,37],"raw":0.6893,"sc":0.9806,"okr":"1111111011111111011011111010101110111111010101110101011011111001101101110011111110010010010000111011011","oks":"1111111111111111111111111111111111111111110111111111111111111111111111111111111111111111011111111111111","yte":"0002222220202201110122220101001210222002000200201000100002100102200212211000221120021021020210222000120"},"Penguins_2_0":{"ntr":239,"nte":103,"ctr":[108,42,89],"cte":[43,26,34],"raw":0.6019,"sc":0.9612,"okr":"1010111010111011001110100111000111100010000110110110011011100111011101010101111111101110100101110110001","oks":"1111111111111111111111111111011111101111111111111111111111111111111111110111111111111111111111111111101","yte":"2000022101212122100020111020102020000121000020000021122022001202121200221202201001012221011200021220011"},"Penguins_3_1":{"ntr":239,"nte":103,"ctr":[106,47,86],"cte":[45,21,37],"raw":0.6311,"sc":0.9515,"okr":"1101101011011111001101100111000100110110110101101000111010101101111110001111011111010101111110010011101","oks":"1111111111111111111111111111111111111111111111111111101111111111111111011111111111111111110011101111111","yte":"2220210120001100012002120222002201010200200002202000211010212202222021012220021202100200010100110220201"},"Penguins_3_0":{"ntr":239,"nte":103,"ctr":[104,50,85],"cte":[47,18,38],"raw":0.6699,"sc":0.9903,"okr":"0101101111011110001110110001101111111111101110101101100101011110010100110111111100101111110111001001111","oks":"1111111111111111111111111111111111111111111111111111111111111111111111110111111111111111111111111111111","yte":"2220202202002220010220220000212022021222210200002210101010012220110000100000020001012200201220112000212"},"Penguins_4_1":{"ntr":239,"nte":103,"ctr":[106,47,86],"cte":[45,21,37],"raw":0.6117,"sc":0.9709,"okr":"1111111111010111000110111001000011001110010000111111111110101111001010001001100111111111110101100010100","oks":"1111111111011111111111111111011111111111111111111111111111111111111111111111111111111111111111111011111","yte":"2222202122100202100020020000100102011221010020221220012212200212012120020010100122200220001001000021220"},"Penguins_4_0":{"ntr":239,"nte":103,"ctr":[107,49,83],"cte":[44,19,40],"raw":0.5728,"sc":0.9612,"okr":"1011110111100111000100101010110000111010010101001100101100111111110100010110001110111111011101100110010","oks":"1111111111110111111111111110111111111011011111111111111111111111111111111111111111111111111111111111111","yte":"0012020020210002010200200000012000020122021210000000201102122200121011121020112222222222002022021022222"},"Iris_0_1":{"ntr":105,"nte":45,"ctr":[35,35,35],"cte":[15,15,15],"raw":0.9111,"sc":0.7556,"okr":"101101111111111111111111110111111110111111111","oks":"101101101111101010011111110111111100011111111","yte":"220010120102021211101201222212100112100102002"},"Iris_0_0":{"ntr":105,"nte":45,"ctr":[34,32,39],"cte":[16,18,11],"raw":0.9111,"sc":0.8667,"okr":"111111110111111111110111011111111011111111111","oks":"111111100100111111110111011111111111111111111","yte":"210202011121111011002100200110210221011120200"},"Iris_1_1":{"ntr":105,"nte":45,"ctr":[35,35,35],"cte":[15,15,15],"raw":0.8889,"sc":0.8222,"okr":"111011111110111111111110111110111111111011111","oks":"111011111111111011111100101110111111111010111","yte":"200211212002010121122012111202001122000122100"},"Iris_1_0":{"ntr":105,"nte":45,"ctr":[36,32,37],"cte":[14,18,13],"raw":0.9556,"sc":0.8667,"okr":"111111111111111111111101111111111111111111011","oks":"110110111111101111111101111110111111111111011","yte":"011021200210211011001110210012121220101220221"},"Iris_2_1":{"ntr":105,"nte":45,"ctr":[35,35,35],"cte":[15,15,15],"raw":0.9111,"sc":0.9333,"okr":"111101110011111111011111111111111111111111111","oks":"111101110011111111111111111111111111111111111","yte":"100010122202100012210121000222120120210211112"},"Iris_2_0":{"ntr":105,"nte":45,"ctr":[33,35,37],"cte":[17,15,13],"raw":0.9333,"sc":0.9333,"okr":"110111111111111111110111111111011111111111111","oks":"110111111111110111110111111111111111111111111","yte":"002002022000001101211121100202201210211211210"},"Iris_3_1":{"ntr":105,"nte":45,"ctr":[35,35,35],"cte":[15,15,15],"raw":0.9333,"sc":0.8,"okr":"111111111101111110111111111111111111111101111","oks":"111101110011111110110111111101110011111101111","yte":"020112012110111221102220010022202120000120121"},"Iris_3_0":{"ntr":105,"nte":45,"ctr":[33,36,36],"cte":[17,14,14],"raw":0.9111,"sc":0.8444,"okr":"111111111111111111010110111111111111011111111","oks":"111111111011111111010110110110111111011111111","yte":"000002102110112012202221022111002100102121002"},"Iris_4_1":{"ntr":105,"nte":45,"ctr":[35,35,35],"cte":[15,15,15],"raw":0.9333,"sc":0.8667,"okr":"110111111111111011111111111111111111111101111","oks":"111111111111111011111110111111101111110101011","yte":"012102210120010220202211020020021221101210111"},"Iris_4_0":{"ntr":105,"nte":45,"ctr":[29,40,36],"cte":[21,10,14],"raw":0.9556,"sc":0.8667,"okr":"111111011111110111111111111111111111111111111","oks":"111111111011110111101111111110111111110111011","yte":"202221100200012010020210000002102012211020102"}},"pen_range":{"depth":[13.1,21.5],"mass":[2700.0,6300.0]},"pen_centroids":[[38.94,18.47,190.48,3754.01],[48.88,18.43,196.17,3744.15],[47.23,14.9,216.81,5011.92]]},"vars":{"fish":{"type":"ndarray","shape":[10,2],"dtype":"float64","len":10},"labels":{"type":"ndarray","shape":[10],"dtype":"int64","len":10},"names":{"type":"ndarray","shape":[2],"dtype":"<U8","len":2},"PENGUIN_FEATURES":{"type":"list","shape":null,"dtype":"","len":4},"Xp":{"type":"ndarray","shape":[342,4],"dtype":"float64","len":342},"yp":{"type":"ndarray","shape":[342],"dtype":"int64","len":342},"dfp":{"type":"DataFrame","shape":[342,7],"dtype":"","len":342},"a":{"type":"ndarray","shape":[2],"dtype":"float64","len":2},"b":{"type":"ndarray","shape":[2],"dtype":"float64","len":2},"centres":{"type":"ndarray","shape":[2,2],"dtype":"float64","len":2},"new":{"type":"ndarray","shape":[2],"dtype":"float64","len":2},"d":{"type":"ndarray","shape":[2],"dtype":"float64","len":2},"to_mm":{"type":"ndarray","shape":[2],"dtype":"int64","len":2},"fish_mm":{"type":"ndarray","shape":[10,2],"dtype":"float64","len":10},"new_mm":{"type":"ndarray","shape":[2],"dtype":"float64","len":2},"centres_mm":{"type":"ndarray","shape":[2,2],"dtype":"float64","len":2},"d_mm":{"type":"ndarray","shape":[2],"dtype":"float64","len":2},"z":{"type":"StandardScaler","shape":null,"dtype":"","len":null},"mm":{"type":"MinMaxScaler","shape":null,"dtype":"","len":null},"z_mm":{"type":"StandardScaler","shape":null,"dtype":"","len":null},"z_new_out":{"shape":[1,2]},"df":{"type":"DataFrame","shape":[6,4],"dtype":"","len":6},"filled":{"type":"DataFrame","shape":[6,4],"dtype":"","len":6},"coded":{"type":"DataFrame","shape":[6,6],"dtype":"","len":6},"na":{"type":"Series","shape":[4],"dtype":"int64","len":4},"X_Penguins":{"type":"ndarray","shape":[342,4],"dtype":"float64","len":342},"y_Penguins":{"type":"ndarray","shape":[342],"dtype":"int64","len":342},"Xtr_Penguins":{"type":"ndarray","shape":[239,4],"dtype":"float64","len":239},"Xte_Penguins":{"type":"ndarray","shape":[103,4],"dtype":"float64","len":103},"ytr_Penguins":{"type":"ndarray","shape":[239],"dtype":"int64","len":239},"yte_Penguins":{"type":"ndarray","shape":[103],"dtype":"int64","len":103},"X_Iris":{"type":"ndarray","shape":[150,4],"dtype":"float64","len":150},"y_Iris":{"type":"ndarray","shape":[150],"dtype":"int64","len":150},"Xtr_Iris":{"type":"ndarray","shape":[105,4],"dtype":"float64","len":105},"Xte_Iris":{"type":"ndarray","shape":[45,4],"dtype":"float64","len":45},"ytr_Iris":{"type":"ndarray","shape":[105],"dtype":"int64","len":105},"yte_Iris":{"type":"ndarray","shape":[45],"dtype":"int64","len":45},"raw":{"type":"float","shape":null,"dtype":"","len":null},"scaled":{"type":"float","shape":null,"dtype":"","len":null}}};
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const LIB = {py: "Python", np: "NumPy", pd: "pandas", plt: "Matplotlib", sk: "scikit-learn"};
+const ST = {new: ["new", "NEW"], rev: ["rev", "مراجعة"], trap: ["trap", "فخ"]};
+const C = n => `<code>${n}</code>`;
+const T = (ar, en) => `${ar} <bdi>(${en})</bdi>`;
+const W1 = "https://iyasanwar.github.io/engs3302/guides/Lab_W01_Code_Guide.html#index";
+const REV = `<p class="revlink"><a href="${W1}">الشرح الكامل في دليل الأسبوع 1 ←</a></p>`;
+
+/* ---------- explanations: key -> entry. l = library, t = status, n = name, s = one line (index), d = body, a = args, x = trap,
+   c = control to flash (an entry with c shows its cell's live panel inside the card), go = action, w = week of the full explanation ---------- */
+const E = {
+ /* ---- setup ---- */
+ imp: {l: "py", t: "rev", w: 1, n: "import numpy as np", s: `تحميل ${T("مكتبة", "library")} باسم مختصر`,
+  d: `<p>تذكير: ${C("import")} يحمّل ${T("مكتبة", "library")}، و${C("as np")} يعطيها اسمًا قصيرًا. السطور الثلاثة الأولى كما في الأسبوع 1.</p>`},
+ from: {l: "py", t: "rev", w: 1, n: "from sklearn.datasets import load_iris", s: `أخذ شيء واحد من ${T("مكتبة", "library")}`,
+  d: `<p>تذكير: ${C("from … import …")} تأخذ اسمًا واحدًا من داخل مكتبة، فنكتبه بعدها مباشرة. ${C("load_iris")} نفسها من الأسبوع 1.</p>`},
+ skmods: {l: "sk", t: "new", n: "from sklearn.… import …", s: `أربعة أجزاء من scikit-learn`,
+  d: `<p>scikit-learn مقسومة إلى أجزاء ${T("وحدات", "modules")}، ولكل جزء عمل. نأخذ من كل جزء أداة واحدة أو اثنتين:</p>`,
+  a: [["model_selection", `${C("train_test_split")}: تقسيم البيانات إلى تدريب واختبار (1.6)`], ["preprocessing", `${C("StandardScaler")} و${C("MinMaxScaler")}: ${T("التطبيع", "normalization")} (1.4)`], ["neighbors", `${C("NearestCentroid")}: ${T("مصنِّف", "classifier")} أقرب متوسط (1.6)`], ["pipeline", `${C("make_pipeline")}: ربط خطوتين في نموذج واحد (1.6)`]]},
+ def: {l: "py", t: "rev", w: 1, n: "def check(label, got, expected, tol=1e-2)", s: `تعريف ${T("دالة", "function")}، ومعامل بقيمة افتراضية`,
+  d: `<p>تذكير: ${C("def")} تعرّف ${T("دالة", "function")}. و${C("tol=1e-2")} ${T("قيمة افتراضية", "default value")}: 0.01. في الأسبوع 1 كانت 1e-3.</p>`},
+ doc: {l: "py", t: "rev", w: 1, n: '"""docstring"""', s: `${T("نص التوثيق", "docstring")} داخل الدالة`,
+  d: `<p>تذكير: النص بين ثلاث علامات تنصيص يشرح الدالة، ولا يُنفَّذ.</p>`},
+ try: {l: "py", t: "rev", w: 1, n: "try: … except Exception:", s: `جرّب، وإن فشل افعل شيئًا آخر ${T("", "exception")}`,
+  d: `<p>تذكير: إن ظهر ${T("استثناء", "exception")} داخل ${C("try")}، ينتقل البرنامج إلى ${C("except")} بدل أن يتوقف. هنا تصير النتيجة ${C("ok = False")}، أي ❌.</p>`},
+ isinst: {l: "py", t: "new", n: "isinstance(expected, str)", s: `هل القيمة من هذا ${T("النوع", "type")}؟`,
+  d: `<p>${C("isinstance(x, str)")} تعطي ${C("True")} إن كانت ${C("x")} ${T("نصًّا", "string")}، و${C("False")} غير ذلك.</p><p>لماذا هنا؟ ${C("check")} صارت تفحص نوعين من الإجابات: أرقامًا (تقارنها بتسامح ${C("tol")})، أو نصًّا مثل ${C('"sea bass"')} (يجب أن يطابق تمامًا).</p>`,
+  a: [["x", "القيمة التي نفحصها"], ["str", `النوع: ${C("str")} نص، ${C("int")} عدد صحيح، ${C("float")} عدد عشري`]]},
+ strc: {l: "py", t: "new", n: "str(got) == expected", s: `تحويل إلى ${T("نص", "string")}، ثم مقارنة تامة`,
+  d: `<p>${C("str(got)")} تحوّل إجابتك إلى ${T("نص", "string")}. ثم ${C("==")} تقارن النصين حرفًا حرفًا.</p><p>فـ ${C('"Sea bass"')} لا تساوي ${C('"sea bass"')}: الحرف الكبير يكفي ليصير الجواب ❌.</p>`},
+ allclose: {l: "np", t: "rev", w: 1, n: "got is not None and np.allclose(…)", s: `«قريب بما يكفي» لأرقام أو مصفوفات`,
+  d: `<p>تذكير: ${C("np.allclose")} تعطي True إن كان الفرق بين كل رقمين أصغر من ${C("atol=tol")}. و${C("got is not None")} يرفض الخلية التي لم تُكمل بعد.</p>`},
+ condf: {l: "py", t: "rev", w: 1, n: 'f"✅ …" if ok else f"❌ …"', s: `${T("نص منسَّق", "f-string")} يختاره شرط`,
+  d: `<p>تذكير: ${C("A if ok else B")} تعطي A إن كان ${C("ok")} صحيحًا، وإلا B. وما بين ${C("{ }")} في ${T("النص المنسَّق", "f-string")} يُحسب ويوضع مكانه.</p>`},
+ arr: {l: "np", t: "rev", w: 1, n: "np.array([[…], […]])", s: `${T("مصفوفة", "array")} من قائمة قوائم`,
+  d: `<p>تذكير: قائمة فيها قوائم تصير ${T("مصفوفة", "array")} ببعدين. كل قائمة داخلية ${T("صف", "row")}: سمكة واحدة. ${C("fish.shape")} = (10, 2).</p>`},
+ strarr: {l: "np", t: "new", n: 'np.array(["salmon", "sea bass"])', s: `${T("مصفوفة", "array")} نصوص: رقم الصنف ← اسمه`,
+  d: `<p>${T("مصفوفة", "array")} فيها نصان. ${C("names[0]")} = ${C('"salmon"')} و${C("names[1]")} = ${C('"sea bass"')}.</p><p>رقم الصنف هو ${T("موقع", "index")} اسمه. لذلك في 1.2 نكتب ${C("names[d.argmin()]")}: رقم الصنف الفائز يعطينا اسمه.</p>`},
+ list: {l: "py", t: "rev", w: 1, n: "[ … ]", s: T("قائمة", "list"),
+  d: `<p>تذكير: ${T("القائمة", "list")} قيم بين قوسين مربعين. هنا أسماء أعمدة القياسات الأربعة في جدول البطاريق.</p>`},
+ csv: {l: "pd", t: "new", n: "pd.read_csv(path)", s: `قراءة ملف CSV إلى ${T("جدول", "DataFrame")}`,
+  d: `<p>تقرأ ملفًا نصيًا فيه قيم بينها فواصل، وتعيد ${T("جدولًا", "DataFrame")}. الصف الأول في الملف يصير أسماء ${T("الأعمدة", "columns")}.</p><p>${C('"penguins.csv"')} يجب أن يكون بجانب الدفتر في Colab. ويمكن أن يكون ${C("path")} رابطًا على الإنترنت، كما في السطر التالي.</p>`,
+  a: [["path", "اسم الملف، أو رابط URL"]]},
+ fnf: {l: "py", t: "new", n: "except FileNotFoundError:", s: `التقاط خطأ واحد بعينه: الملف غير موجود`,
+  d: `<p>${C("try / except")} مرّ في الأسبوع 1 مع ${C("Exception")}، أي أي خطأ. هنا نلتقط ${T("استثناء", "exception")} واحدًا بعينه: ${C("FileNotFoundError")}، أي «الملف غير موجود».</p><p>إن لم تضع ${C("penguins.csv")} بجانب الدفتر، لا يتوقف الكود: يحمّل الجدول من الإنترنت. أي خطأ آخر يظهر لك كما هو.</p>`},
+ dropna: {l: "pd", t: "new", n: "df.dropna(subset=…).reset_index(drop=True)", s: `حذف الصفوف الناقصة ${T("", "NaN")} وإعادة الترقيم`,
+  d: `<p>${C("dropna")} تحذف كل ${T("صف", "row")} فيه ${T("قيمة ناقصة", "missing value, NaN")} في الأعمدة المذكورة في ${C("subset")}. بطريقان بلا قياسات، فيبقى 342 من 344.</p><p>${C("reset_index(drop=True)")} يعيد ${T("ترقيم الصفوف", "index")} 0، 1، 2… بعد الحذف، حتى لا تبقى فجوات.</p>`,
+  a: [["subset", "الأعمدة التي نفحصها فقط. عمود sex فيه 9 فجوات باقية، لأنه ليس في القائمة"], ["drop=True", "لا تحفظ الترقيم القديم عمودًا جديدًا"]]},
+ map: {l: "pd", t: "new", n: 'df["species"].map({"Adelie": 0, …})', s: `استبدال كل قيمة بقيمة من ${T("قاموس", "dict")}`,
+  d: `<p>${C('{"Adelie": 0, "Chinstrap": 1, "Gentoo": 2}')} ${T("قاموس", "dict")}: أزواج ${T("مفتاح", "key")} ← ${T("قيمة", "value")} بين قوسين معقوصين.</p><p>${C(".map")} تمرّ على العمود، وتضع مكان كل اسم قيمته في القاموس. فيصير عمود الأسماء عمود أرقام 0 و1 و2. المصنِّف يحتاج أرقام الأصناف.</p>`,
+  x: `<b>انتبه:</b> اسم غير موجود في القاموس يصير ${C("NaN")}، بلا رسالة خطأ. الأسماء يجب أن تطابق تمامًا.`},
+ tonp: {l: "pd", t: "new", n: ".to_numpy()", s: `من pandas إلى ${T("مصفوفة", "array")} NumPy`,
+  d: `<p>تحوّل ${T("عمودًا", "Series")} أو ${T("جدولًا", "DataFrame")} إلى ${T("مصفوفة", "array")} NumPy عادية. تفقد أسماء الأعمدة و${T("الترقيم", "index")}، وتبقى الأرقام.</p><p>${C("y")} صار مصفوفة شكلها (342,)، و${C("X")} مصفوفة شكلها (342, 4).</p>`},
+ colsel: {l: "pd", t: "new", n: "df[PENGUIN_FEATURES]", s: `اختيار عدة ${T("أعمدة", "columns")} بقائمة أسماء`,
+  d: `<p>${C('df["species"]')} يأخذ عمودًا واحدًا. أما ${T("قائمة", "list")} أسماء بين القوسين فتأخذ جدولًا أصغر فيه هذه الأعمدة فقط، بترتيب القائمة.</p><p>هنا الأعمدة الأربعة الرقمية، بلا ${C("species")} و${C("island")} و${C("sex")}.</p>`},
+ ret3: {l: "py", t: "new", n: "return X, y, df", s: `إعادة ثلاث قيم معًا في ${T("صف ثابت", "tuple")}`,
+  d: `<p>القيم المفصولة بفواصل بعد ${C("return")} تخرج معًا في ${T("صف ثابت", "tuple")} واحد: ${C("(X, y, df)")}.</p><p>من يستدعي الدالة يوزّعها على أسماء، مثل ${C("X, y, _ = load_penguins()")} في Task 4. أو يأخذ جزءًا منها، مثل ${C("load_penguins()[:2]")} في 1.6. انظر اللوحة.</p>`},
+ /* ---- 1.1 ---- */
+ tuple2: {l: "py", t: "new", n: "a, b = fish[0], fish[5]", s: `${T("إسناد", "assignment")} قيمتين في سطر`,
+  d: `<p>القيمتان على اليمين تذهبان بالترتيب إلى الاسمين على اليسار. هذا ${T("التوزيع", "unpacking")}.</p><p>${C("fish[0]")} ${T("الصف", "row")} رقم 0، أي السمكة الأولى: سلمون (2.5, 16.0). و${C("fish[5]")} السمكة السادسة: قاروص (4.2, 20.5). العدّ من 0.</p><p>الطريقة نفسها في 1.3 (${C("fish_mm, new_mm = …")}) وفي 1.6 (${C("X, y = loader()")}).</p>`},
+ vecsub: {l: "np", t: "new", n: "a - b", s: `طرح ${T("متجهين", "vectors")} ${T("عنصرًا بعنصر", "element-wise")}`,
+  d: `<p>الطرح بين مصفوفتين بالطول نفسه يعمل ${T("عنصرًا بعنصر", "element-wise")}: الأول من الأول، والثاني من الثاني.</p><p>${C("[2.5, 16.0] - [4.2, 20.5]")} = ${C("[-1.7, -4.5]")}: فرق الإضاءة وفرق العرض. هذا ${C("a_i − b_i")} في الصيغة، لكل i مرة واحدة.</p>`},
+ norm: {l: "np", t: "new", n: "np.linalg.norm(v)", s: `طول ${T("المتجه", "vector")}: ${T("المسافة الإقليدية", "Euclidean distance")}`, c: "c11-m",
+  d: `<p>${C("np.linalg.norm(v)")} تعطي طول ${T("المتجه", "vector")} ${C("v")}: تربّع كل عنصر، تجمع، تأخذ الجذر.</p><p>طول ${C("a - b")} هو ${T("المسافة الإقليدية", "Euclidean distance")} بين a وb: الخط المستقيم بينهما. هنا √(1.7² + 4.5²) = √23.14 ≈ 4.81.</p><p>${C("linalg")} جزء ${T("الجبر الخطي", "linear algebra")} في NumPy. اختر سمكتين في اللوحة.</p>`,
+  a: [["v", "مصفوفة؛ هنا الفرق a − b"], ["axis", `في 1.2 نضيف ${C("axis=1")} لنحسب طول كل صف وحده`]]},
+ sum: {l: "np", t: "rev", w: 1, n: "np.sum(x)", s: `مجموع كل العناصر`,
+  d: `<p>تذكير: ${C("np.sum")} تجمع كل عناصر المصفوفة في رقم واحد. في الأسبوع 1 جمعنا بها الأخطاء: True = 1.</p>`},
+ abs: {l: "np", t: "new", n: "np.abs(x)", s: `${T("القيمة المطلقة", "absolute value")} لكل عنصر`, c: "c11-abs",
+  d: `<p>${C("np.abs")} تحذف إشارة السالب من كل عنصر: ${C("[-1.7, -4.5]")} تصير ${C("[1.7, 4.5]")}. هذه ${T("القيمة المطلقة", "absolute value")} |a<sub>i</sub> − b<sub>i</sub>|.</p><p>ثم ${C("np.sum")} تجمعها: 1.7 + 4.5 = 6.2. هذه ${T("مسافة مانهاتن", "Manhattan distance")}: نمشي على المحاور كسيارة في شوارع متعامدة.</p>`,
+  x: `<b>فخ:</b> بلا ${C("np.abs")} يُلغي الفرق الموجب الفرق السالب، والكود لا يشتكي. جرّب الزر ${C("a - b")} في اللوحة.`},
+ /* ---- 1.2 ---- */
+ listcomp: {l: "py", t: "new", n: "[… for c in (0, 1)]", s: `${T("قائمة مختصرة", "list comprehension")}: حلقة في سطر`,
+  d: `<p>${T("القائمة المختصرة", "list comprehension")} تصنع قائمة بحلقة داخل قوسين مربعين. تقرأ هكذا: «لكل c في (0, 1)، احسب ${C("fish[labels == c].mean(axis=0)")}».</p><p>النتيجة قائمة فيها مركزان: مركز الصنف 0 ثم مركز الصنف 1. و${C("np.array")} حولها يجعلها مصفوفة شكلها (2, 2).</p><p>هي نفسها هذه الحلقة الطويلة: ${C("out = []")} ثم ${C("for c in (0, 1): out.append(…)")}.</p>`},
+ mask: {l: "np", t: "rev", w: 1, n: "fish[labels == c]", s: `صفوف صنف واحد ${T("بقناع", "mask")}`,
+  d: `<p>تذكير: ${C("labels == c")} ${T("قناع", "mask")} من True وFalse، و${C("fish[mask]")} يأخذ الصفوف التي فيها True. لـ c = 0: السمكات الخمس الأولى، شكلها (5, 2).</p>`},
+ meanax: {l: "np", t: "new", n: ".mean(axis=0)", s: `${T("المتوسط", "mean")} على ${T("محور", "axis")}: عمودًا عمودًا`, c: "c12-ax",
+  d: `<p>${T("المحور", "axis")} هو <b>الاتجاه الذي نطويه</b> بالمتوسط.</p><ul><li>${C("axis=0")}: ننزل في كل ${T("عمود", "column")}، فيبقى رقم لكل عمود: متوسط الإضاءة ومتوسط العرض. هذا ${T("المركز", "centre")} μ.</li><li>${C("axis=1")}: نمشي في كل ${T("صف", "row")}، فيبقى رقم لكل سمكة. متوسط إضاءة وعرض معًا لا معنى له.</li></ul><p>قاعدة للتذكر: الرقم في ${C("axis")} هو البُعد الذي <b>يختفي</b> من ${T("الشكل", "shape")}: (5, 2) تصير (2,). جرّب الأزرار في اللوحة.</p>`,
+  a: [["axis=0", "يختفي الصف: نتيجة لكل عمود (لكل خاصية)"], ["axis=1", "يختفي العمود: نتيجة لكل صف (لكل سمكة)"], ["(بلا axis)", "متوسط كل العناصر في رقم واحد"]],
+  x: `<b>فخ:</b> المحور الخطأ لا يعطي رسالة خطأ، لكنه يحسب شيئًا آخر.`},
+ bcast: {l: "np", t: "new", n: "centres - new", s: `${T("البثّ", "broadcasting")}: صف واحد يُطرح من كل صف`,
+  d: `<p>${C("centres")} شكلها (2, 2)، و${C("new")} شكلها (2,). الشكلان مختلفان، ومع ذلك يعمل الطرح.</p><p>NumPy «تمدّ» ${C("new")} على كل صف، كأنها كُتبت مرتين. هذا ${T("البثّ", "broadcasting")}. النتيجة (2, 2): فرق السمكة الجديدة عن كل مركز.</p><p>الشرط: آخر بُعد متساوٍ في الاثنين، هنا 2 (خاصيتان).</p>`},
+ normax: {l: "np", t: "new", n: "np.linalg.norm(…, axis=1)", s: `طول كل ${T("صف", "row")} وحده: مسافة لكل مركز`, c: "c12-nax",
+  d: `<p>${C("norm")} من 1.1، مع ${C("axis=1")}: نحسب طول كل ${T("صف", "row")} وحده. كل صف فرق السمكة عن مركز، فطوله المسافة إلى هذا المركز.</p><p>النتيجة ${C("d")} مصفوفة شكلها (2,): [3.18, 2.26]، مسافة لكل صنف.</p>`,
+  a: [["axis=1", "طول كل صف: رقم لكل مركز"], ["(بلا axis)", "طول المصفوفة كلها كأنها متجه واحد: رقم واحد لا معنى له هنا"]],
+  x: `<b>فخ:</b> بلا ${C("axis=1")} نحصل على رقم واحد 3.91، و${C("argmin")} له 0 دائمًا، فكل سمكة تصير salmon. جرّب الزر في اللوحة.`},
+ round2: {l: "np", t: "new", n: "d.round(2)", s: `${T("تقريب", "rounding")} كل عنصر إلى منزلتين`,
+  d: `<p>${C(".round(2)")} تقرّب كل عنصر في المصفوفة إلى منزلتين عشريتين: [3.184965, 2.263537] تصير [3.18, 2.26].</p><p>التقريب للطباعة فقط. ${C("d")} نفسها لا تتغير، و${C("argmin")} تعمل على الأرقام الكاملة.</p>`},
+ argmin: {l: "np", t: "new", n: "names[d.argmin()]", s: `${T("موقع", "index")} أصغر قيمة، ثم اسمه`, c: "c12-xy",
+  d: `<p>${C("d.argmin()")} لا تعطي أصغر مسافة، بل <b>موقعها</b> ${T("", "index")}: في [3.18, 2.26] الأصغر في الموقع 1.</p><p>والموقع هو رقم الصنف، لأن المراكز بالترتيب 0، 1. فـ ${C("names[1]")} = ${C('"sea bass"')}. هذه قاعدة المصنِّف كلها: <b>الأقرب يفوز</b>.</p><p>حرّك السمكة في اللوحة، وانظر متى تعبر الخط المتقطع.</p>`,
+  a: [["argmin()", "موقع أصغر قيمة"], ["argmax()", "موقع أكبر قيمة"], ["min()", "أصغر قيمة نفسها: 2.26"]]},
+ /* ---- 1.3 ---- */
+ scalecol: {l: "np", t: "new", n: "fish * to_mm", s: `ضرب كل ${T("عمود", "column")} برقمه ${T("", "broadcasting")}`, c: "c13-u",
+  d: `<p>${C("to_mm = [1, 10]")} شكلها (2,)، و${C("fish")} شكلها (10, 2). ${T("البثّ", "broadcasting")} يطبّق ${C("to_mm")} على كل صف: الإضاءة × 1، والعرض × 10.</p><p>فالسمكة (2.5, 16.0) تصير (2.5, 160.0): العرض بالمليمتر. السمك لم يتغير، الأرقام فقط.</p><p>بدّل الوحدة في اللوحة، وانظر القرار ينقلب.</p>`},
+ subplots: {l: "plt", t: "rev", w: 1, n: "fig, axs = plt.subplots(1, 2, figsize=(9, 3.5))", s: `شكل فيه ${T("رسمان", "axes")} جنبًا إلى جنب`,
+  d: `<p>تذكير: صف واحد فيه رسمان. ${C("axs[0]")} رسم السنتيمتر، و${C("axs[1]")} رسم المليمتر. ${C("figsize")} العرض والارتفاع بالبوصة.</p>`},
+ forzip: {l: "py", t: "rev", w: 1, n: "for ax, F, C, q, unit in [(…), (…)]:", s: `${T("حلقة", "loop")} توزّع كل عنصر على عدة أسماء`,
+  d: `<p>تذكير: كالحلقة ${C("for ax, col in zip(…)")} في الأسبوع 1. هنا القائمة فيها صفّان ثابتان، وكل صف خمس قيم. الدورة الأولى للسنتيمتر، والثانية للمليمتر.</p>`},
+ scatter: {l: "plt", t: "rev", w: 1, n: "ax.scatter(x, y, c=…, label=…)", s: `رسم نقاط`,
+  d: `<p>تذكير: نقطة لكل زوج (x, y). ${C("c")} اللون، و${C("label")} الاسم في ${T("مفتاح الرسم", "legend")}. المعاملات الجديدة هذا الأسبوع في الشرح التالي.</p>`},
+ star: {l: "py", t: "new", n: "*", s: `${T("التفريق", "unpacking")}: عناصر المصفوفة معاملات منفصلة`,
+  d: `<p>${C("*")} قبل اسم داخل الاستدعاء تفرّق عناصره إلى ${T("معاملات", "arguments")} منفصلة.</p><p>${C("F[labels == 0].T")} فيها صفّان: الإضاءات والعروض. فـ ${C("ax.scatter(*that)")} = ${C("ax.scatter(lightnesses, widths)")}، أي x ثم y.</p><p>و${C("*q")} تفرّق السمكة الجديدة (7.0, 18.0) إلى x = 7.0 وy = 18.0.</p>`},
+ Ttr: {l: "np", t: "new", n: "F[labels == 0].T", s: `${T("المنقول", "transpose")}: الصفوف تصير أعمدة`,
+  d: `<p>${C(".T")} ${T("تنقل", "transpose")} المصفوفة: الصف يصير عمودًا. سمكات السلمون شكلها (5, 2)، و${C(".T")} يجعلها (2, 5).</p><p>الآن الصف 0 فيه كل الإضاءات، والصف 1 كل العروض. هذا ما يحتاجه ${C("scatter")}: كل x معًا، ثم كل y معًا.</p>`},
+ mk: {l: "plt", t: "new", n: 'marker="X", s=200, edgecolor="k"', s: `شكل النقطة وحجمها وحدّها`,
+  d: `<p>معاملات تغيّر شكل النقاط، لنفرّق بين السمك والمراكز والسمكة الجديدة:</p>`,
+  a: [["marker", `الشكل: ${C('"o"')} دائرة (الافتراضي)، ${C('"s"')} مربع، ${C('"X"')} علامة X للمراكز، ${C('"*"')} نجمة للسمكة الجديدة`], ["s", "المساحة بالنقاط المربعة: 200 و300 أكبر بكثير من النقطة العادية"], ["edgecolor", `لون حدّ النقطة: ${C('"k"')} أسود`], ["c", `لون واحد، أو قائمة لون لكل نقطة: ${C('["tab:orange", "tab:blue"]')} للمركزين`]]},
+ setlabel: {l: "plt", t: "rev", w: 1, n: "ax.set_xlabel / ax.set_ylabel", s: `عناوين ${T("المحاور", "axes")} في رسم واحد`,
+  d: `<p>تذكير: مثل ${C("plt.xlabel")}، لكن لرسم واحد ${C("ax")} من عدة رسوم. ${C('f"width ({unit})"')} يكتب cm أو mm حسب الدورة.</p>`},
+ legend: {l: "plt", t: "rev", w: 1, n: "axs[0].legend(); plt.tight_layout(); plt.show()", s: `${T("مفتاح الرسم", "legend")}، وترتيب، وعرض`,
+  d: `<p>تذكير: المفتاح في الرسم الأول فقط، و${C("tight_layout")} يمنع التداخل، و${C("show")} يعرض الشكل.</p>`},
+ /* ---- 1.4 ---- */
+ ss: {l: "sk", t: "new", n: "StandardScaler()", s: `أداة ${T("الدرجة المعيارية", "z-score")}`, c: "c14-m",
+  d: `<p>${C("StandardScaler()")} يصنع أداة فارغة. هي لا تعرف شيئًا بعد. حين ندرّبها بـ ${C("fit")}، تحفظ ${T("المتوسط", "mean")} و${T("الانحراف المعياري", "standard deviation")} لكل خاصية.</p><p>ثم ${C("transform")} تحسب ${T("الدرجة المعيارية", "z-score")}: z = (x − x̄) ÷ σ. بعدها كل خاصية متوسطها 0 وانحرافها المعياري 1.</p><p>تقسم على n، مثل ${C("np.std")}، لا على n−1.</p>`},
+ fit: {l: "sk", t: "new", n: ".fit(fish)", s: `التعلّم من ${T("بيانات التدريب", "training data")}`, c: "c14-m",
+  d: `<p>${C("fit")} تحسب الأرقام التي تحتاجها الأداة، من البيانات التي تعطيها لها، وتحفظها داخلها. ${C("fit")} تعيد الأداة نفسها، لذلك نكتب ${C("z = StandardScaler().fit(fish)")} في سطر.</p><p>هنا ${C("fish")} هي ${T("بيانات التدريب", "training data")}. كل سمكة جديدة تُطبَّع بأرقام ${C("fish")} هذه، لا بأرقامها هي.</p>`,
+  x: `<b>${T("تسرّب البيانات", "data leakage")}:</b> لا تدرّب المقياس على بيانات الاختبار، ولا على كل البيانات. عندها يرى المصنِّف شيئًا من الاختبار، والدقة تبدو أفضل من الحقيقة. لا رسالة خطأ (Notes §2.4).`},
+ attr: {l: "sk", t: "new", n: "z.mean_, z.scale_", s: `ما تعلّمته الأداة: ${T("خصائص", "attributes")} تنتهي بـ _`,
+  d: `<p>بعد ${C("fit")} تحفظ الأداة ما تعلّمته في ${T("خصائص", "attributes")} تنتهي بشرطة سفلية ${C("_")}. الشرطة تعني: «هذا محسوب من البيانات».</p><p>${C("z.mean_")} = [4.91, 18.68]، و${C("z.scale_")} = [1.529, 1.638]: الأرقام نفسها في المثال 2.3. انظر اللوحة.</p>`,
+  a: [["mean_", "متوسط كل خاصية (StandardScaler)"], ["scale_", "الانحراف المعياري لكل خاصية، بالقسمة على n"], ["data_min_, data_max_", "الأصغر والأكبر لكل خاصية (MinMaxScaler)"]]},
+ transform: {l: "sk", t: "new", n: "z.transform([new])", s: `تطبيق الأرقام المحفوظة على بيانات`, c: "c14-u",
+  d: `<p>${C("transform")} تطبّق الأرقام المحفوظة على أي بيانات: z = (x − ${C("mean_")}) ÷ ${C("scale_")}.</p><p>${C("[new]")} قائمة فيها سمكة واحدة: جدول صف واحد، شكله (1, 2). الأداة تنتظر دائمًا صفًّا لكل سمكة. لذلك الناتج أيضًا (1, 2): ${C("[[1.367 -0.415]]")}.</p>`,
+  x: `<b>انتبه:</b> ${C("z.transform(new)")} بلا القوسين تعطي رسالة خطأ ${C("Expected 2D array")}. أضف القوسين.`},
+ mms: {l: "sk", t: "new", n: "MinMaxScaler()", s: `أداة ${T("تحجيم min-max", "min-max scaling")}`, c: "c14-m",
+  d: `<p>${C("fit")} تحفظ الأصغر والأكبر لكل خاصية من التدريب. و${C("transform")} تحسب x′ = (x − min) ÷ (max − min).</p><p>بيانات التدريب تصير بين 0 و1. للسمكة الجديدة: (7.0 − 2.5) ÷ 5 = 0.9، و(18.0 − 16.0) ÷ 5 = 0.4.</p><p>متى؟ حين للخاصية حدود ثابتة، مثل البكسل من 0 إلى 255. لكن قيمة شاذة واحدة تضغط الباقي.</p>`},
+ /* ---- 1.5 ---- */
+ df: {l: "pd", t: "rev", w: 1, n: "pd.DataFrame({ … })", s: `${T("جدول", "DataFrame")} من ${T("قاموس", "dict")}`, c: "c15-s",
+  d: `<p>تذكير: في الأسبوع 1 بنينا الجدول من مصفوفة. هنا من ${T("قاموس", "dict")}: كل ${T("مفتاح", "key")} اسم ${T("عمود", "column")}، وقائمته قيم العمود.</p>`},
+ nan: {l: "np", t: "new", n: "np.nan", s: `${T("قيمة ناقصة", "missing value, NaN")}`,
+  d: `<p>${C("np.nan")} تعني «ليس رقمًا» ${T("", "Not a Number")}. نكتبها مكان قياس ${T("ناقص", "missing")}.</p><p>هي عدد عشري خاص: أي حساب معها يعطي ${C("nan")}. و${C("np.nan == np.nan")} تعطي False! لذلك نفحصها بـ ${C("isna()")}، لا بـ ${C("==")}.</p>`},
+ isna: {l: "pd", t: "new", n: "df.isna().sum()", s: `عدد ${T("الفجوات", "missing values")} في كل عمود`, c: "c15-s",
+  d: `<p>${C("df.isna()")} جدول بالشكل نفسه من True وFalse: True حيث القيمة ناقصة. هو ${T("قناع", "mask")}.</p><p>${C(".sum()")} تجمع كل عمود وحده (True = 1)، فتعطي عدد الفجوات لكل عمود: ${C("lightness")} 1 و${C("width_cm")} 1.</p>`},
+ meanno: {l: "pd", t: "new", n: "df.mean(numeric_only=True)", s: `${T("متوسط", "mean")} كل عمود رقمي`,
+  d: `<p>${C("df.mean()")} تحسب ${T("متوسط", "mean")} كل ${T("عمود", "column")}، وتتجاوز الفجوات ${C("NaN")}. ${C("lightness")}: (2.5 + 3.0 + 4.5 + 6.0 + 6.8) ÷ 5 = 4.56.</p>`,
+  a: [["numeric_only=True", `الأعمدة الرقمية فقط. بدونه: رسالة خطأ ${C("TypeError")}، لأن متوسط ${C('"Gaza"')} لا معنى له`]]},
+ fillna: {l: "pd", t: "new", n: "df.fillna(values)", s: `ملء ${T("الفجوات", "missing values")}`, c: "c15-s",
+  d: `<p>${C("fillna")} تضع قيمة مكان كل ${C("NaN")}. هنا نعطيها متوسط كل عمود، فكل فجوة تأخذ متوسط عمودها: 4.56 للإضاءة، و18.16 للعرض.</p><p>تعيد جدولًا جديدًا ${C("filled")}، و${C("df")} يبقى كما هو.</p><p>في عمل حقيقي: المتوسط من بيانات التدريب فقط، كالتطبيع تمامًا.</p>`},
+ dummies: {l: "pd", t: "new", n: "pd.get_dummies(df, columns=[…], dtype=int)", s: `${T("الترميز الأحادي", "one-hot encoding")}`, c: "c15-d",
+  d: `<p>المسافة تحتاج أرقامًا، والميناء نص. ${C("get_dummies")} تصنع عمودًا لكل قيمة: ${C("port_Gaza")} و${C("port_Khan Younis")} و${C("port_Rafah")}. في كل صف 1 في عمود ميناء السمكة، و0 في الباقي.</p><p>لماذا لا نكتب Gaza = 0 وRafah = 2؟ لأن ذلك يجعل Rafah «أبعد» من Gaza، ولا ترتيب بين الموانئ.</p>`,
+  a: [["columns", "الأعمدة التي نرمّزها؛ العمود الأصلي يُحذف"], ["dtype=int", "1 و0. بدونه: True وFalse"]]},
+ show: {l: "py", t: "new", n: "coded", s: `آخر سطر في الخلية يُعرض وحده`,
+  d: `<p>في Jupyter وColab: إن كان آخر سطر في الخلية اسمًا أو حسابًا، تُعرض قيمته تحت الخلية، بلا ${C("print")}.</p><p>والجدول يظهر بهذه الطريقة بشكل أجمل من ${C("print(coded)")}.</p>`},
+ /* ---- 1.6 ---- */
+ lambda: {l: "py", t: "new", n: "lambda: load_penguins()", s: `${T("دالة بلا اسم", "lambda")} في سطر`,
+  d: `<p>${C("lambda: …")} تصنع ${T("دالة", "function")} صغيرة بلا اسم، تحسب ما بعد النقطتين حين نستدعيها.</p><p>هنا لا نحمّل البيانات فورًا. نحفظ «طريقة التحميل» في ${C("loader")}، ثم نستدعيها داخل الحلقة: ${C("loader()")}. هكذا تعامل الحلقة مجموعتي البيانات بالطريقة نفسها.</p>`},
+ slice: {l: "py", t: "new", n: "[:2]", s: `${T("شريحة", "slice")}: أول عنصرين`,
+  d: `<p>${C("[start:stop]")} تأخذ ${T("شريحة", "slice")} من العناصر: من ${C("start")} حتى قبل ${C("stop")}. بلا ${C("start")} نبدأ من 0.</p><p>${C("load_penguins()")} تعيد ثلاثة: ${C("(X, y, df)")}. و${C("[:2]")} تأخذ العنصرين 0 و1، أي ${C("(X, y)")}، مثل ${C("load_iris(return_X_y=True)")}.</p>`,
+  a: [["start", "أول موقع (يدخل)"], ["stop", "الحد (لا يدخل)"]]},
+ iris: {l: "sk", t: "rev", w: 1, n: "load_iris(return_X_y=True)", s: `بيانات Iris مصفوفتين`,
+  d: `<p>تذكير: 150 زهرة، 4 خصائص بالسنتيمتر، 3 أنواع. الجديد ${C("return_X_y=True")}: تعيد ${C("(X, y)")} مصفوفتين، بدل الكائن الكامل.</p>`},
+ split: {l: "sk", t: "new", n: "train_test_split(X, y, test_size, random_state, stratify)", s: `تقسيم إلى ${T("تدريب", "training")} و${T("اختبار", "test")}`, c: "c16-rs",
+  d: `<p>تخلط العيّنات، ثم تقسمها: 70% ${T("بيانات تدريب", "training data")}، و30% ${T("بيانات اختبار", "test data")} نخبّئها حتى النهاية.</p><p>تعيد أربعة بالترتيب: ${C("Xtr, Xte, ytr, yte")}. لـ Penguins: 239 للتدريب و103 للاختبار.</p><p>غيّر ${C("random_state")} و${C("stratify")} في اللوحة، وانظر الأعمدة والدقة.</p>`,
+  a: [["test_size=0.3", "حصة الاختبار: 30%"], ["random_state=0", "يثبّت الخلط، فيحصل الجميع على التقسيم نفسه"], ["stratify=y", "حصة كل نوع في الاختبار كحصته في كل البيانات"]],
+  x: `<b>فخ:</b> بلا ${C("random_state")} يتغير التقسيم في كل تشغيل، وتتغير الدقة، فلا تطابق خلية التحقق.`},
+ nc: {l: "sk", t: "new", n: "NearestCentroid()", s: `${T("مصنِّف", "classifier")} أقرب متوسط جاهز`, c: "c16-mo",
+  d: `<p>هو مصنِّفنا في 1.2، جاهزًا. ${C("fit(Xtr, ytr)")} تحسب ${T("مركز", "centroid")} كل صنف من التدريب. و${C("predict")} تعطي صنف أقرب مركز.</p><p>على Penguins بلا تطبيع: كتلة الجسم بالغرام (2700 إلى 6300) تسيطر على المسافة. مركزا Adelie وChinstrap فيها 3754 و3744 تقريبًا، فيختلطان.</p>`},
+ score: {l: "sk", t: "new", n: ".score(Xte, yte)", s: `${T("الدقة", "accuracy")} على بيانات الاختبار`, c: "c16-mo",
+  d: `<p>${C("score")} تتنبأ بأصناف ${C("Xte")}، وتقارنها بـ ${C("yte")}، وتعطي ${T("الدقة", "accuracy")}: عدد الصحيح ÷ عدد عيّنات الاختبار.</p><p>Penguins بلا تطبيع: 65 من 103 = 0.631. ومع الدرجة المعيارية: 100 من 103 = 0.971. و${T("معدل الخطأ", "error rate")} = 1 − الدقة.</p>`,
+  x: `<b>فخ:</b> ${C(".score(Xtr, ytr)")} يقيس على بيانات رآها المصنِّف. قِس على الاختبار دائمًا.`},
+ pipe: {l: "sk", t: "new", n: "make_pipeline(StandardScaler(), NearestCentroid())", s: `${T("خط معالجة", "pipeline")}: تطبيع ثم تصنيف`, c: "c16-mo",
+  d: `<p>${C("make_pipeline")} تربط خطوتين في نموذج واحد. ${C("fit(Xtr, ytr)")} يدرّب المقياس على ${C("Xtr")}، ويطبّعه، ثم يحسب المراكز.</p><p>و${C("score(Xte, yte)")} تطبّع ${C("Xte")} <b>بأرقام التدريب</b>، ثم تصنّف. هذه قاعدة تسرّب البيانات تمامًا، بلا جهد منا (Notes §2.7).</p>`},
+ fmt: {l: "py", t: "new", n: '{raw:.3f}', s: `${T("تنسيق", "format spec")} رقم بثلاث منازل`,
+  d: `<p>في ${T("النص المنسَّق", "f-string")}، ما بعد النقطتين ${T("تنسيق", "format spec")}. ${C(":.3f")}: عدد عشري (f) بثلاث منازل بعد الفاصلة.</p><p>0.6310679611650486 يُطبع 0.631. الرقم نفسه لا يتغير، الطباعة فقط.</p>`}
+};
+/* review entries end with the link to the Week 1 guide */
+Object.values(E).forEach(e => { if (e.t === "rev" && e.w) e.d += REV; });
+/* T("", en) gives a bare English tag after an Arabic phrase: tidy the leading space */
+/* shapes such as (100000, 3) or (3,) are isolated LTR so the Arabic sentence does not reorder them */
+const ltrShapes = h => h.replace(/(^|[^\w(">])(\(\d[\d, ]*,?\))/g, (m, p, t) => `${p}<span dir="ltr">${t}</span>`);
+Object.values(E).forEach(e => ["s", "d", "x"].forEach(f => { if (e[f]) e[f] = ltrShapes(e[f].replace(/ +<bdi>/g, " <bdi>").replace(/^ <bdi>/, "<bdi>")); }));
+Object.values(E).forEach(e => { if (e.a) e.a = e.a.map(([n, m]) => [n, ltrShapes(m)]); });
+
+/* ---------- syntax colours (editor style) ---------- */
+const KW = new Set(["import","from","as","def","return","for","in","try","except","if","else","elif","and","or","not","while","with","lambda","pass","is"]);
+const CONST = new Set(["True","False","None"]);
+const BUILTIN = new Set(["print","len","range","round","isinstance","str","int","float","list","dict","sum","max","min","abs"]);
+const MODS = new Set(["np","pd","plt"]);
+function classify(t) {
+ const cls = new Array(t.length).fill("");
+ const fill = (i, j, c) => { for (let k = i; k < j; k++) cls[k] = c; };
+ let i = 0;
+ while (i < t.length) {
+  const ch = t[i];
+  if (ch === "#") { let j = t.indexOf("\n", i); if (j < 0) j = t.length; fill(i, j, "cm"); i = j; continue; }
+  const sm = /^([fFrRbB]{0,2})("""|'''|"|')/.exec(t.slice(i, i + 5));
+  if (sm && !(sm[1] && /\w/.test(t[i - 1] || ""))) {
+   const q = sm[2], st = i, isF = /[fF]/.test(sm[1]);
+   let j = i + sm[0].length;
+   while (j < t.length && t.slice(j, j + q.length) !== q && !(q.length === 1 && t[j] === "\n")) { if (t[j] === "\\") { j += 2; continue; } j++; }
+   const end = Math.min(t.length, j + q.length);
+   fill(st, end, "st");
+   if (isF) {
+    let k = st + sm[0].length;
+    while (k < j) {
+     if (t[k] === "{") {
+      let d = 1, m = k + 1; while (m < j && d) { if (t[m] === "{") d++; else if (t[m] === "}") d--; if (d) m++; }
+      cls[k] = "br"; if (m < t.length) cls[m] = "br";
+      const inner = t.slice(k + 1, m), colon = inner.search(/:[^}()]*$/), expr = colon >= 0 ? inner.slice(0, colon) : inner;
+      classify(expr).forEach((c, n) => cls[k + 1 + n] = c || "op");
+      if (expr.length < inner.length) fill(k + 1 + expr.length, m, "fmt");
+      k = m + 1;
+     } else k++;
+    }
+   }
+   i = end; continue;
+  }
+  if (/[0-9]/.test(ch) && !/\w/.test(t[i - 1] || "")) { const m = /^\d+(\.\d+)?(e-?\d+)?/.exec(t.slice(i)); fill(i, i + m[0].length, "nu"); i += m[0].length; continue; }
+  if (/[A-Za-z_]/.test(ch)) {
+   const w = /^[A-Za-z_]\w*/.exec(t.slice(i))[0], after = t.slice(i + w.length), prev = t[i - 1];
+   let c = "va";
+   if (KW.has(w)) c = "kw"; else if (CONST.has(w)) c = "co";
+   else if (prev !== "." && MODS.has(w)) c = "mo";
+   else if (/^\s*\(/.test(after)) c = BUILTIN.has(w) ? "bi" : "fn";
+   else if (/^=(?!=)/.test(after) && /[(,]\s*$/.test(t.slice(0, i))) c = "kwarg";
+   else if (prev === ".") c = "at";
+   fill(i, i + w.length, c); i += w.length; continue;
+  }
+  if (/[-+*/<>=!&|%]/.test(ch)) cls[i] = "op";
+  i++;
+ }
+ return cls;
+}
+const esc = c => c === "<" ? "&lt;" : c === ">" ? "&gt;" : c === "&" ? "&amp;" : c;
+
+/* ---------- code rendering: one row per line (number + code), each marked name is a button ---------- */
+const attr = s => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+function renderCode() {
+ $$("pre.code").forEach(pre => {
+  const raw = pre.textContent, segs = [], re = /\[\[([\w-]+)\|(.*?)\]\](?!\])/g; let last = 0, m, plain = "";
+  while ((m = re.exec(raw))) { if (m.index > last) segs.push([null, raw.slice(last, m.index)]); segs.push([m[1], m[2]]); last = re.lastIndex; }
+  if (last < raw.length) segs.push([null, raw.slice(last)]);
+  const segAt = [];
+  segs.forEach((sg, i) => { for (let n = 0; n < sg[1].length; n++) segAt.push(sg[0] ? i : -1); plain += sg[1]; });
+  const cls = classify(plain), rows = [];
+  let cur = "", oc = null, os = -1;
+  const closeSpan = () => { if (oc) { cur += "</span>"; oc = null; } };
+  const closeBtn = () => { closeSpan(); if (os >= 0) { cur += "</button>"; os = -1; } };
+  for (let i = 0; i < plain.length; i++) {
+   const ch = plain[i];
+   if (ch === "\n") { closeBtn(); rows.push(cur); cur = ""; continue; }
+   const s = segAt[i];
+   if (s !== os) { closeBtn(); if (s >= 0) { const k = segs[s][0]; cur += `<button type="button" class="tk" data-k="${k}" aria-expanded="false" aria-label="${attr("شرح " + (E[k] ? E[k].n : k))}">`; } os = s; }
+   const c = cls[i] || "";
+   if (c !== (oc || "")) { closeSpan(); if (c) { cur += `<span class="hl-${c}">`; oc = c; } }
+   cur += esc(ch);
+  }
+  closeBtn(); rows.push(cur);
+  pre.insertAdjacentHTML("afterend", `<div class="lines"><div class="lines-in">${rows.map((h, i) => `<div class="ln" data-line="${i + 1}"><span class="no">${i + 1}</span><span class="lc">${h || " "}</span></div>`).join("")}</div></div>`);
+ });
+}
+
+/* ---------- the explanation card under its line ---------- */
+let CARD = null;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function flash(el) { if (typeof el === "string") el = document.getElementById(el); if (!el) return; el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); setTimeout(() => el.classList.remove("flash"), 1600); }
+function setHashQuiet(h) { try { history.replaceState(null, "", "#" + h); } catch (e) {} }
+function lineKeys(ln) { const ks = []; $$(".tk", ln).forEach(b => { if (!ks.includes(b.dataset.k)) ks.push(b.dataset.k); }); return ks; }
+function openCard(btn, opt = {}) {
+ const view = btn.closest(".view"), cell = view.dataset.view, k = btn.dataset.k, e = E[k];
+ if (!e) return;
+ if (CARD && CARD.ln === btn.closest(".ln") && CARD.k === k && !opt.force) { closeCard(); return; }
+ closeCard(true); closeVar(true);
+ const ln = btn.closest(".ln"), lines = btn.closest(".lines"), ks = lineKeys(ln), st = ST[e.t];
+ const others = ks.filter(x => x !== k);
+ const card = document.createElement("div");
+ card.className = "card";
+ card.style.width = lines.clientWidth + "px";
+ card.innerHTML = `<div class="card-in" role="region" tabindex="-1" aria-label="${attr("شرح " + e.n)}"><span class="caret" aria-hidden="true"></span>
+  <div class="ctop"><span class="b ${e.l}">${LIB[e.l]}</span><span class="b ${st[0]}">${st[1]}</span><span class="name">${e.n}</span><span class="one">${e.s}</span>
+  <button class="xbtn" type="button" aria-label="إغلاق الشرح (Esc)">×</button></div>
+  <div class="cbody"><div class="ctext">${e.d}
+   ${e.a ? `<div class="args">${e.a.map(([n, m]) => `<div class="arg"><code>${n}</code><span>${m}</span></div>`).join("")}</div>` : ""}
+   ${e.x ? `<div class="trapbox">${e.x}</div>` : ""}</div>${e.c ? `<div class="cside"></div>` : ""}</div>
+  ${others.length ? `<div class="cfoot"><span>في السطر نفسه:</span>${others.map(o => `<button type="button" data-k="${o}">${E[o].n}</button>`).join("")}<span class="cnt">الاسم ${ks.indexOf(k) + 1} من ${ks.length} في هذا السطر</span></div>` : ""}</div>`;
+ ln.after(card);
+ ln.classList.add("cur");
+ $$(`.tk[data-k="${k}"]`, ln).forEach(b => { b.classList.add("on"); b.setAttribute("aria-expanded", "true"); });
+ if (e.c) {
+  const panel = $("#p-" + cell), rest = $(`.rest[data-cell="${cell}"]`);
+  if (panel) { $(".cside", card).appendChild(panel); rest.hidden = true; }
+  if (e.go) e.go();
+  setTimeout(() => flash(e.c), 60);
+ }
+ CARD = {cell, k, btn, card, ln, lines};
+ placeCaret();
+ setHashQuiet(cell + "--" + k);
+ if (opt.scroll !== false) {
+  const r = card.getBoundingClientRect(), top = ln.getBoundingClientRect().top;
+  if (opt.center) ln.scrollIntoView({block: "start", behavior: reduce ? "auto" : "smooth"});
+  else if (r.bottom > innerHeight && top > 140) scrollBy({top: Math.min(r.bottom - innerHeight + 16, top - 120), behavior: reduce ? "auto" : "smooth"});
+ }
+ if (opt.focus) $(".card-in", card).focus({preventScroll: true});
+}
+function placeCaret() {
+ if (!CARD) return;
+ const {card, btn, lines} = CARD;
+ card.style.width = lines.clientWidth + "px";
+ const cin = $(".card-in", card), car = $(".caret", card), r = btn.getBoundingClientRect(), c = cin.getBoundingClientRect();
+ car.style.left = Math.max(18, Math.min(c.width - 18, r.left + r.width / 2 - c.left)) + "px";
+}
+function closeCard(silent) {
+ if (!CARD) return;
+ const {cell, card, ln, btn} = CARD, panel = $(".cside .panel", card);
+ if (panel) { const rest = $(`.rest[data-cell="${cell}"]`); rest.appendChild(panel); rest.hidden = false; }
+ card.remove(); ln.classList.remove("cur");
+ $$(".tk.on", ln).forEach(b => { b.classList.remove("on"); b.setAttribute("aria-expanded", "false"); });
+ CARD = null;
+ if (!silent) { setHashQuiet(cell); btn.focus({preventScroll: true}); }
+}
+document.addEventListener("click", ev => {
+ const t = ev.target;
+ const tk = t.closest(".tk"); if (tk) { openCard(tk); return; }
+ if (CARD && t.closest(".card .xbtn")) { closeCard(); return; }
+ const ob = t.closest(".cfoot button[data-k]");
+ if (ob && CARD) { const b = $(`.tk[data-k="${ob.dataset.k}"]`, CARD.ln); if (b) openCard(b, {focus: true}); return; }
+});
+addEventListener("resize", () => placeCaret());
+document.addEventListener("scroll", ev => { if (CARD && ev.target === CARD.lines) placeCaret(); }, true);
+
+
+/* ---------- variables strip and structure views ---------- */
+const sh = (code, txt) => `<div class="shp">${code}${txt ? `<span>${txt}</span>` : ""}</div>`;
+const cellsHTML = (vals, f = v => v, cls = () => "") => `<div class="cells">${vals.map((v, i) => v === "…" ? `<span class="dots">…</span>` : `<span class="${cls(v, i)}">${f(v, i)}</span>`).join("")}</div>`;
+const dsl = (id, ar, en) => `<a class="dslink" href="#setup--${id}">ما ${ar} <bdi>(${en})</bdi>؟ الشكل العام ←</a>`;
+function scalarPic(name, val, note) { return `<div class="frame pic"><span class="cap">${name}</span><span style="font-size:22px;font-weight:700;color:var(--sandfg);background:var(--sand);border-radius:6px;padding:2px 10px">${val}</span>${note ? `<span class="cap">${note}</span>` : ""}</div>`; }
+const nf = v => { const s = String(+(+v).toFixed(4)); return s.includes(".") ? s : s + "."; };   // NumPy-like: 16.0 -> "16."
+const VS = D.vars; VS.names.dtype = VS.names.dtype.replace("<", "&lt;"); const _vs = 0, shp = n => "(" + VS[n].shape.join(", ") + (VS[n].shape.length === 1 ? "," : "") + ")";
+/* a small matrix picture: rows of numbers, row labels, optional class colouring and highlighted cells */
+function matPic(rows, o = {}) {
+ const head = o.cols ? `<thead><tr><th class="ix">${o.corner || ""}</th>${o.cols.map((c, j) => `<th class="${o.colCls ? o.colCls(j) : ""}">${c}</th>`).join("")}</tr></thead>` : "";
+ const body = rows.map((r, i) => r === "…" ? `<tr class="gap"><th>⋮</th>${(o.cols || rows[0]).map(() => "<td>⋮</td>").join("")}</tr>` :
+  `<tr class="${o.rowCls ? o.rowCls(i) : ""}"><th class="ix">${o.rl ? o.rl(i) : i}</th>${r.map((v, j) => `<td class="${o.hit && o.hit(i, j) ? "hit" : (o.cellCls ? o.cellCls(i, j) : "")}">${o.f ? o.f(v, i, j) : v}</td>`).join("")}</tr>`).join("");
+ return `<div class="frame fr-wrap"><table class="dtab">${head}<tbody>${body}</tbody></table></div>`;
+}
+const FISH = D.fish, LBL = D.labels;
+const fishRows = (F, hit) => matPic(F, {cols: ["lightness", "width"], rowCls: i => LBL[i] ? "" : "", cellCls: (i, j) => LBL[i] ? "cA" : "cS", hit, f: v => nf(v)});
+const VARS = {
+ setup: [
+  {n: "fish", t: `ndarray · shape ${shp("fish")} · float64`, line: 22, title: T("مصفوفة", "array"),
+   code: `<span class="v">fish</span> = np.array([<span class="kA">[2.5, 16.0]</span>, [3.0, 19.3], [3.8, 16.5], [4.5, 18.0], [5.6, 17.0],\n                 <span class="kB">[4.2, 20.5]</span>, [5.2, 19.0], [6.0, 21.0], [6.8, 19.5], [7.5, 20.0]])`,
+   lines: [`متغيرًا ${T("", "variable")} اسمه ${C("fish")}، نوعه ${T("مصفوفة", "array")} من ${T("أعداد عشرية", "float")}.`, `كل ${T("صف", "row")} سمكة: 10 صفوف. وكل ${T("عمود", "column")} ${T("خاصية", "feature")}: الإضاءة ثم العرض بالسنتيمتر.`, `الصفوف 0–4 <span class="kCc">سلمون</span>، والصفوف 5–9 <span class="kAc">قاروص</span>. <span class="kAc">fish[0]</span> و<span class="kBc">fish[5]</span> هما سمكتا 1.1.`],
+   shape: sh("fish.shape → (10, 2)", "10 سمكات، خاصيتان") + sh("fish[5] → [ 4.2 20.5]"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => fishRows(FISH, (i) => i === 0 || i === 5)},
+  {n: "labels", t: `ndarray · shape ${shp("labels")} · int64`, line: 24, title: T("مصفوفة", "array"),
+   code: `<span class="v">labels</span> = np.array([<span class="kA">0, 0, 0, 0, 0</span>, <span class="kB">1, 1, 1, 1, 1</span>])`,
+   lines: [`${T("مصفوفة", "array")} ${T("أعداد صحيحة", "integers")} ببعد واحد، طولها 10.`, `${C("labels[i]")} صنف السمكة ${C("fish[i]")}: <span class="kAc">0</span> سلمون و<span class="kBc">1</span> قاروص.`, `${C("labels == 0")} ${T("قناع", "mask")} يختار صفوف السلمون في 1.2.`],
+   shape: sh("labels.shape → (10,)"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => `<div class="frame pic"><span class="cap">labels</span>${cellsHTML(LBL, v => v, v => v ? "T" : "F")}${cellsHTML(LBL, (v, i) => "[" + i + "]", () => "ix")}<span class="cap">labels == 0</span>${cellsHTML(LBL, v => v === 0 ? "True" : "False", v => v === 0 ? "hit" : "")}</div>`},
+  {n: "names", t: `ndarray · shape ${shp("names")} · ${VS.names.dtype}`, line: 25, title: `${T("مصفوفة", "array")} نصوص`,
+   code: `<span class="v">names</span> = np.array([<span class="kA">"salmon"</span>, <span class="kB">"sea bass"</span>])`,
+   lines: [`${T("مصفوفة", "array")} فيها ${T("نصان", "strings")}.`, `النوع ${C(VS.names.dtype)} يعني: نص بطول 8 حروف على الأكثر (Unicode).`, `الموقع هو رقم الصنف: <span class="kAc">0</span> salmon و<span class="kBc">1</span> sea bass.`],
+   shape: sh("names.shape → (2,)") + sh('names[1] → "sea bass"'),
+   pic: () => `<div class="frame pic"><span class="cap">names</span><div class="kv"><span class="k">[0]</span><span class="ar2">→</span><span>"salmon"</span><span class="k">[1]</span><span class="ar2">→</span><span class="hit">"sea bass"</span></div><span class="cap">names[d.argmin()] in 1.2 reads one of these</span></div>`},
+  {n: "PENGUIN_FEATURES", t: `list · len ${VS.PENGUIN_FEATURES.len}`, line: 27, title: T("قائمة", "list"),
+   code: `<span class="v">PENGUIN_FEATURES</span> = [<span class="kA">"bill_length_mm", "bill_depth_mm", "flipper_length_mm", "body_mass_g"</span>]`,
+   lines: [`متغيرًا اسمه ${C("PENGUIN_FEATURES")}، نوعه ${T("قائمة", "list")}.`, `فيها 4 ${T("نصوص", "strings")}: أسماء أعمدة القياسات. ثلاثة بالمليمتر، والأخير بالغرام.`, `نستعملها مرتين: في ${C("dropna(subset=…)")}، وفي ${C("df[PENGUIN_FEATURES]")} لنأخذ هذه الأعمدة فقط.`],
+   shape: sh("len(PENGUIN_FEATURES) → 4") + sh('PENGUIN_FEATURES[3] → "body_mass_g"'), link: dsl("ds-list", "القائمة", "list"),
+   pic: () => `<div class="frame pic"><span class="cap">PENGUIN_FEATURES</span><div class="cells">${D.setup.colnames.slice(2, 6).map((v, i) => `<span style="display:inline-grid;gap:2px;border:0;padding:0"><small style="color:var(--muted)">[${i}]</small><span class="${i === 3 ? "hit" : ""}" style="background:${i === 3 ? "" : "var(--basstint)"};color:${i === 3 ? "" : "var(--bass)"}">"${v}"</span></span>`).join("")}</div><span class="cap">len = 4</span></div>`},
+  {n: "load_penguins()", t: `function → tuple of 3`, line: 28, title: `${T("دالة", "function")} تعيد ${T("صفًّا ثابتًا", "tuple")}`,
+   code: `def load_penguins():\n    …\n    return <span class="kA">df[PENGUIN_FEATURES].to_numpy()</span>, <span class="kB">y</span>, <span class="uC">df</span>`,
+   lines: [`${C("load_penguins")} ${T("دالة", "function")}، لا بيانات. الخلية تعرّفها فقط، ولا تستدعيها.`, `حين نستدعيها (في 1.6 وفي Task 4) تعيد ${T("صفًّا ثابتًا", "tuple")} من ثلاثة: <span class="kAc">X</span> و<span class="kBc">y</span> و<span class="kCc">df</span>.`, `${C("X")} شكلها ${shp("Xp")}، و${C("y")} شكلها ${shp("yp")}، و${C("df")} جدول ${shp("dfp")}.`],
+   shape: sh("len(load_penguins()) → 3") + sh("load_penguins()[0].shape → (342, 4)"), link: dsl("ds-tuple", "الصف الثابت", "tuple"),
+   pic: () => `<div class="frame pic"><span class="cap">load_penguins() → ( X, y, df )</span><div class="cells"><span style="background:var(--basstint);color:var(--bass)">X ${shp("Xp")}</span><span style="background:var(--greentint);color:var(--good)">y ${shp("yp")}</span><span style="background:var(--saltint);color:var(--salink)">df ${shp("dfp")}</span></div><span class="cap">X[0] = [${D.setup.X0.map(nf).join(" ")}]   y[0] = ${D.setup.y0}</span></div>`}],
+ c11: [
+  {n: "a", t: `ndarray · shape ${shp("a")}`, line: 1, title: T("مصفوفة", "array"),
+   code: `<span class="v">a</span>, b = <span class="kA">fish[0]</span>, fish[5]`,
+   lines: [`${C("a")} ${T("مصفوفة", "array")} ببعد واحد، فيها عددان.`, `هي <span class="kAc">الصف 0</span> من ${C("fish")}: سمكة سلمون.`, `${C("a[0]")} الإضاءة 2.5، و${C("a[1]")} العرض 16.0. هذا ${T("متجه الخصائص", "feature vector")} x في Notes §2.2.`],
+   shape: sh("a.shape → (2,)") + sh("a → [ 2.5 16. ]"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => fishRows(FISH, (i) => i === 0)},
+  {n: "b", t: `ndarray · shape ${shp("b")}`, line: 1, title: T("مصفوفة", "array"),
+   code: `a, <span class="v">b</span> = fish[0], <span class="kB">fish[5]</span>`,
+   lines: [`${C("b")} ${T("مصفوفة", "array")} بالشكل نفسه (2,).`, `هي <span class="kBc">الصف 5</span> من ${C("fish")}: سمكة قاروص.`, `${C("a - b")} = [-1.7, -4.5]: فرق كل خاصية.`],
+   shape: sh("b.shape → (2,)") + sh("a - b → [-1.7 -4.5]"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => fishRows(FISH, (i) => i === 5)}],
+ c12: [
+  {n: "centres", t: `ndarray · shape ${shp("centres")}`, line: 1, title: T("مصفوفة", "array"),
+   code: `<span class="v">centres</span> = np.array([<span class="kA">fish[labels == c].mean(axis=0)</span> for c in <span class="kB">(0, 1)</span>])`,
+   lines: [`${C("centres")} ${T("مصفوفة", "array")} شكلها (2, 2).`, `صف لكل صنف من <span class="kBc">(0, 1)</span>: الصف 0 مركز السلمون، والصف 1 مركز القاروص.`, `كل صف <span class="kAc">متوسط أعمدة</span> سمكات صنفه: إضاءة وعرض. هذا μ<sub>i</sub> في Notes §2.5.`],
+   shape: sh("centres.shape → (2, 2)") + sh("centres[1] → [ 5.94 20.  ]"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => matPic(D.c12.centres, {cols: ["lightness", "width"], rl: i => ["0 salmon", "1 sea bass"][i], f: v => nf(v), cellCls: i => i ? "cA" : "cS"})},
+  {n: "new", t: `ndarray · shape ${shp("new")}`, line: 4, title: T("مصفوفة", "array"),
+   code: `<span class="v">new</span> = np.array(<span class="kA">[7.0, 18.0]</span>)`,
+   lines: [`سمكة جديدة لا نعرف صنفها: ${T("متجه خصائص", "feature vector")} شكله (2,).`, `<span class="kAc">الإضاءة 7.0، والعرض 18.0</span> سم.`, `لا ${C("labels")} لها: هذا ما سيقرّره المصنِّف.`],
+   shape: sh("new.shape → (2,)"), pic: () => `<div class="frame pic"><span class="cap">new</span>${cellsHTML(D.new, nf, () => "hit")}<span class="cap">lightness, width (cm)</span></div>`},
+  {n: "d", t: `ndarray · shape ${shp("d")}`, line: 5, title: T("مصفوفة", "array"),
+   code: `<span class="v">d</span> = np.linalg.norm(<span class="kA">centres - new</span>, <span class="kB">axis=1</span>)`,
+   lines: [`<span class="kAc">${C("centres - new")}</span> شكلها (2, 2): فرق السمكة عن كل مركز (${T("البثّ", "broadcasting")}).`, `<span class="kBc">${C("axis=1")}</span> يطوي كل صف إلى طوله: رقم لكل مركز.`, `${C("d")} = [3.18, 2.26]. الأصغر في الموقع 1، أي sea bass.`],
+   shape: sh("d.shape → (2,)") + sh(`d → [${D.c12.d.map(v => v.toFixed(6)).join(" ")}]`) + sh("d.argmin() → 1"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => `<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">${matPic(D.c12.diff, {cols: ["Δ lightness", "Δ width"], corner: "centres − new", rl: i => i, f: v => nf(v)})}<span style="color:var(--salmon)">→ norm, axis=1 →</span>${matPic(D.c12.d.map(v => [v.toFixed(2)]), {cols: ["d"], rl: i => i, hit: i => i === 1})}</div>`}],
+ c13: [
+  {n: "to_mm", t: `ndarray · shape ${shp("to_mm")} · int64`, line: 1, title: T("مصفوفة", "array"),
+   code: `<span class="v">to_mm</span> = np.array([<span class="kA">1</span>, <span class="kB">10</span>])`,
+   lines: [`${T("مصفوفة", "array")} فيها عددان صحيحان: رقم لكل خاصية.`, `<span class="kAc">1</span> للإضاءة (لا تتغير)، و<span class="kBc">10</span> للعرض (سم ← مم).`],
+   shape: sh("to_mm.shape → (2,)"), pic: () => `<div class="frame pic"><span class="cap">to_mm</span>${cellsHTML([1, 10], v => v, (v, i) => i ? "hit" : "")}<span class="cap">× lightness, × width</span></div>`},
+  {n: "fish_mm", t: `ndarray · shape ${shp("fish_mm")}`, line: 2, title: T("مصفوفة", "array"),
+   code: `<span class="v">fish_mm</span>, new_mm = <span class="kA">fish</span> * <span class="kB">to_mm</span>, new * to_mm`,
+   lines: [`الشكل نفسه (10, 2): ${T("البثّ", "broadcasting")} طبّق <span class="kBc">to_mm</span> على كل صف من <span class="kAc">fish</span>.`, `عمود الإضاءة كما هو، وعمود العرض × 10.`, `${C("fish")} نفسها لم تتغير: ${C("fish_mm")} مصفوفة جديدة.`],
+   shape: sh("fish_mm.shape → (10, 2)") + sh("fish_mm[0] → [  2.5 160. ]"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => fishRows(FISH.map(r => [r[0], +(r[1] * 10).toFixed(1)]), (i, j) => j === 1 && i < 3)},
+  {n: "new_mm", t: `ndarray · shape ${shp("new_mm")}`, line: 2, title: T("مصفوفة", "array"),
+   code: `fish_mm, <span class="v">new_mm</span> = fish * to_mm, <span class="kA">new * to_mm</span>`,
+   lines: [`السمكة الجديدة نفسها بالمليمتر: [7.0, 180.0].`, `${C("new")} و${C("to_mm")} شكلهما (2,)، فالضرب ${T("عنصر بعنصر", "element-wise")}.`],
+   shape: sh("new_mm → [  7. 180.]"), pic: () => `<div class="frame pic"><span class="cap">new_mm</span>${cellsHTML([7, 180], nf, (v, i) => i ? "hit" : "")}</div>`},
+  {n: "centres_mm", t: `ndarray · shape ${shp("centres_mm")}`, line: 3, title: T("مصفوفة", "array"),
+   code: `<span class="v">centres_mm</span> = np.array([<span class="kA">fish_mm[labels == c].mean(axis=0)</span> for c in (0, 1)])`,
+   lines: [`المركزان بالمليمتر، شكلهما (2, 2).`, `هما مركزا 1.2 مع العرض × 10: (3.88, 173.6) و(5.94, 200.0).`],
+   shape: sh("centres_mm.shape → (2, 2)"), pic: () => matPic(D.c13.centres_mm, {cols: ["lightness", "width (mm)"], rl: i => ["0 salmon", "1 sea bass"][i], f: v => nf(v), cellCls: i => i ? "cA" : "cS"})},
+  {n: "d_mm", t: `ndarray · shape ${shp("d_mm")}`, line: 4, title: T("مصفوفة", "array"),
+   code: `<span class="v">d_mm</span> = np.linalg.norm(centres_mm - new_mm, axis=1)`,
+   lines: [`مسافتان بالمليمتر: [7.12, 20.03].`, `الأصغر صارت في الموقع 0، فالقرار salmon. في 1.2 كان sea bass.`],
+   shape: sh("d_mm.round(2) → [ 7.12 20.03]") + sh("d_mm.argmin() → 0"), pic: () => matPic(D.c13.d_mm.map(v => [v.toFixed(2)]), {cols: ["d_mm"], rl: i => ["0 salmon", "1 sea bass"][i], hit: i => i === 0})},
+  {n: "axs", t: `ndarray · shape (2,) · Axes`, line: 7, title: `${T("مصفوفة", "array")} رسوم`,
+   code: `fig, <span class="v">axs</span> = plt.subplots(<span class="kA">1, 2</span>, figsize=(9, 3.5))`,
+   lines: [`${C("axs")} ${T("مصفوفة", "array")} فيها رسمان ${T("", "Axes")}، لا أرقام.`, `<span class="kAc">صف واحد، رسمان</span>، فالشكل (2,). ${C("axs[0]")} للسنتيمتر، و${C("axs[1]")} للمليمتر.`, `${C("fig")} الشكل كله، من نوع ${C("Figure")}.`],
+   shape: sh("axs.shape → (2,)"), pic: () => `<div class="frame pic"><span class="cap">fig</span><div class="cells"><span class="hit">axs[0] · width (cm)</span><span class="hit">axs[1] · width (mm)</span></div></div>`}],
+ c14: [
+  {n: "z", t: `${VS.z.type} · fitted`, line: 1, title: `أداة ${T("مُدرَّبة", "fitted")}`,
+   code: `<span class="v">z</span> = <span class="kA">StandardScaler()</span>.fit(<span class="kB">fish</span>)`,
+   lines: [`${C("z")} ليست أرقامًا، بل <span class="kAc">أداة</span> من نوع ${C("StandardScaler")}.`, `بعد ${C("fit")} على <span class="kBc">fish</span> تحفظ داخلها ${C("mean_")} و${C("scale_")}، كلٌّ شكله (2,).`, `${C("z.transform(…)")} يستعمل هذه الأرقام على أي سمكة.`],
+   shape: sh(`z.mean_ → [${D.c14.mean.map(nf).join(" ")}]`) + sh(`z.scale_.round(3) → [${D.c14.scale.map(v => v.toFixed(3)).join(" ")}]`) + sh("z.transform([new]).shape → (1, 2)"),
+   pic: () => matPic([D.c14.mean.map(v => v.toFixed(2)), D.c14.scale.map(v => v.toFixed(3))], {cols: ["lightness", "width"], corner: "z", rl: i => ["mean_", "scale_"][i]})},
+  {n: "mm", t: `${VS.mm.type} · fitted`, line: 5, title: `أداة ${T("مُدرَّبة", "fitted")}`,
+   code: `<span class="v">mm</span> = <span class="kA">MinMaxScaler()</span>.fit(fish)`,
+   lines: [`أداة من نوع ${C("MinMaxScaler")}.`, `تحفظ ${C("data_min_")} و${C("data_max_")} لكل خاصية من ${C("fish")}.`, `${C("mm.transform([new])")} = [[0.9 0.4]].`],
+   shape: sh(`mm.data_min_ → [${D.c14.min.map(nf).join(" ")}]`) + sh(`mm.data_max_ → [${D.c14.max.map(nf).join(" ")}]`),
+   pic: () => matPic([D.c14.min.map(nf), D.c14.max.map(nf)], {cols: ["lightness", "width"], corner: "mm", rl: i => ["data_min_", "data_max_"][i]})},
+  {n: "z_mm", t: `${VS.z_mm.type} · fitted`, line: 9, title: `أداة ${T("مُدرَّبة", "fitted")}`,
+   code: `<span class="v">z_mm</span> = StandardScaler().fit(<span class="kA">fish_mm</span>)`,
+   lines: [`أداة ثانية من النوع نفسه، مُدرَّبة على <span class="kAc">fish_mm</span>.`, `متوسط العرض وانحرافه المعياري × 10: 186.8 و16.3756.`, `فالدرجة المعيارية للسمكة الجديدة لم تتغير: [1.367 -0.415].`],
+   shape: sh("z_mm.mean_ → [  4.91 186.8 ]"),
+   pic: () => matPic([D.c14.grid.mm_z.par.a.map(nf), D.c14.grid.mm_z.par.b.map(v => v.toFixed(4))], {cols: ["lightness", "width (mm)"], corner: "z_mm", rl: i => ["mean_", "scale_"][i]})}],
+ c15: [
+  {n: "df", t: `DataFrame · shape ${shp("df")}`, line: 1, title: T("جدول", "DataFrame"),
+   code: `<span class="v">df</span> = pd.DataFrame({\n    <span class="kA">"lightness"</span>: [2.5, 3.0, <span class="dsh">np.nan</span>, 4.5, 6.0, 6.8], …`,
+   lines: [`${T("جدول", "DataFrame")} فيه 6 صفوف و4 أعمدة.`, `كل ${T("مفتاح", "key")} في القاموس صار عمودًا، مثل <span class="kAc">lightness</span>.`, `فيه فجوتان ${C("NaN")} (المحيط المتقطع في الكود): واحدة في الإضاءة، وواحدة في العرض.`],
+   shape: sh("df.shape → (6, 4)"), link: dsl("ds-df", "الجدول", "DataFrame"),
+   pic: () => tablePic(D.c15.df, (i, j) => D.c15.df.rows[i][j] === "NaN")},
+  {n: "filled", t: `DataFrame · shape ${shp("filled")}`, line: 8, title: T("جدول", "DataFrame"),
+   code: `<span class="v">filled</span> = df.fillna(<span class="kA">df.mean(numeric_only=True)</span>)`,
+   lines: [`جدول جديد بالشكل نفسه (6, 4).`, `الفجوتان امتلأتا <span class="kAc">بمتوسط عمودهما</span>: 4.56 و18.16.`, `${C("df")} الأصلي ما زالت فيه الفجوتان.`],
+   shape: sh("filled.isna().sum().sum() → 0"), link: dsl("ds-df", "الجدول", "DataFrame"),
+   pic: () => tablePic(D.c15.filled, (i, j) => D.c15.df.rows[i][j] === "NaN")},
+  {n: "coded", t: `DataFrame · shape ${shp("coded")}`, line: 9, title: T("جدول", "DataFrame"),
+   code: `<span class="v">coded</span> = pd.get_dummies(filled, <span class="kA">columns=["port"]</span>, dtype=int)`,
+   lines: [`6 صفوف و6 أعمدة: <span class="kAc">port</span> اختفى، وجاءت ثلاثة أعمدة 0/1 مكانه.`, `في كل صف 1 واحد فقط بين أعمدة الموانئ.`, `الأعمدة الجديدة في آخر الجدول، بترتيب الحروف: Gaza ثم Khan Younis ثم Rafah.`],
+   shape: sh("coded.shape → (6, 6)"), link: dsl("ds-df", "الجدول", "DataFrame"),
+   pic: () => tablePic(D.c15.coded, (i, j) => j >= 3 && D.c15.coded.rows[i][j] === "1")}],
+ c16: [
+  {n: "X", t: `ndarray · shape ${shp("X_Iris")}`, line: 2, title: T("مصفوفة", "array"),
+   code: `    <span class="v">X</span>, y = <span class="kA">loader()</span>`,
+   lines: [`في كل دورة تأخذ ${C("X")} بيانات جديدة من <span class="kAc">loader()</span>.`, `الدورة 1 (Penguins): ${shp("X_Penguins")}. الدورة 2 (Iris): ${shp("X_Iris")}.`, `بعد الحلقة يبقى آخرها: Iris، 150 زهرة و4 خصائص.`],
+   shape: sh("X.shape → (150, 4)", "بعد الحلقة: Iris"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => `<div class="brk" style="gap:6px"><div style="border-color:var(--cA)">1 · Penguins: X ${shp("X_Penguins")}  y ${shp("y_Penguins")}</div><div style="border-color:var(--cG);font-weight:700">2 · Iris: X ${shp("X_Iris")}  y ${shp("y_Iris")} ← now</div></div>`},
+  {n: "y", t: `ndarray · shape ${shp("y_Iris")}`, line: 2, title: T("مصفوفة", "array"),
+   code: `    X, <span class="v">y</span> = loader()`,
+   lines: [`أرقام الأصناف 0 و1 و2، رقم لكل عيّنة.`, `Penguins: ${D.c16.Penguins.per.join(" و")} من الأنواع الثلاثة. Iris: ${D.c16.Iris.per.join(" و")}.`],
+   shape: sh("y.shape → (150,)", "بعد الحلقة: Iris"), pic: () => `<div class="frame pic"><span class="cap">np.bincount(y) for Penguins</span>${cellsHTML(D.c16.Penguins.per, v => v, () => "hit")}<span class="cap">Adelie, Chinstrap, Gentoo</span></div>`},
+  {n: "Xtr", t: `ndarray · shape ${shp("Xtr_Iris")}`, line: 3, title: T("بيانات التدريب", "training data"),
+   code: `    <span class="v">Xtr</span>, Xte, ytr, yte = train_test_split(X, y, <span class="kA">test_size=0.3</span>, …)`,
+   lines: [`70% من العيّنات، للتدريب فقط.`, `Penguins: ${shp("Xtr_Penguins")}. Iris: ${shp("Xtr_Iris")}.`, `منها نحسب المراكز وأرقام التطبيع.`],
+   shape: sh("Xtr.shape → (105, 4)", "بعد الحلقة: Iris"), pic: () => splitPic("Xtr")},
+  {n: "Xte", t: `ndarray · shape ${shp("Xte_Iris")}`, line: 3, title: T("بيانات الاختبار", "test data"),
+   code: `    Xtr, <span class="v">Xte</span>, ytr, yte = train_test_split(X, y, <span class="kA">test_size=0.3</span>, …)`,
+   lines: [`<span class="kAc">30%</span> من العيّنات، مخبّأة حتى القياس.`, `Penguins: ${shp("Xte_Penguins")}. Iris: ${shp("Xte_Iris")}.`, `${C("ytr")} و${C("yte")} أصنافها، بالترتيب نفسه: ${shp("ytr_Iris")} و${shp("yte_Iris")} لـ Iris.`],
+   shape: sh("Xte.shape → (45, 4)", "بعد الحلقة: Iris"), pic: () => splitPic("Xte")},
+  {n: "raw", t: `${VS.raw.type} · 0.9111…`, line: 4, title: T("الدقة", "accuracy"),
+   code: `    <span class="v">raw</span> = NearestCentroid().fit(Xtr, ytr).<span class="kA">score(Xte, yte)</span>`,
+   lines: [`عدد ${T("عشري", "float")} واحد: ${T("الدقة", "accuracy")} بلا تطبيع.`, `Penguins: ${D.c16.splits.Penguins_0_1.okr.split("1").length - 1} من 103 = 0.631. Iris: ${D.c16.splits.Iris_0_1.okr.split("1").length - 1} من 45 = 0.911.`],
+   shape: sh('f"{raw:.3f}" → 0.911', "بعد الحلقة: Iris"), pic: () => scalarPic("raw", "0.9111111111111111", "Iris · 41 / 45")},
+  {n: "scaled", t: `${VS.scaled.type} · 0.7556…`, line: 5, title: T("الدقة", "accuracy"),
+   code: `    <span class="v">scaled</span> = <span class="kA">make_pipeline(StandardScaler(), NearestCentroid())</span>.fit(Xtr, ytr).score(Xte, yte)`,
+   lines: [`${T("الدقة", "accuracy")} مع الدرجة المعيارية.`, `Penguins: ${D.c16.splits.Penguins_0_1.oks.split("1").length - 1} من 103 = 0.971 (أفضل). Iris: ${D.c16.splits.Iris_0_1.oks.split("1").length - 1} من 45 = 0.756 (أسوأ).`, `التطبيع ليس أفضل دائمًا: قارن على الاختبار.`],
+   shape: sh('f"{scaled:.3f}" → 0.756', "بعد الحلقة: Iris"), pic: () => scalarPic("scaled", "0.7555555555555555", "Iris · 34 / 45")}]
+};
+function tablePic(t, hit) { return matPic(t.rows, {cols: t.cols, corner: "", hit, colCls: j => t.cols[j].startsWith("port_") ? "cA" : ""}); }
+function splitPic(which) {
+ const s = D.c16.splits, P = s.Penguins_0_1, I = s.Iris_0_1, k = which === "Xtr" ? "ctr" : "cte";
+ return `<div class="frame pic"><span class="cap">${which} per class (random_state=0, stratify=y)</span><div class="kv" style="grid-template-columns:auto auto auto auto"><span></span><span class="cap">0</span><span class="cap">1</span><span class="cap">2</span><span class="k">Penguins</span>${P[k].map(v => `<span>${v}</span>`).join("")}<span class="k">Iris</span>${I[k].map(v => `<span class="hit">${v}</span>`).join("")}</div></div>`;
+}
+let VAR = null;
+function buildVars() {
+ $$(".vars[data-cell]").forEach(sec => {
+  const cell = sec.dataset.cell, list = VARS[cell] || [];
+  sec.innerHTML = `<h3>3 · المتغيرات بعد تشغيل الخلية <span class="sub">انقر متغيرًا ${T("", "variable")} لترى شكله تحت الشريط</span></h3>
+   <div class="vchips">${list.map((v, i) => `<button type="button" class="vchip" data-var="${i}" aria-expanded="false" aria-controls="vv-${cell}"><b>${v.n}</b><span>${v.t}</span></button>`).join("")}</div>
+   <div class="varview" id="vv-${cell}" hidden></div>`;
+ });
+}
+function openVar(cell, i, opt = {}) {
+ const v = VARS[cell][i], sec = $(`.vars[data-cell="${cell}"]`), box = $(".varview", sec);
+ if (VAR && VAR.cell === cell && VAR.i === i && !opt.force) { closeVar(); return; }
+ closeVar(true); closeCard(true);
+ box.innerHTML = `<div class="sv" role="region" tabindex="-1" aria-label="${attr("شكل " + v.n)}">
+  <div class="svbar"><button type="button" class="back">→ رجوع إلى الكود (السطر ${v.line})</button><span class="svt"><code>${v.n}</code> · ${v.title}</span><button type="button" class="xbtn" aria-label="إغلاق (Esc)">×</button></div>
+  <div class="svcode">${v.code}</div>
+  <div class="svbody"><div class="svtext"><b>ماذا صنع هذا السطر؟</b><ol>${v.lines.map(l => `<li><span>${ltrShapes(l)}</span></li>`).join("")}</ol>${v.shape}${v.link || ""}</div>
+  <div class="svpic">${v.pic()}</div></div></div>`;
+ box.hidden = false;
+ const chip = $(`.vchip[data-var="${i}"]`, sec); chip.setAttribute("aria-expanded", "true");
+ VAR = {cell, i, chip, line: v.line};
+ setHashQuiet(cell + "--var-" + v.n);
+ if (opt.scroll !== false) { const r = box.getBoundingClientRect(); if (r.bottom > innerHeight) box.scrollIntoView({block: r.height > innerHeight - 100 ? "start" : "nearest", behavior: reduce ? "auto" : "smooth"}); }
+ if (opt.focus) $(".sv", box).focus({preventScroll: true});
+}
+function closeVar(silent, back) {
+ if (!VAR) return;
+ const {cell, chip, line} = VAR, box = $(`#vv-${cell}`);
+ box.hidden = true; box.innerHTML = ""; chip.setAttribute("aria-expanded", "false"); VAR = null;
+ if (silent) return;
+ setHashQuiet(cell);
+ if (back) {
+  const ln = $(`.view[data-view="${cell}"] .ln[data-line="${line}"]`);
+  if (ln) { ln.scrollIntoView({block: "center", behavior: reduce ? "auto" : "smooth"}); flash(ln); const b = $(".tk", ln); (b || chip).focus({preventScroll: true}); }
+ } else chip.focus({preventScroll: true});
+}
+document.addEventListener("click", ev => {
+ const t = ev.target, ch = t.closest(".vchip");
+ if (ch) { openVar(ch.closest(".vars").dataset.cell, +ch.dataset.var); return; }
+ if (VAR && t.closest(".sv .back")) { closeVar(false, true); return; }
+ if (VAR && t.closest(".sv .xbtn")) { closeVar(false, true); return; }
+});
+
+/* ---------- helpers ---------- */
+const NS = "http://www.w3.org/2000/svg";
+function seg(id, cb) {
+ const s = document.getElementById(id);
+ s.addEventListener("click", ev => {
+  const b = ev.target.closest("button"); if (!b) return;
+  $$("button", s).forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+  cb(b.dataset.v);
+ });
+ return () => $("button[aria-pressed=true]", s).dataset.v;
+}
+function setSeg(id, v) { $$(`#${id} button`).forEach(x => x.setAttribute("aria-pressed", x.dataset.v === String(v) ? "true" : "false")); }
+function scale(d0, d1, r0, r1) { return v => r0 + (v - d0) / (d1 - d0) * (r1 - r0); }
+function axes(svg, X, Y, xt, yt, xl, yl, W, H, L, B, fmtY) {
+ let g = "";
+ yt.forEach(v => { g += `<line class="grid" x1="${L}" x2="${W - 10}" y1="${Y(v)}" y2="${Y(v)}"></line><text x="${L - 6}" y="${Y(v) + 4}" text-anchor="end">${fmtY ? fmtY(v) : v}</text>`; });
+ xt.forEach(v => { g += `<line class="axis" x1="${X(v)}" x2="${X(v)}" y1="${H - B}" y2="${H - B + 4}"></line><text x="${X(v)}" y="${H - B + 17}" text-anchor="middle">${v}</text>`; });
+ g += `<line class="axis" x1="${L}" x2="${W - 10}" y1="${H - B}" y2="${H - B}"></line>`;
+ g += `<text x="${(L + W) / 2}" y="${H - 4}" text-anchor="middle">${xl}</text><text x="12" y="${(H - B) / 2}" text-anchor="middle" transform="rotate(-90 12 ${(H - B) / 2})">${yl}</text>`;
+ return g;
+}
+function erf(x) { // Abramowitz-Stegun 7.1.26
+ const s = Math.sign(x); x = Math.abs(x); const t = 1 / (1 + 0.3275911 * x);
+ const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
+ return s * y;
+}
+const pdf = (x, m, s) => Math.exp(-0.5 * ((x - m) / s) ** 2) / (Math.sqrt(2 * Math.PI) * s);
+const cdf = (x, m, s) => 0.5 * (1 + erf((x - m) / (s * Math.SQRT2)));
+const f = (v, n) => v.toFixed(n);
+
+/* ---------- shared 2-D plot: fish, centres, new fish, nearest-mean boundary ---------- */
+const NAMES = ["salmon", "sea bass"];
+function niceStep(r) { const c = [0.1, 0.2, 0.25, 0.5, 1, 2, 5, 10, 20, 25, 50, 100]; return c.find(s => r / s <= 7) || 200; }
+function ticks(a, b) { const s = niceStep(b - a), out = []; for (let v = Math.ceil(a / s - 1e-9) * s; v <= b + 1e-9; v += s) out.push(+v.toFixed(4)); return out; }
+const starPts = (cx, cy, R) => Array.from({length: 10}, (_, i) => { const r = i % 2 ? R * 0.45 : R, t = -Math.PI / 2 + i * Math.PI / 5; return `${f(cx + r * Math.cos(t), 1)},${f(cy + r * Math.sin(t), 1)}`; }).join(" ");
+const xMark = (cx, cy, r, col) => `<path d="M${cx - r},${cy - r} L${cx + r},${cy + r} M${cx - r},${cy + r} L${cx + r},${cy - r}" stroke="var(--fg)" stroke-width="${r * 0.9}" stroke-linecap="round"></path><path d="M${cx - r},${cy - r} L${cx + r},${cy + r} M${cx - r},${cy + r} L${cx + r},${cy - r}" stroke="${col}" stroke-width="${r * 0.55}" stroke-linecap="round"></path>`;
+const COL = ["var(--salmon)", "var(--bass)"];
+function plot2(o) {
+ const W = 560, H = o.H || 300, L = 58, Rr = 14, Tp = 14, B = 38;
+ let [x0, x1] = o.xr, [y0, y1] = o.yr;
+ if (o.eq) {
+  const pw = W - L - Rr, ph = H - B - Tp, k = Math.min(pw / (x1 - x0), ph / (y1 - y0)), cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+  x0 = cx - pw / k / 2; x1 = cx + pw / k / 2; y0 = cy - ph / k / 2; y1 = cy + ph / k / 2;
+ }
+ const X = scale(x0, x1, L, W - Rr), Y = scale(y0, y1, H - B, Tp);
+ const xt = ticks(x0, x1), yt = ticks(y0, y1);
+ let g = axes(null, X, Y, xt, yt, o.xl, o.yl, W, H, L, B, v => +v.toFixed(2));
+ g += `<line class="axis" x1="${L}" x2="${L}" y1="${Tp}" y2="${H - B}"></line>`;
+ if (o.C && o.bound !== false) {                       // boundary: (C1 - C0)·x = (|C1|² - |C0|²)/2
+  const [a, b] = [o.C[1][0] - o.C[0][0], o.C[1][1] - o.C[0][1]], c = (o.C[1][0] ** 2 + o.C[1][1] ** 2 - o.C[0][0] ** 2 - o.C[0][1] ** 2) / 2, P = [];
+  if (Math.abs(b) > 1e-12) [x0, x1].forEach(x => { const y = (c - a * x) / b; if (y >= y0 - 1e-9 && y <= y1 + 1e-9) P.push([x, y]); });
+  if (Math.abs(a) > 1e-12) [y0, y1].forEach(y => { const x = (c - b * y) / a; if (x >= x0 - 1e-9 && x <= x1 + 1e-9) P.push([x, y]); });
+  if (P.length >= 2) g += `<line x1="${f(X(P[0][0]), 1)}" y1="${f(Y(P[0][1]), 1)}" x2="${f(X(P[1][0]), 1)}" y2="${f(Y(P[1][1]), 1)}" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="7 5"></line>`;
+ }
+ g += o.under || "";
+ o.F.forEach((p, i) => {
+  const cx = X(p[0]), cy = Y(p[1]), lab = LBL[i];
+  if (o.ring && o.ring.includes(i)) g += `<circle cx="${f(cx, 1)}" cy="${f(cy, 1)}" r="12" fill="none" stroke="var(--fg)" stroke-width="2"></circle>`;
+  if (o.wrong && o.wrong.includes(i)) g += `<circle cx="${f(cx, 1)}" cy="${f(cy, 1)}" r="13" fill="none" stroke="var(--bad)" stroke-width="2.4" stroke-dasharray="3 3"></circle>`;
+  g += lab ? `<rect x="${f(cx - 6, 1)}" y="${f(cy - 6, 1)}" width="12" height="12" fill="${COL[1]}" opacity=".9"></rect>` : `<circle cx="${f(cx, 1)}" cy="${f(cy, 1)}" r="6.5" fill="${COL[0]}" opacity=".9"></circle>`;
+  if (o.idx) g += `<text x="${f(cx + 9, 1)}" y="${f(cy - 7, 1)}" style="font-size:11px">${i}</text>`;
+ });
+ if (o.C) o.C.forEach((p, i) => { g += xMark(X(p[0]), Y(p[1]), 8, COL[i]); });
+ if (o.q) g += `<polygon points="${starPts(X(o.q[0]), Y(o.q[1]), 12)}" fill="${o.qcol || "var(--surface)"}" stroke="var(--fg)" stroke-width="1.6"></polygon>`;
+ g += o.over || "";
+ g += `<g transform="translate(${L + 8},${Tp + 4})"><circle cx="6" cy="6" r="5" fill="${COL[0]}"></circle><text x="16" y="10">salmon</text><rect x="72" y="1" width="10" height="10" fill="${COL[1]}"></rect><text x="88" y="10">sea bass</text>${o.C ? `<text x="158" y="10">✕ centres</text>` : ""}${o.q ? `<text x="232" y="10">★ new</text>` : ""}</g>`;
+ return {g, X, Y};
+}
+const npv = a => "[" + a.map(v => nf(v)).join(" ") + "]";
+
+/* ---------- setup: what load_penguins returns ---------- */
+(() => {
+ const S = D.setup, box = (t, s, col, bg) => `<figure><div style="border:1.5px solid ${col};background:${bg};border-radius:8px;padding:8px 12px;font-family:var(--f-mono);font-size:13px;color:${col};text-align:center;min-width:92px">${t}</div><figcaption>${s}</figcaption></figure>`;
+ const arr = `<span style="align-self:center;color:var(--pd);font-family:var(--f-mono);font-size:12px">→</span>`;
+ $("#setup-ds").innerHTML = box("penguins.csv", `${S.rows_csv} rows`, "var(--muted)", "var(--sunk)") + arr +
+  box("dropna", `${S.rows} rows × ${S.cols}`, "var(--pd)", "var(--pdbg)") + arr +
+  box(`( X, y, df )`, `X ${shp("Xp")} · y ${shp("yp")} · df ${shp("dfp")}`, "var(--bass)", "var(--basstint)");
+ $("#setup-note").innerHTML = `${C(".map")} حوّل أسماء الأنواع إلى أرقام: <span dir="ltr">${S.per.map((n, i) => `${i} = ${["Adelie", "Chinstrap", "Gentoo"][i]} (${n})`).join(", ")}</span>. أول صف في ${C("X")} هو ${C(npv(S.X0))}، وصنفه ${S.y0}. الخلية تعرّف الدالة فقط، والاستدعاء في 1.6.`;
+})();
+
+/* ---------- 1.1 distances ---------- */
+let pa = 0, pb = 5, mshow = "b", useAbs = 1;
+$("#aseg").innerHTML = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => `<button type="button" aria-pressed="${i === pa}" data-v="${i}">${i}</button>`).join("");
+$("#bseg").innerHTML = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => `<button type="button" aria-pressed="${i === pb}" data-v="${i}">${i}</button>`).join("");
+seg("aseg", v => { pa = +v; draw11(); });
+seg("bseg", v => { pb = +v; draw11(); });
+seg("mseg", v => { mshow = v; draw11(); });
+seg("absseg", v => { useAbs = +v; draw11(); });
+function draw11() {
+ const A = FISH[pa], Bp = FISH[pb], eu = D.pairs.eu[pa][pb], hidden = eu === null;
+ const {g, X, Y} = (() => {
+  let over = "";
+  const P = plot2({F: FISH, xr: [2, 8], yr: [15.5, 21.5], xl: "lightness", yl: "width (cm)", ring: [pa, pb], idx: true});
+  if (!hidden && pa !== pb) {
+   const ax = P.X(A[0]), ay = P.Y(A[1]), bx = P.X(Bp[0]), by = P.Y(Bp[1]);
+   if (mshow !== "e") over += `<path d="M${f(ax, 1)},${f(ay, 1)} H${f(bx, 1)} V${f(by, 1)}" fill="none" stroke="var(--good)" stroke-width="2.6" stroke-dasharray="6 4"></path>` +
+    `<text x="${f((ax + bx) / 2, 1)}" y="${f(ay + (by < ay ? 16 : -8), 1)}" text-anchor="middle" style="fill:var(--good)">|Δ| ${nf(Math.abs(A[0] - Bp[0]).toFixed(1))}</text>` +
+    `<text x="${f(bx + 8, 1)}" y="${f((ay + by) / 2, 1)}" style="fill:var(--good)">|Δ| ${nf(Math.abs(A[1] - Bp[1]).toFixed(1))}</text>`;
+   if (mshow !== "m") over += `<line x1="${f(ax, 1)}" y1="${f(ay, 1)}" x2="${f(bx, 1)}" y2="${f(by, 1)}" stroke="var(--salink)" stroke-width="2.6"></line>`;
+   over += `<text x="${f(ax - 10, 1)}" y="${f(ay + 20, 1)}" text-anchor="middle" style="fill:var(--fg);font-weight:700">a</text><text x="${f(bx - 10, 1)}" y="${f(by - 12, 1)}" text-anchor="middle" style="fill:var(--fg);font-weight:700">b</text>`;
+  }
+  P.g += over; return P;
+ })();
+ $("#c11-svg").innerHTML = g;
+ const out = $("#c11-out"), note = $("#c11-note");
+ if (hidden) { out.textContent = `a = fish[${pa}]   b = fish[${pb}]\nthis pair is Task 1: compute it yourself in the notebook`; note.innerHTML = `هذا الزوج هو Task 1 في الجزء 2، فاللوحة لا تحسبه. اختر زوجًا آخر.`; return; }
+ const dx = +(A[0] - Bp[0]).toFixed(1), dy = +(A[1] - Bp[1]).toFixed(1), ss = +(dx * dx + dy * dy).toFixed(2);
+ let t = `a = fish[${pa}] = ${npv(A)}   b = fish[${pb}] = ${npv(Bp)}\na - b = ${npv([dx, dy])}\n`;
+ if (mshow !== "m") t += `Euclidean: sqrt(${nf(Math.abs(dx))}² + ${nf(Math.abs(dy))}²) = sqrt(${ss}) = ${f(eu, 4)}\n`;
+ if (mshow !== "e") t += useAbs ? `Manhattan: ${nf(Math.abs(dx))} + ${nf(Math.abs(dy))} = ${nf(D.pairs.ma[pa][pb])}` : `np.sum(a - b) = ${nf(dx)} + ${nf(dy)} = ${nf(D.pairs.nos[pa][pb])}   ⚠ not a distance`;
+ out.textContent = t.trimEnd();
+ note.innerHTML = !useAbs && mshow !== "e" ? `<b>بلا ${C("np.abs")}</b> يُجمع الفرقان بإشارتيهما. ${Math.sign(dx) !== Math.sign(dy) && dx && dy ? "هنا إشارتان مختلفتان، فيُلغي بعضهما بعضًا." : "الناتج قد يكون سالبًا، والمسافة لا تكون سالبة."} الكود لا يعطي رسالة خطأ.`
+  : `الخط الأحمر المستقيم هو المسافة الإقليدية <bdi>(Euclidean)</bdi>. الطريق الأخضر المتقطع على المحاور هو مانهاتن <bdi>(Manhattan)</bdi>، وهو دائمًا أطول أو مساوٍ. ${LBL[pa] === LBL[pb] ? "السمكتان من الصنف نفسه." : "السمكتان من صنفين مختلفين."}`;
+}
+
+/* ---------- 1.2 nearest mean ---------- */
+let nx = 7, ny = 18, nax = 1, ax2 = "0";
+$("#c12-x").addEventListener("input", e => { nx = +e.target.value; $("#c12-xv").textContent = f(nx, 1); draw12(); });
+$("#c12-y").addEventListener("input", e => { ny = +e.target.value; $("#c12-yv").textContent = f(ny, 1); draw12(); });
+seg("naxseg", v => { nax = +v; draw12(); });
+seg("axseg", v => { ax2 = v; drawAx(); });
+function draw12() {
+ const Cn = D.c12.centres, q = [nx, ny], d = Cn.map(c => Math.hypot(c[0] - q[0], c[1] - q[1]));
+ const all = Math.hypot(...Cn.flatMap(c => [c[0] - q[0], c[1] - q[1]]));
+ const pick = nax ? (d[0] <= d[1] ? 0 : 1) : 0;
+ const P = plot2({F: FISH, C: Cn, q, qcol: COL[pick], xr: [2, 8], yr: [15.5, 21.5], xl: "lightness", yl: "width (cm)"});
+ let over = "";
+ Cn.forEach((c, i) => { const x1 = P.X(q[0]), y1 = P.Y(q[1]), x2 = P.X(c[0]), y2 = P.Y(c[1]);
+  over += `<line x1="${f(x1, 1)}" y1="${f(y1, 1)}" x2="${f(x2, 1)}" y2="${f(y2, 1)}" stroke="${COL[i]}" stroke-width="${nax && i === pick ? 2.6 : 1.4}" ${nax && i === pick ? "" : 'stroke-dasharray="3 4"'}></line>`;
+  if (nax) over += `<text x="${f((x1 + x2) / 2 + 6, 1)}" y="${f((y1 + y2) / 2 - 6, 1)}" style="fill:${COL[i]};font-weight:700">${f(d[i], 2)}</text>`; });
+ $("#c12-svg").innerHTML = P.g.replace(/(<polygon)/, over + "$1");
+ $("#c12-out").textContent = nax ? `new = ${npv(q)}\ncentres - new = [${Cn.map(c => npv([+(c[0] - q[0]).toFixed(2), +(c[1] - q[1]).toFixed(2)])).join(" ")}]\nd = np.linalg.norm(centres - new, axis=1)\n  → ${npv(d.map(v => +v.toFixed(2)))}\nd.argmin() → ${pick}   names[${pick}] → "${NAMES[pick]}"`
+  : `new = ${npv(q)}\nnp.linalg.norm(centres - new) → ${f(all, 2)}\n  (one number for the whole array)\nd.argmin() → 0   names[0] → "salmon"\n⚠ always salmon`;
+ $("#c12-note") && drawAx();
+}
+function drawAx() {
+ const S = FISH.slice(0, 5), A0 = D.c12.ax0, A1 = D.c12.ax1;
+ let h = `<span></span><span class="rl" style="text-align:center">light.</span><span class="rl" style="text-align:center">width</span><span></span><span class="rl" style="text-align:center">${ax2 === "1" ? "mean" : ""}</span>`;
+ S.forEach((r, i) => { h += `<span class="rl">fish ${i}</span>${r.map(v => `<span class="c">${nf(v)}</span>`).join("")}<span style="color:var(--salmon);text-align:center">${ax2 === "1" ? "→" : ""}</span>` + (ax2 === "1" ? `<span class="c sum">${A1[i]}</span>` : `<span></span>`); });
+ if (ax2 === "0") h += `<span class="rl">mean</span>${A0.map(v => `<span class="c sum">${nf(v)}</span>`).join("")}<span></span><span></span>`;
+ if (ax2 === "n") h += `<span class="rl">mean</span><span class="c sum" style="grid-column:span 2">${D.c12.axn} (one number)</span><span></span><span></span>`;
+ const g = $("#c12-grid"); g.style.gridTemplateColumns = "auto 58px 58px 22px 58px"; g.innerHTML = h;
+ $("#c12-shape").innerHTML = ax2 === "0" ? `(<b>5</b>, 2) → .mean(axis=0) → (2,)` : ax2 === "1" ? `(5, <b>2</b>) → .mean(axis=1) → (5,)` : `(5, 2) → .mean() → one number`;
+ $("#c12-note").innerHTML = ax2 === "0" ? `${C("axis=0")}: ننزل في كل عمود <bdi>(column)</bdi>. رقم لكل خاصية: هذا مركز السلمون (3.88, 17.36). هذا ما نريده.`
+  : ax2 === "1" ? `${C("axis=1")}: نمشي في كل صف <bdi>(row)</bdi>. رقم لكل سمكة: متوسط إضاءة وعرض معًا، ولا معنى له. لا رسالة خطأ.`
+  : `بلا محور <bdi>(axis)</bdi>: كل العشرة أرقام في متوسط واحد. خطأ آخر بلا رسالة.`;
+}
+
+/* ---------- 1.3 units ---------- */
+let unit = "mm", view = "nb";
+seg("useg", v => { unit = v; draw13(); });
+seg("vseg", v => { view = v; draw13(); });
+function draw13() {
+ const mm = unit === "mm", k = mm ? 10 : 1, F = FISH.map(r => [r[0], +(r[1] * k).toFixed(1)]), q = [7, 18 * k];
+ const Cn = mm ? D.c13.centres_mm : D.c12.centres, d = mm ? D.c13.d_mm : D.c12.d, pick = d[0] <= d[1] ? 0 : 1, wrong = mm ? D.c13.wrong_mm : [];
+ const P = plot2({F, C: Cn, q, qcol: COL[pick], xr: [2, 8], yr: [15.5 * k, 21.5 * k], xl: "lightness", yl: `width (${unit})`, eq: view === "eq", wrong});
+ $("#c13-svg").innerHTML = P.g;
+ $("#c13-out").textContent = (mm ? `centres_mm = [${Cn.map(npv).join(" ")}]\nnew_mm = ${npv(q)}\ndistances in mm: ${npv(d.map(v => +v.toFixed(2)))} -> ${NAMES[pick]}`
+  : `centres = [${Cn.map(npv).join(" ")}]\nnew = ${npv(q)}\ndistances: ${npv(d.map(v => +v.toFixed(2)))} -> ${NAMES[pick]}`) +
+  `\ntraining fish on the wrong side: ${wrong.length}${wrong.length ? `\n  fish[${wrong[0]}] = ${npv(FISH[wrong[0]])} cm, a salmon` : ""}`;
+ $("#c13-note").innerHTML = (view === "eq" ? `«ما تراه المسافة»: المحوران بالمقياس نفسه، فالمسافة على الشاشة هي المسافة في الحساب. ` : `مثل رسم الدفتر: كل محور يتمدّد ليملأ الرسم، فتبدو الصورتان متشابهتين. اختر «what the distance sees» لترى الفرق. `) +
+  (mm ? `بالمليمتر صار فرق العرض أكبر بعشر مرات، فالحدّ المتقطع صار شبه أفقي: العرض وحده تقريبًا يقرّر. السمكة الجديدة عبرت إلى جهة السلمون، وسمكة سلمون (الدائرة الحمراء المتقطعة) صارت في الجهة الخطأ.`
+   : `بالسنتيمتر الخاصيتان بمقياس متقارب. السمكة الجديدة في جهة القاروص، وكل سمكات التدريب في جهتها الصحيحة.`);
+}
+
+/* ---------- 1.4 scalers ---------- */
+let meth = "z", u4 = "cm";
+seg("sclseg", v => { meth = v; draw14(); });
+seg("u4seg", v => { u4 = v; draw14(); });
+function draw14() {
+ const G = D.c14.grid[u4 + "_" + meth], F = G.F, xs = F.map(r => r[0]).concat([G.q[0]]), ys = F.map(r => r[1]).concat([G.q[1]]);
+ const pad = (a, b) => { const m = (b - a) * 0.12 || 1; return [a - m, b + m]; };
+ const P = plot2({F, C: G.C, q: G.q, qcol: COL[G.pick], xr: pad(Math.min(...xs), Math.max(...xs)), yr: pad(Math.min(...ys), Math.max(...ys)), eq: true,
+  xl: meth === "none" ? "lightness" : meth === "z" ? "lightness (z)" : "lightness (min-max)", yl: meth === "none" ? `width (${u4})` : meth === "z" ? "width (z)" : "width (min-max)"});
+ $("#c14-svg").innerHTML = P.g;
+ const name = meth === "z" ? "StandardScaler" : "MinMaxScaler", src = u4 === "cm" ? "fish" : "fish_mm", qn = u4 === "cm" ? "new" : "new_mm";
+ let t = "";
+ if (meth === "none") t = `no scaler: ${src} as it is (width in ${u4})\n${qn} = ${npv(G.q)}\n`;
+ else {
+  t = `${name}().fit(${src})\n` + (meth === "z" ? `mean_ = ${npv(G.par.a)}   scale_ = ${npv(G.par.b.map(v => +v.toFixed(3)))}\n` : `data_min_ = ${npv(G.par.a)}   data_max_ = ${npv(G.par.b)}\n`);
+  t += `transform([${qn}]) → [${npv(G.q.map(v => +v.toFixed(3)))}]\n`;
+ }
+ t += `distances to the two centres: ${npv(G.d.map(v => +v.toFixed(2)))} -> ${NAMES[G.pick]}\ntraining errors: ${G.err}`;
+ $("#c14-out").textContent = t;
+ $("#c14-note").innerHTML = (meth === "none" ? (u4 === "mm" ? `بلا تطبيع وبالمليمتر: العرض يسيطر، والقرار salmon، كما في 1.3.` : `بلا تطبيع وبالسنتيمتر: القرار sea bass.`)
+  : `بعد ${C(name)} الخاصيتان بمقياس واحد. القرار sea bass. ${u4 === "mm" ? "وبالمليمتر الصورة نفسها تمامًا كالسنتيمتر." : "بدّل إلى mm لترى أن الصورة لا تتغير."}`) +
+  ` المحوران هنا بالمقياس نفسه، فالمسافة على الشاشة هي مسافة الحساب.`;
+}
+
+/* ---------- 1.5 messy table ---------- */
+let st5 = 3, dt5 = "int";
+seg("stseg", v => { st5 = +v; draw15(); });
+seg("dtseg", v => { dt5 = v; if (st5 !== 3) { st5 = 3; setSeg("stseg", 3); } draw15(); });
+function draw15() {
+ const S = D.c15, nan = (i, j) => S.df.rows[i][j] === "NaN";
+ let t, hit;
+ if (st5 === 0) { t = S.df; hit = nan; }
+ else if (st5 === 1) { t = {cols: S.df.cols, rows: S.isna.map(r => r.map(b => b ? "True" : "False"))}; hit = (i, j) => S.isna[i][j]; }
+ else if (st5 === 2) { t = S.filled; hit = nan; }
+ else { t = dt5 === "int" ? S.coded : S.coded_b; hit = (i, j) => j >= 3 && (t.rows[i][j] === "1" || t.rows[i][j] === "True"); }
+ $("#c15-tab").innerHTML = tablePic(t, hit);
+ const out = st5 === 0 ? `df.shape → (6, 4)` : st5 === 1 ? `df.isna().sum()\n` + Object.entries(S.na).map(([k, v]) => `${k.padEnd(10)} ${v}`).join("\n") + `\ndtype: int64`
+  : st5 === 2 ? `df.mean(numeric_only=True)\n` + Object.entries(S.means).map(([k, v]) => `${k.padEnd(10)} ${v.toFixed(2)}`).join("\n")
+  : `coded.dtypes (port columns): ` + Object.entries(dt5 === "int" ? S.dtypes : S.dtypes_b).filter(([k]) => k.startsWith("port_")).map(([k, v]) => `${k}: ${v}`).join(", ");
+ $("#c15-out").textContent = out;
+ $("#c15-note").innerHTML = [`الجدول كما كتبناه. الخانتان الملوّنتان ${C("NaN")}: قياس ناقص <bdi>(missing value)</bdi>.`,
+  `${C("df.isna()")} قناع <bdi>(mask)</bdi> بالشكل نفسه. ${C(".sum()")} تعدّ True في كل عمود: فجوة واحدة في ${C("lightness")} وواحدة في ${C("width_cm")}.`,
+  `${C("filled")}: كل فجوة أخذت متوسط عمودها (الخانتان الملوّنتان). الأعمدة النصية لم تتغير.`,
+  dt5 === "int" ? `${C("coded")}: عمود ${C("port")} صار ثلاثة أعمدة 0/1، وفي كل صف 1 واحد فقط. هذا الترميز الأحادي <bdi>(one-hot encoding)</bdi>.` : `بلا ${C("dtype=int")} تعطي ${C("get_dummies")} القيم ${C("True")} و${C("False")} من نوع ${C("bool")}. المعنى نفسه، لكن 0/1 أوضح.`][st5];
+}
+
+/* ---------- 1.6 split and accuracy ---------- */
+let ds6 = "Penguins", mo6 = "sc", rs6 = 0, sf6 = 1;
+$("#rsseg").innerHTML = [0, 1, 2, 3, 4].map(i => `<button type="button" aria-pressed="${i === 0}" data-v="${i}">${i}</button>`).join("");
+seg("dsseg", v => { ds6 = v; draw16(); });
+seg("moseg", v => { mo6 = v; draw16(); });
+seg("rsseg", v => { rs6 = +v; draw16(); });
+seg("stfseg", v => { sf6 = +v; draw16(); });
+const CLS = {Penguins: ["Adelie", "Chinstrap", "Gentoo"], Iris: ["setosa", "versicolor", "virginica"]}, CC = ["var(--cA)", "var(--cC)", "var(--cG)"];
+function draw16() {
+ const S = D.c16.splits[`${ds6}_${rs6}_${sf6}`], N = D.c16[ds6], ok = mo6 === "sc" ? S.oks : S.okr, acc = mo6 === "sc" ? S.sc : S.raw, nc = ok.split("1").length - 1;
+ const W = 560, H = 150, L = 110, R = 60, max = Math.max(...N.per), bw = (W - L - R);
+ let g = "";
+ ["train", "test"].forEach((part, r) => {
+  const c = r ? S.cte : S.ctr, n = r ? S.nte : S.ntr, y = 18 + r * 64;
+  g += `<text x="${L - 10}" y="${y + 16}" text-anchor="end" style="fill:var(--fg)">${part} (${n})</text>`;
+  let x = L; c.forEach((v, k) => { const w = v / (S.ntr + S.nte) * bw; g += `<rect x="${f(x, 1)}" y="${y}" width="${f(w, 1)}" height="26" fill="${CC[k]}" opacity="${r ? 1 : 0.55}"></rect>`; if (w > 24) g += `<text x="${f(x + w / 2, 1)}" y="${y + 18}" text-anchor="middle" style="fill:#fff;font-weight:700">${v}</text>`; x += w; });
+  g += `<text x="${f(x + 6, 1)}" y="${y + 18}" style="fill:var(--muted)">${c.map(v => Math.round(v / n * 100) + "%").join(" / ")}</text>`;
+ });
+ g += `<g transform="translate(${L},${H - 12})">${CLS[ds6].map((nm, k) => `<rect x="${k * 150}" y="-10" width="11" height="11" fill="${CC[k]}"></rect><text x="${k * 150 + 16}" y="0">${k} ${nm} (${N.per[k]})</text>`).join("")}</g>`;
+ $("#c16-svg").innerHTML = g;
+ $("#c16-sq").innerHTML = [...ok].map((b, i) => `<span class="sq ${b === "1" ? "ok" : "no"}" title="test sample ${i}: class ${S.yte[i]}, ${b === "1" ? "correct" : "wrong"}"></span>`).join("");
+ $("#c16-sq").setAttribute("aria-label", `${nc} correct of ${S.nte}`);
+ const mdl = mo6 === "sc" ? "make_pipeline(StandardScaler(), NearestCentroid())" : "NearestCentroid()";
+ $("#c16-out").textContent = `train_test_split(X, y, test_size=0.3,\n                 random_state=${rs6}, stratify=${sf6 ? "y" : "None"})\n` +
+  `train: ${S.ntr} samples   test: ${S.nte} samples\n${mdl}\n  .fit(Xtr, ytr).score(Xte, yte)\n` +
+  `correct ${nc} of ${S.nte} → accuracy ${f(acc, 3)}\nerror rate ${f(1 - acc, 3)}` +
+  (rs6 === 0 && sf6 ? `\nthe notebook prints:\n  ${ds6}: raw ${f(S.raw, 3)}   z-score ${f(S.sc, 3)}` : "");
+ $("#c16-note").innerHTML = (sf6 ? `مع ${C("stratify=y")} حصة كل نوع في الاختبار كحصته في كل البيانات، مهما كان ${C("random_state")}. ` : `بلا ${C("stratify")} تتغير حصص الأنواع في الاختبار مع كل ${C("random_state")}. `) +
+  (ds6 === "Penguins" ? `في Penguins التطبيع يرفع الدقة كثيرًا: كتلة الجسم بالغرام تسيطر على المسافة بدونه.` : `في Iris كل الخصائص بالسنتيمتر، والتطبيع قد يخفض الدقة. قارن الزرين، وجرّب ${C("random_state=2")}.`);
+}
+
+/* ---------- index ---------- */
+function buildIndex() {
+ const where = {};
+ $$(".view").forEach(v => $$(".lines .tk", v).forEach(b => { where[b.dataset.k] = where[b.dataset.k] || v.dataset.view; }));
+ const lab = {setup: "الإعداد", c11: "1.1", c12: "1.2", c13: "1.3", c14: "1.4", c15: "1.5", c16: "1.6"};
+ const order = ["py", "np", "pd", "plt", "sk"];
+ const rows = Object.entries(E).sort((x, y) => order.indexOf(x[1].l) - order.indexOf(y[1].l) || (x[1].t === "rev") - (y[1].t === "rev"));
+ $("#glo tbody").innerHTML = rows.map(([k, e]) => `<tr><td class="n">${e.n}</td><td><span class="b ${e.l}">${LIB[e.l]}</span></td><td class="hide-ph"><span class="b ${ST[e.t][0]}">${ST[e.t][1]}</span></td><td>${e.s}</td><td><a href="#${where[k]}--${k}">${lab[where[k]]}</a>${e.t === "rev" && e.w ? ` · <a class="w1" href="${W1}">الأسبوع ${e.w}</a>` : ""}</td></tr>`).join("");
+}
+
+/* ---------- reading-order strip inside a cell ---------- */
+function buildSteps() {
+ $$(".view.cell .steps").forEach(s => {
+  if (!s.children.length) s.innerHTML = `<span class="sl">اقرأ بالترتيب:</span><button type="button" data-step="1"><b>1</b> الصيغة</button><span class="ar">←</span><button type="button" data-step="2" class="on"><b>2</b> الكود سطرًا سطرًا</button><span class="ar">←</span><button type="button" data-step="3"><b>3</b> المتغيرات الناتجة</button><span class="ar">←</span><button type="button" data-step="4"><b>4</b> جرّب</button>`;
+ });
+ document.addEventListener("click", ev => {
+  const b = ev.target.closest(".steps button"); if (!b) return;
+  const view = b.closest(".view"), n = b.dataset.step, el = view.querySelector(`:not(button)[data-step="${n}"]`);
+  $$(".steps button", view).forEach(x => x.classList.toggle("on", x === b));
+  if (!el) return;
+  if (el.tagName === "DETAILS") el.open = true;
+  el.scrollIntoView({block: "start", behavior: reduce ? "auto" : "smooth"});
+ });
+}
+
+/* ---------- views and hash routing ---------- */
+const VIEWS = ["setup", "c11", "c12", "c13", "c14", "c15", "c16", "tasks", "traps", "index"];
+const NAME = {setup: "الإعداد", c11: "1.1 مسافتان", c12: "1.2 أقرب متوسط باليد", c13: "1.3 الوحدة تقرّر", c14: "1.4 التطبيع", c15: "1.5 جدول فيه فجوات", c16: "1.6 بيانات حقيقية", tasks: "مهامك", traps: "الفخاخ", index: "فهرس الأسماء"};
+const SHORT = {setup: "الإعداد", c11: "1.1", c12: "1.2", c13: "1.3", c14: "1.4", c15: "1.5", c16: "1.6", tasks: "مهامك", traps: "الفخاخ", index: "الفهرس"};
+let CUR = null;
+const SEEN = new Set();
+try { JSON.parse(localStorage.getItem("lg2-seen") || "[]").forEach(v => SEEN.add(v)); } catch (e) {}
+function showView(v) {
+ closeCard(true); closeVar(true);
+ $$(".view").forEach(s => s.hidden = s.dataset.view !== v);
+ CUR = v; SEEN.add(v);
+ try { localStorage.setItem("lg2-seen", JSON.stringify([...SEEN])); } catch (e) {}
+ const i = VIEWS.indexOf(v), pv = VIEWS[i - 1], nx = VIEWS[i + 1];
+ $$("#side .nv").forEach(a => { const on = a.dataset.v === v; if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); a.classList.toggle("done", SEEN.has(a.dataset.v) && !on); });
+ const cur = $(`#side .nv[data-v="${v}"]`), side = $("#side");
+ if (cur && side.scrollWidth > side.clientWidth + 2) { const r = cur.getBoundingClientRect(), s = side.getBoundingClientRect(); if (r.left < s.left || r.right > s.right) side.scrollLeft += (r.left + r.width / 2) - (s.left + s.width / 2); }
+ $("#tbcount").textContent = i <= 6 ? `الخلية ${i + 1} من 7` : `${NAME[v]} · بعد الخلايا`;
+ const pct = Math.round((i + 1) / VIEWS.length * 100);
+ $("#tbbar i").style.width = pct + "%"; $("#tbbar").setAttribute("aria-valuenow", pct);
+ const P = $("#tbprev"), N = $("#tbnext");
+ if (pv) { P.href = "#" + pv; P.textContent = `→ ${SHORT[pv]} السابق`; P.removeAttribute("aria-disabled"); P.removeAttribute("tabindex"); } else { P.href = "#" + v; P.textContent = "→ السابق"; P.setAttribute("aria-disabled", "true"); P.tabIndex = -1; }
+ if (nx) { N.href = "#" + nx; N.textContent = `التالي ${SHORT[nx]} ←`; N.removeAttribute("aria-disabled"); N.removeAttribute("tabindex"); } else { N.href = "#" + v; N.textContent = "التالي ←"; N.setAttribute("aria-disabled", "true"); N.tabIndex = -1; }
+ const pn = $(`.view[data-view="${v}"] .pn`);
+ if (pn) pn.innerHTML = (pv ? `<a href="#${pv}">→ السابق: ${NAME[pv]}</a>` : "") + (nx ? `<a class="primary" href="#${nx}">التالي: ${NAME[nx]} ←</a>` : `<a class="primary" href="#setup">إلى البداية: الإعداد ←</a>`);
+ $$(`.view[data-view="${v}"] .steps button`).forEach(b => b.classList.toggle("on", b.dataset.step === "2"));
+ document.title = `Lab 2 Code Guide · ${SHORT[v]}`;
+}
+function openSub(v, sub) {
+ const view = $(`.view[data-view="${v}"]`);
+ if (E[sub]) { const b = $(`.lines .tk[data-k="${sub}"]`, view); if (b) { openCard(b, {force: true, focus: true, center: true}); return; } }
+ if (sub.startsWith("var-")) { const i = (VARS[v] || []).findIndex(x => x.n === sub.slice(4)); if (i >= 0) { openVar(v, i, {force: true, focus: true}); $(`.vars[data-cell="${v}"]`).scrollIntoView({block: "start"}); } return; }
+ const el = document.getElementById(sub);
+ if (el && view.contains(el)) { if (el.tagName === "DETAILS") el.open = true; el.scrollIntoView({block: "center", behavior: reduce ? "auto" : "smooth"}); flash(el); }
+}
+function route() {
+ let h = ""; try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) { h = location.hash.slice(1); }
+ let [v, sub] = h.split("--");
+ if (!VIEWS.includes(v)) { v = "setup"; sub = ""; }
+ const changed = v !== CUR;
+ if (changed) showView(v);
+ if (sub) requestAnimationFrame(() => openSub(v, sub));
+ else if (changed) scrollTo(0, 0);
+}
+addEventListener("hashchange", route);
+document.addEventListener("click", ev => {
+ const a = ev.target.closest('a[href^="#"]'); if (!a || ev.ctrlKey || ev.metaKey || ev.shiftKey) return;
+ const h = a.getAttribute("href"); if (!h || h === "#") return;
+ ev.preventDefault();
+ if (location.hash === h) route(); else location.hash = h;
+});
+document.addEventListener("keydown", ev => {
+ if (ev.key !== "Escape") return;
+ if (CARD) { ev.preventDefault(); closeCard(); } else if (VAR) { ev.preventDefault(); closeVar(false, true); }
+});
+
+/* ---------- theme and start ---------- */
+(() => {
+ const root = document.documentElement;
+ const apply = v => { if (v === "auto") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", v); setSeg("themeseg", v); };
+ let saved = "auto"; try { saved = localStorage.getItem("lg-theme") || "auto"; } catch (e) {}
+ apply(saved);
+ seg("themeseg", v => { apply(v); try { localStorage.setItem("lg-theme", v); } catch (e) {} });
+})();
+renderCode(); buildSteps(); buildVars(); buildIndex();
+draw11(); draw12(); draw13(); draw14(); draw15(); draw16();
+route();
+</script>
+</body></html>

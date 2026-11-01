@@ -1,0 +1,1725 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Lab 1 Code Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700&family=Fira+Sans:wght@400;600;700&family=Literata:opsz,wght@7..72,600;7..72,700&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>
+/* Layout: one notebook cell per view (hash route). Top bar with progress, side navigation (stacks above on phones),
+   and inside a cell a fixed reading order: 1 formula, 2 code line by line (the explanation card opens under its line,
+   with the live panel inside it), 3 the variables the cell makes (structure view opens inline), 4 try in the notebook. */
+:root{
+ --bg:#F5F7FA;--surface:#FFFFFF;--sunk:#EEF1F5;--fg:#14233B;--muted:#566173;--line:#DDE3EA;
+ --bass:#1D5C8C;--onbass:#FFFFFF;--basstint:#E6EEF6;--salmon:#E4734F;--salink:#B4472A;--saltint:#FBE9E3;
+ --sand:#F3E3B5;--sandfg:#6E5310;--sandline:#F3E3B5;--good:#28724F;--goodbg:#E3F4EA;--greentint:#E6F3EC;
+ --bad:#B3261E;--badbg:#FBE9E7;--warn:#9A5B00;--warnbg:#FFF4E0;--faint:#A3ADB8;
+ --py:#6A3FB0;--pybg:#F0EAFB;--np:#0D7377;--npbg:#E0F2F2;--pd:#A3346E;--pdbg:#F8E6EF;--plt:#A85A12;--pltbg:#FBEEDF;--sp:#2E6B30;--spbg:#E6F2E6;--sk:#2456A6;--skbg:#E5EDFA;
+ --codebg:#14233B;--codefg:#E6EBF3;--codecm:#8EA0B8;--codeno:#627083;--codeline:#263347;--codehead:#D5DDE8;--tk:#F3E3B5;
+ --hkw:#D7A6F5;--hco:#7FB8F0;--hst:#F2A98A;--hnu:#C7E3A8;--hfn:#F3E3A0;--hmo:#6FD8C8;--hva:#B9DBF7;--hka:#F0C48A;
+ --kA:#9CC3E6;--kAbg:rgba(116,174,224,.25);--kAu:#74AEE0;--kB:#A8E0C0;--kBbg:rgba(99,192,143,.25);--kCu:#F08A6A;
+ --cA:#D8742B;--cC:#2E8B57;--cG:#2F6FB0;--dv:#6B3FB8;--dvbg:#F4EFFC;
+ --f-body:"Fira Sans","Cairo","Tajawal","Noto Sans Arabic",Tahoma,sans-serif;
+ --f-ar:"Cairo","Tajawal","Noto Sans Arabic",Tahoma,sans-serif;
+ --f-disp:"Literata","Cairo","Tajawal",Georgia,serif;
+ --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+ --bg:#0F141C;--surface:#161D29;--sunk:#1C2433;--fg:#E6EAF1;--muted:#9AA4B6;--line:#2A3344;
+ --bass:#79B3E3;--onbass:#0F141C;--basstint:#1B2C40;--salmon:#F29A7B;--salink:#F29A7B;--saltint:#3A221A;
+ --sand:#4A3F22;--sandfg:#F0D58C;--sandline:#8A7434;--good:#7FD3A6;--goodbg:#163225;--greentint:#16301F;
+ --bad:#F2A097;--badbg:#3A1B19;--warn:#F2C17A;--warnbg:#3A2A12;--faint:#5E6A7E;
+ --py:#C3A6F2;--pybg:#2A2140;--np:#6FD0D3;--npbg:#133233;--pd:#F09AC6;--pdbg:#3A1C2C;--plt:#F2B36E;--pltbg:#3A2914;--sp:#93D195;--spbg:#1A3019;--sk:#8DB4F0;--skbg:#17263F;
+ --codebg:#0A0F16;--codefg:#E6EBF3;--codecm:#7F90A8;--codeno:#56647A;--codeline:#1E2838;--codehead:#C9D2DF;--tk:#4A3F22;
+ --kA:#9CC3E6;--kAbg:rgba(116,174,224,.22);--kAu:#74AEE0;--kB:#A8E0C0;--kBbg:rgba(99,192,143,.22);--kCu:#F08A6A;
+ --cA:#F0A066;--cC:#6FCF97;--cG:#7DB1EA;--dv:#C3A6F2;--dvbg:#221B33;color-scheme:dark}}
+:root[data-theme="dark"]{
+ --bg:#0F141C;--surface:#161D29;--sunk:#1C2433;--fg:#E6EAF1;--muted:#9AA4B6;--line:#2A3344;
+ --bass:#79B3E3;--onbass:#0F141C;--basstint:#1B2C40;--salmon:#F29A7B;--salink:#F29A7B;--saltint:#3A221A;
+ --sand:#4A3F22;--sandfg:#F0D58C;--sandline:#8A7434;--good:#7FD3A6;--goodbg:#163225;--greentint:#16301F;
+ --bad:#F2A097;--badbg:#3A1B19;--warn:#F2C17A;--warnbg:#3A2A12;--faint:#5E6A7E;
+ --py:#C3A6F2;--pybg:#2A2140;--np:#6FD0D3;--npbg:#133233;--pd:#F09AC6;--pdbg:#3A1C2C;--plt:#F2B36E;--pltbg:#3A2914;--sp:#93D195;--spbg:#1A3019;--sk:#8DB4F0;--skbg:#17263F;
+ --codebg:#0A0F16;--codefg:#E6EBF3;--codecm:#7F90A8;--codeno:#56647A;--codeline:#1E2838;--codehead:#C9D2DF;--tk:#4A3F22;
+ --kA:#9CC3E6;--kAbg:rgba(116,174,224,.22);--kAu:#74AEE0;--kB:#A8E0C0;--kBbg:rgba(99,192,143,.22);--kCu:#F08A6A;
+ --cA:#F0A066;--cC:#6FCF97;--cG:#7DB1EA;--dv:#C3A6F2;--dvbg:#221B33;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-padding-top:90px}
+body{background:var(--bg);color:var(--fg);margin:0;font-family:var(--f-body);font-size:17px;line-height:1.85;overflow-x:hidden}
+.app{direction:rtl;text-align:right;min-height:100vh}
+h1{font-family:var(--f-disp);font-size:clamp(26px,4.4vw,34px);line-height:1.4;margin:0;text-wrap:balance}
+h2{font-family:var(--f-disp);font-size:clamp(21px,3vw,25px);line-height:1.45;margin:0;text-wrap:balance}
+h3{font-size:18px;margin:0;line-height:1.6}
+h1 bdi,h2 bdi{font-family:var(--f-body);font-weight:600;color:var(--muted);font-size:.7em}
+p{margin:0}
+a{color:var(--bass)}
+.lead{color:var(--muted);max-width:70ch}
+code,.mono{font-family:var(--f-mono);font-size:.86em;direction:ltr;unicode-bidi:isolate}
+.mono{display:inline-block}
+code{background:var(--sunk);border-radius:5px;padding:1px 5px;overflow-wrap:anywhere}
+bdi{unicode-bidi:isolate}
+:focus-visible{outline:2px solid var(--salmon);outline-offset:2px}
+.sub{font-weight:400;color:var(--muted);font-size:14px}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;background:var(--surface);border-bottom:1px solid var(--line);
+ padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
+.tb-title{display:flex;flex-direction:column;flex:1 1 220px;min-width:0}
+.tb-eyebrow{font-size:13px;font-weight:600;color:var(--muted);direction:ltr;text-align:right}
+.tb-name{font-family:var(--f-disp);font-size:22px;font-weight:700;line-height:1.4}
+.tb-prog{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+.bar{width:160px;height:8px;border-radius:999px;background:var(--line);overflow:hidden;display:flex}
+.bar i{display:block;height:100%;background:var(--bass);width:0;transition:width .3s}
+.tb-nav{display:flex;gap:8px;flex-wrap:wrap}
+.navbtn{min-height:44px;border-radius:999px;padding:8px 16px;font-weight:600;font-size:15px;border:1px solid var(--line);background:var(--surface);color:var(--fg);text-decoration:none;display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-family:inherit}
+.navbtn:hover{border-color:var(--fg)}
+.navbtn.primary{background:var(--bass);border-color:var(--bass);color:var(--onbass)}
+.navbtn[aria-disabled="true"]{opacity:.4;pointer-events:none}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;direction:ltr}
+.seg button{font-family:var(--f-mono);font-size:13px;background:var(--surface);color:var(--fg);border:0;border-inline-start:1px solid var(--line);padding:5px 9px;cursor:pointer;min-width:30px;min-height:40px}
+.seg button:first-child{border-inline-start:0}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--surface)}
+.seg button:focus-visible{outline:2px solid var(--salmon);outline-offset:-2px}
+#themeseg button{font-family:var(--f-body)}
+@media (max-width:860px){.topbar{position:static}.tb-name{font-size:19px}.bar{width:110px}}
+
+/* ---------- shell and side navigation ---------- */
+.shell{display:flex;gap:28px;align-items:flex-start;max-width:1400px;margin:0 auto;
+ padding:24px max(16px,env(safe-area-inset-right,0px)) 80px max(16px,env(safe-area-inset-left,0px))}
+.side{flex:0 0 250px;position:sticky;top:92px;display:flex;flex-direction:column;gap:3px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+.side .sh{font-size:13px;font-weight:700;color:var(--muted);padding:0 8px 4px}
+.nv{text-decoration:none;color:var(--fg);display:flex;gap:10px;align-items:center;padding:7px 10px;border-radius:8px;font-size:15px;min-height:40px;line-height:1.5}
+.nv:hover{background:var(--sunk)}
+.nv .nk{font-family:var(--f-mono);font-size:13px;color:var(--muted);min-width:46px;direction:ltr;text-align:right;white-space:nowrap}
+.nv.done{color:var(--muted)}
+.nv.done .nk{color:var(--good)}
+.nv.done .nk::before{content:"✓ "}
+.nv[aria-current="page"]{background:var(--basstint);color:var(--fg);font-weight:700}
+.nv[aria-current="page"] .nk{color:var(--bass)}
+.nv[aria-current="page"] .nk::before{content:"● "}
+.nv .nk.tr{color:var(--salink)}
+.side .sep{height:1px;background:var(--line);margin:6px 0}
+.side .scope{margin:8px 6px 2px;font-size:13px}
+main{flex:1 1 0;min-width:0}
+@media (max-width:860px){
+ .shell{flex-direction:column;gap:14px;padding-top:14px}
+ .side{position:static;flex:none;width:100%;flex-direction:row;overflow-x:auto;gap:6px;padding:8px;scrollbar-width:thin}
+ .side .sh,.side .sep,.side .scope{display:none}
+ .nv{flex:none;white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+ .nv .nk{min-width:0}
+}
+
+/* ---------- a view ---------- */
+.view{display:grid;gap:20px;min-width:0}
+.cellhead{display:grid;gap:6px}
+.cellno{font-family:var(--f-mono);font-size:14px;font-weight:700;color:var(--muted);direction:ltr;text-align:right}
+.goal{max-width:72ch;font-size:17.5px}
+.goal b{color:var(--bass)}
+.scope{display:inline-flex;gap:8px;align-items:center;background:var(--sand);color:var(--sandfg);border-radius:8px;padding:4px 12px;font-size:15px;font-weight:600;width:fit-content}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:14px}
+.intro{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 18px;display:grid;gap:10px}
+.steps{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0;padding:0;list-style:none}
+.steps .sl{font-size:14px;font-weight:700;color:var(--muted)}
+.steps .ar{color:var(--faint)}
+.steps button{display:inline-flex;gap:8px;align-items:center;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:15px;font-family:inherit;cursor:pointer;min-height:40px}
+.steps button b{color:var(--bass)}
+.steps button.on{background:var(--fg);color:var(--surface);border-color:var(--fg)}
+.steps button.on b{color:var(--surface)}
+.blk{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 18px}
+details.blk>summary{cursor:pointer;font-weight:700;line-height:1.8;min-height:40px;display:list-item;padding-top:4px}
+summary::marker{color:var(--salmon)}
+.b{display:inline-flex;align-items:center;font-family:var(--f-mono);font-size:12px;font-weight:700;line-height:1;border-radius:5px;padding:4px 7px;white-space:nowrap;direction:ltr}
+.b.py{color:var(--py);background:var(--pybg)}.b.np{color:var(--np);background:var(--npbg)}.b.pd{color:var(--pd);background:var(--pdbg)}
+.b.plt{color:var(--plt);background:var(--pltbg)}.b.sp{color:var(--sp);background:var(--spbg)}.b.sk{color:var(--sk);background:var(--skbg)}
+.b.new{color:var(--surface);background:var(--fg)}.b.rev{color:var(--muted);background:var(--sunk)}.b.trap{color:var(--warn);background:var(--warnbg)}
+a.b{text-decoration:none;min-height:32px;padding:6px 10px}
+a.b:hover{outline:1px solid currentColor}
+.formula{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:center;margin-top:10px}
+.formula .side2{display:grid;gap:2px;min-width:0}
+.formula .lab{font-size:13px;font-weight:700;color:var(--muted)}
+.formula .math{font-family:var(--f-disp);font-size:19px;line-height:1.9;direction:ltr;text-align:center;overflow-x:auto}
+.formula .py{font-family:var(--f-mono);font-size:15px;line-height:2.4;direction:ltr;text-align:center;overflow-x:auto;color:var(--bass)}
+.formula .eq{font-size:22px;color:var(--muted)}
+@media (max-width:640px){.formula{grid-template-columns:1fr}.formula .eq{text-align:center;transform:rotate(90deg)}}
+.pn{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:8px}
+.pn a{text-decoration:none;font-weight:600;color:var(--fg);border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 18px;min-height:44px;display:inline-flex;align-items:center}
+.pn a.primary{color:var(--onbass);background:var(--bass);border-color:var(--bass);margin-inline-start:auto}
+
+/* ---------- code, line by line ---------- */
+.codebox{background:var(--codebg);color:var(--codefg);border-radius:12px;overflow:hidden;min-width:0}
+.codehead{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px 14px;padding:10px 18px;border-bottom:1px solid var(--codeline);color:var(--codehead);font-size:14px;font-weight:700}
+.codehead .src{font-family:var(--f-mono);font-size:12px;font-weight:400;color:#9AA6B8;direction:ltr}
+.lines{direction:ltr;text-align:left;overflow-x:auto;padding:10px 0 12px;font-family:var(--f-mono);font-size:14.5px;line-height:2}
+.lines-in{min-width:100%;width:max-content}
+.ln{display:flex;gap:14px;padding:0 18px 0 10px;white-space:pre;border-left:3px solid transparent}
+.ln .no{color:var(--codeno);width:22px;text-align:right;flex:none;user-select:none;-webkit-user-select:none}
+.ln.cur{background:rgba(243,227,181,.08);border-left-color:var(--sandline)}
+.ln.flash{animation:lnflash 1.8s ease-out}
+@keyframes lnflash{0%,40%{background:rgba(243,227,181,.28)}100%{background:transparent}}
+.lines .hl-cm{color:var(--codecm);font-style:italic}.lines .hl-kw{color:var(--hkw)}.lines .hl-co{color:var(--hco)}.lines .hl-st{color:var(--hst)}
+.lines .hl-nu{color:var(--hnu)}.lines .hl-fn,.lines .hl-bi{color:var(--hfn)}.lines .hl-mo{color:var(--hmo)}.lines .hl-va,.lines .hl-at{color:var(--hva)}
+.lines .hl-kwarg{color:var(--hka)}.lines .hl-op{color:var(--codefg)}.lines .hl-br{color:var(--hco)}.lines .hl-fmt{color:var(--hnu)}
+.tk{font:inherit;color:inherit;background:transparent;border:0;border-bottom:2px dotted var(--codecm);padding:0 1px;margin:0;cursor:pointer;border-radius:3px;line-height:inherit;white-space:pre}
+.tk:hover{background:rgba(243,227,181,.16)}
+.tk:focus-visible{outline:2px solid var(--sand);outline-offset:1px}
+.tk.on{background:var(--tk);color:var(--sandfg);border-bottom-color:transparent}
+.tk.on span{color:inherit;font-style:normal}
+pre.code{display:none}
+
+/* ---------- explanation card under its line ---------- */
+.card{position:sticky;left:0;padding:8px 12px 12px;white-space:normal;font-family:var(--f-body)}
+.card-in{direction:rtl;text-align:right;background:var(--surface);color:var(--fg);border-radius:12px;border-top:4px solid var(--sandline);position:relative;padding:14px 18px 14px;display:grid;gap:12px;font-size:16.5px;line-height:1.85;box-shadow:0 6px 24px rgba(10,15,22,.25)}
+.caret{position:absolute;top:-14px;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:10px solid var(--sandline);transform:translateX(-50%)}
+.ctop{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ctop .name{font-family:var(--f-mono);font-size:16px;font-weight:700;direction:ltr;unicode-bidi:isolate;overflow-wrap:anywhere}
+.ctop .one{font-size:15.5px;color:var(--muted)}
+.xbtn{margin-inline-start:auto;width:44px;height:44px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:22px;line-height:1;cursor:pointer;font-family:var(--f-body)}
+.xbtn:hover{color:var(--fg);border-color:var(--fg)}
+.cbody{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+.ctext{flex:1 1 280px;min-width:0;display:grid;gap:10px}
+.ctext ul{margin:0;padding-inline-start:20px}
+.cside{flex:1.2 1 340px;min-width:0}
+.cside .panel{background:var(--bg)}
+.args{display:grid;gap:6px}
+.arg{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;align-items:baseline;border-top:1px dashed var(--line);padding-top:6px;font-size:15.5px}
+.arg code{font-weight:700;color:var(--np);background:var(--npbg)}
+.trapbox{background:var(--warnbg);color:var(--fg);border-radius:8px;padding:8px 12px;font-size:15.5px}
+.trapbox b{color:var(--warn)}
+.cfoot{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+.cfoot button{font-family:var(--f-mono);font-size:13px;color:var(--bass);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 12px;direction:ltr;cursor:pointer;min-height:40px}
+.cfoot button:hover{border-color:var(--bass)}
+.cfoot .cnt{margin-inline-start:auto}
+@media (max-width:640px){.card{padding:8px 6px 12px}.card-in{padding:12px 12px}}
+
+/* ---------- live panels ---------- */
+.rest{min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:12px;min-width:0}
+.panel .ptitle{font-size:14px;font-weight:700;color:var(--muted)}
+.ctrls{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.ctrl{direction:ltr;display:flex;gap:6px;align-items:center;flex-wrap:wrap;border-radius:8px;padding:2px 4px;transition:box-shadow .3s}
+.ctrl.flash,.dice.flash,.ds.flash{box-shadow:0 0 0 3px var(--salmon)}
+.ctrl label{font-family:var(--f-mono);font-size:13px;direction:ltr}
+input[type=range]{accent-color:var(--bass);width:150px;max-width:100%;min-height:32px}
+.out{font-family:var(--f-mono);font-size:13.5px;direction:ltr;text-align:left;background:var(--sunk);border-radius:8px;padding:8px 12px;white-space:pre;overflow-x:auto;line-height:1.7}
+svg{direction:ltr;display:block;width:100%;height:auto;max-width:100%}
+svg text{font-family:var(--f-mono);font-size:12px;fill:var(--muted)}
+svg .axis{stroke:var(--muted);stroke-width:1}
+svg .grid{stroke:var(--line);stroke-width:1}
+.note{font-size:15px;color:var(--muted)}
+.dice{display:flex;flex-wrap:wrap;gap:6px;direction:ltr;border-radius:8px;transition:box-shadow .3s}
+.die{width:34px;height:34px;border-radius:7px;border:1.5px solid var(--line);display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;background:var(--surface)}
+.die.six{background:var(--salmon);color:var(--surface);border-color:var(--salmon)}
+.chips{display:flex;gap:4px;direction:ltr;flex-wrap:wrap}
+.chip{font-family:var(--f-mono);font-size:13px;border-radius:6px;padding:2px 8px;background:var(--npbg);color:var(--np)}
+.chip.x{background:var(--badbg);color:var(--bad);text-decoration:line-through}
+table.t{border-collapse:collapse;font-family:var(--f-mono);font-size:14px;direction:ltr;margin:0 auto}
+table.t th,table.t td{border:1px solid var(--line);padding:4px 12px;text-align:center}
+table.t th{background:var(--sunk);font-weight:600}
+table.t td.hrow{background:color-mix(in srgb,var(--bass) 14%,transparent)}
+table.t td.hcol{background:color-mix(in srgb,var(--salmon) 18%,transparent)}
+table.t td.hit{background:var(--sand);color:var(--sandfg);font-weight:700}
+table.t td.marg,table.t th.marg{color:var(--muted)}
+.tw{overflow-x:auto;max-width:100%}
+.grid3{display:grid;grid-template-columns:auto repeat(3,52px) 16px 52px;gap:4px;direction:ltr;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:13px}
+.grid3 .c{height:30px;border-radius:5px;display:grid;place-items:center;background:var(--sunk)}
+.grid3 .c.T{background:color-mix(in srgb,var(--bass) 80%,transparent);color:#fff}
+.grid3 .c.F{background:color-mix(in srgb,var(--salmon) 25%,transparent)}
+.grid3 .c.sum{background:var(--sand);color:var(--sandfg);font-weight:700}
+.grid3 .rl{color:var(--muted);padding-right:6px}
+.shape{font-family:var(--f-mono);direction:ltr;text-align:center;font-size:14px}
+.shape b{color:var(--salink)}
+.ds{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;justify-content:center;direction:ltr;border-radius:8px}
+.ds figure{margin:0;display:grid;gap:4px;justify-items:center}
+.ds figcaption{font-size:12px;color:var(--muted);font-family:var(--f-mono)}
+
+/* ---------- variables strip and structure view ---------- */
+.vars{display:grid;gap:10px}
+.vars>h3{font-size:17px}
+.vchips{display:flex;flex-wrap:wrap;gap:10px;direction:ltr}
+.vchip{text-align:left;color:var(--fg);display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:7px 14px;min-width:140px;min-height:44px;cursor:pointer;font-family:inherit}
+.vchip b{font-family:var(--f-mono);font-size:15px}
+.vchip span{font-size:13px;color:var(--muted);font-family:var(--f-mono)}
+.vchip:hover{border-color:var(--bass)}
+.vchip[aria-expanded="true"]{border:2px solid var(--bass);background:var(--basstint);padding:6px 13px}
+.sv{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface);display:grid}
+.svbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--bg)}
+.svbar .back{font-family:inherit;font-weight:600;font-size:15px;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 14px;min-height:44px;cursor:pointer}
+.svbar .back:hover{border-color:var(--fg)}
+.svbar .svt{font-weight:700}
+.svcode{background:var(--codebg);color:var(--codefg);direction:ltr;text-align:left;font-family:var(--f-mono);font-size:14.5px;line-height:2;padding:10px 18px;overflow-x:auto;white-space:pre}
+.svcode .v{background:var(--tk);color:var(--sandfg);border-radius:4px;padding:0 4px;font-weight:700}
+.svcode .kA{background:var(--kAbg);color:var(--kA);border-radius:4px;padding:0 4px}
+.svcode .kB{background:var(--kBbg);color:var(--kB);border-radius:4px;padding:0 4px}
+.svcode .uA{border-bottom:2px solid var(--kAu)}
+.svcode .uC{border-bottom:2px solid var(--kCu)}
+.svcode .dsh{border:1.5px dashed var(--faint);border-radius:4px;padding:0 4px}
+.svcode .cm{color:var(--codecm);font-style:italic}
+.svbody{display:flex;flex-wrap:wrap;gap:24px;padding:18px 20px;align-items:flex-start}
+.svtext{flex:1 1 320px;min-width:0;display:grid;gap:10px}
+.svtext ol{list-style:none;margin:0;padding:0;display:grid;gap:8px;counter-reset:n}
+.svtext li{display:flex;gap:10px;align-items:baseline;counter-increment:n}
+.svtext li::before{content:counter(n);font-family:var(--f-mono);font-size:13px;font-weight:700;color:var(--surface);background:var(--fg);border-radius:50%;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.svtext .shp{background:var(--basstint);border-radius:10px;padding:8px 14px;font-family:var(--f-mono);font-size:14px;direction:ltr;text-align:left;overflow-wrap:anywhere}
+.svtext .shp span{font-family:var(--f-ar);font-size:14px;color:var(--muted);unicode-bidi:isolate;direction:rtl;display:inline-block;margin-left:10px}
+.svtext .dslink{font-size:15px;display:block}
+.card-in:focus,.sv:focus{outline:none}
+
+.svpic{flex:1 1 380px;min-width:0;display:flex;justify-content:center;direction:ltr}
+.frame{border:2px solid var(--sandline);border-radius:10px;overflow:hidden;font-family:var(--f-mono);font-size:14px;max-width:100%}
+.fr-wrap{overflow-x:auto;max-width:100%}
+.kAc{color:var(--bass);font-weight:700}.kBc{color:var(--good);font-weight:700}.kCc{color:var(--salink);font-weight:700}
+.dtab{border-collapse:collapse;font-family:var(--f-mono);font-size:13.5px}
+.dtab th,.dtab td{padding:4px 9px;text-align:left;border-top:1px solid var(--line);white-space:nowrap}
+.dtab thead th{background:var(--bg);font-weight:700;border-top:0}
+.dtab .ix{color:var(--muted)}
+.dtab .cA{background:var(--basstint);color:var(--bass)}
+.dtab .cB{background:var(--greentint);color:var(--good)}
+.dtab td.hit{background:var(--sand);color:var(--sandfg);font-weight:700}
+.dtab .gap td,.dtab .gap th{color:var(--muted)}
+.dtab tr.cut td,.dtab tr.cut th{border-top:2px solid var(--fg)}
+.dtab .dm{color:var(--muted)}
+.dtab .mg{color:var(--muted)}
+.dtab .dl{border-left:1.5px dashed var(--faint)}
+.dtab tr.dt td,.dtab tr.dt th{border-top:1.5px dashed var(--faint)}
+.brk{display:flex;flex-direction:column;font-family:var(--f-mono);font-size:13px}
+.brk div{border-left:3px solid;padding-left:8px;display:flex;align-items:center}
+.cells{display:flex;flex-wrap:wrap;gap:3px;font-family:var(--f-mono);font-size:13px;align-items:center}
+.cells span{border:1px solid var(--faint);border-radius:4px;padding:2px 7px;min-width:28px;text-align:center}
+.cells span.hit{background:var(--sand);color:var(--sandfg);border-color:var(--sandline);font-weight:700}
+.cells span.T{background:color-mix(in srgb,var(--bass) 80%,transparent);color:#fff;border-color:transparent}
+.cells span.F{background:var(--saltint);border-color:transparent}
+.cells span.six{background:var(--salmon);color:#fff;border-color:transparent}
+.cells span.dots{border:0;color:var(--muted);min-width:0}
+.cells span.ix{border:0;color:var(--muted);font-size:11px;min-width:28px;padding:0 2px}
+.pic{display:grid;gap:8px;justify-items:start;padding:12px 14px}
+.pic .cap{font-size:12px;color:var(--muted)}
+.kv{display:grid;grid-template-columns:auto auto auto;gap:4px 10px;align-items:center;font-family:var(--f-mono);font-size:14px}
+.kv .k{color:var(--bass);font-weight:700}
+.kv .ar2{color:var(--muted)}
+.kv .hit{background:var(--sand);color:var(--sandfg);border-radius:4px;padding:0 4px;font-weight:700}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:4px}
+.dsgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.dscard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;transition:box-shadow .3s}
+.dscard.flash{box-shadow:0 0 0 3px var(--salmon)}
+.dscard p{font-size:14.5px;text-align:right}
+.mini{display:flex;gap:3px;direction:ltr;font-family:var(--f-mono);font-size:12px;flex-wrap:wrap;justify-content:center}
+.mini span{border:1px solid var(--faint);border-radius:4px;padding:2px 6px}
+
+/* ---------- setup, tasks, traps, index ---------- */
+.libs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:10px}
+.lib{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:6px;align-content:start}
+.lib h3{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.lib .why{font-size:15px}
+.lib ul{margin:0;padding-inline-start:20px;font-size:15px}
+.tries ol{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:4px}
+.tries details{border-top:1px dashed var(--line);padding-top:6px}
+.tries li:first-child details{border-top:0}
+.tries details summary{cursor:pointer;line-height:1.8;font-weight:400;min-height:40px}
+.tries .ans{background:var(--goodbg);border-radius:8px;padding:8px 12px;margin-top:6px}
+.traps{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px}
+.trapcard{background:var(--surface);border:1px solid var(--line);border-inline-start:4px solid var(--warn);border-radius:10px;padding:12px 16px;display:grid;gap:6px}
+.trapcard h3{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.task{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:8px;transition:box-shadow .3s}
+.task .tools{display:flex;flex-wrap:wrap;gap:6px}
+.task .note.flash,.und.flash{box-shadow:0 0 0 3px var(--salmon);border-radius:8px}
+.glo{width:100%;border-collapse:collapse;font-size:15px}
+.glo th,.glo td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:right;vertical-align:top}
+.glo th{font-size:13px;color:var(--muted)}
+.glo td.n{font-family:var(--f-mono);direction:ltr;text-align:left;white-space:nowrap}
+.glo a{color:var(--bass);display:inline-flex;min-height:32px;align-items:center}
+@media (max-width:640px){.glo td.n{white-space:normal;overflow-wrap:anywhere}.glo .hide-ph{display:none}}
+.howto{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.howto div{background:var(--bg);border-radius:10px;padding:8px 12px;font-size:15px}
+.howto b{display:block;color:var(--bass)}
+.und{border:2px dashed var(--dv);background:var(--dvbg);border-radius:12px;padding:14px 18px;display:grid;gap:10px}
+.undhead{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.undtag{font-size:13px;font-weight:700;color:var(--surface);background:var(--dv);border-radius:6px;padding:2px 10px}
+.und h3{color:var(--dv)}
+.undstep{display:grid;gap:6px}
+.undstep h4{margin:0;font-size:16px}
+.undm{direction:ltr;text-align:left;font-family:var(--f-disp);font-size:18px;background:var(--surface);border-radius:8px;padding:6px 12px;overflow-x:auto;white-space:nowrap}
+.undm .r{background:color-mix(in srgb,var(--bass) 18%,transparent);border-radius:4px;padding:0 3px}
+.undm .c{background:color-mix(in srgb,var(--salmon) 22%,transparent);border-radius:4px;padding:0 3px}
+.undcode{font-size:15px;color:var(--muted)}
+#dv{direction:ltr;text-align:left;--dv:#6a4c93;--dv-soft:#f3eff9;--dv-line:#e3dbef;--ink:#14233B;--muted:#5A6477;--salmon:#E4734F;--good:#1F7A4D;--bar:#8a94a6;--font-text:"Fira Sans","Cairo",sans-serif;--font-display:"Literata",Georgia,serif;--font-mono:"JetBrains Mono",monospace}
+.dvbtn{--dv:#6a4c93;--dv-soft:#f3eff9;font-family:var(--font-text);font-size:20px;font-weight:600;color:var(--dv);background:var(--dv-soft);border:1.5px dashed var(--dv);border-radius:20px;padding:5px 16px 6px;cursor:pointer;letter-spacing:.01em;white-space:nowrap}
+.dvbtn:hover{filter:brightness(.96)}
+.dvbtn::before{content:"⤷ "}
+#dv{position:fixed;inset:0;z-index:900;background:rgba(20,35,59,.45)}
+#dvStage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:50% 50%;font-family:var(--font-text);color:var(--ink);cursor:pointer}
+#dv .dvpanel{position:absolute;left:36px;top:28px;width:1528px;height:846px;border-radius:18px;border:2px solid var(--dv);box-shadow:0 10px 40px rgba(20,35,59,.35);
+  background-color:#fdfcff;background-image:linear-gradient(var(--dv-line) 1px,transparent 1px),linear-gradient(90deg,var(--dv-line) 1px,transparent 1px);background-size:36px 36px;background-position:-1px -1px}
+#dv .dvhead{position:absolute;left:34px;top:24px;right:24px;display:flex;align-items:center;gap:18px}
+#dv .dvtag{font-size:18px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--dv);border-radius:6px;padding:3px 12px}
+#dv .dvtitle{font-family:var(--font-display);font-size:40px;font-weight:700;color:var(--ink)}
+#dv .dvclose{margin-left:auto;width:44px;height:44px;border-radius:50%;border:2px solid var(--dv);background:#fff;color:var(--dv);font-size:30px;line-height:36px;cursor:pointer}
+#dv .dvcols{position:absolute;left:40px;top:112px;width:1140px;height:706px;display:flex;flex-direction:column;flex-wrap:wrap;align-content:flex-start;column-gap:48px;row-gap:24px}
+#dv .dvcols{z-index:1}
+#dv .dvtrail{z-index:2}
+#dv .dvbreak{flex-basis:100%;width:0;margin-left:-48px}
+#dv .dvtrail{position:absolute;left:0;top:0;pointer-events:none;overflow:visible;color:var(--dv)}
+#dv .dvtrail path.tr{fill:none;stroke:var(--dv);stroke-width:1.6;stroke-dasharray:5 6;opacity:.22}
+#dv .dvtrail path.tr.new{opacity:.85;stroke-width:2.4}
+#dv .dvtrail path.tr.fresh{animation:dvin .5s both}
+#dv .dvside{position:absolute;left:1222px;top:112px;width:270px;font-size:19px;color:var(--muted)}
+#dv .dvcount{font-family:var(--font-mono);font-weight:700;font-size:24px;color:var(--dv);margin-bottom:18px}
+#dv .dvkey p{margin:0 0 12px;line-height:1.35}
+#dv .dvk1{display:inline-block;width:34px;border-top:2.5px dashed var(--dv);vertical-align:middle;margin-right:6px}
+#dv .dvk2{font-family:var(--font-mono);position:relative;padding:0 4px;margin-right:6px}
+#dv .dvk2::after{content:"";position:absolute;left:0;right:0;top:52%;height:3px;background:var(--salmon)}
+#dv .dvk3{font-size:15px;font-family:var(--font-mono);background:#fff;border:1.5px solid var(--dv);color:var(--dv);border-radius:6px;padding:1px 6px;margin-right:6px}
+#dv .dvhint{margin-top:22px;font-size:17px;color:var(--bar)}
+#dv .dl{display:flex;flex-direction:column;align-items:flex-start;gap:5px;max-width:530px}
+#dv .dl .ex{font-size:27px;line-height:1.5;white-space:nowrap;background:#fdfcff;border-radius:8px;padding:3px 10px}
+#dv .dl.now .ex{box-shadow:inset 4px 0 0 var(--dv)}
+#dv .dl .note{font-size:20px;color:var(--muted);white-space:normal;max-width:520px;padding:0 10px;background:#fdfcff;border-radius:6px}
+#dv .dl .rule{font-family:var(--font-mono);font-size:17px;color:var(--dv);background:#fff;border:1.5px solid var(--dv);border-radius:7px;padding:2px 9px;margin-left:18px}
+#dv .dl .rule b{font-family:var(--font-text);font-weight:600;margin-right:6px}
+#dv .dl .ok{color:var(--good);font-weight:700}
+#dv .dvcols [data-s]{visibility:hidden}
+#dv .dvcols [data-s].on{visibility:visible}
+#dv .dvcols [data-t]{display:inline-block;position:relative;border-radius:5px}
+#dv .dvcols [data-from]{background:var(--dv-soft)}
+#dv .dvcols [data-t]::after{content:"";position:absolute;left:-3px;right:-3px;top:54%;height:3px;border-radius:2px;background:var(--salmon);transform:scaleX(0);transform-origin:left center;transition:transform .55s ease}
+#dv .dvcols [data-t].struck{color:var(--muted)}
+#dv .dvcols [data-t].struck::after{transform:scaleX(1)}
+#dv .dvcols .inst,#dv .dvcols .inst::after{transition:none!important;animation:none!important}
+#dv .dl.now:not(.inst) .ex{animation:dvtxt .5s .8s both}
+#dv .dl.now:not(.inst) .rule,#dv .dl.now:not(.inst) .note,#dv .dl.now:not(.inst) .lbl{animation:dvin .45s .9s both}
+#dv .dvcols [data-from]{color:var(--ink)}
+#dv @keyframes dvtxt{from{color:transparent;background-color:rgba(255,255,255,0)}
+#dv to{color:var(--ink)}
+#dv }
+.dvcols [data-s]:not(.dl).now:not(.inst){animation:dvin .45s both}
+#dv @keyframes dvin{from{opacity:0}
+#dv to{opacity:1}
+#dv }
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.25;margin:0 3px}
+#dv .fr>span:first-child{border-bottom:2px solid currentColor;padding:0 4px}
+#dv .fr>span:last-child{padding:0 4px}
+#dvStage sup{vertical-align:super;font-size:.66em;line-height:0}
+#dvStage sub{vertical-align:sub;font-size:.66em;line-height:0}
+#dv .dl .lbl{font-family:var(--font-text);font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:5px;padding:1px 7px;margin-left:10px;vertical-align:middle}
+#wb{z-index:1000}
+#dv .dvside p,#dv .dvhint{direction:rtl;text-align:right}
+#dv .dl .note{font-family:var(--f-ar);font-size:19px}
+#dv .dl .rule .ar{font-family:var(--f-ar);font-weight:600;letter-spacing:0;direction:rtl;unicode-bidi:isolate}
+#dv .dvtitle{font-family:"Literata","Cairo",Georgia,serif;font-size:36px;direction:rtl;unicode-bidi:isolate}
+#dv .dvtag{letter-spacing:0;text-transform:none}
+.dvbtn{font-family:var(--f-body);font-size:16px;color:var(--dv);background:var(--dvbg);border-color:var(--dv)}
+.trapcard .tools{display:flex;flex-wrap:wrap;gap:6px}
+/* ---------- Week 1 panels ---------- */
+.ftab td.on{background:var(--sand);color:var(--sandfg);font-weight:700}
+.ftab td.lab0{color:var(--salink)}.ftab td.lab1{color:var(--bass)}
+.ftab tr.wrong th{color:var(--bad)}
+.ftab td.dim{color:var(--faint)}
+.vec{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:2px;direction:ltr;font-family:var(--f-mono);font-size:11px;width:100%;max-width:520px}
+.vec span{border:1px solid var(--line);border-radius:3px;text-align:center;padding:1px 0;line-height:1.5}
+.vec span.on{background:var(--sand);color:var(--sandfg);border-color:var(--sandline);font-weight:700}
+.dig{display:grid;grid-template-columns:repeat(8,1fr);gap:1px;width:200px;max-width:100%;direction:ltr;background:var(--line);border:1px solid var(--line)}
+.dig button{aspect-ratio:1;border:0;padding:0;margin:0;cursor:pointer;font-family:var(--f-mono);font-size:10px;min-width:0}
+.dig button.on{outline:3px solid var(--salmon);outline-offset:-3px}
+.digrow{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;direction:ltr}
+.fv{display:grid;grid-template-columns:auto auto;gap:2px 14px;font-family:var(--f-mono);font-size:14px;direction:ltr;align-items:center}
+.fv .k{color:var(--muted)}.fv .v{font-weight:700}
+.und .dvbtn{white-space:normal;max-width:100%;text-align:right}
+.rest .panel svg{max-width:640px;margin-inline:auto}
+.big{font-family:var(--f-mono);font-size:20px;font-weight:700}
+.ok{color:var(--good)}.no{color:var(--bad)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style></head><body>
+
+<div class="app">
+<header class="topbar">
+ <div class="tb-title"><span class="tb-eyebrow">ENGS 3302 Pattern Recognition · Week 1 · Lab_W01 · Iyas A. I. Alshaikhkhalil</span><span class="tb-name">دليل كود المعمل 1</span></div>
+ <div class="tb-prog"><span id="tbcount" aria-live="polite">الخلية 1 من 8</span><span class="bar" role="progressbar" aria-label="التقدم في الصفحة" aria-valuemin="0" aria-valuemax="100" id="tbbar"><i></i></span></div>
+ <div class="tb-nav"><a class="navbtn" id="tbprev" href="#setup">→ السابق</a><a class="navbtn primary" id="tbnext" href="#c11">التالي ←</a></div>
+ <span class="seg" id="themeseg" role="group" aria-label="لون الصفحة"><button type="button" aria-pressed="false" data-v="light">فاتح</button><button type="button" aria-pressed="false" data-v="dark">داكن</button><button type="button" aria-pressed="true" data-v="auto">تلقائي</button></span>
+</header>
+
+<div class="shell">
+<nav class="side" id="side" aria-label="خلايا الدفتر">
+ <span class="sh">خلايا الدفتر</span>
+ <a class="nv" href="#setup" data-v="setup"><span class="nk">0</span><span>الإعداد</span></a>
+ <a class="nv" href="#c11" data-v="c11"><span class="nk">1.1</span><span>عشر سمكات مصفوفةً</span></a>
+ <a class="nv" href="#c12" data-v="c12"><span class="nk">1.2</span><span>قاعدة قرار</span></a>
+ <a class="nv" href="#c13" data-v="c13"><span class="nk">1.3</span><span>جدول pandas</span></a>
+ <a class="nv" href="#c14a" data-v="c14a"><span class="nk">1.4a</span><span>بيانات Iris</span></a>
+ <a class="nv" href="#c14b" data-v="c14b"><span class="nk">1.4b</span><span>سمة واحدة: مدرّجات</span></a>
+ <a class="nv" href="#c14c" data-v="c14c"><span class="nk">1.4c</span><span>سمتان: فضاء السمات</span></a>
+ <a class="nv" href="#c15" data-v="c15"><span class="nk">1.5</span><span>صورة متجهَ سمات</span></a>
+ <span class="sep"></span>
+ <a class="nv" href="#tasks" data-v="tasks"><span class="nk">2</span><span>مهامك</span></a>
+ <a class="nv" href="#traps" data-v="traps"><span class="nk tr">!</span><span>الفخاخ</span></a>
+ <a class="nv" href="#index" data-v="index"><span class="nk">A–Z</span><span>فهرس الأسماء</span></a>
+ <span class="scope">للفهم والتطبيق في المعمل. ليست مادة امتحان.</span>
+</nav>
+
+<main id="main">
+
+<!-- ================= SETUP ================= -->
+<section class="view cell" data-view="setup" hidden>
+ <div class="cellhead"><span class="cellno">Setup cell</span><h1>خلية الإعداد: المكتبات <bdi>(libraries)</bdi> ودالة التحقق</h1>
+ <p class="goal"><b>الهدف:</b> نحمّل ثلاث مكتبات، ونأخذ ثلاث مجموعات بيانات جاهزة من scikit-learn. ثم نعرّف دالة <bdi>(function)</bdi> اسمها <code>check</code> تعطيك ✅ أو ❌. شغّل هذه الخلية أولًا في كل مرة تفتح الدفتر.</p></div>
+ <div class="intro">
+  <p class="lead">افتح دفتر <code>Lab_W01.ipynb</code> في Colab، وافتح هذه الصفحة بجانبه. الصفحة تعرض خلية واحدة في كل مرة، بترتيب الدفتر. <b>انقر أي اسم مُسطَّر في الكود</b>، فيفتح شرحه تحت سطره، ومعه لوحة حيّة ترى فيها أثره.</p>
+  <p class="lead">هذا أول دليل في المقرر. كل اسم هنا يُشرح كاملًا. أدلة الأسابيع التالية تعطي تذكيرًا قصيرًا، وتُحيل إلى هنا.</p>
+  <span class="scope">للفهم والتطبيق في المعمل. ليست مادة امتحان.</span>
+  <div class="legend">
+   <span class="b py">Python</span> اللغة نفسها
+   <span class="b np">NumPy</span><span class="b pd">pandas</span><span class="b plt">Matplotlib</span><span class="b sk">scikit-learn</span> المكتبات
+   <span class="b new">NEW</span> أول مرة (كل الأسماء هذا الأسبوع)
+   <span class="b rev">مراجعة</span> في الأسابيع التالية: اسم شُرح هنا
+   <span class="b trap">فخ</span> خطأ شائع
+  </div>
+ </div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"><span class="sl">اقرأ بالترتيب:</span>
+  <button type="button" data-step="1"><b>1</b> المكتبات</button><span class="ar">←</span>
+  <button type="button" data-step="2" class="on"><b>2</b> الكود سطرًا سطرًا</button><span class="ar">←</span>
+  <button type="button" data-step="3"><b>3</b> المتغيرات الناتجة</button><span class="ar">←</span>
+  <button type="button" data-step="4"><b>4</b> أشكال البيانات</button></div>
+ <details class="blk" data-step="1"><summary>1 · المكتبات: ماذا تفعل كل واحدة <span class="sub">(انقر لتفتح)</span></summary>
+ <div class="libs">
+  <div class="lib"><h3><span class="b np">NumPy</span> <span class="b new">NEW</span></h3>
+   <p class="why">مكتبة المصفوفات <bdi>(arrays)</bdi> والحساب. تحسب على كل العناصر مرة واحدة: <code>fish[:, 0] &gt; 5.0</code> تقارن عشرة أرقام في سطر واحد، بلا حلقة <bdi>(loop)</bdi>.</p>
+   <ul><li>هذا الأسبوع: <code>np.array</code>، والشكل <code>shape</code>، والترقيم <bdi>(indexing)</bdi>، والقناع <bdi>(mask)</bdi>، و<code>np.sum</code> و<code>np.where</code>.</li></ul>
+   <p class="why"><b>ميزتها عن قوائم Python:</b> أسرع بكثير، والعمليات تُكتب كما تُكتب في الرياضيات.</p></div>
+  <div class="lib"><h3><span class="b pd">pandas</span> <span class="b new">NEW</span></h3>
+   <p class="why">مكتبة الجداول. الجدول اسمه <code>DataFrame</code>، ولكل عمود <bdi>(column)</bdi> اسم مثل <code>"width"</code>.</p>
+   <ul><li>هذا الأسبوع: <code>DataFrame</code>، و<code>head</code>، و<code>groupby</code>، و<code>value_counts</code>، واختيار الصفوف بشرط <code>.loc</code>.</li></ul>
+   <p class="why"><b>ميزتها عن NumPy:</b> أعمدة بأسماء، ونصوص وأرقام في الجدول نفسه.</p></div>
+  <div class="lib"><h3><span class="b plt">Matplotlib</span> <span class="b new">NEW</span></h3>
+   <p class="why">مكتبة الرسم. <code>pyplot</code> هو الجزء الذي نرسم به، ونختصره <code>plt</code>.</p>
+   <ul><li>هذا الأسبوع: المدرّج التكراري <bdi>(histogram)</bdi>، ونقاط التشتت <bdi>(scatter plot)</bdi>، وعرض صورة <code>imshow</code>، وعدة رسوم في شكل واحد <code>subplots</code>.</li></ul></div>
+  <div class="lib"><h3><span class="b sk">scikit-learn</span> <span class="b new">NEW</span></h3>
+   <p class="why">مكتبة تعلم الآلة <bdi>(machine learning)</bdi>. اسمها في الكود <code>sklearn</code>. هذا الأسبوع نأخذ منها البيانات فقط.</p>
+   <ul><li><code>load_iris</code> و<code>load_digits</code> و<code>load_wine</code> تحمّل بيانات مشهورة، موجودة داخل المكتبة. لا تحتاج إنترنت.</li></ul>
+   <p class="why">في الأسابيع القادمة نأخذ منها المصنِّفات <bdi>(classifiers)</bdi> نفسها.</p></div>
+ </div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W01.ipynb · setup cell</span></div>
+ <pre class="code" data-cell="setup">[[cmt|# Run this cell first. It loads the libraries and a helper that checks your answers.]]
+[[imp|import numpy as np]]
+[[imp|import pandas as pd]]
+[[imp|import matplotlib.pyplot as plt]]
+[[from|from sklearn.datasets import load_iris, load_digits, load_wine]]
+
+[[def|def check(label, got, expected, tol=1e-3):]]
+    [[doc|"""Prints a green tick if `got` is close to `expected`, otherwise a red cross."""]]
+    [[try|try:]]
+        ok = [[isnot|got is not None and]] [[allclose|np.allclose(]][[asarray|np.asarray(got, dtype=float)]],
+                                             np.asarray(expected, dtype=float), [[allclose|atol=tol)]]
+    [[try|except Exception:]]
+        ok = False
+    print([[fstr|f"✅ {label}"]] [[ifelse|if ok else]] f"❌ {label}: expected {expected}, got {got}")
+
+[[print|print("Ready.")]]</pre></section>
+ <div class="rest" data-cell="setup">
+  <div class="panel" id="p-setup"><span class="ptitle">جرّب check: غيّر إجابتك <bdi>(got)</bdi> والفرق المسموح <bdi>(tol)</bdi></span>
+   <div class="ctrls">
+    <div class="ctrl" id="setup-got"><label>got =</label><span class="seg" id="gotseg"><button type="button" aria-pressed="true" data-v="3.88">3.88</button><button type="button" aria-pressed="false" data-v="3.8804">3.8804</button><button type="button" aria-pressed="false" data-v="3.885">3.885</button><button type="button" aria-pressed="false" data-v="3.9">3.9</button><button type="button" aria-pressed="false" data-v="None">None</button><button type="button" aria-pressed="false" data-v='"abc"'>"abc"</button></span></div>
+    <div class="ctrl" id="setup-tol"><label>tol =</label><span class="seg" id="tolseg"><button type="button" aria-pressed="true" data-v="1e-3">1e-3</button><button type="button" aria-pressed="false" data-v="1e-2">1e-2</button><button type="button" aria-pressed="false" data-v="1e-1">1e-1</button></span></div>
+   </div>
+   <svg id="setup-svg" viewBox="0 0 560 110" role="img" aria-label="الإجابة الصحيحة والمجال المسموح حولها"></svg>
+   <div class="out" id="setup-out"></div>
+   <p class="note" id="setup-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="setup" data-step="3"></section>
+ <section class="blk" id="ds" data-step="4" style="display:grid;gap:10px">
+  <h3>4 · أشكال البيانات <span class="sub">(مرة واحدة هنا، ثم نعود إليها من كل خلية)</span></h3>
+  <div class="dsgrid">
+   <div class="dscard" id="ds-list"><b>قائمة <bdi>(list)</bdi></b>
+    <div class="mini"><span>"lightness"</span><span>"width"</span></div><span class="mono" style="color:var(--muted)">len = 2</span>
+    <p>قيم بالترتيب بين قوسين مربعين <code>[ ]</code>. نصل إلى العنصر برقمه <bdi>(index)</bdi>، والعدّ من 0.</p></div>
+   <div class="dscard" id="ds-tuple"><b>صف ثابت <bdi>(tuple)</bdi></b>
+    <div class="mini"><span>10</span><span>2</span></div><span class="mono" style="color:var(--muted)">(10, 2)</span>
+    <p>مثل القائمة، لكن بين قوسين عاديين <code>( )</code> ولا نغيّره. الشكل <bdi>(shape)</bdi> مثلًا صف ثابت.</p></div>
+   <div class="dscard" id="ds-array"><b>مصفوفة <bdi>(array)</bdi></b>
+    <div style="display:grid;grid-template-columns:repeat(2,18px);gap:2px"><span style="height:14px;background:var(--bass);border-radius:2px"></span><span style="height:14px;background:var(--saltint);border-radius:2px"></span><span style="height:14px;background:var(--bass);border-radius:2px"></span><span style="height:14px;background:var(--saltint);border-radius:2px"></span><span style="height:14px;background:var(--bass);border-radius:2px"></span><span style="height:14px;background:var(--saltint);border-radius:2px"></span></div><span class="mono" style="color:var(--muted)">shape (rows, cols)</span>
+    <p>أرقام من نوع واحد في شبكة. الشكل <bdi>(shape)</bdi> يقول كم صفًا وكم عمودًا. الحساب يعمل على كل العناصر معًا.</p></div>
+   <div class="dscard" id="ds-df"><b>جدول <bdi>(DataFrame)</bdi></b>
+    <div style="display:grid;grid-template-columns:30px 30px;gap:2px;font-size:10px;font-family:var(--f-mono)"><span style="background:var(--basstint);text-align:center">a</span><span style="background:var(--greentint);text-align:center">b</span><span style="border:1px solid var(--line);height:10px"></span><span style="border:1px solid var(--line);height:10px"></span></div><span style="color:var(--muted);font-size:14px">أعمدة بأسماء</span>
+    <p>صفوف وأعمدة، ولكل عمود اسم. العمود الواحد وحده اسمه <code>Series</code>: قائمة قيم مع رقم كل صف <bdi>(index)</bdi>.</p></div>
+   <div class="dscard" id="ds-bunch"><b>حزمة بيانات <bdi>(Bunch)</bdi></b>
+    <div class="kv" style="direction:ltr"><span class="k">data</span><span class="ar2">→</span><span>X</span><span class="k">target</span><span class="ar2">→</span><span>y</span></div><span style="color:var(--muted);font-size:14px">اسم ← قيمة</span>
+    <p>ما تعيده <code>load_iris</code>. مثل القاموس <bdi>(dict)</bdi>: أسماء وقيمها. نقرأ القيمة بنقطة: <code>iris.data</code>.</p></div>
+  </div>
+ </section>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.1 ================= -->
+<section class="view cell" data-view="c11" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.1</span><h1>السمكات العشر مصفوفةً <bdi>(NumPy array)</bdi></h1>
+ <p class="goal"><b>الهدف:</b> كل <b>صف</b> سمكة واحدة، أي عيّنة <bdi>(sample)</bdi>. كل <b>عمود</b> سمة <bdi>(feature)</bdi>: اللمعان <bdi>(lightness)</bdi> ثم العرض <bdi>(width)</bdi>. نتعلم أن نأخذ صفًا، أو عمودًا، أو سمك صنف واحد فقط.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §1.3، والمثال 1.1)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">x = (x₁, x₂) = (lightness, width)<br>n = 10 samples, d = 2 features</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">fish[i]   (one row)<br>fish.shape → (10, 2)</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W01.ipynb · cell 1.1</span></div>
+ <pre class="code" data-cell="c11">[[assign|fish =]] [[arr|np.array(]][[2.5, 16.0], [3.0, 19.3], [3.8, 16.5], [4.5, 18.0], [5.6, 17.0],   [[cmt|# salmon]]
+                 [4.2, 20.5], [5.2, 19.0], [6.0, 21.0], [6.8, 19.5], [7.5, 20.0]])  # sea bass
+labels = [[arr|np.array(]][0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
+
+print([[str|"shape (samples, features):"]], [[shape|fish.shape]])
+print("first fish:", [[idx|fish[0]]])
+print("all lightness values:", [[colon|fish[:, 0]]])
+print("mean lightness of salmon:", [[bmask|fish[labels == 0, 0]]][[mean|.mean()]])</pre></section>
+ <div class="rest" data-cell="c11">
+  <div class="panel" id="p-c11"><span class="ptitle">اختر تعبيرًا <bdi>(expression)</bdi>، فتُلوَّن الخانات التي يأخذها من fish</span>
+   <div class="ctrls"><div class="ctrl" id="c11-ex"><span class="seg" id="exseg" style="flex-wrap:wrap"></span></div></div>
+   <div class="tw"><table class="t ftab" id="c11-tab"></table></div>
+   <div class="out" id="c11-out"></div>
+   <p class="note" id="c11-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c11" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(4 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>اكتب <code>fish[9]</code> بدل <code>fish[0]</code>. أي سمكة هذه؟</summary><div class="ans"><code>[ 7.5 20. ]</code>: آخر سمكة، وهي قاروص <bdi>(sea bass)</bdi>. عشرة صفوف، فالترقيم من 0 إلى 9.</div></details></li>
+  <li><details><summary>اطبع <code>labels == 0</code> وحده.</summary><div class="ans"><code>[ True  True  True  True  True False False False False False]</code>. هذا قناع <bdi>(mask)</bdi>: True حيث السمكة سلمون. هو الذي يختار الصفوف في <code>fish[labels == 0, 0]</code>.</div></details></li>
+  <li><details><summary>احسب متوسط لمعان القاروص: <code>fish[labels == 1, 0].mean()</code>.</summary><div class="ans">يطبع <code>5.9399999999999995</code>، أي 5.94. الحاسوب يخزن الأعداد العشرية <bdi>(floating-point numbers)</bdi> بدقة محدودة، فيظهر هذا الفرق الصغير جدًا. هذا طبيعي.</div></details></li>
+  <li><details><summary>اكتب <code>fish[:, 2]</code>. ماذا يحدث؟</summary><div class="ans">رسالة خطأ <code>IndexError</code>: لا يوجد عمود رقمه 2. عندنا عمودان فقط، رقماهما 0 و1.</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.2 ================= -->
+<section class="view cell" data-view="c12" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.2</span><h1>قاعدة قرار <bdi>(decision rule)</bdi> في سطر واحد</h1>
+ <p class="goal"><b>الهدف:</b> نصنّف السمكات العشر بقاعدة بسيطة، ثم نعدّ الأخطاء. سمة واحدة تعطي خطأين. سمتان معًا تعطيان صفرًا، كما في المثالين 1.1 و1.2.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §1.2.2 و§1.3، المثالان 1.1 و1.2)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">decide sea bass if x₁ &gt; 5.0<br>errors = number of fish with guess ≠ label<br>decide sea bass if x₂ + x₁ &gt; 23</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">(fish[:, 0] &gt; 5.0).astype(int)<br>np.sum(guess_1 != labels)<br>fish[:, 1] + fish[:, 0] &gt; 23</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W01.ipynb · cell 1.2</span></div>
+ <pre class="code" data-cell="c12"># One feature: sea bass if lightness > 5.0
+guess_1 = ([[gt|fish[:, 0] > 5.0]])[[astype|.astype(int)]]
+print("errors with lightness only:", [[sum|np.sum(]][[ne|guess_1 != labels]][[sum|)]])
+
+# Two features: sea bass if width + lightness > 23
+guess_2 = ([[add|fish[:, 1] + fish[:, 0]]] [[gt2|> 23]]).astype(int)
+print("errors with two features  :", np.sum(guess_2 != labels))</pre></section>
+ <div class="rest" data-cell="c12">
+  <div class="panel" id="p-c12"><span class="ptitle">القاعدة حيّة على السمكات العشر في فضاء السمات <bdi>(feature space)</bdi></span>
+   <div class="ctrls">
+    <div class="ctrl" id="c12-mode"><label>rule</label><span class="seg" id="modeseg" style="flex-wrap:wrap"><button type="button" aria-pressed="true" data-v="1">lightness &gt; t</button><button type="button" aria-pressed="false" data-v="2">width + lightness &gt; c</button></span></div>
+   </div>
+   <div class="ctrls">
+    <div class="ctrl" id="c12-t"><label for="c12-tr">t =</label><input type="range" id="c12-tr" min="2" max="8" step="0.1" value="5"><span class="mono" id="c12-tv">5.0</span></div>
+    <div class="ctrl" id="c12-c"><label for="c12-cr">c =</label><input type="range" id="c12-cr" min="19" max="28" step="0.5" value="23"><span class="mono" id="c12-cv">23.0</span></div>
+   </div>
+   <svg id="c12-svg" viewBox="0 0 560 300" role="img" aria-label="السمكات العشر وحدّ القرار"></svg>
+   <div class="out" id="c12-out"></div>
+   <p class="note" id="c12-note"></p>
+  </div>
+ </div>
+ <div class="und" id="c12-dv">
+  <div class="undhead"><span class="undtag">للفهم</span><h3>لماذا القاعدة <span dir="ltr">width + lightness &gt; 23</span> خطّ مستقيم؟</h3></div>
+  <p>كل قاعدة تقسم فضاء السمات إلى منطقتين. الحدّ بينهما اسمه حدّ القرار <bdi>(decision boundary)</bdi>. نكتب القاعدة بطريقة أخرى، فيظهر أن حدّها خط مستقيم. حرّك <code>c</code> في اللوحة فوق وانظر إلى الخط.</p>
+  <div><button class="dvbtn" type="button" data-dv="line" title="الاشتقاق خطوة خطوة (D أو ي)">الاشتقاق الرياضي خطوة خطوة، كما في الشرائح</button></div>
+  <template id="dv-line" data-title="من القاعدة إلى حدّ القرار"><div class="dl" data-s="1"><span class="ex">decide sea bass if  <i data-t="a1">x₂ + x₁</i> &gt; 23</span><span class="rule"><b>rule</b>Notes §1.3 · Worked example 1.2</span><span class="note" dir="rtl">x₁ اللمعان، وx₂ العرض.</span></div><div class="dl" data-s="2"><span class="ex"><i data-t="a2" data-from="a1">x₂ + x₁</i> = 23</span><span class="rule"><b>boundary</b><span class="ar">نضع = مكان &gt;</span></span><span class="note" dir="rtl">على الحدّ نفسه تتساوى الجهتان.</span></div><div class="dl" data-s="3"><span class="ex">x₂ = 23 − x₁</span><span class="rule"><b>− x₁</b><span class="ar">من الطرفين</span></span><span class="note" dir="rtl">هذه معادلة خط مستقيم: ميله −1، ويقطع محور x₂ عند 23.</span></div><div class="dl" data-s="4"><span class="ex">x₂ &gt; 23 − x₁  ⇒  sea bass</span><span class="rule"><b>above the line</b></span><span class="note" dir="rtl">كل سمكة فوق الخط قاروص، وكل سمكة تحته سلمون.</span></div><div class="dl" data-s="5"><span class="ex">(4.2, 20.5):  20.5 &gt; 23 − 4.2 = 18.8  <span class="ok">✓ sea bass</span></span><span class="note" dir="rtl">هذه السمكة أخطأت فيها قاعدة اللمعان وحده.</span></div><div class="dl" data-s="6"><span class="ex">x₁ &gt; 5.0  ⇒  boundary  x₁ = 5.0</span><span class="rule"><b>one feature</b></span><span class="note" dir="rtl">قاعدة السمة الواحدة حدّها خط عمودي. الخط المائل يفصل ما لا يفصله العمودي.</span></div></template>
+  <p class="undcode">في الكود: <code>fish[:, 1] + fish[:, 0] &gt; 23</code> يحسب x₂ + x₁ لكل سمكة مرة واحدة، ويقارن بـ 23. فهو يسأل: هل السمكة فوق الخط؟</p>
+ </div>
+ <section class="vars blk" data-cell="c12" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(4 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>غيّر العتبة <bdi>(threshold)</bdi> 5.0 إلى 4.0 ثم إلى 5.4. هل تحصل على أرقام الـ Notes؟</summary><div class="ans">نعم. مع 4.0: خطآن (السلمون 4.5 و5.6). مع 5.4: ثلاثة أخطاء (السلمون 5.6، والقاروص 4.2 و5.2). جرّبها في اللوحة.</div></details></li>
+  <li><details><summary>احذف <code>.astype(int)</code> من السطر 2. هل يتغير عدد الأخطاء؟</summary><div class="ans">لا، يبقى 2. <code>guess_1</code> يصير True وFalse بدل 1 و0. وPython يعدّ True = 1 وFalse = 0، فالمقارنة مع <code>labels</code> تعطي النتيجة نفسها.</div></details></li>
+  <li><details><summary>اكتب <code>np.mean(guess_1 != labels)</code> بدل <code>np.sum</code>.</summary><div class="ans">0.2، أي نسبة الخطأ <bdi>(error rate)</bdi> 20%، كما في المثال 1.1. المجموع عدد الأخطاء، والمتوسط نسبتها.</div></details></li>
+  <li><details><summary>غيّر 23 إلى 22 في القاعدة الثانية.</summary><div class="ans">3 أخطاء: الخط نزل، فصارت ثلاث سمكات سلمون فوقه. ومع 24 يبقى 0. جرّب <code>c</code> في اللوحة.</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.3 ================= -->
+<section class="view cell" data-view="c13" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.3</span><h1>البيانات نفسها جدولًا <bdi>(DataFrame)</bdi></h1>
+ <p class="goal"><b>الهدف:</b> نضع المصفوفة في جدول له أسماء أعمدة، ونضيف عمودًا فيه اسم الصنف <bdi>(class)</bdi>. ثم نحسب متوسط كل سمة داخل كل صنف بسطر واحد.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §1.2.1، «Key idea»)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">mean of a feature in class ω = (1 / n<sub>ω</sub>) Σ<sub>fish in ω</sub> x<br>good feature: similar within a class, different between classes</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">df.groupby("species").mean()</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W01.ipynb · cell 1.3</span></div>
+ <pre class="code" data-cell="c13">df = [[df|pd.DataFrame(fish, columns=["lightness", "width"])]]
+[[newcol|df["species"] =]] [[where|np.where(labels == 1, "sea bass", "salmon")]]
+print([[head|df.head()]])
+[[blank|print()]]
+print([[groupby|df.groupby("species").mean()]])</pre></section>
+ <div class="rest" data-cell="c13">
+  <div class="panel" id="p-c13"><span class="ptitle">الجدول، ثم التجميع حسب الصنف <bdi>(groupby)</bdi></span>
+   <div class="ctrls">
+    <div class="ctrl" id="c13-h"><label>df.head(</label><span class="seg" id="headseg"><button type="button" aria-pressed="false" data-v="3">3</button><button type="button" aria-pressed="true" data-v="5">5</button><button type="button" aria-pressed="false" data-v="10">10</button></span><label>)</label></div>
+    <div class="ctrl" id="c13-g"><label>groupby("species").</label><span class="seg" id="aggseg"><button type="button" aria-pressed="true" data-v="mean">mean()</button><button type="button" aria-pressed="false" data-v="count">count()</button><button type="button" aria-pressed="false" data-v="max">max()</button><button type="button" aria-pressed="false" data-v="min">min()</button></span></div>
+   </div>
+   <div class="ds"><figure><div class="tw"><table class="t" id="c13-df"></table></div><figcaption id="c13-cap"></figcaption></figure>
+    <figure><div class="tw"><table class="t" id="c13-grp"></table></div><figcaption>lightness only</figcaption></figure></div>
+   <p class="note" id="c13-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c13" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(4 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>اكتب <code>df.head(3)</code>.</summary><div class="ans">ثلاثة صفوف فقط: 0 و1 و2. الرقم بين القوسين عدد الصفوف، والافتراضي 5.</div></details></li>
+  <li><details><summary>اطبع <code>df.shape</code>.</summary><div class="ans"><code>(10, 3)</code>: عشرة صفوف، وثلاثة أعمدة: <code>lightness</code> و<code>width</code> و<code>species</code>.</div></details></li>
+  <li><details><summary>اكتب <code>.max()</code> بدل <code>.mean()</code> في السطر الأخير.</summary><div class="ans">أكبر قيمة في كل صنف: السلمون 5.6 و19.3، والقاروص 7.5 و21.0. لاحظ أن أعرض سلمون (19.3) أعرض من بعض القاروص (19.0).</div></details></li>
+  <li><details><summary>اطبع <code>df["species"]</code>.</summary><div class="ans">عمود واحد، نوعه <code>Series</code>: عشر قيم، مع رقم كل صف من 0 إلى 9، واسمه <code>species</code>.</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.4a ================= -->
+<section class="view cell" data-view="c14a" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.4 · part 1</span><h1>بيانات حقيقية: زهرة السوسن <bdi>(Iris)</bdi></h1>
+ <p class="goal"><b>الهدف:</b> 150 زهرة من <b>3 أنواع</b>. لكل زهرة <b>4 سمات</b> بالسنتيمتر. نفصل السمات <code>X</code> عن الأصناف <code>y</code>. كل زهرة معها صنفها الصحيح، وهذا هو التعلم بإشراف <bdi>(supervised learning)</bdi>.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §1.3 و§1.7)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">n samples × d features, one label for each sample<br>n = 150, d = 4, classes 0, 1, 2</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">X.shape → (150, 4)<br>y.value_counts()</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W01.ipynb · cell 1.4 (1 of 3)</span></div>
+ <pre class="code" data-cell="c14a">iris = [[load|load_iris(as_frame=True)]]
+X = [[data|iris.data]]                      # features: a DataFrame, 150 rows x 4 columns
+y = [[target|iris.target]]                    # class labels 0, 1, 2
+names = [[tnames|iris.target_names]]          # ['setosa', 'versicolor', 'virginica']
+
+print([[shape|X.shape]])
+print([[head|X.head()]])
+print([[vc|y.value_counts()]])</pre></section>
+ <div class="rest" data-cell="c14a">
+  <div class="panel" id="p-c14a"><span class="ptitle">زهرة واحدة = صف واحد = متجه سمات <bdi>(feature vector)</bdi></span>
+   <div class="ctrls"><div class="ctrl" id="c14a-i"><label for="c14a-ir">flower i =</label><input type="range" id="c14a-ir" min="0" max="149" step="1" value="0"><span class="mono" id="c14a-iv">0</span></div>
+    <div class="ctrl" id="c14a-q"><span class="seg" id="iqseg"><button type="button" aria-pressed="false" data-v="0">0</button><button type="button" aria-pressed="false" data-v="50">50</button><button type="button" aria-pressed="false" data-v="100">100</button><button type="button" aria-pressed="false" data-v="149">149</button></span></div></div>
+   <div class="digrow"><div class="fv" id="c14a-fv"></div><svg id="c14a-svg" viewBox="0 0 300 150" role="img" aria-label="سمات الزهرة الأربع أعمدةً" style="max-width:320px"></svg></div>
+   <div class="out" id="c14a-out"></div>
+   <p class="note" id="c14a-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c14a" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(4 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>اطبع <code>names[y[100]]</code>.</summary><div class="ans"><code>virginica</code>. <code>y[100]</code> هو 2، و<code>names[2]</code> هو اسم الصنف 2. هكذا نحوّل رقم الصنف إلى اسمه.</div></details></li>
+  <li><details><summary>اطبع <code>X.columns</code>.</summary><div class="ans">أسماء الأعمدة الأربعة: <code>sepal length (cm)</code> و<code>sepal width (cm)</code> و<code>petal length (cm)</code> و<code>petal width (cm)</code>. السِّبلة <bdi>(sepal)</bdi> الورقة الخضراء تحت الزهرة، والبتلة <bdi>(petal)</bdi> الورقة الملونة.</div></details></li>
+  <li><details><summary>اطبع <code>print(iris.DESCR[:500])</code>.</summary><div class="ans">أول 500 حرف من وصف البيانات <bdi>(description)</bdi>: عدد العيّنات 150، وعدد السمات 4، وأسماء الأنواع. <code>[:500]</code> تقطيع <bdi>(slicing)</bdi> للنص.</div></details></li>
+  <li><details><summary>جرّب <code>load_wine(as_frame=True).target.value_counts()</code>.</summary><div class="ans">الصنف 1 (71) أولًا، ثم 0 (59)، ثم 2 (48). <code>value_counts</code> ترتب حسب العدد، من الأكبر. في Iris كل الأعداد 50، فظهر الترتيب 0، 1، 2 مصادفةً.</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.4b ================= -->
+<section class="view cell" data-view="c14b" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.4 · part 2</span><h1>سمة واحدة في كل مرة: مدرّج تكراري <bdi>(histogram)</bdi> لكل نوع</h1>
+ <p class="goal"><b>الهدف:</b> لكل سمة من الأربع نرسم ثلاثة مدرّجات فوق بعض، واحدًا لكل نوع. السمة الجيدة تفصل الألوان. السمة الرديئة تخلطها، كما رأينا مع طول السمك في الـ Notes.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §1.2.1، الشكلان 1 و2)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">histogram of feature x<sub>j</sub> for each class ω<sub>k</sub><br>small overlap ⇒ good feature</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">ax.hist(X.loc[y == k, col], bins=15)</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W01.ipynb · cell 1.4 (2 of 3)</span></div>
+ <pre class="code" data-cell="c14b"># One feature at a time: which one separates the species? (Notes, Section 1.2)
+fig, axs = [[subplots|plt.subplots(1, 4, figsize=(15, 3))]]
+[[for|for ax, col in]] [[zip|zip(axs, X.columns)]]:
+    for k in [[range|range(3)]]:
+        [[axhist|ax.hist(]][[loc|X.loc[y == k, col]]], [[bins|bins=15]], [[alpha|alpha=0.6]], [[label|label=names[k]]])
+    [[settitle|ax.set_title(col)]]
+[[legend|axs[0].legend()]]; [[tight|plt.tight_layout()]]; [[show|plt.show()]]</pre></section>
+ <div class="rest" data-cell="c14b">
+  <div class="panel" id="p-c14b"><span class="ptitle">ax.hist حيّ على الأزهار الـ 150</span>
+   <div class="ctrls">
+    <div class="ctrl" id="c14b-col"><label>col =</label><span class="seg" id="colseg" style="flex-wrap:wrap"></span></div>
+   </div>
+   <div class="ctrls">
+    <div class="ctrl" id="c14b-b"><label>bins=</label><span class="seg" id="binseg"><button type="button" aria-pressed="false" data-v="5">5</button><button type="button" aria-pressed="true" data-v="15">15</button><button type="button" aria-pressed="false" data-v="30">30</button></span></div>
+    <div class="ctrl" id="c14b-a"><label>alpha=</label><span class="seg" id="alphaseg"><button type="button" aria-pressed="false" data-v="0.3">0.3</button><button type="button" aria-pressed="true" data-v="0.6">0.6</button><button type="button" aria-pressed="false" data-v="1">1.0</button></span></div>
+    <div class="ctrl" id="c14b-l"><label>label=</label><span class="seg" id="labseg"><button type="button" aria-pressed="true" data-v="1">names[k]</button><button type="button" aria-pressed="false" data-v="0">(none)</button></span></div>
+   </div>
+   <svg id="c14b-svg" viewBox="0 0 560 270" role="img" aria-label="مدرّجات الأنواع الثلاثة لسمة واحدة"></svg>
+   <div class="out" id="c14b-out"></div>
+   <p class="note" id="c14b-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c14b" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(4 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>غيّر <code>bins=15</code> إلى 5 ثم إلى 30.</summary><div class="ans">مع 5 أعمدة <bdi>(bins)</bdi> عريضة نخسر التفاصيل. مع 30 تصير الأعمدة ضيقة ومتقطعة. 15 حلّ وسط. جرّبها في اللوحة.</div></details></li>
+  <li><details><summary>غيّر <code>alpha=0.6</code> إلى 1.</summary><div class="ans">الأعمدة تصير معتمة، فيغطي النوع الأخير ما تحته. لا ترى أين تتداخل الأنواع.</div></details></li>
+  <li><details><summary>احذف <code>label=names[k]</code>.</summary><div class="ans">الرسم نفسه، لكن لا يظهر مفتاح الرسم <bdi>(legend)</bdi>، ويظهر تحذير <bdi>(warning)</bdi> بأنه لا توجد أسماء. <code>legend</code> تأخذ الأسماء من <code>label</code>.</div></details></li>
+  <li><details><summary>أي سمة تفصل setosa عن النوعين الآخرين تمامًا؟</summary><div class="ans">طول البتلة <code>petal length (cm)</code> وعرضها <code>petal width (cm)</code>: أعمدة setosa بعيدة عن الباقي، بلا تداخل. ستحتاج هذا في المهمة 2.5.</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.4c ================= -->
+<section class="view cell" data-view="c14c" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.4 · part 3</span><h1>سمتان معًا: كل زهرة نقطة في فضاء السمات <bdi>(feature space)</bdi></h1>
+ <p class="goal"><b>الهدف:</b> نأخذ سمتين، طول البتلة وعرضها. كل زهرة تصير نقطة في مستوى. نلوّن النقاط حسب النوع، وننظر: هل تنفصل المجموعات؟</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §1.3، الشكل 3)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">x = (x₁, x₂)  is one point in the plane</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">plt.scatter(x1_values, x2_values)</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W01.ipynb · cell 1.4 (3 of 3)</span></div>
+ <pre class="code" data-cell="c14c"># Two features: each flower is a point in feature space (Notes, Section 1.3)
+for k in range(3):
+    [[scatter|plt.scatter(]][[loc|X.loc[y == k, "petal length (cm)"]]], X.loc[y == k, "petal width (cm)"], [[label|label=names[k]]])
+[[xlabel|plt.xlabel("petal length (cm)"); plt.ylabel("petal width (cm)")]]; [[legend|plt.legend()]]; [[show|plt.show()]]</pre></section>
+ <div class="rest" data-cell="c14c">
+  <div class="panel" id="p-c14c"><span class="ptitle">plt.scatter حيّ: اختر السمتين</span>
+   <div class="ctrls"><div class="ctrl" id="c14c-x"><label>x =</label><span class="seg" id="xseg" style="flex-wrap:wrap"></span></div></div>
+   <div class="ctrls"><div class="ctrl" id="c14c-y"><label>y =</label><span class="seg" id="yseg" style="flex-wrap:wrap"></span></div></div>
+   <svg id="c14c-svg" viewBox="0 0 560 320" role="img" aria-label="الأزهار نقاطًا في فضاء سمتين"></svg>
+   <p class="note" id="c14c-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c14c" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(3 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>ارسم <code>sepal length (cm)</code> مقابل <code>sepal width (cm)</code> (سؤال «Try it» في الدفتر).</summary><div class="ans">setosa ما زالت منفصلة، لكن versicolor وvirginica تتداخلان كثيرًا. سمات البتلة أفضل للفصل. جرّبها في اللوحة. لا تنسَ تغيير عناوين المحورين.</div></details></li>
+  <li><details><summary>احذف سطر <code>plt.xlabel(…)</code>.</summary><div class="ans">النقاط نفسها، لكن المحور الأفقي بلا اسم. من يقرأ الرسم لا يعرف ماذا يرى. اكتب اسم السمة ووحدتها دائمًا.</div></details></li>
+  <li><details><summary>أضف <code>alpha=0.5</code> داخل <code>plt.scatter</code>.</summary><div class="ans">النقاط تصير شفافة. حيث تتراكم النقاط فوق بعض يظهر اللون أغمق، فترى أين البيانات كثيفة.</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.5 ================= -->
+<section class="view cell" data-view="c15" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.5</span><h1>صورة تصير متجه سمات <bdi>(feature vector)</bdi>: الأرقام المكتوبة باليد</h1>
+ <p class="goal"><b>الهدف:</b> كل صورة 8 × 8 بكسل <bdi>(pixel)</bdi>. نكتب قيم البكسلات الـ 64 في صف واحد، فتصير الصورة متجه سمات فيه <b>64 سمة</b>.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §1.3: فضاء من d بُعدًا، و§1.5: استخراج السمات)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">d = 8 × 8 = 64<br>one image → one point x in a 64-dimensional feature space</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">digits.images.shape → (1797, 8, 8)<br>digits.data.shape → (1797, 64)</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W01.ipynb · cell 1.5</span></div>
+ <pre class="code" data-cell="c15">digits = [[ldig|load_digits()]]
+print("images:", [[imgs|digits.images.shape]], "  as feature vectors:", [[dshape|digits.data.shape]])
+
+fig, axs = [[subplots|plt.subplots(1, 10, figsize=(12, 1.6))]]
+for i, ax in [[enum|enumerate(axs)]]:
+    [[imshow|ax.imshow(digits.images[i], cmap="gray_r")]]; [[settitle|ax.set_title(]][[dtarget|digits.target[i]]]); [[axoff|ax.axis("off")]]
+[[show|plt.show()]]</pre></section>
+ <div class="rest" data-cell="c15">
+  <div class="panel" id="p-c15"><span class="ptitle">صورة 8 × 8 ← صف من 64 رقمًا. انقر بكسلًا</span>
+   <div class="ctrls">
+    <div class="ctrl" id="c15-i"><label>digits.images[</label><span class="seg" id="digseg"></span><label>]</label></div>
+    <div class="ctrl" id="c15-cm"><label>cmap=</label><span class="seg" id="cmseg"><button type="button" aria-pressed="true" data-v="gray_r">"gray_r"</button><button type="button" aria-pressed="false" data-v="gray">"gray"</button></span></div>
+   </div>
+   <div class="digrow"><div style="display:grid;gap:4px;justify-items:center"><div class="dig" id="c15-img"></div><span class="note" id="c15-ttl"></span></div>
+    <div style="display:grid;gap:4px;flex:1 1 260px;min-width:0"><span class="note">digits.data[i] · 64 numbers (shown in rows of 16)</span><div class="vec" id="c15-vec"></div></div></div>
+   <div class="out" id="c15-out"></div>
+   <p class="note" id="c15-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c15" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(4 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>احذف <code>cmap="gray_r"</code>.</summary><div class="ans">الصور تظهر بألوان أخرى (أزرق وأصفر)، وهي خريطة الألوان <bdi>(colormap)</bdi> الافتراضية. الأرقام نفسها، والألوان فقط تغيّرت.</div></details></li>
+  <li><details><summary>اطبع <code>digits.images[0]</code> ثم <code>digits.data[0]</code>.</summary><div class="ans">الأول شبكة 8 × 8. الثاني صف واحد من 64 رقمًا. الأرقام نفسها بالترتيب نفسه: الصف الأول من الصورة، ثم الثاني، وهكذا. جرّب النقر على البكسلات في اللوحة.</div></details></li>
+  <li><details><summary>اكتب <code>plt.subplots(1, 5, …)</code> بدل 10.</summary><div class="ans">خمس صور فقط: 0 إلى 4. <code>enumerate(axs)</code> يمرّ على عدد الرسوم الموجود في <code>axs</code>، فالحلقة تقصر وحدها.</div></details></li>
+  <li><details><summary>احذف <code>ax.axis("off")</code>.</summary><div class="ans">تظهر حول كل صورة محاور بأرقام 0 إلى 7: أرقام صفوف البكسلات وأعمدتها.</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= TASKS ================= -->
+<section class="view" data-view="tasks" hidden>
+ <div class="cellhead"><span class="cellno">Part 2</span><h1>مهامك في الجزء 2</h1>
+ <p class="lead">هنا لا نعطيك الحل. لكل مهمة: ماذا تحسب، وأي الأسماء في هذه الصفحة تحتاجها، وتلميح. انقر اسمًا ليفتح شرحه في خليته. شغّل خلية التحقق تحت كل مهمة: ✅ يعني أن إجابتك قريبة من الصحيحة بما يكفي. هذا المعمل بلا درجة.</p></div>
+ <div class="task"><h3>Task 2.1 · متوسط العرض في كل صنف</h3>
+  <p>احسب متوسط عرض <bdi>(width)</bdi> السلمون، ومتوسط عرض القاروص، من المصفوفة <code>fish</code>.</p>
+  <div class="tools"><a class="b np" href="#c11--bmask">fish[labels == 0, 0]</a><a class="b np" href="#c11--mean">.mean()</a><a class="b np" href="#c11--colon">fish[:, j]</a></div>
+  <p class="note">تلميح: في 1.1 حسبنا متوسط لمعان السلمون. ما الذي يتغير إذا أردت العرض؟ تذكّر ترتيب الأعمدة: أي رقم لعمود العرض؟</p></div>
+ <div class="task"><h3>Task 2.2 · أخطاء القاعدة «قاروص إذا العرض &gt; 18.5»</h3>
+  <p>اكتب القاعدة، ثم احسب عدد الأخطاء في <code>errors_width</code>.</p>
+  <div class="tools"><a class="b np" href="#c12--gt">&gt; على عمود</a><a class="b np" href="#c12--astype">astype(int)</a><a class="b np" href="#c12--ne">!=</a><a class="b np" href="#c12--sum">np.sum</a></div>
+  <p class="note">تلميح: انسخ قاعدة السمة الواحدة في 1.2، وغيّر شيئين فقط: العمود والعتبة <bdi>(threshold)</bdi>.</p></div>
+ <div class="task"><h3>Task 2.3 · Iris بالأرقام</h3>
+  <p>كم عيّنة <bdi>(sample)</bdi> وكم سمة <bdi>(feature)</bdi> في Iris؟ وكم زهرة من كل نوع؟</p>
+  <div class="tools"><a class="b np" href="#c14a--shape">.shape</a><a class="b py" href="#c11--idx">[0] و[1]</a><a class="b pd" href="#c14a--vc">value_counts</a></div>
+  <p class="note" id="t3">تلميح: <code>shape</code> صف ثابت <bdi>(tuple)</bdi> من رقمين، ونقرأ كل رقم برقمه. الأعداد لكل نوع يجب أن تكون بالترتيب 0، 1، 2. <code>value_counts</code> ترتب حسب العدد، فإن أردت الترتيب حسب الصنف أضف بعدها <code>.sort_index()</code>. انظر الفخ «value_counts لا ترتب حسب الصنف».</p></div>
+ <div class="task"><h3>Task 2.4 · متوسط طول البتلة لكل نوع</h3>
+  <p>احفظ في <code>mean_petal_length</code> ثلاثة أرقام: متوسط <code>petal length (cm)</code> للأصناف 0 و1 و2.</p>
+  <div class="tools"><a class="b pd" href="#c13--groupby">groupby().mean()</a><a class="b pd" href="#tasks--t4">df["col"]</a></div>
+  <p class="note" id="t4">تلميح: الدفتر يعطيك <code>X.groupby(y).mean()</code>: جدول فيه صف لكل صنف وعمود لكل سمة. خذ منه العمود الذي تريده باسمه بين قوسين مربعين، كما أضفنا <code>df["species"]</code> في 1.3.</p></div>
+ <div class="task"><h3>Task 2.5 · قاعدة تجد setosa</h3>
+  <p>اختر عتبة <code>t</code> على طول البتلة، بحيث تعطي القاعدة «setosa إذا طول البتلة &lt; t» صفر أخطاء على الأزهار الـ 150.</p>
+  <div class="tools"><a class="b plt" href="#c14b--axhist">ax.hist</a><a class="b np" href="#c12--ne">!=</a><a class="b np" href="#c12--sum">np.sum</a></div>
+  <p class="note">تلميح: افتح مدرّج <code>petal length (cm)</code> في <a href="#c14b--axhist">لوحة 1.4b</a>. أين تنتهي أعمدة setosa، وأين تبدأ أعمدة النوعين الآخرين؟ أي رقم بين المكانين يكفي. وانتبه: قبل أن تكتب رقمًا تطبع الخلية 50، بلا رسالة خطأ (انظر الفخاخ).</p></div>
+ <div class="task"><h3>Task 2.6 · صورة رقم واحدة</h3>
+  <p>كم سمة في صورة رقم واحدة؟ وما صنف <bdi>(class)</bdi> الصورة الأولى؟</p>
+  <div class="tools"><a class="b sk" href="#c15--dshape">digits.data.shape</a><a class="b sk" href="#c15--dtarget">digits.target</a><a class="b py" href="#c11--idx">[0]</a></div>
+  <p class="note">تلميح: عدد السمات هو عدد أعمدة <code>digits.data</code>، أي الرقم الثاني في شكله. والصنف في <code>digits.target</code>، والصورة الأولى رقمها 0.</p></div>
+ <div class="task"><h3>Reflect · versicolor أم virginica؟</h3>
+  <p>اكتب جملتين أو ثلاثًا: أي سمة واحدة تختار لتفصل versicolor عن virginica؟ وهل تستطيع سمة واحدة فصلهما بلا أخطاء؟ انظر المدرّجات الأربعة في <a href="#c14b--axhist">لوحة 1.4b</a>، ثم سمتين معًا في <a href="#c14c--scatter">لوحة 1.4c</a>.</p></div>
+ <nav class="pn" aria-label="التنقل بين الأقسام"></nav>
+</section>
+
+<!-- ================= TRAPS ================= -->
+<section class="view" data-view="traps" hidden>
+ <div class="cellhead"><span class="cellno">Traps</span><h1>الفخاخ: أخطاء لا تعطي رسالة خطأ <bdi>(error message)</bdi></h1>
+ <p class="lead">أغلب هذه الأخطاء تجعل الكود يعمل، لكن بأرقام خاطئة. لهذا هي خطيرة. انقر الاسم في كل بطاقة لترى شرحه في خليته.</p></div>
+ <div class="traps">
+  <div class="trapcard"><h3><span class="b np">NumPy</span> <code>fish[mask][0]</code> ليست <code>fish[mask, 0]</code></h3><p><code>fish[labels == 1, 0]</code> لمعان القاروص الخمس. لكن <code>fish[labels == 1][0]</code> أول سمكة قاروص بسمتيها: <code>[ 4.2 20.5]</code>. و<code>.mean()</code> لها 12.35، بلا رسالة خطأ.</p><div class="tools"><a class="b np" href="#c11--bmask">fish[labels == 0, 0]</a></div></div>
+  <div class="trapcard"><h3><span class="b np">NumPy</span> ترتيب الأعمدة</h3><p>العمود 0 اللمعان، والعمود 1 العرض. إن بدّلتهما تحسب سمة أخرى، والكود لا يشتكي. اقرأ أسماء الأعمدة من تعليق الدفتر أو من <code>df.head()</code>.</p><div class="tools"><a class="b np" href="#c11--colon">fish[:, 0]</a> <a class="b pd" href="#c13--df">DataFrame</a></div></div>
+  <div class="trapcard"><h3><span class="b py">Python</span> مقارنة مع <code>None</code></h3><p>في 2.5، إن بقي <code>t = None</code> تعطي <code>X["petal length (cm)"] &lt; t</code> كلها False، فتطبع الخلية 50 بلا رسالة خطأ. و<code>check</code> تعطي ❌ لأي <code>None</code>.</p><div class="tools"><a class="b py" href="#setup--isnot">is not None</a> <a class="b np" href="#c12--gt">مقارنة</a></div></div>
+  <div class="trapcard"><h3><span class="b pd">pandas</span> <code>value_counts</code> لا ترتب حسب الصنف</h3><p>ترتب حسب العدد، من الأكبر. في Wine تعطي الصنف 1 (71) ثم 0 (59) ثم 2 (48). إن احتجت الترتيب 0، 1، 2 أضف <code>.sort_index()</code>.</p><div class="tools"><a class="b pd" href="#c14a--vc">value_counts</a></div></div>
+  <div class="trapcard"><h3><span class="b plt">Matplotlib</span> <code>bins=15</code> لكل نوع وحده</h3><p>كل استدعاء لـ <code>ax.hist</code> يقسم مجال بياناته هو إلى 15 عمودًا. فعرض الأعمدة يختلف بين الأنواع. قارن مواضع الأعمدة، لا عددها ولا عرضها.</p><div class="tools"><a class="b plt" href="#c14b--bins">bins=15</a></div></div>
+  <div class="trapcard"><h3><span class="b pd">pandas</span> <code>head()</code> ليست كل البيانات</h3><p><code>X.head()</code> تعرض 5 صفوف فقط، وكلها setosa. البيانات 150 صفًا. لا تحكم على البيانات من أول صفوفها.</p><div class="tools"><a class="b pd" href="#c13--head">head</a></div></div>
+ </div>
+ <nav class="pn" aria-label="التنقل بين الأقسام"></nav>
+</section>
+
+<!-- ================= INDEX ================= -->
+<section class="view" data-view="index" hidden>
+ <div class="cellhead"><span class="cellno">Index</span><h1>فهرس الأسماء</h1>
+ <p class="lead">كل اسم مرّ في هذا المعمل، مع مكتبته ومكان شرحه. انقر الخلية لتفتح الشرح تحت سطره. هذا الأسبوع الأول، فكل الأسماء جديدة. الفهرس يكبر كل أسبوع: الاسم الذي يُشرح هنا لن يُعاد شرحه في الأسابيع التالية، بل يُحال إلى هذا الدليل.</p></div>
+ <div class="tw"><table class="glo" id="glo"><thead><tr><th>الاسم</th><th>المكتبة</th><th class="hide-ph">الحالة</th><th>بجملة</th><th>الشرح</th></tr></thead><tbody></tbody></table></div>
+ <nav class="pn" aria-label="التنقل بين الأقسام"></nav>
+</section>
+
+</main>
+</div>
+</div>
+
+<script>window.Reveal = window.Reveal || {isReady: () => true, getCurrentSlide: () => document.querySelector(".view:not([hidden])") || document.body};</script>
+<script>
+/* Derivation window for ENGS 3302 decks ("how we get this", for understanding).
+   A slide holds a button  <button class="dvbtn" data-dv="ID">  and a  <template id="dv-ID" data-title="...">  with the lines.
+   Inside the template every element with data-s="k" appears at step k. A token <i data-t="name"> with data-from="other"
+   flies from the token "other" (in an earlier line) to its place and leaves a dashed trail. data-x="k" strikes a token at step k.
+   Lines flow into columns (no scrolling). Click or → / Space / PageDown: next step; ← / PageUp: back; Esc or D (ي): back to the slide,
+   which stays at the same slide and step. While the window is open no key reaches the deck. */
+(function(){
+  var dv, stage, cols, svg, cnt, ttl, cur = null, step = 0, max = 0, busy = 0;
+  var NS = 'http://www.w3.org/2000/svg';
+  function scale(){ var k = Math.min(innerWidth / 1600, innerHeight / 900); stage.style.transform = 'translate(-50%,-50%) scale(' + k + ')'; return k; }
+  function K(){ return stage.getBoundingClientRect().width / 1600; }
+  function local(r){ var b = svg.getBoundingClientRect(), k = K(); return {x: (r.left - b.left) / k, y: (r.top - b.top) / k, w: r.width / k, h: r.height / k}; }
+  function build(){
+    dv = document.createElement('div'); dv.id = 'dv'; dv.hidden = true;
+    dv.innerHTML = '<div id="dvStage"><div class="dvpanel"><div class="dvhead"><span class="dvtag">للفهم</span><span class="dvtitle"></span>'
+      + '<button class="dvclose" type="button" aria-label="رجوع إلى الدليل">×</button></div><div class="dvcols"></div>'
+      + '<svg class="dvtrail" width="1600" height="900" viewBox="0 0 1600 900" aria-hidden="true"><defs><marker id="dvar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="currentColor"></path></marker></defs></svg>'
+      + '<div class="dvside"><div class="dvcount"></div><div class="dvkey"><p><span class="dvk1"></span> حدّ ينتقل: الخط المتقطع يدل على مصدره</p>'
+      + '<p><span class="dvk2">a</span> يُختصر: يُشطب</p><p><span class="dvk3">rule</span> القاعدة المستعملة في السطر</p></div>'
+      + '<div class="dvhint">انقر للخطوة التالية، وEsc للرجوع</div></div></div></div>';
+    document.body.appendChild(dv);
+    stage = dv.querySelector('#dvStage'); cols = dv.querySelector('.dvcols'); svg = dv.querySelector('.dvtrail'); cnt = dv.querySelector('.dvcount'); ttl = dv.querySelector('.dvtitle');
+    dv.querySelector('.dvclose').addEventListener('click', function(e){ e.stopPropagation(); close(); });
+    stage.addEventListener('click', function(e){ e.stopPropagation(); go(step + 1); });
+    dv.addEventListener('click', function(e){ e.stopPropagation(); });
+    addEventListener('resize', function(){ if(!dv.hidden){ scale(); trails(step, false); } });
+  }
+  function open(id){
+    var t = document.getElementById('dv-' + id); if(!t) return;
+    cur = id; ttl.innerHTML = t.dataset.title || ''; cols.innerHTML = t.innerHTML;
+    max = 0; cols.querySelectorAll('[data-s]').forEach(function(el){ max = Math.max(max, +el.dataset.s); });
+    cols.querySelectorAll('[data-x]').forEach(function(el){ max = Math.max(max, +el.dataset.x); });
+    dv.hidden = false; scale(); document.body.classList.add('dv-on'); set(1, true);
+  }
+  function close(){ dv.hidden = true; cur = null; document.body.classList.remove('dv-on'); }
+  function go(k){ if(k < 1 || k > max || busy) return; set(k, k === step + 1); }
+  function set(k, anim){
+    step = k; cnt.textContent = 'step ' + k + ' / ' + max;
+    cols.querySelectorAll('[data-s]').forEach(function(el){ var s = +el.dataset.s; el.classList.toggle('on', s <= k); el.classList.toggle('now', s === k); el.classList.toggle('inst', !anim || s !== k); });
+    cols.querySelectorAll('[data-x]').forEach(function(el){ var x = +el.dataset.x; el.classList.toggle('struck', x <= k); el.classList.toggle('inst', !anim || x !== k); });
+    var movers = [].filter.call(cols.querySelectorAll('[data-from]'), function(el){ return +sOf(el) === k; });
+    if(!anim || !movers.length){ trails(k, false); return; }
+    trails(k - 1, false);                     // the old trails stay; the new ones come after the move
+    busy++; var k0 = K();
+    movers.forEach(function(el, i){
+      var src = cols.querySelector('[data-t="' + el.dataset.from + '"]'); if(!src) return;
+      var a = src.getBoundingClientRect(), b = el.getBoundingClientRect();
+      el.style.transition = 'none'; el.style.transform = 'translate(' + ((a.left - b.left) / k0) + 'px,' + ((a.top - b.top) / k0) + 'px)'; el.style.opacity = '1';
+      el.getBoundingClientRect();
+      el.style.transition = 'transform 800ms cubic-bezier(.45,.05,.25,1) ' + (i * 140) + 'ms'; el.style.transform = '';
+    });
+    setTimeout(function(){ movers.forEach(function(el){ el.style.transition = ''; }); busy--; if(step === k) trails(k, true); }, 800 + movers.length * 140 + 60);
+  }
+  function sOf(el){ var p = el; while(p && p !== cols){ if(p.dataset && p.dataset.s) return p.dataset.s; p = p.parentNode; } return 0; }
+  function trails(k, fresh){
+    [].slice.call(svg.querySelectorAll('path.tr')).forEach(function(p){ p.remove(); });
+    cols.querySelectorAll('[data-from]').forEach(function(el){
+      var s = +sOf(el); if(s > k) return;
+      var src = cols.querySelector('[data-t="' + el.dataset.from + '"]'); if(!src) return;
+      var a = local(src.getBoundingClientRect()), b = local(el.getBoundingClientRect());
+      var x1 = a.x + a.w / 2, y1 = a.y + a.h, x2 = b.x + b.w / 2, y2 = b.y, d;
+      if(x2 - x1 > 300 || x1 - x2 > 300){ d = 'M' + x1 + ',' + y1 + ' C' + x1 + ',' + (y1 + 60) + ' ' + x2 + ',' + (y2 - 60) + ' ' + x2 + ',' + (y2 - 3); }
+      else d = 'M' + x1 + ',' + y1 + ' C' + x1 + ',' + (y1 + (y2 - y1) * 0.5) + ' ' + x2 + ',' + (y1 + (y2 - y1) * 0.5) + ' ' + x2 + ',' + (y2 - 3);
+      var p = document.createElementNS(NS, 'path'); p.setAttribute('d', d); p.setAttribute('class', 'tr' + (s === step ? ' new' : '') + (fresh && s === k ? ' fresh' : ''));
+      p.setAttribute('marker-end', 'url(#dvar)'); svg.appendChild(p);
+    });
+  }
+  function init(){
+    build();
+    document.addEventListener('click', function(e){ var b = e.target.closest && e.target.closest('.dvbtn'); if(b){ e.preventDefault(); e.stopPropagation(); b.blur(); open(b.dataset.dv); } }, true);
+    document.addEventListener('keydown', function(e){
+      var t = e.target; if(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+      var wb = document.getElementById('wb'); if(wb && !wb.hidden) return;                    // the whiteboard has the keys
+      var mod = e.ctrlKey || e.metaKey || e.altKey;
+      var isD = !mod && (e.key === 'd' || e.key === 'D' || e.key === 'ي' || e.code === 'KeyD');   // ي = D on an Arabic keyboard
+      var isW = !mod && (e.key === 'w' || e.key === 'W' || e.key === 'ص' || e.code === 'KeyW');
+      if(dv.hidden){
+        if(!isD) return;
+        var b = Reveal.getCurrentSlide().querySelector('.dvbtn'); if(!b) return;
+        e.preventDefault(); e.stopImmediatePropagation(); open(b.dataset.dv); return;
+      }
+      if(isW) return;                                                                         // let the whiteboard open over the window
+      e.preventDefault(); e.stopImmediatePropagation();
+      if(isD || e.key === 'Escape') close();
+      else if(['ArrowRight', 'ArrowDown', ' ', 'PageDown', 'Enter', 'n'].indexOf(e.key) >= 0) go(step + 1);
+      else if(['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace', 'p'].indexOf(e.key) >= 0) go(step - 1);
+    }, true);
+    window.EngsDeriv = {open: open, close: close, go: function(k){ go(k); }, set: function(k){ set(k, false); }, state: function(){ return {id: cur, step: step, max: max}; }};
+  }
+  (function wait(){ if(window.Reveal && Reveal.isReady && Reveal.isReady()) init(); else setTimeout(wait, 50); })();
+})();
+
+</script>
+<script>
+const D = {"chk":{"3.88|1e-3":"✅ mean lightness","3.88|1e-2":"✅ mean lightness","3.88|1e-1":"✅ mean lightness","3.8804|1e-3":"✅ mean lightness","3.8804|1e-2":"✅ mean lightness","3.8804|1e-1":"✅ mean lightness","3.885|1e-3":"❌ mean lightness: expected 3.88, got 3.885","3.885|1e-2":"✅ mean lightness","3.885|1e-1":"✅ mean lightness","3.9|1e-3":"❌ mean lightness: expected 3.88, got 3.9","3.9|1e-2":"❌ mean lightness: expected 3.88, got 3.9","3.9|1e-1":"✅ mean lightness","None|1e-3":"❌ mean lightness: expected 3.88, got None","None|1e-2":"❌ mean lightness: expected 3.88, got None","None|1e-1":"❌ mean lightness: expected 3.88, got None","\"abc\"|1e-3":"❌ mean lightness: expected 3.88, got abc","\"abc\"|1e-2":"❌ mean lightness: expected 3.88, got abc","\"abc\"|1e-1":"❌ mean lightness: expected 3.88, got abc"},"fish":[[2.5,16.0],[3.0,19.3],[3.8,16.5],[4.5,18.0],[5.6,17.0],[4.2,20.5],[5.2,19.0],[6.0,21.0],[6.8,19.5],[7.5,20.0]],"labels":[0,0,0,0,0,1,1,1,1,1],"ex":{"fish[0]":{"repr":"[ 2.5 16. ]","shape":"(2,)","cells":[[0,0],[0,1]],"mean":9.25},"fish[:, 0]":{"repr":"[2.5 3.  3.8 4.5 5.6 4.2 5.2 6.  6.8 7.5]","shape":"(10,)","cells":[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[7,0],[8,0],[9,0]],"mean":4.91},"fish[:, 1]":{"repr":"[16.  19.3 16.5 18.  17.  20.5 19.  21.  19.5 20. ]","shape":"(10,)","cells":[[0,1],[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],[7,1],[8,1],[9,1]],"mean":18.68},"fish[labels == 0, 0]":{"repr":"[2.5 3.  3.8 4.5 5.6]","shape":"(5,)","cells":[[0,0],[1,0],[2,0],[3,0],[4,0]],"mean":3.88},"fish[labels == 1, 0]":{"repr":"[4.2 5.2 6.  6.8 7.5]","shape":"(5,)","cells":[[5,0],[6,0],[7,0],[8,0],[9,0]],"mean":5.94},"fish[labels == 1][0]":{"repr":"[ 4.2 20.5]","shape":"(2,)","cells":[[5,0],[5,1]],"mean":12.35}},"mask0":"[ True  True  True  True  True False False False False False]","mean_salmon_light":3.88,"r1":{"2.0":{"g":[1,1,1,1,1,1,1,1,1,1],"e":5},"2.1":{"g":[1,1,1,1,1,1,1,1,1,1],"e":5},"2.2":{"g":[1,1,1,1,1,1,1,1,1,1],"e":5},"2.3":{"g":[1,1,1,1,1,1,1,1,1,1],"e":5},"2.4":{"g":[1,1,1,1,1,1,1,1,1,1],"e":5},"2.5":{"g":[0,1,1,1,1,1,1,1,1,1],"e":4},"2.6":{"g":[0,1,1,1,1,1,1,1,1,1],"e":4},"2.7":{"g":[0,1,1,1,1,1,1,1,1,1],"e":4},"2.8":{"g":[0,1,1,1,1,1,1,1,1,1],"e":4},"2.9":{"g":[0,1,1,1,1,1,1,1,1,1],"e":4},"3.0":{"g":[0,0,1,1,1,1,1,1,1,1],"e":3},"3.1":{"g":[0,0,1,1,1,1,1,1,1,1],"e":3},"3.2":{"g":[0,0,1,1,1,1,1,1,1,1],"e":3},"3.3":{"g":[0,0,1,1,1,1,1,1,1,1],"e":3},"3.4":{"g":[0,0,1,1,1,1,1,1,1,1],"e":3},"3.5":{"g":[0,0,1,1,1,1,1,1,1,1],"e":3},"3.6":{"g":[0,0,1,1,1,1,1,1,1,1],"e":3},"3.7":{"g":[0,0,1,1,1,1,1,1,1,1],"e":3},"3.8":{"g":[0,0,0,1,1,1,1,1,1,1],"e":2},"3.9":{"g":[0,0,0,1,1,1,1,1,1,1],"e":2},"4.0":{"g":[0,0,0,1,1,1,1,1,1,1],"e":2},"4.1":{"g":[0,0,0,1,1,1,1,1,1,1],"e":2},"4.2":{"g":[0,0,0,1,1,0,1,1,1,1],"e":3},"4.3":{"g":[0,0,0,1,1,0,1,1,1,1],"e":3},"4.4":{"g":[0,0,0,1,1,0,1,1,1,1],"e":3},"4.5":{"g":[0,0,0,0,1,0,1,1,1,1],"e":2},"4.6":{"g":[0,0,0,0,1,0,1,1,1,1],"e":2},"4.7":{"g":[0,0,0,0,1,0,1,1,1,1],"e":2},"4.8":{"g":[0,0,0,0,1,0,1,1,1,1],"e":2},"4.9":{"g":[0,0,0,0,1,0,1,1,1,1],"e":2},"5.0":{"g":[0,0,0,0,1,0,1,1,1,1],"e":2},"5.1":{"g":[0,0,0,0,1,0,1,1,1,1],"e":2},"5.2":{"g":[0,0,0,0,1,0,0,1,1,1],"e":3},"5.3":{"g":[0,0,0,0,1,0,0,1,1,1],"e":3},"5.4":{"g":[0,0,0,0,1,0,0,1,1,1],"e":3},"5.5":{"g":[0,0,0,0,1,0,0,1,1,1],"e":3},"5.6":{"g":[0,0,0,0,0,0,0,1,1,1],"e":2},"5.7":{"g":[0,0,0,0,0,0,0,1,1,1],"e":2},"5.8":{"g":[0,0,0,0,0,0,0,1,1,1],"e":2},"5.9":{"g":[0,0,0,0,0,0,0,1,1,1],"e":2},"6.0":{"g":[0,0,0,0,0,0,0,0,1,1],"e":3},"6.1":{"g":[0,0,0,0,0,0,0,0,1,1],"e":3},"6.2":{"g":[0,0,0,0,0,0,0,0,1,1],"e":3},"6.3":{"g":[0,0,0,0,0,0,0,0,1,1],"e":3},"6.4":{"g":[0,0,0,0,0,0,0,0,1,1],"e":3},"6.5":{"g":[0,0,0,0,0,0,0,0,1,1],"e":3},"6.6":{"g":[0,0,0,0,0,0,0,0,1,1],"e":3},"6.7":{"g":[0,0,0,0,0,0,0,0,1,1],"e":3},"6.8":{"g":[0,0,0,0,0,0,0,0,0,1],"e":4},"6.9":{"g":[0,0,0,0,0,0,0,0,0,1],"e":4},"7.0":{"g":[0,0,0,0,0,0,0,0,0,1],"e":4},"7.1":{"g":[0,0,0,0,0,0,0,0,0,1],"e":4},"7.2":{"g":[0,0,0,0,0,0,0,0,0,1],"e":4},"7.3":{"g":[0,0,0,0,0,0,0,0,0,1],"e":4},"7.4":{"g":[0,0,0,0,0,0,0,0,0,1],"e":4},"7.5":{"g":[0,0,0,0,0,0,0,0,0,0],"e":5},"7.6":{"g":[0,0,0,0,0,0,0,0,0,0],"e":5},"7.7":{"g":[0,0,0,0,0,0,0,0,0,0],"e":5},"7.8":{"g":[0,0,0,0,0,0,0,0,0,0],"e":5},"7.9":{"g":[0,0,0,0,0,0,0,0,0,0],"e":5},"8.0":{"g":[0,0,0,0,0,0,0,0,0,0],"e":5}},"r2":{"19.0":{"g":[0,1,1,1,1,1,1,1,1,1],"e":4},"19.5":{"g":[0,1,1,1,1,1,1,1,1,1],"e":4},"20.0":{"g":[0,1,1,1,1,1,1,1,1,1],"e":4},"20.5":{"g":[0,1,0,1,1,1,1,1,1,1],"e":3},"21.0":{"g":[0,1,0,1,1,1,1,1,1,1],"e":3},"21.5":{"g":[0,1,0,1,1,1,1,1,1,1],"e":3},"22.0":{"g":[0,1,0,1,1,1,1,1,1,1],"e":3},"22.5":{"g":[0,0,0,0,1,1,1,1,1,1],"e":1},"23.0":{"g":[0,0,0,0,0,1,1,1,1,1],"e":0},"23.5":{"g":[0,0,0,0,0,1,1,1,1,1],"e":0},"24.0":{"g":[0,0,0,0,0,1,1,1,1,1],"e":0},"24.5":{"g":[0,0,0,0,0,1,0,1,1,1],"e":1},"25.0":{"g":[0,0,0,0,0,0,0,1,1,1],"e":2},"25.5":{"g":[0,0,0,0,0,0,0,1,1,1],"e":2},"26.0":{"g":[0,0,0,0,0,0,0,1,1,1],"e":2},"26.5":{"g":[0,0,0,0,0,0,0,1,0,1],"e":3},"27.0":{"g":[0,0,0,0,0,0,0,0,0,1],"e":4},"27.5":{"g":[0,0,0,0,0,0,0,0,0,0],"e":5},"28.0":{"g":[0,0,0,0,0,0,0,0,0,0],"e":5}},"sums":[18.5,22.3,20.3,22.5,22.6,24.7,24.2,27.0,26.3,27.5],"dfhead":"   lightness  width species\n0        2.5   16.0  salmon\n1        3.0   19.3  salmon\n2        3.8   16.5  salmon\n3        4.5   18.0  salmon\n4        5.6   17.0  salmon","grp":{"mean":{"salmon":3.88,"sea bass":5.94},"count":{"salmon":5,"sea bass":5},"max":{"salmon":5.6,"sea bass":7.5},"min":{"salmon":2.5,"sea bass":4.2}},"where":["salmon","salmon","salmon","salmon","salmon","sea bass","sea bass","sea bass","sea bass","sea bass"],"cols":["sepal length (cm)","sepal width (cm)","petal length (cm)","petal width (cm)"],"X":[[5.1,3.5,1.4,0.2],[4.9,3.0,1.4,0.2],[4.7,3.2,1.3,0.2],[4.6,3.1,1.5,0.2],[5.0,3.6,1.4,0.2],[5.4,3.9,1.7,0.4],[4.6,3.4,1.4,0.3],[5.0,3.4,1.5,0.2],[4.4,2.9,1.4,0.2],[4.9,3.1,1.5,0.1],[5.4,3.7,1.5,0.2],[4.8,3.4,1.6,0.2],[4.8,3.0,1.4,0.1],[4.3,3.0,1.1,0.1],[5.8,4.0,1.2,0.2],[5.7,4.4,1.5,0.4],[5.4,3.9,1.3,0.4],[5.1,3.5,1.4,0.3],[5.7,3.8,1.7,0.3],[5.1,3.8,1.5,0.3],[5.4,3.4,1.7,0.2],[5.1,3.7,1.5,0.4],[4.6,3.6,1.0,0.2],[5.1,3.3,1.7,0.5],[4.8,3.4,1.9,0.2],[5.0,3.0,1.6,0.2],[5.0,3.4,1.6,0.4],[5.2,3.5,1.5,0.2],[5.2,3.4,1.4,0.2],[4.7,3.2,1.6,0.2],[4.8,3.1,1.6,0.2],[5.4,3.4,1.5,0.4],[5.2,4.1,1.5,0.1],[5.5,4.2,1.4,0.2],[4.9,3.1,1.5,0.2],[5.0,3.2,1.2,0.2],[5.5,3.5,1.3,0.2],[4.9,3.6,1.4,0.1],[4.4,3.0,1.3,0.2],[5.1,3.4,1.5,0.2],[5.0,3.5,1.3,0.3],[4.5,2.3,1.3,0.3],[4.4,3.2,1.3,0.2],[5.0,3.5,1.6,0.6],[5.1,3.8,1.9,0.4],[4.8,3.0,1.4,0.3],[5.1,3.8,1.6,0.2],[4.6,3.2,1.4,0.2],[5.3,3.7,1.5,0.2],[5.0,3.3,1.4,0.2],[7.0,3.2,4.7,1.4],[6.4,3.2,4.5,1.5],[6.9,3.1,4.9,1.5],[5.5,2.3,4.0,1.3],[6.5,2.8,4.6,1.5],[5.7,2.8,4.5,1.3],[6.3,3.3,4.7,1.6],[4.9,2.4,3.3,1.0],[6.6,2.9,4.6,1.3],[5.2,2.7,3.9,1.4],[5.0,2.0,3.5,1.0],[5.9,3.0,4.2,1.5],[6.0,2.2,4.0,1.0],[6.1,2.9,4.7,1.4],[5.6,2.9,3.6,1.3],[6.7,3.1,4.4,1.4],[5.6,3.0,4.5,1.5],[5.8,2.7,4.1,1.0],[6.2,2.2,4.5,1.5],[5.6,2.5,3.9,1.1],[5.9,3.2,4.8,1.8],[6.1,2.8,4.0,1.3],[6.3,2.5,4.9,1.5],[6.1,2.8,4.7,1.2],[6.4,2.9,4.3,1.3],[6.6,3.0,4.4,1.4],[6.8,2.8,4.8,1.4],[6.7,3.0,5.0,1.7],[6.0,2.9,4.5,1.5],[5.7,2.6,3.5,1.0],[5.5,2.4,3.8,1.1],[5.5,2.4,3.7,1.0],[5.8,2.7,3.9,1.2],[6.0,2.7,5.1,1.6],[5.4,3.0,4.5,1.5],[6.0,3.4,4.5,1.6],[6.7,3.1,4.7,1.5],[6.3,2.3,4.4,1.3],[5.6,3.0,4.1,1.3],[5.5,2.5,4.0,1.3],[5.5,2.6,4.4,1.2],[6.1,3.0,4.6,1.4],[5.8,2.6,4.0,1.2],[5.0,2.3,3.3,1.0],[5.6,2.7,4.2,1.3],[5.7,3.0,4.2,1.2],[5.7,2.9,4.2,1.3],[6.2,2.9,4.3,1.3],[5.1,2.5,3.0,1.1],[5.7,2.8,4.1,1.3],[6.3,3.3,6.0,2.5],[5.8,2.7,5.1,1.9],[7.1,3.0,5.9,2.1],[6.3,2.9,5.6,1.8],[6.5,3.0,5.8,2.2],[7.6,3.0,6.6,2.1],[4.9,2.5,4.5,1.7],[7.3,2.9,6.3,1.8],[6.7,2.5,5.8,1.8],[7.2,3.6,6.1,2.5],[6.5,3.2,5.1,2.0],[6.4,2.7,5.3,1.9],[6.8,3.0,5.5,2.1],[5.7,2.5,5.0,2.0],[5.8,2.8,5.1,2.4],[6.4,3.2,5.3,2.3],[6.5,3.0,5.5,1.8],[7.7,3.8,6.7,2.2],[7.7,2.6,6.9,2.3],[6.0,2.2,5.0,1.5],[6.9,3.2,5.7,2.3],[5.6,2.8,4.9,2.0],[7.7,2.8,6.7,2.0],[6.3,2.7,4.9,1.8],[6.7,3.3,5.7,2.1],[7.2,3.2,6.0,1.8],[6.2,2.8,4.8,1.8],[6.1,3.0,4.9,1.8],[6.4,2.8,5.6,2.1],[7.2,3.0,5.8,1.6],[7.4,2.8,6.1,1.9],[7.9,3.8,6.4,2.0],[6.4,2.8,5.6,2.2],[6.3,2.8,5.1,1.5],[6.1,2.6,5.6,1.4],[7.7,3.0,6.1,2.3],[6.3,3.4,5.6,2.4],[6.4,3.1,5.5,1.8],[6.0,3.0,4.8,1.8],[6.9,3.1,5.4,2.1],[6.7,3.1,5.6,2.4],[6.9,3.1,5.1,2.3],[5.8,2.7,5.1,1.9],[6.8,3.2,5.9,2.3],[6.7,3.3,5.7,2.5],[6.7,3.0,5.2,2.3],[6.3,2.5,5.0,1.9],[6.5,3.0,5.2,2.0],[6.2,3.4,5.4,2.3],[5.9,3.0,5.1,1.8]],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],"names":["setosa","versicolor","virginica"],"Xhead":"   sepal length (cm)  sepal width (cm)  petal length (cm)  petal width (cm)\n0                5.1               3.5                1.4               0.2\n1                4.9               3.0                1.4               0.2\n2                4.7               3.2                1.3               0.2\n3                4.6               3.1                1.5               0.2\n4                5.0               3.6                1.4               0.2","vc":"target\n0    50\n1    50\n2    50","wine_vc":"target\n1    71\n0    59\n2    48","hist":{"sepal length (cm)|5":[{"c":[5,11,20,9,5],"e":[4.3,4.6,4.9,5.2,5.5,5.8]},{"c":[5,16,13,8,8],"e":[4.9,5.32,5.74,6.16,6.58,7.0]},{"c":[1,10,17,15,7],"e":[4.9,5.5,6.1,6.7,7.3,7.9]}],"sepal length (cm)|15":[{"c":[1,3,1,4,2,5,4,8,8,3,1,5,2,0,3],"e":[4.3,4.4,4.5,4.6,4.7,4.8,4.9,5.0,5.1,5.2,5.3,5.4,5.5,5.6,5.7,5.8]},{"c":[3,1,1,1,10,5,3,6,4,5,2,1,5,1,2],"e":[4.9,5.04,5.18,5.32,5.46,5.6,5.74,5.88,6.02,6.16,6.3,6.44,6.58,6.72,6.86,7.0]},{"c":[1,0,0,1,4,5,8,5,4,7,4,4,1,5,1],"e":[4.9,5.1,5.3,5.5,5.7,5.9,6.1,6.3,6.5,6.7,6.9,7.1,7.3,7.5,7.7,7.9]}],"sepal length (cm)|30":[{"c":[1,0,3,0,1,0,4,0,2,0,5,0,4,0,8,0,8,0,3,0,1,0,5,0,2,0,0,0,2,1],"e":[4.3,4.35,4.4,4.45,4.5,4.55,4.6,4.65,4.7,4.75,4.8,4.85,4.9,4.95,5.0,5.05,5.1,5.15,5.2,5.25,5.3,5.35,5.4,5.45,5.5,5.55,5.6,5.65,5.7,5.75,5.8]},{"c":[1,2,1,0,1,0,0,1,5,5,0,5,3,0,2,4,0,4,2,3,0,2,1,0,2,3,0,1,1,1],"e":[4.9,4.97,5.04,5.11,5.18,5.25,5.32,5.39,5.46,5.53,5.6,5.67,5.74,5.81,5.88,5.95,6.02,6.09,6.16,6.23,6.3,6.37,6.44,6.51,6.58,6.65,6.72,6.79,6.86,6.93,7.0]},{"c":[1,0,0,0,0,0,1,0,4,0,1,4,0,8,0,5,4,0,7,0,3,1,3,1,0,1,1,4,0,1],"e":[4.9,5.0,5.1,5.2,5.3,5.4,5.5,5.6,5.7,5.8,5.9,6.0,6.1,6.2,6.3,6.4,6.5,6.6,6.7,6.8,6.9,7.0,7.1,7.2,7.3,7.4,7.5,7.6,7.7,7.8,7.9]}],"sepal width (cm)|5":[{"c":[1,11,22,12,4],"e":[2.3,2.72,3.14,3.56,3.98,4.4]},{"c":[3,10,14,18,5],"e":[2.0,2.28,2.56,2.84,3.12,3.4]},{"c":[5,14,18,10,3],"e":[2.2,2.52,2.84,3.16,3.48,3.8]}],"sepal width (cm)|15":[{"c":[1,0,0,0,1,10,5,11,6,3,7,2,2,1,1],"e":[2.3,2.44,2.58,2.72,2.86,3.0,3.14,3.28,3.42,3.56,3.7,3.84,3.98,4.12,4.26,4.4]},{"c":[1,0,2,3,3,4,3,5,6,7,8,3,3,1,1],"e":[2.0,2.0933,2.1867,2.28,2.3733,2.4667,2.56,2.6533,2.7467,2.84,2.9333,3.0267,3.12,3.2133,3.3067,3.4]},{"c":[1,0,4,2,4,8,2,12,4,5,3,2,0,1,2],"e":[2.2,2.3067,2.4133,2.52,2.6267,2.7333,2.84,2.9467,3.0533,3.16,3.2667,3.3733,3.48,3.5867,3.6933,3.8]}],"sepal width (cm)|30":[{"c":[1,0,0,0,0,0,0,0,1,0,6,4,5,0,2,9,0,6,3,0,3,4,2,0,1,1,0,1,0,1],"e":[2.3,2.37,2.44,2.51,2.58,2.65,2.72,2.79,2.86,2.93,3.0,3.07,3.14,3.21,3.28,3.35,3.42,3.49,3.56,3.63,3.7,3.77,3.84,3.91,3.98,4.05,4.12,4.19,4.26,4.33,4.4]},{"c":[1,0,0,0,2,0,3,0,3,0,4,0,3,0,0,5,0,6,0,7,0,8,0,3,0,3,0,1,0,1],"e":[2.0,2.0467,2.0933,2.14,2.1867,2.2333,2.28,2.3267,2.3733,2.42,2.4667,2.5133,2.56,2.6067,2.6533,2.7,2.7467,2.7933,2.84,2.8867,2.9333,2.98,3.0267,3.0733,3.12,3.1667,3.2133,3.26,3.3067,3.3533,3.4]},{"c":[1,0,0,0,0,4,0,2,0,4,0,8,0,2,0,12,4,0,5,0,3,0,2,0,0,0,1,0,0,2],"e":[2.2,2.2533,2.3067,2.36,2.4133,2.4667,2.52,2.5733,2.6267,2.68,2.7333,2.7867,2.84,2.8933,2.9467,3.0,3.0533,3.1067,3.16,3.2133,3.2667,3.32,3.3733,3.4267,3.48,3.5333,3.5867,3.64,3.6933,3.7467,3.8]}],"petal length (cm)|5":[{"c":[2,9,26,11,2],"e":[1.0,1.18,1.36,1.54,1.72,1.9]},{"c":[3,5,15,16,11],"e":[3.0,3.42,3.84,4.26,4.68,5.1]},{"c":[6,16,17,7,4],"e":[4.5,4.98,5.46,5.94,6.42,6.9]}],"petal length (cm)|15":[{"c":[1,1,0,2,0,7,13,0,13,0,7,4,0,0,2],"e":[1.0,1.06,1.12,1.18,1.24,1.3,1.36,1.42,1.48,1.54,1.6,1.66,1.72,1.78,1.84,1.9]},{"c":[1,0,2,2,1,2,3,8,4,2,11,3,7,2,2],"e":[3.0,3.14,3.28,3.42,3.56,3.7,3.84,3.98,4.12,4.26,4.4,4.54,4.68,4.82,4.96,5.1]},{"c":[1,2,3,10,2,4,9,3,5,5,0,2,0,3,1],"e":[4.5,4.66,4.82,4.98,5.14,5.3,5.46,5.62,5.78,5.94,6.1,6.26,6.42,6.58,6.74,6.9]}],"petal length (cm)|30":[{"c":[1,0,0,1,0,0,2,0,0,0,7,0,0,13,0,0,13,0,0,0,7,0,0,4,0,0,0,0,0,2],"e":[1.0,1.03,1.06,1.09,1.12,1.15,1.18,1.21,1.24,1.27,1.3,1.33,1.36,1.39,1.42,1.45,1.48,1.51,1.54,1.57,1.6,1.63,1.66,1.69,1.72,1.75,1.78,1.81,1.84,1.87,1.9]},{"c":[1,0,0,0,2,0,0,2,1,0,1,1,3,0,5,3,0,4,2,0,4,7,3,0,5,2,0,2,1,1],"e":[3.0,3.07,3.14,3.21,3.28,3.35,3.42,3.49,3.56,3.63,3.7,3.77,3.84,3.91,3.98,4.05,4.12,4.19,4.26,4.33,4.4,4.47,4.54,4.61,4.68,4.75,4.82,4.89,4.96,5.03,5.1]},{"c":[1,0,0,2,0,3,3,7,2,0,2,2,3,6,0,3,3,2,2,3,0,0,1,1,0,0,1,2,0,1],"e":[4.5,4.58,4.66,4.74,4.82,4.9,4.98,5.06,5.14,5.22,5.3,5.38,5.46,5.54,5.62,5.7,5.78,5.86,5.94,6.02,6.1,6.18,6.26,6.34,6.42,6.5,6.58,6.66,6.74,6.82,6.9]}],"petal width (cm)|5":[{"c":[5,36,0,7,2],"e":[0.1,0.2,0.3,0.4,0.5,0.6]},{"c":[10,18,7,13,2],"e":[1.0,1.16,1.32,1.48,1.64,1.8]},{"c":[4,12,11,9,14],"e":[1.4,1.62,1.84,2.06,2.28,2.5]}],"petal width (cm)|15":[{"c":[5,0,0,29,0,7,0,0,0,7,0,0,1,0,1],"e":[0.1,0.1333,0.1667,0.2,0.2333,0.2667,0.3,0.3333,0.3667,0.4,0.4333,0.4667,0.5,0.5333,0.5667,0.6]},{"c":[7,3,0,5,0,13,0,7,0,10,0,3,0,1,1],"e":[1.0,1.0533,1.1067,1.16,1.2133,1.2667,1.32,1.3733,1.4267,1.48,1.5333,1.5867,1.64,1.6933,1.7467,1.8]},{"c":[1,2,1,0,1,11,5,0,6,6,3,0,8,3,3],"e":[1.4,1.4733,1.5467,1.62,1.6933,1.7667,1.84,1.9133,1.9867,2.06,2.1333,2.2067,2.28,2.3533,2.4267,2.5]}],"petal width (cm)|30":[{"c":[5,0,0,0,0,0,29,0,0,0,0,7,0,0,0,0,0,0,7,0,0,0,0,0,1,0,0,0,0,1],"e":[0.1,0.1167,0.1333,0.15,0.1667,0.1833,0.2,0.2167,0.2333,0.25,0.2667,0.2833,0.3,0.3167,0.3333,0.35,0.3667,0.3833,0.4,0.4167,0.4333,0.45,0.4667,0.4833,0.5,0.5167,0.5333,0.55,0.5667,0.5833,0.6]},{"c":[7,0,0,3,0,0,0,5,0,0,0,13,0,0,0,7,0,0,10,0,0,0,3,0,0,0,1,0,0,1],"e":[1.0,1.0267,1.0533,1.08,1.1067,1.1333,1.16,1.1867,1.2133,1.24,1.2667,1.2933,1.32,1.3467,1.3733,1.4,1.4267,1.4533,1.48,1.5067,1.5333,1.56,1.5867,1.6133,1.64,1.6667,1.6933,1.72,1.7467,1.7733,1.8]},{"c":[1,0,2,0,0,1,0,0,1,0,11,0,0,5,0,0,6,0,0,6,0,3,0,0,8,0,0,3,0,3],"e":[1.4,1.4367,1.4733,1.51,1.5467,1.5833,1.62,1.6567,1.6933,1.73,1.7667,1.8033,1.84,1.8767,1.9133,1.95,1.9867,2.0233,2.06,2.0967,2.1333,2.17,2.2067,2.2433,2.28,2.3167,2.3533,2.39,2.4267,2.4633,2.5]}]},"none_err":50,"dig":{"images":"(1797, 8, 8)","data":"(1797, 64)","img":[[[0,0,5,13,9,1,0,0],[0,0,13,15,10,15,5,0],[0,3,15,2,0,11,8,0],[0,4,12,0,0,8,8,0],[0,5,8,0,0,9,8,0],[0,4,11,0,1,12,7,0],[0,2,14,5,10,12,0,0],[0,0,6,13,10,0,0,0]],[[0,0,0,12,13,5,0,0],[0,0,0,11,16,9,0,0],[0,0,3,15,16,6,0,0],[0,7,15,16,16,2,0,0],[0,0,1,16,16,3,0,0],[0,0,1,16,16,6,0,0],[0,0,1,16,16,6,0,0],[0,0,0,11,16,10,0,0]],[[0,0,0,4,15,12,0,0],[0,0,3,16,15,14,0,0],[0,0,8,13,8,16,0,0],[0,0,1,6,15,11,0,0],[0,1,8,13,15,1,0,0],[0,9,16,16,5,0,0,0],[0,3,13,16,16,11,5,0],[0,0,0,3,11,16,9,0]],[[0,0,7,15,13,1,0,0],[0,8,13,6,15,4,0,0],[0,2,1,13,13,0,0,0],[0,0,2,15,11,1,0,0],[0,0,0,1,12,12,1,0],[0,0,0,0,1,10,8,0],[0,0,8,4,5,14,9,0],[0,0,7,13,13,9,0,0]],[[0,0,0,1,11,0,0,0],[0,0,0,7,8,0,0,0],[0,0,1,13,6,2,2,0],[0,0,7,15,0,9,8,0],[0,5,16,10,0,16,6,0],[0,4,15,16,13,16,1,0],[0,0,0,3,15,10,0,0],[0,0,0,2,16,4,0,0]],[[0,0,12,10,0,0,0,0],[0,0,14,16,16,14,0,0],[0,0,13,16,15,10,1,0],[0,0,11,16,16,7,0,0],[0,0,0,4,7,16,7,0],[0,0,0,0,4,16,9,0],[0,0,5,4,12,16,4,0],[0,0,9,16,16,10,0,0]],[[0,0,0,12,13,0,0,0],[0,0,5,16,8,0,0,0],[0,0,13,16,3,0,0,0],[0,0,14,13,0,0,0,0],[0,0,15,12,7,2,0,0],[0,0,13,16,13,16,3,0],[0,0,7,16,11,15,8,0],[0,0,1,9,15,11,3,0]],[[0,0,7,8,13,16,15,1],[0,0,7,7,4,11,12,0],[0,0,0,0,8,13,1,0],[0,4,8,8,15,15,6,0],[0,2,11,15,15,4,0,0],[0,0,0,16,5,0,0,0],[0,0,9,15,1,0,0,0],[0,0,13,5,0,0,0,0]],[[0,0,9,14,8,1,0,0],[0,0,12,14,14,12,0,0],[0,0,9,10,0,15,4,0],[0,0,3,16,12,14,2,0],[0,0,4,16,16,2,0,0],[0,3,16,8,10,13,2,0],[0,1,15,1,3,16,8,0],[0,0,11,16,15,11,1,0]],[[0,0,11,12,0,0,0,0],[0,2,16,16,16,13,0,0],[0,3,16,12,10,14,0,0],[0,1,16,1,12,15,0,0],[0,0,13,16,9,15,2,0],[0,0,0,3,0,9,11,0],[0,0,0,0,9,15,4,0],[0,0,9,12,13,3,0,0]]],"target":[0,1,2,3,4,5,6,7,8,9],"n":1797}};
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const LIB = {py: "Python", np: "NumPy", pd: "pandas", plt: "Matplotlib", sp: "SciPy", sk: "scikit-learn"};
+const ST = {new: ["new", "NEW"], rev: ["rev", "مراجعة"], trap: ["trap", "فخ"]};
+const C = n => `<code>${n}</code>`;
+const T = (ar, en) => `${ar} <bdi>(${en})</bdi>`;
+
+/* ---------- explanations: key -> entry. l = library, t = status, n = name, s = one line (index), d = body, a = args, x = trap,
+   c = control to flash (a string, or {cell: control} when the name appears in several cells; an entry with c shows that cell's
+   live panel inside the card), go = action (receives the cell). Week 1 is the first week: every name is NEW here. ---------- */
+const E = {
+ /* ----- setup ----- */
+ cmt: {l: "py", t: "new", n: "# comment", s: T("تعليق", "comment"),
+  d: `<p>كل ما بعد العلامة ${C("#")} في السطر ${T("تعليق", "comment")}. Python يتجاهله ولا ينفّذه. نكتبه لنشرح الكود لمن يقرؤه، ولأنفسنا بعد أسبوع.</p><p>في 1.1 التعليق ${C("# salmon")} يقول إن الصفوف الخمسة الأولى سلمون.</p>`},
+ imp: {l: "py", t: "new", n: "import numpy as np", s: `تحميل ${T("مكتبة", "library")} باسم مختصر`,
+  d: `<p>${C("import")} يحمّل ${T("مكتبة", "library")} لنستعملها. و${C("as np")} يعطيها اسمًا قصيرًا، فنكتب ${C("np.array")} بدل ${C("numpy.array")}.</p><p>السطور الثلاثة بالطريقة نفسها: ${C("np")} و${C("pd")} و${C("plt")}. هذه الأسماء المختصرة يستعملها كل العالم، فستجدها في أي كود تقرؤه.</p><p>${C("matplotlib.pyplot")}: النقطة تعني «جزء داخل». نأخذ جزء الرسم ${C("pyplot")} من مكتبة Matplotlib.</p>`},
+ from: {l: "py", t: "new", n: "from sklearn.datasets import load_iris, …", s: `أخذ أشياء محددة من ${T("مكتبة", "library")}`,
+  d: `<p>${C("from … import …")} تأخذ أشياء محددة من داخل مكتبة. هنا نأخذ ثلاث ${T("دوال", "functions")} من جزء البيانات ${C("sklearn.datasets")} في scikit-learn.</p><p>بعدها نكتب ${C("load_iris()")} مباشرة، بلا اسم المكتبة قبلها. كل دالة تحمّل مجموعة بيانات: الأزهار، والأرقام المكتوبة باليد، والنبيذ.</p>`},
+ def: {l: "py", t: "new", n: "def check(label, got, expected, tol=1e-3):", s: `تعريف ${T("دالة", "function")}، ومعامل بقيمة افتراضية`, c: "setup-tol",
+  d: `<p>${C("def")} تعرّف ${T("دالة", "function")} اسمها ${C("check")}. الدالة سطور لها اسم، نشغّلها متى نشاء بكتابة اسمها وقوسين.</p><p>بين القوسين أربعة ${T("معاملات", "parameters")}: أسماء للقيم التي نعطيها للدالة. السطور المزاحة <bdi>(indented)</bdi> تحت ${C("def")} هي جسم الدالة.</p><p>${C("tol=1e-3")} معامل له ${T("قيمة افتراضية", "default value")}: إن لم تكتبه يأخذ 0.001. و${C("1e-3")} ${T("كتابة علمية", "scientific notation")} تعني 1 × 10⁻³ = 0.001.</p>`,
+  a: [["label", "نص يظهر بجانب ✅ أو ❌"], ["got", "إجابتك"], ["expected", "الإجابة الصحيحة"], ["tol", `الفرق المسموح ${T("", "tolerance")}. غيّره في اللوحة`]]},
+ doc: {l: "py", t: "new", n: '"""docstring"""', s: `${T("نص التوثيق", "docstring")} داخل الدالة`,
+  d: `<p>النص بين ثلاث علامات تنصيص في أول الدالة اسمه ${T("نص التوثيق", "docstring")}. يشرح ماذا تفعل الدالة. لا يُنفَّذ، لكن Colab يعرضه حين تمرّ بالمؤشر على اسم الدالة.</p>`},
+ try: {l: "py", t: "new", n: "try: … except Exception:", s: `جرّب، وإن فشل افعل شيئًا آخر ${T("", "exception")}`, c: "setup-got", go: () => setGot('"abc"'),
+  d: `<p>${C("try")} تجرّب السطور تحتها. إن حدث خطأ يظهر ${T("استثناء", "exception")}. عندها لا يتوقف البرنامج، بل ينتقل إلى ${C("except")} وينفّذ ما تحته.</p><p>هنا: إن كانت إجابتك نصًا مثل ${C('"abc"')} لا يمكن تحويله إلى رقم، يفشل السطر. فيصير ${C("ok = False")}، وتطبع الدالة ❌ بدل رسالة خطأ حمراء.</p><p>${C("Exception")} يعني «أي نوع من الأخطاء».</p>`},
+ isnot: {l: "py", t: "new", n: "got is not None and …", s: `فحص أن القيمة موجودة، ثم شرط ثانٍ ${T("", "and")}`, c: "setup-got", go: () => setGot("None"),
+  d: `<p>${C("None")} قيمة خاصة في Python تعني «لا شيء». خلايا ${C("# TODO")} في الجزء 2 تبدأ بـ ${C("= None")}، أي أنك لم تكتب إجابتك بعد.</p><p>${C("got is not None")} يسأل: هل كتبت شيئًا؟ و${C("and")} تعني «و»: الشرط الثاني يُفحص فقط إذا كان الأول True. فإن كانت الإجابة ${C("None")} فـ ${C("ok")} يصير False مباشرة.</p>`},
+ allclose: {l: "np", t: "new", n: "np.allclose(a, b, atol=tol)", s: `هل الرقمان قريبان بما يكفي؟`, c: "setup-tol",
+  d: `<p>تعيد True إذا كان الفرق بين ${C("a")} و${C("b")} صغيرًا، لكل عنصر. لا نقارن الأعداد العشرية بـ ${C("==")}، لأن الحاسوب يخزنها بدقة محدودة: 5.94 قد تُخزن 5.9399999999999995.</p><p>الشرط تقريبًا: |a − b| ≤ ${C("atol")}. (وفيه أيضًا جزء نسبي صغير جدًا، ${C("rtol")} = 0.00001 من |b|.)</p><p>تعمل على رقم واحد أو على قائمة أرقام، مثل ${C("[50, 50, 50]")}.</p>`,
+  a: [["a, b", "الرقمان، أو مصفوفتان بالشكل نفسه"], ["atol", `الفرق المسموح ${T("", "absolute tolerance")}`]]},
+ asarray: {l: "np", t: "new", n: "np.asarray(got, dtype=float)", s: `تحويل القيمة إلى ${T("مصفوفة", "array")} أعداد عشرية`, c: "setup-got", go: () => setGot('"abc"'),
+  d: `<p>تحوّل ما تعطيها إلى ${T("مصفوفة", "array")} NumPy: رقم، أو ${T("قائمة", "list")}، أو عمود من جدول. فتعمل ${C("check")} مع كل هذه الأنواع.</p><p>${C("dtype=float")} يطلب ${T("أعدادًا عشرية", "floats")}. النص ${C('"abc"')} لا يتحول، فيظهر ${T("استثناء", "exception")} يلتقطه ${C("except")}.</p>`,
+  a: [["got", "القيمة التي نحوّلها"], ["dtype", `${T("نوع البيانات", "data type")} المطلوب؛ هنا float`]]},
+ fstr: {l: "py", t: "new", n: 'f"✅ {label}"', s: `${T("نص منسَّق", "f-string")} فيه قيم`,
+  d: `<p>${T("النص المنسَّق", "f-string")} يبدأ بحرف ${C("f")} قبل علامة التنصيص. ما بين ${C("{ }")} يُحسب، وتوضع قيمته مكانه.</p><p>${C('f"✅ {label}"')} مع ${C('label = "mean lightness"')} يصير ${C('"✅ mean lightness"')}.</p>`},
+ ifelse: {l: "py", t: "new", n: "A if ok else B", s: `اختيار قيمة من اثنتين بشرط ${T("", "conditional expression")}`,
+  d: `<p>${T("تعبير شرطي", "conditional expression")} في سطر واحد: إذا كان ${C("ok")} True تكون النتيجة A، وإلا تكون B.</p><p>هنا A نص الصح، وB نص الخطأ مع الإجابة الصحيحة وإجابتك، لتعرف كم أخطأت.</p>`},
+ print: {l: "py", t: "new", n: "print(…)", s: "طباعة قيمة أو أكثر",
+  d: `<p>${C("print")} تعرض ما بين القوسين تحت الخلية. يمكن أن تعطيها عدة قيم بينها فواصل، فتطبعها في سطر واحد بينها مسافة.</p><p>${C('print("Ready.")')} تطبع ${C("Ready.")}: علامة أن الخلية انتهت بلا خطأ.</p>`},
+
+ /* ----- 1.1 ----- */
+ assign: {l: "py", t: "new", n: "fish = …", s: `${T("إسناد", "assignment")}: إعطاء القيمة اسمًا`,
+  d: `<p>العلامة ${C("=")} في Python ليست «يساوي» الرياضية. هي ${T("إسناد", "assignment")}: احسب ما على اليمين، واحفظه باسم ${T("المتغير", "variable")} على اليسار.</p><p>بعد هذا السطر نكتب ${C("fish")} في أي خلية، فنقصد المصفوفة كلها. للمقارنة نكتب ${C("==")} بعلامتين.</p>`},
+ arr: {l: "np", t: "new", n: "np.array([[…], […]])", s: `${T("مصفوفة", "array")} من ${T("قائمة", "list")} قوائم`, c: "c11-ex", go: () => setEx("fish[0]"),
+  d: `<p>تصنع ${T("مصفوفة", "array")} NumPy من ${T("قائمة", "list")}. القائمة بين قوسين مربعين ${C("[ ]")}.</p><p>هنا قائمة فيها عشر قوائم صغيرة، في كل واحدة رقمان. فتصير المصفوفة شبكة: 10 ${T("صفوف", "rows")} و2 ${T("عمودان", "columns")}. كل صف سمكة، وكل عمود سمة.</p><p>${C("labels")} قائمة واحدة، فتصير مصفوفة ${T("ببُعد واحد", "1-D")}: عشرة أرقام، 0 للسلمون و1 للقاروص.</p>`},
+ str: {l: "py", t: "new", n: '"shape (samples, features):"', s: T("نص", "string"),
+  d: `<p>${T("النص", "string")} حروف بين علامتي تنصيص ${C('" "')}. Python يطبعه كما هو، ولا يحسب ما فيه.</p><p>${C("print")} هنا يطبع نصًا ثم قيمة: ${C("shape (samples, features): (10, 2)")}.</p>`},
+ shape: {l: "np", t: "new", n: "fish.shape", s: `${T("الشكل", "shape")}: كم صفًا وكم عمودًا`,
+  d: `<p>${T("الشكل", "shape")} ${T("صف ثابت", "tuple")} يقول حجم كل بُعد. ${C("fish.shape")} = ${C("(10, 2)")}: 10 عيّنات <bdi>(samples)</bdi> و2 سمتان <bdi>(features)</bdi>.</p><p>في 1.4 ${C("X.shape")} = ${C("(150, 4)")}. الرقم الأول دائمًا عدد الصفوف، والثاني عدد الأعمدة. نقرأ كل رقم برقمه: ${C("[0]")} أو ${C("[1]")}.</p><p>لا قوسين بعد ${C("shape")}: هي ${T("خاصية", "attribute")} محفوظة، لا ${T("دالة", "function")}.</p>`},
+ idx: {l: "py", t: "new", n: "fish[0]", s: `${T("الترقيم", "indexing")}: العنصر رقم 0`, c: "c11-ex", go: () => setEx("fish[0]"),
+  d: `<p>${T("الترقيم", "indexing")} يبدأ من 0 في Python. ${C("fish[0]")} أول صف: السمكة الأولى بسمتيها ${C("[ 2.5 16. ]")}.</p><p>آخر صف رقمه 9، لأن العدد 10. و${C("16.")} تعني 16.0.</p>`},
+ colon: {l: "np", t: "new", n: "fish[:, 0]", s: `كل الصفوف، والعمود 0 ${T("", "slicing")}`, c: "c11-ex", go: () => setEx("fish[:, 0]"),
+  d: `<p>في المصفوفة ذات البعدين نكتب رقمين بينهما فاصلة: ${C("[rows, columns]")}. الصفوف أولًا، ثم الأعمدة.</p><p>النقطتان ${C(":")} وحدهما تعنيان «كل الصفوف». فـ${C("fish[:, 0]")} العمود 0 كاملًا: لمعان السمكات العشر. هذا ${T("تقطيع", "slicing")}.</p>`,
+  a: [[":", "كل الصفوف"], ["0", "العمود 0: اللمعان. والعمود 1: العرض"]]},
+ bmask: {l: "np", t: "new", n: "fish[labels == 0, 0]", s: `اختيار صفوف بـ${T("قناع", "boolean mask")}`, c: "c11-ex", go: () => setEx("fish[labels == 0, 0]"),
+  x: `<b>فخ:</b> ${C("fish[labels == 0][0]")} شيء آخر: أول صف من صفوف السلمون. اكتب الاثنين داخل قوس واحد بفاصلة.`,
+  d: `<p>${C("labels == 0")} ${T("مقارنة", "comparison")} على كل عنصر، تعطي عشرة True/False. هذه المصفوفة اسمها ${T("قناع", "mask")}.</p><p>نضع القناع مكان الصفوف: تبقى الصفوف التي فيها True فقط، أي السلمون. ثم ${C("0")} يأخذ عمود اللمعان. هذا ${T("الترقيم بقناع", "boolean indexing")}، وستستعمله في كل معمل.</p>`},
+ mean: {l: "np", t: "new", n: ".mean()", s: T("المتوسط", "mean"), c: "c11-ex", go: () => setEx("fish[labels == 0, 0]"),
+  d: `<p>${T("المتوسط", "mean")}: مجموع القيم ÷ عددها. (2.5 + 3.0 + 3.8 + 4.5 + 5.6) ÷ 5 = 3.88.</p><p>${C(".mean()")} ${T("دالة تابعة", "method")}: نكتبها بعد المصفوفة بنقطة، فتعمل على تلك المصفوفة. الشكل الآخر ${C("np.mean(x)")} يعطي الرقم نفسه.</p>`},
+
+ /* ----- 1.2 ----- */
+ gt: {l: "np", t: "new", n: "fish[:, 0] > 5.0", s: `${T("مقارنة", "comparison")} على كل عنصر`, c: "c12-t", go: () => setMode(1),
+  d: `<p>نقارن عمود اللمعان كله بـ 5.0 مرة واحدة. النتيجة عشرة True/False: True حيث اللمعان أكبر من 5.0.</p><p>هذه هي ${T("قاعدة القرار", "decision rule")}: True تعني «قاروص». الرقم 5.0 ${T("عتبة", "threshold")}. حرّكه في اللوحة.</p>`},
+ astype: {l: "np", t: "new", n: ".astype(int)", s: `تحويل True/False إلى 1/0`, c: "c12-t", go: () => setMode(1),
+  d: `<p>تحوّل ${T("نوع البيانات", "data type")}. True تصير 1، وFalse تصير 0.</p><p>فيصير ${C("guess_1")} بلغة ${C("labels")} نفسها: 1 قاروص و0 سلمون. نقارنهما بعد ذلك عنصرًا بعنصر.</p>`},
+ ne: {l: "np", t: "new", n: "guess_1 != labels", s: `«لا يساوي» على كل عنصر: أين أخطأنا؟`, c: "c12-t", go: () => setMode(1),
+  d: `<p>${C("!=")} تعني «لا يساوي». تقارن التخمين بالصنف الحقيقي لكل سمكة، ${T("عنصرًا بعنصر", "element-wise")}.</p><p>النتيجة True حيث أخطأت القاعدة. انظر الحلقات الحمراء في اللوحة.</p>`},
+ sum: {l: "np", t: "new", n: "np.sum(…)", s: `المجموع؛ على True/False = عدد True`, c: "c12-t", go: () => setMode(1),
+  d: `<p>${C("np.sum")} تجمع العناصر. Python يعدّ True = 1 وFalse = 0، فمجموع ${T("القناع", "mask")} هو عدد الـ True.</p><p>هنا: عدد الأخطاء. القاعدة الأولى تخطئ في سمكتين، كما في المثال 1.1.</p><p>و${C("np.mean")} على القناع نفسه يعطي نسبة الخطأ <bdi>(error rate)</bdi>: 0.2.</p>`},
+ add: {l: "np", t: "new", n: "fish[:, 1] + fish[:, 0]", s: `جمع عمودين ${T("عنصرًا بعنصر", "element-wise")}`, c: "c12-c", go: () => setMode(2),
+  d: `<p>نجمع عمود العرض وعمود اللمعان: عنصرًا بعنصر، سمكة بسمكة. النتيجة عشرة أرقام: x₂ + x₁ لكل سمكة.</p><p>السمكة الأولى: 16.0 + 2.5 = 18.5، كما في المثال 1.2.</p>`},
+ gt2: {l: "np", t: "new", n: "… > 23", s: `قاعدة بسمتين: ${T("حدّ قرار", "decision boundary")} مائل`, c: "c12-c", go: () => setMode(2),
+  d: `<p>«قاروص إذا x₂ + x₁ &gt; 23». حدّ هذه القاعدة خط مستقيم مائل في فضاء السمات. انظر «للفهم» تحت اللوحة.</p><p>مع السمتين معًا: صفر أخطاء. هذا ما لم تستطعه سمة واحدة.</p>`},
+
+ /* ----- 1.3 ----- */
+ df: {l: "pd", t: "new", n: 'pd.DataFrame(fish, columns=[…])', s: `${T("جدول", "DataFrame")} من مصفوفة`, c: "c13-h",
+  d: `<p>تصنع ${T("جدولًا", "DataFrame")} من المصفوفة: الصفوف نفسها والأعمدة نفسها، لكن لكل ${T("عمود", "column")} اسم.</p><p>فنكتب ${C('df["width"]')} بدل ${C("fish[:, 1]")}، ولا نحتاج أن نتذكر أي رقم لأي عمود. وعلى اليسار ${T("ترقيم الصفوف", "index")} 0 إلى 9.</p>`,
+  a: [["data", "المصفوفة، هنا fish"], ["columns", `${T("قائمة", "list")} أسماء الأعمدة، بالترتيب`]]},
+ newcol: {l: "pd", t: "new", n: 'df["species"] = …', s: `إضافة ${T("عمود", "column")} جديد`, c: "c13-h",
+  d: `<p>إذا كتبت اسم عمود غير موجود، ثم ${C("=")} وقائمة قيم بطول الجدول، يُضاف عمود جديد بهذا الاسم.</p><p>و${C('df["species"]')} وحده يقرأ العمود. العمود الواحد نوعه ${C("Series")}.</p>`},
+ where: {l: "np", t: "new", n: 'np.where(cond, A, B)', s: `A حيث الشرط True، وB حيث False`, c: "c13-h",
+  d: `<p>تمرّ على ${T("القناع", "mask")} عنصرًا بعنصر: حيث True تضع A، وحيث False تضع B.</p><p>هنا: حيث ${C("labels == 1")} تضع ${C('"sea bass"')}، وإلا ${C('"salmon"')}. فتتحول الأرقام 0 و1 إلى أسماء نقرؤها.</p>`,
+  a: [["cond", "قناع True/False"], ["A", "القيمة حيث True"], ["B", "القيمة حيث False"]]},
+ head: {l: "pd", t: "new", n: "df.head(n)", s: `أول n صفوف، والافتراضي 5`, c: {c13: "c13-h"},
+  x: `<b>انتبه:</b> ${C("head")} تعرض جزءًا فقط. في Iris أول 5 صفوف كلها setosa.`,
+  d: `<p>تعرض أول ${C("n")} ${T("صفوف", "rows")} من الجدول. بلا رقم تعرض 5. نستعملها لنلقي نظرة على البيانات قبل أي حساب: أسماء الأعمدة، ونوع القيم.</p>`,
+  a: [["n", "عدد الصفوف؛ الافتراضي 5"]]},
+ blank: {l: "py", t: "new", n: "print()", s: "سطر فارغ",
+  d: `<p>${C("print")} بلا شيء تطبع سطرًا فارغًا. هنا تفصل الجدولين في المخرجات، لتقرأهما بسهولة.</p>`},
+ groupby: {l: "pd", t: "new", n: 'df.groupby("species").mean()', s: `${T("التجميع", "grouping")} حسب الصنف، ثم متوسط كل مجموعة`, c: "c13-g",
+  d: `<p>${C("groupby")} تقسم الصفوف إلى مجموعات حسب قيمة عمود: كل السلمون معًا، وكل القاروص معًا.</p><p>ثم ${C(".mean()")} تحسب ${T("متوسط", "mean")} كل عمود رقمي داخل كل مجموعة. النتيجة جدول فيه صف لكل صنف، وعمود لكل سمة.</p><p>هذا يختبر الفكرة في §1.2.1: هل تختلف السمة بين الصنفين؟</p>`},
+
+ /* ----- 1.4a ----- */
+ load: {l: "sk", t: "new", n: "load_iris(as_frame=True)", s: `تحميل بيانات Iris ${T("حزمةَ بيانات", "Bunch")}`, c: "c14a-i",
+  d: `<p>تحمّل بيانات Iris من داخل scikit-learn، بلا إنترنت. تعيد ${T("حزمة بيانات", "Bunch")}: مثل ${T("القاموس", "dict")}، فيها أجزاء بأسماء، ونقرأ كل جزء بنقطة.</p><p>${C("as_frame=True")} تجعل السمات ${T("جدولًا", "DataFrame")} pandas بأسماء أعمدة، بدل ${T("مصفوفة", "array")}.</p>`,
+  a: [["as_frame", "True: جدول pandas. بلا هذا المعامل: مصفوفة NumPy"]]},
+ data: {l: "sk", t: "new", n: "iris.data", s: `السمات: ${T("جدول", "DataFrame")} 150 × 4`, c: "c14a-i",
+  d: `<p>جزء السمات <bdi>(features)</bdi>: صف لكل زهرة، وعمود لكل سمة. 150 صفًا و4 أعمدة، بالسنتيمتر.</p><p>نسميه ${C("X")} بحرف كبير، كما في الكتب: المصفوفة تُكتب بحرف كبير.</p>`},
+ target: {l: "sk", t: "new", n: "iris.target", s: `الأصناف: رقم لكل زهرة ${T("", "labels")}`, c: "c14a-i",
+  d: `<p>${T("الأصناف", "labels")}: لكل زهرة رقم نوعها: 0 أو 1 أو 2. نوعه ${C("Series")}، بطول 150.</p><p>هذا «المعلّم» في التعلم بإشراف <bdi>(supervised learning)</bdi>، §1.7: نعرف الصنف الصحيح لكل عيّنة تدريب.</p>`},
+ tnames: {l: "sk", t: "new", n: "iris.target_names", s: "اسم كل صنف",
+  d: `<p>${T("مصفوفة", "array")} فيها ثلاثة ${T("نصوص", "strings")}: ${C("'setosa'")} و${C("'versicolor'")} و${C("'virginica'")}.</p><p>رقم الصنف هو رقم الاسم فيها: ${C("names[0]")} = setosa. فـ${C("names[k]")} يحوّل الرقم k إلى اسمه.</p>`},
+ vc: {l: "pd", t: "new", n: "y.value_counts()", s: `كم مرة تتكرر كل قيمة`,
+  x: `<b>فخ:</b> الترتيب حسب العدد، من الأكبر، لا حسب الصنف. في Wine: الصنف 1 أولًا.`,
+  d: `<p>تعدّ كم مرة تظهر كل قيمة في العمود. في Iris: 50 من كل صنف. البيانات ${T("متوازنة", "balanced")}.</p><p>على اليسار القيمة (رقم الصنف)، وعلى اليمين عددها.</p>`},
+
+ /* ----- 1.4b ----- */
+ subplots: {l: "plt", t: "new", n: "plt.subplots(rows, cols, figsize=(w, h))", s: `شكل فيه عدة رسوم ${T("", "subplots")}`,
+  d: `<p>تصنع ${T("شكلًا", "figure")} واحدًا فيه شبكة ${T("رسوم", "axes")}: هنا صف واحد فيه 4 رسوم، واحد لكل سمة. وفي 1.5 صف فيه 10 رسوم.</p><p>تعيد شيئين، ${T("نوزعهما", "unpacking")} على اسمين: ${C("fig")} الشكل كله، و${C("axs")} ${T("مصفوفة", "array")} فيها الرسوم.</p>`,
+  a: [["rows, cols", "عدد صفوف الرسوم وأعمدتها"], ["figsize", "عرض الشكل وارتفاعه بالبوصة (inch)"]]},
+ for: {l: "py", t: "new", n: "for ax, col in …:", s: `${T("حلقة", "for loop")}: كرّر لكل عنصر`,
+  d: `<p>${T("الحلقة", "for loop")} تكرر السطور المزاحة تحتها، مرة لكل عنصر. في كل مرة يأخذ ${T("متغير الحلقة", "loop variable")} العنصر التالي.</p><p>هنا كل عنصر زوج، فنكتب اسمين: ${C("ax")} الرسم، و${C("col")} اسم السمة. وداخلها حلقة ثانية على ${C("k")}: حلقة داخل حلقة <bdi>(nested loop)</bdi>.</p><p>المسافة في أول السطر <bdi>(indentation)</bdi> هي التي تحدد ما داخل الحلقة.</p>`},
+ zip: {l: "py", t: "new", n: "zip(axs, X.columns)", s: `يمشي على قائمتين معًا، زوجًا زوجًا`, c: "c14b-col",
+  d: `<p>${C("zip")} تأخذ الأول من كل قائمة معًا، ثم الثاني، وهكذا. الرسم الأول مع السمة الأولى، والثاني مع الثانية.</p><p>${C("X.columns")} أسماء أعمدة الجدول: ${C("'sepal length (cm)'")} … ${C("'petal width (cm)'")}.</p>`},
+ range: {l: "py", t: "new", n: "range(3)", s: "0، 1، 2",
+  d: `<p>${C("range(3)")} تعطي 0 و1 و2. ثلاثة أعداد، و3 لا تدخل، كالعادة في Python. نستعملها في ${T("الحلقة", "loop")}: مرة لكل صنف.</p>`},
+ axhist: {l: "plt", t: "new", n: "ax.hist(x, bins, alpha, label)", s: `رسم ${T("المدرّج التكراري", "histogram")} في رسم واحد`, c: "c14b-col",
+  d: `<p>ترسم ${T("المدرّج التكراري", "histogram")}: تقسم مجال القيم إلى ${T("أعمدة", "bins")}، وتعدّ كم قيمة في كل عمود، وترسم العدد ارتفاعًا.</p><p>${C("ax.hist")} ترسم في الرسم ${C("ax")} فقط. ثلاث مرات لكل سمة، فتتراكب المدرّجات الثلاثة كما في الشكل 2 في الـ Notes.</p>`,
+  a: [["x", "القيم: هنا سمة واحدة لصنف واحد"], ["bins", "عدد الأعمدة"], ["alpha", T("الشفافية", "transparency")], ["label", `الاسم في ${T("مفتاح الرسم", "legend")}`]]},
+ loc: {l: "pd", t: "new", n: "X.loc[y == k, col]", s: `صفوف بشرط وعمود باسمه ${T("", "label-based selection")}`, c: {c14b: "c14b-col", c14c: "c14c-x"},
+  d: `<p>${C(".loc[rows, column]")}: الصفوف أولًا، ثم العمود، كما في NumPy. لكن العمود هنا باسمه.</p><p>الصفوف ${T("قناع", "mask")}: ${C("y == k")} True للأزهار من الصنف k. النتيجة عمود واحد، نوعه ${C("Series")}: 50 قيمة لنوع واحد.</p>`,
+  a: [["y == k", "قناع True/False بطول الجدول"], ["col", "اسم العمود"]]},
+ bins: {l: "plt", t: "new", n: "bins=15", s: `عدد ${T("الأعمدة", "bins")}`, c: "c14b-b",
+  x: `<b>فخ:</b> كل استدعاء يقسم مجال بياناته هو. فأعمدة setosa أضيق من أعمدة virginica في الرسم نفسه.`,
+  d: `<p>عدد ${T("الأعمدة", "bins")} التي يُقسم إليها المجال من أصغر قيمة إلى أكبرها. أعمدة قليلة تخفي التفاصيل، وكثيرة تجعل الرسم متقطعًا. جرّب 5 و30 في اللوحة.</p>`},
+ alpha: {l: "plt", t: "new", n: "alpha=0.6", s: T("الشفافية", "transparency"), c: "c14b-a",
+  d: `<p>${C("alpha")} هو ${T("الشفافية", "transparency")}: من 0 (شفاف تمامًا) إلى 1 (معتم). المدرّجات الثلاثة متراكبة، فنجعلها شفافة لنرى ما تحتها.</p>`},
+ label: {l: "plt", t: "new", n: "label=names[k]", s: `اسم الرسم في ${T("مفتاح الرسم", "legend")}`, c: {c14b: "c14b-l"},
+  d: `<p>${C("label")} يعطي ما نرسمه اسمًا. ${C("names[k]")} اسم الصنف k: setosa ثم versicolor ثم virginica.</p><p>الاسم لا يظهر وحده. يظهر حين نستدعي ${C("legend()")}.</p>`},
+ settitle: {l: "plt", t: "new", n: "ax.set_title(…)", s: "عنوان رسم واحد",
+  d: `<p>تكتب عنوانًا فوق الرسم ${C("ax")}. في 1.4 العنوان اسم السمة ${C("col")}. وفي 1.5 العنوان صنف الصورة ${C("digits.target[i]")}، فنرى الرقم الصحيح فوق كل صورة.</p>`},
+ legend: {l: "plt", t: "new", n: "legend()", s: T("مفتاح الرسم", "legend"), c: {c14b: "c14b-l"},
+  d: `<p>يعرض ${T("مفتاح الرسم", "legend")}: مربع فيه لون كل صنف واسمه. يأخذ الأسماء من ${C("label")}.</p><p>${C("axs[0].legend()")} يضعه في الرسم الأول فقط، فهو يكفي للأربعة. و${C("plt.legend()")} في 1.4c يضعه في الرسم الحالي.</p>`},
+ tight: {l: "plt", t: "new", n: "plt.tight_layout()", s: "ترتيب المسافات بين الرسوم",
+  d: `<p>تضبط المسافات بين الرسوم الأربعة، حتى لا تتداخل العناوين والأرقام على المحاور.</p>`},
+ show: {l: "plt", t: "new", n: "plt.show()", s: "اعرض الشكل",
+  d: `<p>تعرض الشكل تحت الخلية. في Colab يظهر الشكل غالبًا بدونها أيضًا، لكن كتابتها عادة جيدة: تعمل في كل مكان، وتنهي الشكل فلا يختلط بالشكل التالي.</p>`},
+
+ /* ----- 1.4c ----- */
+ scatter: {l: "plt", t: "new", n: "plt.scatter(x, y, label)", s: `رسم ${T("نقاط التشتت", "scatter plot")}`, c: "c14c-x",
+  d: `<p>ترسم نقطة لكل زوج (x, y). هنا x طول البتلة، وy عرضها، لكل زهرة من الصنف k.</p><p>هذا ${T("فضاء السمات", "feature space")} في §1.3: كل زهرة نقطة. ثلاث مرات في الحلقة، ولكل صنف لون، فنرى هل تنفصل المجموعات.</p>`,
+  a: [["x, y", "قيم السمة الأولى والثانية، بالطول نفسه"], ["label", `الاسم في ${T("مفتاح الرسم", "legend")}`]]},
+ xlabel: {l: "plt", t: "new", n: "plt.xlabel / plt.ylabel", s: `عناوين ${T("المحاور", "axes")}`, c: "c14c-x",
+  d: `<p>عنوان ${T("المحور", "axis")} الأفقي والعمودي. اكتب اسم السمة ووحدتها دائمًا. وإن غيّرت السمتين في ${C("scatter")} فغيّر العنوانين معهما.</p>`},
+
+ /* ----- 1.5 ----- */
+ ldig: {l: "sk", t: "new", n: "load_digits()", s: `تحميل صور الأرقام المكتوبة باليد`,
+  d: `<p>تحمّل 1797 صورة صغيرة لأرقام من 0 إلى 9، مكتوبة باليد. تعيد ${T("حزمة بيانات", "Bunch")} فيها الصور بشكلين: ${C("images")} و${C("data")}، والأصناف ${C("target")}.</p>`},
+ imgs: {l: "sk", t: "new", n: "digits.images.shape", s: `الصور شبكاتٍ: (1797, 8, 8)`, c: "c15-i",
+  d: `<p>${C("digits.images")} ${T("مصفوفة", "array")} بثلاثة أبعاد: 1797 صورة، في كل صورة 8 صفوف و8 أعمدة من ${T("البكسلات", "pixels")}.</p><p>كل بكسل رقم من 0 (فاتح) إلى 16 (داكن).</p>`},
+ dshape: {l: "sk", t: "new", n: "digits.data.shape", s: `الصور متجهاتٍ: (1797, 64)`, c: "c15-i",
+  d: `<p>${C("digits.data")} الصور نفسها، لكن كل صورة صارت صفًا واحدًا من 64 رقمًا: صفوف الصورة الثمانية واحدًا بعد الآخر.</p><p>هذا ${T("متجه السمات", "feature vector")}: 64 سمة لكل صورة. وهذا الشكل الذي تأخذه المصنِّفات: صف لكل عيّنة، وعمود لكل سمة.</p>`},
+ enum: {l: "py", t: "new", n: "for i, ax in enumerate(axs):", s: `حلقة تعطي الرقم والعنصر معًا`, c: "c15-i",
+  d: `<p>${C("enumerate")} تعطي في كل دورة زوجًا: رقم العنصر، والعنصر نفسه. ${C("i")} = 0 مع الرسم الأول، ثم 1، … حتى 9.</p><p>نحتاج ${C("i")} لنأخذ الصورة رقم i، ونحتاج ${C("ax")} لنرسم فيها.</p>`},
+ imshow: {l: "plt", t: "new", n: 'ax.imshow(img, cmap="gray_r")', s: `عرض ${T("مصفوفة", "array")} صورةً`, c: "c15-cm",
+  d: `<p>ترسم كل رقم في المصفوفة مربعًا ملونًا. الرقم الأكبر لون أغمق أو أفتح حسب ${T("خريطة الألوان", "colormap")}.</p><p>${C('"gray_r"')} رمادي معكوس <bdi>(reversed)</bdi>: 0 أبيض، وأكبر قيمة سوداء، كالحبر على الورق. جرّب ${C('"gray"')} في اللوحة.</p>`,
+  a: [["img", "مصفوفة 8 × 8"], ["cmap", `${T("خريطة الألوان", "colormap")}`]]},
+ dtarget: {l: "sk", t: "new", n: "digits.target[i]", s: "صنف الصورة رقم i", c: "c15-i",
+  d: `<p>${C("digits.target")} صنف كل صورة: الرقم المكتوب فيها، من 0 إلى 9. ${C("digits.target[i]")} صنف الصورة رقم i.</p><p>نكتبه عنوانًا فوق الصورة، فنتأكد أن الصورة والصنف متطابقان.</p>`},
+ axoff: {l: "plt", t: "new", n: 'ax.axis("off")', s: `إخفاء ${T("المحاور", "axes")}`,
+  d: `<p>تخفي المحورين وأرقامهما. في الصور لا نحتاج أرقام البكسلات حولها، فيصير الشكل أنظف.</p>`}
+};
+const cOf = (e, cell) => !e || !e.c ? null : typeof e.c === "string" ? e.c : (e.c[cell] || null);
+/* T("", en) gives a bare English tag after an Arabic phrase: tidy the leading space */
+/* T("", en) gives a bare English tag after an Arabic phrase: tidy the leading space */
+/* shapes such as (100000, 3) or (3,) are isolated LTR so the Arabic sentence does not reorder them */
+const ltrShapes = h => h.replace(/(^|[^\w(">])(\(\d[\d, ]*,?\))/g, (m, p, t) => `${p}<span dir="ltr">${t}</span>`);
+Object.values(E).forEach(e => ["s", "d", "x"].forEach(f => { if (e[f]) e[f] = ltrShapes(e[f].replace(/ +<bdi>/g, " <bdi>").replace(/^ <bdi>/, "<bdi>")); }));
+Object.values(E).forEach(e => { if (e.a) e.a = e.a.map(([n, m]) => [n, ltrShapes(m)]); });
+
+/* ---------- syntax colours (editor style) ---------- */
+const KW = new Set(["import","from","as","def","return","for","in","try","except","if","else","elif","and","or","not","while","with","lambda","pass","is"]);
+const CONST = new Set(["True","False","None"]);
+const BUILTIN = new Set(["print","len","range","round","isinstance","str","int","float","list","dict","sum","max","min","abs","zip","enumerate"]);
+const MODS = new Set(["np","pd","plt"]);
+function classify(t) {
+ const cls = new Array(t.length).fill("");
+ const fill = (i, j, c) => { for (let k = i; k < j; k++) cls[k] = c; };
+ let i = 0;
+ while (i < t.length) {
+  const ch = t[i];
+  if (ch === "#") { let j = t.indexOf("\n", i); if (j < 0) j = t.length; fill(i, j, "cm"); i = j; continue; }
+  const sm = /^([fFrRbB]{0,2})("""|'''|"|')/.exec(t.slice(i, i + 5));
+  if (sm && !(sm[1] && /\w/.test(t[i - 1] || ""))) {
+   const q = sm[2], st = i, isF = /[fF]/.test(sm[1]);
+   let j = i + sm[0].length;
+   while (j < t.length && t.slice(j, j + q.length) !== q && !(q.length === 1 && t[j] === "\n")) { if (t[j] === "\\") { j += 2; continue; } j++; }
+   const end = Math.min(t.length, j + q.length);
+   fill(st, end, "st");
+   if (isF) {
+    let k = st + sm[0].length;
+    while (k < j) {
+     if (t[k] === "{") {
+      let d = 1, m = k + 1; while (m < j && d) { if (t[m] === "{") d++; else if (t[m] === "}") d--; if (d) m++; }
+      cls[k] = "br"; if (m < t.length) cls[m] = "br";
+      const inner = t.slice(k + 1, m), colon = inner.search(/:[^}()]*$/), expr = colon >= 0 ? inner.slice(0, colon) : inner;
+      classify(expr).forEach((c, n) => cls[k + 1 + n] = c || "op");
+      if (expr.length < inner.length) fill(k + 1 + expr.length, m, "fmt");
+      k = m + 1;
+     } else k++;
+    }
+   }
+   i = end; continue;
+  }
+  if (/[0-9]/.test(ch) && !/\w/.test(t[i - 1] || "")) { const m = /^\d+(\.\d+)?(e-?\d+)?/.exec(t.slice(i)); fill(i, i + m[0].length, "nu"); i += m[0].length; continue; }
+  if (/[A-Za-z_]/.test(ch)) {
+   const w = /^[A-Za-z_]\w*/.exec(t.slice(i))[0], after = t.slice(i + w.length), prev = t[i - 1];
+   let c = "va";
+   if (KW.has(w)) c = "kw"; else if (CONST.has(w)) c = "co";
+   else if (prev !== "." && MODS.has(w)) c = "mo";
+   else if (/^\s*\(/.test(after)) c = BUILTIN.has(w) ? "bi" : "fn";
+   else if (/^=(?!=)/.test(after) && /[(,]\s*$/.test(t.slice(0, i))) c = "kwarg";
+   else if (prev === ".") c = "at";
+   fill(i, i + w.length, c); i += w.length; continue;
+  }
+  if (/[-+*/<>=!&|%]/.test(ch)) cls[i] = "op";
+  i++;
+ }
+ return cls;
+}
+const esc = c => c === "<" ? "&lt;" : c === ">" ? "&gt;" : c === "&" ? "&amp;" : c;
+
+/* ---------- code rendering: one row per line (number + code), each marked name is a button ---------- */
+const attr = s => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+function renderCode() {
+ $$("pre.code").forEach(pre => {
+  const raw = pre.textContent, segs = [], re = /\[\[([\w-]+)\|(.*?)\]\](?!\])/g; let last = 0, m, plain = "";
+  while ((m = re.exec(raw))) { if (m.index > last) segs.push([null, raw.slice(last, m.index)]); segs.push([m[1], m[2]]); last = re.lastIndex; }
+  if (last < raw.length) segs.push([null, raw.slice(last)]);
+  const segAt = [];
+  segs.forEach((sg, i) => { for (let n = 0; n < sg[1].length; n++) segAt.push(sg[0] ? i : -1); plain += sg[1]; });
+  const cls = classify(plain), rows = [];
+  let cur = "", oc = null, os = -1;
+  const closeSpan = () => { if (oc) { cur += "</span>"; oc = null; } };
+  const closeBtn = () => { closeSpan(); if (os >= 0) { cur += "</button>"; os = -1; } };
+  for (let i = 0; i < plain.length; i++) {
+   const ch = plain[i];
+   if (ch === "\n") { closeBtn(); rows.push(cur); cur = ""; continue; }
+   const s = segAt[i];
+   if (s !== os) { closeBtn(); if (s >= 0) { const k = segs[s][0]; cur += `<button type="button" class="tk" data-k="${k}" aria-expanded="false" aria-label="${attr("شرح " + (E[k] ? E[k].n : k))}">`; } os = s; }
+   const c = cls[i] || "";
+   if (c !== (oc || "")) { closeSpan(); if (c) { cur += `<span class="hl-${c}">`; oc = c; } }
+   cur += esc(ch);
+  }
+  closeBtn(); rows.push(cur);
+  pre.insertAdjacentHTML("afterend", `<div class="lines"><div class="lines-in">${rows.map((h, i) => `<div class="ln" data-line="${i + 1}"><span class="no">${i + 1}</span><span class="lc">${h || " "}</span></div>`).join("")}</div></div>`);
+ });
+}
+/* ---------- the explanation card under its line ---------- */
+let CARD = null;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function flash(el) { if (typeof el === "string") el = document.getElementById(el); if (!el) return; el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); setTimeout(() => el.classList.remove("flash"), 1600); }
+function setHashQuiet(h) { try { history.replaceState(null, "", "#" + h); } catch (e) {} }
+function lineKeys(ln) { const ks = []; $$(".tk", ln).forEach(b => { if (!ks.includes(b.dataset.k)) ks.push(b.dataset.k); }); return ks; }
+function openCard(btn, opt = {}) {
+ const view = btn.closest(".view"), cell = view.dataset.view, k = btn.dataset.k, e = E[k];
+ if (!e) return;
+ if (CARD && CARD.ln === btn.closest(".ln") && CARD.k === k && !opt.force) { closeCard(); return; }
+ closeCard(true); closeVar(true);
+ const ln = btn.closest(".ln"), lines = btn.closest(".lines"), ks = lineKeys(ln), st = ST[e.t];
+ const others = ks.filter(x => x !== k);
+ const card = document.createElement("div");
+ card.className = "card";
+ card.style.width = lines.clientWidth + "px";
+ card.innerHTML = `<div class="card-in" role="region" tabindex="-1" aria-label="${attr("شرح " + e.n)}"><span class="caret" aria-hidden="true"></span>
+  <div class="ctop"><span class="b ${e.l}">${LIB[e.l]}</span><span class="b ${st[0]}">${st[1]}</span><span class="name">${e.n}</span><span class="one">${e.s}</span>
+  <button class="xbtn" type="button" aria-label="إغلاق الشرح (Esc)">×</button></div>
+  <div class="cbody"><div class="ctext">${e.d}
+   ${e.a ? `<div class="args">${e.a.map(([n, m]) => `<div class="arg"><code>${n}</code><span>${m}</span></div>`).join("")}</div>` : ""}
+   ${e.x ? `<div class="trapbox">${e.x}</div>` : ""}</div>${cOf(e, cell) ? `<div class="cside"></div>` : ""}</div>
+  ${others.length ? `<div class="cfoot"><span>في السطر نفسه:</span>${others.map(o => `<button type="button" data-k="${o}">${E[o].n}</button>`).join("")}<span class="cnt">الاسم ${ks.indexOf(k) + 1} من ${ks.length} في هذا السطر</span></div>` : ""}</div>`;
+ ln.after(card);
+ ln.classList.add("cur");
+ $$(`.tk[data-k="${k}"]`, ln).forEach(b => { b.classList.add("on"); b.setAttribute("aria-expanded", "true"); });
+ const ec = cOf(e, cell);
+ if (ec) {
+  const panel = $("#p-" + cell), rest = $(`.rest[data-cell="${cell}"]`);
+  if (panel) { $(".cside", card).appendChild(panel); rest.hidden = true; }
+  if (e.go) e.go(cell);
+  setTimeout(() => flash(ec), 60);
+ }
+ CARD = {cell, k, btn, card, ln, lines};
+ placeCaret();
+ setHashQuiet(cell + "--" + k);
+ if (opt.scroll !== false) {
+  const r = card.getBoundingClientRect(), top = ln.getBoundingClientRect().top;
+  if (opt.center) ln.scrollIntoView({block: "start", behavior: reduce ? "auto" : "smooth"});
+  else if (r.bottom > innerHeight && top > 140) scrollBy({top: Math.min(r.bottom - innerHeight + 16, top - 120), behavior: reduce ? "auto" : "smooth"});
+ }
+ if (opt.focus) $(".card-in", card).focus({preventScroll: true});
+}
+function placeCaret() {
+ if (!CARD) return;
+ const {card, btn, lines} = CARD;
+ card.style.width = lines.clientWidth + "px";
+ const cin = $(".card-in", card), car = $(".caret", card), r = btn.getBoundingClientRect(), c = cin.getBoundingClientRect();
+ car.style.left = Math.max(18, Math.min(c.width - 18, r.left + r.width / 2 - c.left)) + "px";
+}
+function closeCard(silent) {
+ if (!CARD) return;
+ const {cell, card, ln, btn} = CARD, panel = $(".cside .panel", card);
+ if (panel) { const rest = $(`.rest[data-cell="${cell}"]`); rest.appendChild(panel); rest.hidden = false; }
+ card.remove(); ln.classList.remove("cur");
+ $$(".tk.on", ln).forEach(b => { b.classList.remove("on"); b.setAttribute("aria-expanded", "false"); });
+ CARD = null;
+ if (!silent) { setHashQuiet(cell); btn.focus({preventScroll: true}); }
+}
+document.addEventListener("click", ev => {
+ const t = ev.target;
+ const tk = t.closest(".tk"); if (tk) { openCard(tk); return; }
+ if (CARD && t.closest(".card .xbtn")) { closeCard(); return; }
+ const ob = t.closest(".cfoot button[data-k]");
+ if (ob && CARD) { const b = $(`.tk[data-k="${ob.dataset.k}"]`, CARD.ln); if (b) openCard(b, {focus: true}); return; }
+});
+addEventListener("resize", () => placeCaret());
+document.addEventListener("scroll", ev => { if (CARD && ev.target === CARD.lines) placeCaret(); }, true);
+
+/* ---------- variables strip and structure views ---------- */
+const sh = (code, txt) => `<div class="shp">${code}${txt ? `<span>${txt}</span>` : ""}</div>`;
+const cellsHTML = (vals, f = v => v, cls = () => "") => `<div class="cells">${vals.map((v, i) => v === "…" ? `<span class="dots">…</span>` : `<span class="${cls(v, i)}">${f(v, i)}</span>`).join("")}</div>`;
+const dsl = (id, ar, en) => `<a class="dslink" href="#setup--${id}">ما ${ar} <bdi>(${en})</bdi>؟ الشكل العام ←</a>`;
+function scalarPic(name, val, note) { return `<div class="frame pic"><span class="cap">${name}</span><span style="font-size:22px;font-weight:700;color:var(--sandfg);background:var(--sand);border-radius:6px;padding:2px 10px">${val}</span>${note ? `<span class="cap">${note}</span>` : ""}</div>`; }
+const f1 = v => (+v).toFixed(1);
+const CLS = ["var(--cG)", "var(--cA)", "var(--cC)"];           /* Matplotlib default colours: tab:blue, tab:orange, tab:green */
+function fishTable(hl = [], cols = [0, 1], showLab = true) {
+ const on = (i, j) => hl.some(([a, b]) => a === i && b === j);
+ return `<div class="frame fr-wrap"><table class="dtab"><thead><tr><th class="ix">row</th>${cols.includes(0) ? `<th class="cA">[:, 0] lightness</th>` : ""}${cols.includes(1) ? `<th class="cB">[:, 1] width</th>` : ""}${showLab ? `<th>labels</th>` : ""}</tr></thead><tbody>
+  ${D.fish.map((r, i) => `<tr class="${i === 5 ? "cut" : ""}"><th class="ix">${i}</th>${cols.map(j => `<td class="${on(i, j) ? "hit" : ""}">${f1(r[j])}</td>`).join("")}${showLab ? `<td class="${D.labels[i] ? "kAc" : "kCc"}">${D.labels[i]}</td>` : ""}</tr>`).join("")}</tbody></table></div>`;
+}
+function dfPic(n = 10) {
+ return `<div class="frame fr-wrap"><table class="dtab"><thead><tr><th class="ix">index</th><th class="cA">lightness</th><th class="cA">width</th><th class="cB">species</th></tr></thead><tbody>
+  ${D.fish.slice(0, n).map((r, i) => `<tr class="${i === 5 ? "cut" : ""}"><th class="ix">${i}</th><td>${f1(r[0])}</td><td>${f1(r[1])}</td><td>${D.where[i]}</td></tr>`).join("")}</tbody></table></div>`;
+}
+const VARS = {
+ setup: [
+  {n: "check", t: "function · 4 parameters", line: 7, title: T("دالة", "function"),
+   code: `def <span class="v">check</span>(<span class="kA">label, got, expected</span>, <span class="kB">tol=1e-3</span>):`,
+   lines: [`اسمًا جديدًا ${C("check")}، نوعه ${T("دالة", "function")}. لم يُطبع شيء بعد: التعريف لا يشغّل الدالة.`, `تعمل حين تكتب ${C("check(...)")} في خلايا التحقق في الجزء 2، مع <span class="kAc">ثلاثة معاملات</span> إجبارية.`, `<span class="kBc">${C("tol")}</span> اختياري، قيمته الافتراضية 0.001.`],
+   shape: sh('check("mean lightness", 3.88, 3.88) → ✅ mean lightness'),
+   pic: () => `<div class="frame pic"><div class="cells"><span style="background:var(--basstint);color:var(--bass)">label</span><span style="background:var(--basstint);color:var(--bass)">got</span><span style="background:var(--basstint);color:var(--bass)">expected</span><span style="background:var(--greentint);color:var(--good)">tol</span><span class="dots">→</span><span class="hit">check</span><span class="dots">→</span><span>✅ / ❌</span></div><span class="cap">a function: inputs → printed result (it returns None)</span></div>`},
+  {n: "np", t: "module · numpy", line: 2, title: T("مكتبة", "module"),
+   code: `import numpy as <span class="v">np</span>`,
+   lines: [`اسمًا قصيرًا ${C("np")} لمكتبة NumPy كلها. نوعه ${T("وحدة", "module")}.`, `بعد النقطة نكتب ما نريد منها: ${C("np.array")}، ${C("np.sum")}، ${C("np.where")}.`, `${C("pd")} و${C("plt")} بالطريقة نفسها.`],
+   shape: sh("type(np) → module"),
+   pic: () => `<div class="frame pic"><span class="cap">np  (numpy)</span><div class="cells">${["np.array", "np.sum", "np.where", "np.allclose", "np.asarray"].map(v => `<span style="background:var(--npbg);color:var(--np)">${v}</span>`).join("")}<span class="dots">…</span></div><span class="cap">names used in this lab</span></div>`}],
+ c11: [
+  {n: "fish", t: "ndarray · shape (10, 2) · float64", line: 1, title: T("مصفوفة", "array"),
+   code: `<span class="v">fish</span> = np.array([[<span class="kA">2.5</span>, <span class="kB">16.0</span>], [<span class="kA">3.0</span>, <span class="kB">19.3</span>], …])`,
+   lines: [`متغيرًا ${T("", "variable")} اسمه ${C("fish")}، نوعه ${T("مصفوفة", "array")} NumPy.`, `كل قائمة صغيرة صارت ${T("صفًا", "row")}: 10 صفوف، سمكة في كل صف.`, `<span class="kAc">الرقم الأول</span> في كل صف صار العمود 0 (اللمعان)، و<span class="kBc">الثاني</span> العمود 1 (العرض).`, `كل القيم ${T("أعداد عشرية", "float64")}.`],
+   shape: sh("fish.shape → (10, 2)", "10 عيّنات، سمتان"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => fishTable([], [0, 1], false)},
+  {n: "labels", t: "ndarray · shape (10,) · int64", line: 3, title: T("مصفوفة", "array"),
+   code: `<span class="v">labels</span> = np.array([<span class="kA">0, 0, 0, 0, 0</span>, <span class="kB">1, 1, 1, 1, 1</span>])`,
+   lines: [`${T("مصفوفة", "array")} ${T("ببُعد واحد", "1-D")}: عشرة ${T("أعداد صحيحة", "integers")}.`, `<span class="kAc">0</span> سلمون: الصفوف 0 إلى 4. و<span class="kBc">1</span> قاروص: الصفوف 5 إلى 9.`, `العنصر رقم i هو صنف الصف رقم i في ${C("fish")}. لهذا يعمل القناع ${C("labels == 0")} على صفوف ${C("fish")}.`],
+   shape: sh("labels.shape → (10,)", "بُعد واحد: الفاصلة تعني ذلك"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => `<div class="frame pic"><span class="cap">labels</span>${cellsHTML(D.labels, v => v, v => v ? "T" : "F")}${cellsHTML(D.labels, (v, i) => "[" + i + "]", () => "ix")}<span class="cap">labels == 0 → ${D.mask0}</span></div>`}],
+ c12: [
+  {n: "guess_1", t: "ndarray · shape (10,) · int64", line: 2, title: T("مصفوفة", "array"),
+   code: `<span class="v">guess_1</span> = (<span class="kA">fish[:, 0] &gt; 5.0</span>)<span class="kB">.astype(int)</span>`,
+   lines: [`${T("مصفوفة", "array")} بشكل ${C("labels")} نفسه: عشرة أرقام 0 أو 1.`, `<span class="kAc">المقارنة</span> أعطت True/False، و<span class="kBc">${C("astype(int)")}</span> حوّلها إلى 1/0.`, `الصفان 4 و5 يختلفان عن ${C("labels")}: هذان الخطآن.`],
+   shape: sh("guess_1.shape → (10,)") + sh(`guess_1 → [${D.r1["5.0"].g.join(" ")}]`), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => `<div class="frame pic"><span class="cap">guess_1</span>${cellsHTML(D.r1["5.0"].g, v => v, (v, i) => v !== D.labels[i] ? "hit" : v ? "T" : "F")}<span class="cap">labels</span>${cellsHTML(D.labels, v => v, v => v ? "T" : "F")}<span class="cap">highlighted: guess_1 != labels → ${D.r1["5.0"].e} errors</span></div>`},
+  {n: "guess_2", t: "ndarray · shape (10,) · int64", line: 6, title: T("مصفوفة", "array"),
+   code: `<span class="v">guess_2</span> = (<span class="kA">fish[:, 1] + fish[:, 0]</span> &gt; 23).astype(int)`,
+   lines: [`${T("مصفوفة", "array")} أخرى بالشكل نفسه (10,).`, `<span class="kAc">المجموع</span> x₂ + x₁ لكل سمكة، ثم المقارنة بـ 23.`, `تطابق ${C("labels")} تمامًا: صفر أخطاء.`],
+   shape: sh("guess_2.shape → (10,)") + sh(`guess_2 → [${D.r2["23.0"].g.join(" ")}]`), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => `<div class="frame pic"><span class="cap">fish[:, 1] + fish[:, 0]</span>${cellsHTML(D.sums, v => f1(v), v => v > 23 ? "hit" : "")}<span class="cap">guess_2 (&gt; 23)</span>${cellsHTML(D.r2["23.0"].g, v => v, v => v ? "T" : "F")}<span class="cap">errors = ${D.r2["23.0"].e}</span></div>`}],
+ c13: [
+  {n: "df", t: "DataFrame · shape (10, 3)", line: 1, title: T("جدول", "DataFrame"),
+   code: `<span class="v">df</span> = pd.DataFrame(fish, columns=[<span class="kA">"lightness", "width"</span>])\n<span class="v">df</span>[<span class="kB">"species"</span>] = np.where(labels == 1, "sea bass", "salmon")`,
+   lines: [`متغيرًا اسمه ${C("df")}، نوعه ${T("جدول", "DataFrame")}.`, `السطر الأول صنع <span class="kAc">عمودين</span> من ${C("fish")}، بالأسماء التي أعطيناها.`, `السطر الثاني أضاف <span class="kBc">عمودًا ثالثًا</span> فيه ${T("نصوص", "strings")}. الجدول يحمل أرقامًا ونصوصًا معًا.`, `على اليسار ${T("ترقيم الصفوف", "index")} 0 إلى 9.`],
+   shape: sh("df.shape → (10, 3)", "10 صفوف، 3 أعمدة"), link: dsl("ds-df", "الجدول", "DataFrame"),
+   pic: () => dfPic(10)}],
+ c14a: [
+  {n: "iris", t: "Bunch · 8 keys", line: 1, title: T("حزمة بيانات", "Bunch"),
+   code: `<span class="v">iris</span> = load_iris(<span class="kA">as_frame=True</span>)`,
+   lines: [`${T("حزمة بيانات", "Bunch")}: أجزاء بأسماء، مثل ${T("القاموس", "dict")}.`, `نقرأ كل جزء بنقطة: ${C("iris.data")}، ${C("iris.target")}، ${C("iris.target_names")}.`, `<span class="kAc">${C("as_frame=True")}</span> جعل ${C("data")} جدول pandas.`],
+   shape: sh("list(iris.keys()) → ['data', 'target', 'frame', 'target_names', 'DESCR', 'feature_names', 'filename', 'data_module']"), link: dsl("ds-bunch", "حزمة البيانات", "Bunch"),
+   pic: () => `<div class="frame pic"><div class="kv">${[["data", "DataFrame (150, 4) → X"], ["target", "Series (150,) → y"], ["target_names", "array (3,) → names"], ["feature_names", "4 column names"], ["DESCR", "text: description"], ["frame", "data + target together"], ["filename", "file name"], ["data_module", "module name"]].map(([k, v], i) => `<span class="k">${k}</span><span class="ar2">→</span><span class="${i < 3 ? "hit" : ""}">${v}</span>`).join("")}</div></div>`},
+  {n: "X", t: "DataFrame · shape (150, 4)", line: 2, title: T("جدول", "DataFrame"),
+   code: `<span class="v">X</span> = iris.<span class="kA">data</span>`,
+   lines: [`${T("جدول", "DataFrame")} السمات: 150 صفًا، صف لكل زهرة.`, `4 أعمدة، سمة في كل عمود، بالسنتيمتر.`, `الصفوف مرتبة حسب النوع: 0–49 setosa، و50–99 versicolor، و100–149 virginica.`],
+   shape: sh("X.shape → (150, 4)", "150 عيّنة، 4 سمات"), link: dsl("ds-df", "الجدول", "DataFrame"),
+   pic: () => { const R = [0, 1, 2, "⋮", 50, "⋮", 100, "⋮", 149]; return `<div class="frame fr-wrap"><table class="dtab"><thead><tr><th class="ix">index</th>${D.cols.map(c => `<th class="cA">${c}</th>`).join("")}</tr></thead><tbody>${R.map(i => i === "⋮" ? `<tr class="gap"><th>⋮</th>${D.cols.map(() => "<td>⋮</td>").join("")}</tr>` : `<tr><th class="ix">${i}</th>${D.X[i].map(v => `<td>${f1(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`; }},
+  {n: "y", t: "Series · shape (150,) · int64", line: 3, title: T("عمود", "Series"),
+   code: `<span class="v">y</span> = iris.<span class="kA">target</span>`,
+   lines: [`عمود واحد، نوعه ${C("Series")}، اسمه ${C("target")}.`, `150 رقمًا، رقم الصنف لكل زهرة: 0 أو 1 أو 2.`, `الصف i في ${C("y")} صنف الصف i في ${C("X")}. لهذا يعمل ${C("X.loc[y == k, col]")}.`],
+   shape: sh("y.shape → (150,)") + sh("y.value_counts() → 0: 50, 1: 50, 2: 50"), link: dsl("ds-df", "الجدول والعمود", "DataFrame, Series"),
+   pic: () => `<div class="frame pic"><span class="cap">y</span>${cellsHTML([0, 0, 0, "…", 1, 1, "…", 2, 2], v => v, v => v === 0 ? "" : v === 1 ? "T" : "hit")}<span class="cap">index 0–49 → 0 · 50–99 → 1 · 100–149 → 2</span></div>`},
+  {n: "names", t: "ndarray · shape (3,) · <U10", line: 4, title: T("مصفوفة نصوص", "array of strings"),
+   code: `<span class="v">names</span> = iris.<span class="kA">target_names</span>`,
+   lines: [`${T("مصفوفة", "array")} فيها ثلاثة ${T("نصوص", "strings")}.`, `${C("<U10")} تعني: نصوص، طول كل نص 10 حروف على الأكثر.`, `رقم الاسم هو رقم الصنف: ${C("names[y[100]]")} = ${C("names[2]")} = virginica.`],
+   shape: sh("names → ['setosa' 'versicolor' 'virginica']"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => `<div class="frame pic"><span class="cap">names</span>${cellsHTML(D.names.map(s => `'${s}'`))}${cellsHTML(D.names, (v, i) => "[" + i + "]", () => "ix")}</div>`}],
+ c14b: [
+  {n: "axs", t: "ndarray · shape (4,) · Axes", line: 2, title: `${T("مصفوفة", "array")} ${T("رسوم", "Axes")}`,
+   code: `<span class="kB">fig</span>, <span class="v">axs</span> = plt.subplots(<span class="kA">1, 4</span>, figsize=(15, 3))`,
+   lines: [`${C("axs")} ${T("مصفوفة", "array")} فيها <span class="kAc">4</span> ${T("رسوم", "Axes")}، لا أرقام.`, `${C("axs[0]")} الرسم الأول، و${C("axs[3]")} الأخير.`, `<span class="kBc">${C("fig")}</span> الشكل الذي يحملها كلها، نوعه ${C("Figure")}.`],
+   shape: sh("axs.shape → (4,)") + sh("type(fig) → Figure"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => `<div class="frame pic"><span class="cap">fig · figsize (15, 3)</span><div class="cells">${D.cols.map((c, i) => `<span style="display:inline-grid;gap:2px;padding:6px 8px;background:var(--basstint);color:var(--bass)"><b>axs[${i}]</b><small>${c}</small></span>`).join("")}</div></div>`},
+  {n: "col", t: "str · after the loop", line: 3, title: T("نص", "string"),
+   code: `for ax, <span class="v">col</span> in zip(axs, <span class="kA">X.columns</span>):`,
+   lines: [`${T("متغير الحلقة", "loop variable")}: في كل دورة اسم عمود من <span class="kAc">${C("X.columns")}</span>.`, `بعد الحلقة يبقى آخر قيمة: ${C("'petal width (cm)'")}.`, `و${C("ax")} يبقى الرسم الأخير ${C("axs[3]")}.`],
+   shape: sh("col → 'petal width (cm)'"), link: dsl("ds-list", "القائمة", "list"),
+   pic: () => `<div class="frame pic"><span class="cap">zip(axs, X.columns): the 4 passes</span><div class="brk" style="gap:4px">${D.cols.map((c, i) => `<div style="border-color:${i === 3 ? "var(--salmon)" : "var(--line)"}">${i + 1} · ax = axs[${i}], col = '${c}'${i === 3 ? " ← after the loop" : ""}</div>`).join("")}</div></div>`},
+  {n: "k", t: "int · 2 after the loop", line: 4, title: T("عدد صحيح", "integer"),
+   code: `    for <span class="v">k</span> in <span class="kA">range(3)</span>:`,
+   lines: [`${T("متغير الحلقة", "loop variable")} الداخلية: 0 ثم 1 ثم 2، لكل سمة.`, `<span class="kAc">${C("range(3)")}</span> ثلاث دورات، صنف في كل دورة.`, `الحلقتان معًا: 4 × 3 = 12 استدعاءً لـ ${C("ax.hist")}.`],
+   shape: sh("k → 2"), pic: () => scalarPic("k", "2", "the last class: virginica")}],
+ c14c: [
+  {n: "k", t: "int · 2 after the loop", line: 2, title: T("عدد صحيح", "integer"),
+   code: `for <span class="v">k</span> in <span class="kA">range(3)</span>:`,
+   lines: [`لا متغيرات جديدة في هذه الخلية: هي ترسم فقط.`, `${C("k")} يأخذ 0 ثم 1 ثم 2 مرة أخرى، ويبقى 2.`, `في كل دورة ${C("plt.scatter")} يرسم 50 نقطة لصنف واحد.`],
+   shape: sh("k → 2"), pic: () => scalarPic("k", "2", "3 passes · 50 points each · 150 points")}],
+ c15: [
+  {n: "digits", t: "Bunch · 7 keys", line: 1, title: T("حزمة بيانات", "Bunch"),
+   code: `<span class="v">digits</span> = load_digits()`,
+   lines: [`${T("حزمة بيانات", "Bunch")} أخرى، بلا ${C("as_frame")}: فالأجزاء مصفوفات NumPy.`, `فيها الصور بشكلين: <span class="kAc">${C("images")}</span> (1797, 8, 8) و<span class="kBc">${C("data")}</span> (1797, 64).`, `و${C("target")} صنف كل صورة: ${C("[0 1 2 3 4 5 6 7 8 9 …]")}.`],
+   shape: sh(`digits.images.shape → ${D.dig.images}`) + sh(`digits.data.shape → ${D.dig.data}`) + sh(`digits.target[:10] → [${D.dig.target.join(" ")}]`), link: dsl("ds-bunch", "حزمة البيانات", "Bunch"),
+   pic: () => { const img = D.dig.img[0], mx = Math.max(...img.flat()); return `<div class="frame pic"><span class="cap kAc">digits.images[0] · 8 × 8</span><div class="dig" style="width:120px">${img.flat().map(v => `<button type="button" tabindex="-1" aria-hidden="true" style="background:hsl(0 0% ${100 - v / mx * 100}%);cursor:default"></button>`).join("")}</div><span class="cap kBc">digits.data[0] · 64 values</span><div class="vec" style="max-width:360px">${img.flat().map(v => `<span>${v}</span>`).join("")}</div></div>`; }},
+  {n: "axs", t: "ndarray · shape (10,) · Axes", line: 4, title: `${T("مصفوفة", "array")} ${T("رسوم", "Axes")}`,
+   code: `fig, <span class="v">axs</span> = plt.subplots(<span class="kA">1, 10</span>, figsize=(12, 1.6))`,
+   lines: [`الاسم نفسه الذي في 1.4b، لكن قيمة جديدة: <span class="kAc">10</span> رسوم.`, `${T("الإسناد", "assignment")} يكتب فوق القيمة القديمة.`, `${C("axs[i]")} مكان الصورة رقم i.`],
+   shape: sh("axs.shape → (10,)"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => `<div class="frame pic"><div class="cells">${D.dig.target.map((t, i) => `<span style="display:inline-grid;gap:0;padding:4px 6px;background:var(--basstint);color:var(--bass)"><small>axs[${i}]</small><b>${t}</b></span>`).join("")}</div><span class="cap">title of each subplot: digits.target[i]</span></div>`},
+  {n: "i", t: "int · 9 after the loop", line: 5, title: T("عدد صحيح", "integer"),
+   code: `for <span class="v">i</span>, ax in <span class="kA">enumerate(axs)</span>:`,
+   lines: [`<span class="kAc">${C("enumerate")}</span> أعطى ${C("i")} = 0، 1، … 9.`, `بعد الحلقة يبقى 9، و${C("ax")} يبقى ${C("axs[9]")}.`, `${C("i")} رقم الصورة ورقم الرسم معًا.`],
+   shape: sh("i → 9"), pic: () => scalarPic("i", "9", "10 passes: i = 0 … 9")}]
+};
+let VAR = null;
+function buildVars() {
+ $$(".vars[data-cell]").forEach(sec => {
+  const cell = sec.dataset.cell, list = VARS[cell] || [];
+  sec.innerHTML = `<h3>3 · المتغيرات بعد تشغيل الخلية <span class="sub">انقر متغيرًا ${T("", "variable")} لترى شكله تحت الشريط</span></h3>
+   <div class="vchips">${list.map((v, i) => `<button type="button" class="vchip" data-var="${i}" aria-expanded="false" aria-controls="vv-${cell}"><b>${v.n}</b><span>${v.t.replace(/</g, "&lt;")}</span></button>`).join("")}</div>
+   <div class="varview" id="vv-${cell}" hidden></div>`;
+ });
+}
+function openVar(cell, i, opt = {}) {
+ const v = VARS[cell][i], sec = $(`.vars[data-cell="${cell}"]`), box = $(".varview", sec);
+ if (VAR && VAR.cell === cell && VAR.i === i && !opt.force) { closeVar(); return; }
+ closeVar(true); closeCard(true);
+ box.innerHTML = `<div class="sv" role="region" tabindex="-1" aria-label="${attr("شكل " + v.n)}">
+  <div class="svbar"><button type="button" class="back">→ رجوع إلى الكود (السطر ${v.line})</button><span class="svt"><code>${v.n}</code> · ${v.title}</span><button type="button" class="xbtn" aria-label="إغلاق (Esc)">×</button></div>
+  <div class="svcode">${v.code}</div>
+  <div class="svbody"><div class="svtext"><b>ماذا صنع هذا السطر؟</b><ol>${v.lines.map(l => `<li><span>${ltrShapes(l)}</span></li>`).join("")}</ol>${v.shape}${v.link || ""}</div>
+  <div class="svpic">${v.pic()}</div></div></div>`;
+ box.hidden = false;
+ const chip = $(`.vchip[data-var="${i}"]`, sec); chip.setAttribute("aria-expanded", "true");
+ VAR = {cell, i, chip, line: v.line};
+ setHashQuiet(cell + "--var-" + v.n);
+ if (opt.scroll !== false) { const r = box.getBoundingClientRect(); if (r.bottom > innerHeight) box.scrollIntoView({block: r.height > innerHeight - 100 ? "start" : "nearest", behavior: reduce ? "auto" : "smooth"}); }
+ if (opt.focus) $(".sv", box).focus({preventScroll: true});
+}
+function closeVar(silent, back) {
+ if (!VAR) return;
+ const {cell, chip, line} = VAR, box = $(`#vv-${cell}`);
+ box.hidden = true; box.innerHTML = ""; chip.setAttribute("aria-expanded", "false"); VAR = null;
+ if (silent) return;
+ setHashQuiet(cell);
+ if (back) {
+  const ln = $(`.view[data-view="${cell}"] .ln[data-line="${line}"]`);
+  if (ln) { ln.scrollIntoView({block: "center", behavior: reduce ? "auto" : "smooth"}); flash(ln); const b = $(".tk", ln); (b || chip).focus({preventScroll: true}); }
+ } else chip.focus({preventScroll: true});
+}
+document.addEventListener("click", ev => {
+ const t = ev.target, ch = t.closest(".vchip");
+ if (ch) { openVar(ch.closest(".vars").dataset.cell, +ch.dataset.var); return; }
+ if (VAR && t.closest(".sv .back")) { closeVar(false, true); return; }
+ if (VAR && t.closest(".sv .xbtn")) { closeVar(false, true); return; }
+});
+
+/* ---------- helpers ---------- */
+const NS = "http://www.w3.org/2000/svg";
+function seg(id, cb) {
+ const s = document.getElementById(id);
+ s.addEventListener("click", ev => {
+  const b = ev.target.closest("button"); if (!b) return;
+  $$("button", s).forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+  cb(b.dataset.v);
+ });
+ return () => $("button[aria-pressed=true]", s).dataset.v;
+}
+function setSeg(id, v) { $$(`#${id} button`).forEach(x => x.setAttribute("aria-pressed", x.dataset.v === String(v) ? "true" : "false")); }
+function scale(d0, d1, r0, r1) { return v => r0 + (v - d0) / (d1 - d0) * (r1 - r0); }
+function axes(svg, X, Y, xt, yt, xl, yl, W, H, L, B, fmtY) {
+ let g = "";
+ yt.forEach(v => { g += `<line class="grid" x1="${L}" x2="${W - 10}" y1="${Y(v)}" y2="${Y(v)}"></line><text x="${L - 6}" y="${Y(v) + 4}" text-anchor="end">${fmtY ? fmtY(v) : v}</text>`; });
+ xt.forEach(v => { g += `<line class="axis" x1="${X(v)}" x2="${X(v)}" y1="${H - B}" y2="${H - B + 4}"></line><text x="${X(v)}" y="${H - B + 17}" text-anchor="middle">${v}</text>`; });
+ g += `<line class="axis" x1="${L}" x2="${W - 10}" y1="${H - B}" y2="${H - B}"></line>`;
+ g += `<text x="${(L + W) / 2}" y="${H - 4}" text-anchor="middle">${xl}</text><text x="12" y="${(H - B) / 2}" text-anchor="middle" transform="rotate(-90 12 ${(H - B) / 2})">${yl}</text>`;
+ return g;
+}
+function erf(x) { // Abramowitz-Stegun 7.1.26
+ const s = Math.sign(x); x = Math.abs(x); const t = 1 / (1 + 0.3275911 * x);
+ const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
+ return s * y;
+}
+const pdf = (x, m, s) => Math.exp(-0.5 * ((x - m) / s) ** 2) / (Math.sqrt(2 * Math.PI) * s);
+const cdf = (x, m, s) => 0.5 * (1 + erf((x - m) / (s * Math.SQRT2)));
+const f = (v, n) => v.toFixed(n);
+
+/* ---------- setup: check() ---------- */
+const GOT = {"3.88": 3.88, "3.8804": 3.8804, "3.885": 3.885, "3.9": 3.9, "None": null, '"abc"': "abc"};
+let got = "3.88", tol = "1e-3";
+seg("gotseg", v => { got = v; drawSetup(); });
+seg("tolseg", v => { tol = v; drawSetup(); });
+function setGot(v) { got = v; setSeg("gotseg", v); drawSetup(); }
+function drawSetup() {
+ const g = GOT[got], t = +tol, exp = 3.88, W = 560, H = 110, X = scale(3.70, 4.00, 30, W - 30), y0 = 62;
+ let s = `<line class="axis" x1="30" x2="${W - 30}" y1="${y0}" y2="${y0}"></line>`;
+ [3.70, 3.75, 3.80, 3.85, 3.90, 3.95, 4.00].forEach(v => { s += `<line class="axis" x1="${X(v)}" x2="${X(v)}" y1="${y0}" y2="${y0 + 5}"></line><text x="${X(v)}" y="${y0 + 20}" text-anchor="middle">${v.toFixed(2)}</text>`; });
+ const lo = Math.max(3.70, exp - t), hi = Math.min(4.00, exp + t);
+ s += `<rect x="${X(lo)}" y="${y0 - 16}" width="${Math.max(2, X(hi) - X(lo))}" height="16" fill="var(--good)" opacity=".25"></rect>`;
+ s += `<line x1="${X(exp)}" x2="${X(exp)}" y1="${y0 - 26}" y2="${y0}" stroke="var(--good)" stroke-width="2"></line><text x="${X(exp)}" y="${y0 - 30}" text-anchor="middle" style="fill:var(--good)">expected 3.88 ± tol</text>`;
+ if (typeof g === "number") s += `<circle cx="${X(g)}" cy="${y0 - 8}" r="6" fill="var(--salmon)"></circle><text x="${X(g)}" y="${y0 + 38}" text-anchor="middle" style="fill:var(--salmon)">got ${got}</text>`;
+ else s += `<text x="${W / 2}" y="${y0 + 42}" text-anchor="middle" style="fill:var(--salmon)">got = ${got}: not a number, no point on the line</text>`;
+ $("#setup-svg").innerHTML = s;
+ const line = D.chk[got + "|" + tol];
+ $("#setup-out").textContent = `check("mean lightness", ${got}, 3.88, tol=${tol})\n${line}`;
+ $("#setup-note").innerHTML = g === null ? `${C("got is not None")} هو False، فـ ${C("ok")} يصير False مباشرة، ولا تُحسب ${C("np.allclose")}. هذا ما تراه قبل أن تكتب إجابتك في الجزء 2.`
+  : typeof g === "string" ? `${C('np.asarray("abc", dtype=float)')} يفشل: النص ليس رقمًا. يظهر استثناء <bdi>(exception)</bdi>، فينتقل التنفيذ إلى ${C("except")}، ويصير ${C("ok = False")}. لا رسالة خطأ حمراء، بل ❌.`
+  : `الفرق |${got} − 3.88| = ${Math.abs(g - exp).toFixed(4)}. ${Math.abs(g - exp) <= t + 1e-5 * exp ? "أصغر من" : "أكبر من"} ${C("tol")} = ${tol}، فالنتيجة ${line.startsWith("✅") ? "✅" : "❌"}. النقطة ${line.startsWith("✅") ? "داخل" : "خارج"} الشريط الأخضر.`;
+}
+
+/* ---------- 1.1 indexing ---------- */
+const EXK = Object.keys(D.ex);
+let ex = "fish[0]";
+$("#exseg").innerHTML = EXK.map(k => `<button type="button" aria-pressed="${k === ex}" data-v="${k}">${k}</button>`).join("");
+seg("exseg", v => { ex = v; draw11(); });
+function setEx(v) { ex = v; setSeg("exseg", v); draw11(); }
+const EXN = {
+ "fish[0]": `${C("fish[0]")}: الصف 0 كله، أي السمكة الأولى بسمتيها. الشكل <bdi>(shape)</bdi> (2,).`,
+ "fish[:, 0]": `${C("fish[:, 0]")}: كل الصفوف، العمود 0. لمعان السمكات العشر.`,
+ "fish[:, 1]": `${C("fish[:, 1]")}: كل الصفوف، العمود 1. عرض السمكات العشر.`,
+ "fish[labels == 0, 0]": `${C("fish[labels == 0, 0]")}: القناع <bdi>(mask)</bdi> يختار الصفوف 0 إلى 4 (السلمون)، ثم العمود 0. متوسطها 3.88، كما يطبع الدفتر.`,
+ "fish[labels == 1, 0]": `${C("fish[labels == 1, 0]")}: صفوف القاروص، العمود 0.`,
+ "fish[labels == 1][0]": `<b>فخ:</b> ${C("fish[labels == 1]")} يعطي صفوف القاروص الخمسة، ثم ${C("[0]")} يأخذ <b>أول صف</b> منها، لا العمود 0. النتيجة سمكة واحدة بسمتيها، ومتوسطها 12.35 لا معنى له. لا رسالة خطأ.`};
+function draw11() {
+ const e = D.ex[ex], on = (i, j) => e.cells.some(([a, b]) => a === i && b === j), tr = ex.includes("][0]");
+ $("#c11-tab").innerHTML = `<thead><tr><th>row</th><th>[:, 0] lightness</th><th>[:, 1] width</th><th>labels</th></tr></thead><tbody>${D.fish.map((r, i) => `<tr><th class="marg">${i}</th>${r.map((v, j) => `<td class="${on(i, j) ? "hit" : ""}">${f1(v)}</td>`).join("")}<td class="lab${D.labels[i]} ${ex.includes("labels ==") && D.labels[i] === +ex.match(/== (\d)/)[1] ? "hrow" : ""}">${D.labels[i]}</td></tr>`).join("")}</tbody>`;
+ $("#c11-out").textContent = `>>> ${ex}\n${e.repr}\nshape ${e.shape}\n>>> ${ex}.mean()\n${e.mean}`;
+ $("#c11-note").innerHTML = EXN[ex];
+ $("#c11-out").style.boxShadow = tr ? "inset 4px 0 0 var(--warn)" : "";
+}
+
+/* ---------- 1.2 rules ---------- */
+let mode = 1, th = "5.0", cc = "23.0";
+seg("modeseg", v => { mode = +v; draw12(); });
+function setMode(v) { mode = v; setSeg("modeseg", v); draw12(); }
+$("#c12-tr").addEventListener("input", e => { th = (+e.target.value).toFixed(1); $("#c12-tv").textContent = th; if (mode !== 1) setMode(1); else draw12(); });
+$("#c12-cr").addEventListener("input", e => { cc = (+e.target.value).toFixed(1); $("#c12-cv").textContent = cc; if (mode !== 2) setMode(2); else draw12(); });
+function draw12() {
+ const R = mode === 1 ? D.r1[th] : D.r2[cc], W = 560, H = 300, L = 52, B = 40, X = scale(2, 8, L, W - 14), Y = scale(15, 22, H - B, 12);
+ let g = axes(null, X, Y, [2, 3, 4, 5, 6, 7, 8], [15, 16, 17, 18, 19, 20, 21, 22], "lightness  x₁ = fish[:, 0]", "width  x₂", W, H, L, B);
+ if (mode === 1) { const t = +th; g += `<rect x="${X(t)}" y="12" width="${X(8) - X(t)}" height="${Y(15) - 12}" fill="var(--bass)" opacity=".08"></rect><line x1="${X(t)}" x2="${X(t)}" y1="12" y2="${Y(15)}" stroke="var(--fg)" stroke-width="2" stroke-dasharray="6 4"></line><text x="${X(t) + 6}" y="26" style="fill:var(--fg)">x₁ = ${th}</text>`; }
+ else { const c = +cc, p = [[2, c - 2], [8, c - 8]]; g += `<clipPath id="c12clip"><rect x="${L}" y="12" width="${W - 14 - L}" height="${Y(15) - 12}"></rect></clipPath><g clip-path="url(#c12clip)"><polygon points="${X(2)},${Y(c - 2)} ${X(8)},${Y(c - 8)} ${X(8)},12 ${X(2)},12" fill="var(--bass)" opacity=".08"></polygon><line x1="${X(p[0][0])}" y1="${Y(p[0][1])}" x2="${X(p[1][0])}" y2="${Y(p[1][1])}" stroke="var(--fg)" stroke-width="2" stroke-dasharray="6 4"></line></g><text x="${W - 20}" y="26" text-anchor="end" style="fill:var(--fg)">x₂ + x₁ = ${cc}</text>`; }
+ D.fish.forEach(([a, b], i) => {
+  const wrong = R.g[i] !== D.labels[i], cx = X(a), cy = Y(b);
+  g += D.labels[i] ? `<rect x="${cx - 6}" y="${cy - 6}" width="12" height="12" fill="var(--bass)"></rect>` : `<circle cx="${cx}" cy="${cy}" r="6.5" fill="var(--salmon)"></circle>`;
+  if (wrong) g += `<circle cx="${cx}" cy="${cy}" r="12" fill="none" stroke="var(--bad)" stroke-width="2.5"></circle>`;
+ });
+ g += `<g transform="translate(${W - 190},${H - B - 40})"><circle cx="6" cy="6" r="6" fill="var(--salmon)"></circle><text x="16" y="10">salmon (0)</text><rect x="0" y="18" width="12" height="12" fill="var(--bass)"></rect><text x="16" y="28">sea bass (1)</text><circle cx="110" cy="6" r="8" fill="none" stroke="var(--bad)" stroke-width="2"></circle><text x="124" y="10">error</text></g>`;
+ $("#c12-svg").innerHTML = g;
+ const nm = mode === 1 ? "guess_1" : "guess_2", ne = R.g.map((v, i) => v !== D.labels[i]);
+ $("#c12-out").textContent = (mode === 1 ? `${nm} = (fish[:, 0] > ${th}).astype(int)\n` : `${nm} = (fish[:, 1] + fish[:, 0] > ${cc}).astype(int)\n`) +
+  `${nm}  = [${R.g.join(" ")}]\nlabels   = [${D.labels.join(" ")}]\n${nm} != labels → [${ne.map(b => b ? "T" : "F").join(" ")}]\nnp.sum(${nm} != labels) = ${R.e}`;
+ const wr = D.fish.map((r, i) => [r, i]).filter(([, i]) => ne[i]).map(([r, i]) => `${D.labels[i] ? "قاروص" : "سلمون"} (${f1(r[0])}, ${f1(r[1])})`);
+ const notes = {"5.0": "هذا المثال 1.1 في الـ Notes: خطآن من 10.", "4.0": "سؤال «Check yourself» 2 في الـ Notes: خطآن، السلمون 4.5 و5.6.", "5.4": "المثال 1.1: مع 5.4 ثلاثة أخطاء."};
+ $("#c12-note").innerHTML = (R.e ? `الأخطاء ${R.e}: ${wr.join("، ")}. ` : `صفر أخطاء: كل سمكة في منطقتها. `) +
+  (mode === 1 ? (notes[th] || `لا عتبة <bdi>(threshold)</bdi> على اللمعان وحده تعطي أقل من خطأين هنا.`) : (cc === "23.0" ? "هذا المثال 1.2: خط واحد يفصل السمكات العشر كلها." : `الخط المائل <bdi>(decision boundary)</bdi> انتقل: ميله −1 دائمًا، ويقطع محور العرض عند ${cc} − x₁.`));
+}
+
+/* ---------- 1.3 DataFrame ---------- */
+let hn = 5, agg = "mean";
+seg("headseg", v => { hn = +v; draw13(); });
+seg("aggseg", v => { agg = v; draw13(); });
+function draw13() {
+ $("#c13-df").innerHTML = `<thead><tr><th></th><th>lightness</th><th>width</th><th>species</th></tr></thead><tbody>${D.fish.slice(0, hn).map((r, i) => `<tr><th class="marg">${i}</th><td>${f1(r[0])}</td><td>${f1(r[1])}</td><td class="${D.labels[i] ? "hrow" : "hcol"}">${D.where[i]}</td></tr>`).join("")}</tbody>`;
+ $("#c13-cap").textContent = `df.head(${hn}) · ${hn} of 10 rows`;
+ const G = D.grp[agg];
+ $("#c13-grp").innerHTML = `<thead><tr><th>species</th><th>lightness</th></tr></thead><tbody>${Object.entries(G).map(([k, v]) => `<tr><th>${k}</th><td class="hit">${agg === "count" ? v : f(v, 2)}</td></tr>`).join("")}</tbody>`;
+ const N = {mean: `متوسط <bdi>(mean)</bdi> اللمعان: السلمون أغمق في المتوسط من القاروص. الفرق بين الصنفين كبير، فاللمعان سمة جيدة (§1.2.1).`,
+  count: `${C("count()")}: عدد الصفوف في كل مجموعة: 5 و5.`,
+  max: `${C("max()")}: أكبر لمعان في كل صنف. أفتح سلمون (5.6) أفتح من أغمق قاروص (4.2): الصنفان يتداخلان.`,
+  min: `${C("min()")}: أصغر لمعان في كل صنف.`};
+ $("#c13-note").innerHTML = N[agg] + ` الدفتر يطبع عمود <code>width</code> أيضًا. نخفيه هنا، لأن متوسط العرض هو المهمة 2.1.`;
+}
+
+/* ---------- 1.4a one flower ---------- */
+let fi = 0;
+$("#c14a-ir").addEventListener("input", e => { fi = +e.target.value; setSeg("iqseg", -1); draw14a(); });
+seg("iqseg", v => { fi = +v; $("#c14a-ir").value = fi; draw14a(); });
+function draw14a() {
+ const x = D.X[fi], k = D.y[fi];
+ $("#c14a-iv").textContent = fi;
+ $("#c14a-fv").innerHTML = D.cols.map((c, j) => `<span class="k">${c}</span><span class="v">${f1(x[j])}</span>`).join("") + `<span class="k">y[${fi}]</span><span class="v" style="color:${CLS[k]}">${k}</span><span class="k">names[y[${fi}]]</span><span class="v" style="color:${CLS[k]}">'${D.names[k]}'</span>`;
+ const W = 300, H = 150, L = 30, B = 26, Y = scale(0, 8, H - B, 10);
+ let g = `<line class="axis" x1="${L}" x2="${W - 6}" y1="${Y(0)}" y2="${Y(0)}"></line>`;
+ [0, 2, 4, 6, 8].forEach(v => { g += `<line class="grid" x1="${L}" x2="${W - 6}" y1="${Y(v)}" y2="${Y(v)}"></line><text x="${L - 5}" y="${Y(v) + 4}" text-anchor="end">${v}</text>`; });
+ const bw = (W - L - 20) / 4;
+ x.forEach((v, j) => { const x0 = L + 10 + j * bw; g += `<rect x="${x0 + 6}" y="${Y(v)}" width="${bw - 12}" height="${Y(0) - Y(v)}" fill="${CLS[k]}" opacity=".85"></rect><text x="${x0 + bw / 2}" y="${Y(v) - 4}" text-anchor="middle" style="fill:var(--fg)">${f1(v)}</text><text x="${x0 + bw / 2}" y="${H - 8}" text-anchor="middle">${["sep L", "sep W", "pet L", "pet W"][j]}</text>`; });
+ $("#c14a-svg").innerHTML = g;
+ $("#c14a-out").textContent = `x = (${x.map(f1).join(", ")})   ← row ${fi} of X, shape (4,)\ny[${fi}] = ${k}   names[${k}] = '${D.names[k]}'`;
+ $("#c14a-note").innerHTML = `الزهرة ${fi} نقطة في فضاء من 4 أبعاد <bdi>(4-dimensional feature space)</bdi>. الأزهار مرتبة حسب النوع: 0–49 setosa، و50–99 versicolor، و100–149 virginica. حرّك المؤشر وراقب طول البتلة <bdi>(petal length)</bdi>.`;
+}
+
+/* ---------- 1.4b histograms ---------- */
+let hc = "petal length (cm)", hb = 15, ha = 0.6, hl = 1, hpick = null;
+$("#colseg").innerHTML = D.cols.map(c => `<button type="button" aria-pressed="${c === hc}" data-v="${c}">"${c}"</button>`).join("");
+seg("colseg", v => { hc = v; hpick = null; draw14b(); });
+seg("binseg", v => { hb = +v; hpick = null; draw14b(); });
+seg("alphaseg", v => { ha = +v; draw14b(); });
+seg("labseg", v => { hl = +v; draw14b(); });
+function draw14b() {
+ const Hs = D.hist[hc + "|" + hb], lo = Math.min(...Hs.map(h => h.e[0])), hi = Math.max(...Hs.map(h => h.e[h.e.length - 1])), cm = Math.max(...Hs.flatMap(h => h.c));
+ const W = 560, H = 270, L = 44, B = 38, pad = (hi - lo) * 0.04, X = scale(lo - pad, hi + pad, L, W - 14), Y = scale(0, cm * 1.12, H - B, 12);
+ const step = (hi - lo) > 3 ? 1 : 0.5, xt = []; for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) xt.push(+v.toFixed(1));
+ const yst = cm > 20 ? 5 : 2, yt = []; for (let v = 0; v <= cm * 1.12; v += yst) yt.push(v);
+ let g = axes(null, X, Y, xt, yt, hc, "count", W, H, L, B);
+ Hs.forEach((h, k) => h.c.forEach((c, i) => { if (!c) return; const x0 = X(h.e[i]), x1 = X(h.e[i + 1]); g += `<rect data-k="${k}" data-i="${i}" x="${f(x0, 1)}" y="${f(Y(c), 1)}" width="${f(Math.max(1, x1 - x0), 1)}" height="${f(Y(0) - Y(c), 1)}" fill="${CLS[k]}" fill-opacity="${ha}" style="cursor:pointer${hpick && hpick[0] === k && hpick[1] === i ? ";stroke:var(--fg);stroke-width:2" : ""}"></rect>`; }));
+ if (hl) g += `<g transform="translate(${L + 12},18)">${D.names.map((n, k) => `<rect x="0" y="${k * 18}" width="12" height="12" fill="${CLS[k]}" fill-opacity="${ha}"></rect><text x="18" y="${k * 18 + 10}">${n}</text>`).join("")}</g>`;
+ $("#c14b-svg").innerHTML = g;
+ let t = `bins=${hb} for each class, each over its own range:\n` + Hs.map((h, k) => `  ${D.names[k].padEnd(10)} bin width ${(h.e[1] - h.e[0]).toFixed(3)} cm`).join("\n");
+ if (hpick) { const [k, i] = hpick, h = Hs[k]; t += `\nclicked: ${D.names[k]}, bar ${i + 1} of ${hb}: ${h.c[i]} flowers`; }
+ if (!hl) t += `\nUserWarning: No artists with labels found to put in legend.`;
+ $("#c14b-out").textContent = t;
+ $("#c14b-note").innerHTML = `هل تتداخل الألوان الثلاثة؟ السمة التي تفصل الألوان سمة جيدة <bdi>(good feature)</bdi>، كاللمعان في الشكل 2 في الـ Notes. انقر أي عمود لترى عدده. لاحظ أن عرض الأعمدة يختلف بين الأنواع: كل نوع له مجاله.`;
+}
+$("#c14b-svg").addEventListener("click", e => { const r = e.target.closest("rect[data-k]"); if (r) { hpick = [+r.dataset.k, +r.dataset.i]; draw14b(); } });
+
+/* ---------- 1.4c scatter ---------- */
+let sx = 2, sy = 3;
+$("#xseg").innerHTML = D.cols.map((c, j) => `<button type="button" aria-pressed="${j === sx}" data-v="${j}">"${c}"</button>`).join("");
+$("#yseg").innerHTML = D.cols.map((c, j) => `<button type="button" aria-pressed="${j === sy}" data-v="${j}">"${c}"</button>`).join("");
+seg("xseg", v => { sx = +v; draw14c(); });
+seg("yseg", v => { sy = +v; draw14c(); });
+function draw14c() {
+ const xs = D.X.map(r => r[sx]), ys = D.X.map(r => r[sy]);
+ const x0 = Math.floor(Math.min(...xs)), x1 = Math.ceil(Math.max(...xs)), y0 = Math.floor(Math.min(...ys)), y1 = Math.ceil(Math.max(...ys));
+ const W = 560, H = 320, L = 46, B = 40, X = scale(x0, x1, L, W - 14), Y = scale(y0, y1, H - B, 12);
+ const rng = (a, b) => { const r = []; for (let v = a; v <= b; v++) r.push(v); return r; };
+ let g = axes(null, X, Y, rng(x0, x1), rng(y0, y1), D.cols[sx], D.cols[sy], W, H, L, B);
+ D.X.forEach((r, i) => { const k = D.y[i], cx = f(X(r[sx]), 1), cy = f(Y(r[sy]), 1);
+  g += k === 0 ? `<circle cx="${cx}" cy="${cy}" r="4.5" fill="${CLS[0]}"></circle>` : k === 1 ? `<rect x="${cx - 4}" y="${cy - 4}" width="8" height="8" fill="${CLS[1]}"></rect>` : `<path d="M${cx},${cy - 5.5} L${+cx + 5},${+cy + 4} L${cx - 5},${+cy + 4} Z" fill="${CLS[2]}"></path>`; });
+ g += `<g transform="translate(${L + 12},18)">${D.names.map((n, k) => `<rect x="0" y="${k * 18}" width="12" height="12" fill="${CLS[k]}"></rect><text x="18" y="${k * 18 + 10}">${n}</text>`).join("")}</g>`;
+ $("#c14c-svg").innerHTML = g;
+ $("#c14c-note").innerHTML = sx === sy ? `السمة نفسها على المحورين: كل النقاط على خط مستقيم. هذا لا يضيف شيئًا على المدرّج في 1.4b.` :
+  `كل زهرة نقطة <bdi>(point)</bdi>: 150 نقطة. حيث تتداخل مجموعتان لا يفصلهما خط. ${sx === 0 && sy === 1 ? "هذا سؤال «Try it» في الدفتر." : sx === 2 && sy === 3 ? "هذا رسم الدفتر." : ""} بعض الأزهار لها القياسات نفسها، فتقع نقاطها فوق بعض.`;
+}
+
+/* ---------- 1.5 digits ---------- */
+let di = 0, cmap = "gray_r", pr = 0, pc = 3;
+$("#digseg").innerHTML = D.dig.target.map((_, i) => `<button type="button" aria-pressed="${i === 0}" data-v="${i}">${i}</button>`).join("");
+seg("digseg", v => { di = +v; draw15(); });
+seg("cmseg", v => { cmap = v; draw15(); });
+function draw15() {
+ const img = D.dig.img[di], flat = img.flat(), mx = Math.max(...flat), mn = Math.min(...flat);
+ const shade = v => { const t = (v - mn) / (mx - mn); return `hsl(0 0% ${(cmap === "gray_r" ? 1 - t : t) * 100}%)`; };
+ $("#c15-img").innerHTML = flat.map((v, n) => { const r = Math.floor(n / 8), c = n % 8; return `<button type="button" data-r="${r}" data-c="${c}" class="${r === pr && c === pc ? "on" : ""}" style="background:${shade(v)}" aria-label="pixel row ${r} column ${c}: ${v}"></button>`; }).join("");
+ $("#c15-ttl").textContent = `ax.set_title(digits.target[${di}]) → ${D.dig.target[di]}`;
+ const idx = pr * 8 + pc;
+ $("#c15-vec").innerHTML = flat.map((v, n) => `<span class="${n === idx ? "on" : ""}" title="[${n}]">${v}</span>`).join("");
+ $("#c15-out").textContent = `digits.images[${di}][${pr}, ${pc}] = ${img[pr][pc]}\ndigits.data[${di}][${pr} * 8 + ${pc}] = digits.data[${di}][${idx}] = ${flat[idx]}\ndigits.target[${di}] = ${D.dig.target[di]}`;
+ $("#c15-note").innerHTML = `البكسل في الصف ${pr} والعمود ${pc} من الصورة هو العنصر رقم ${pr} × 8 + ${pc} = ${idx} في متجه السمات <bdi>(feature vector)</bdi>. القيم من ${mn} إلى ${mx}، و${C("imshow")} يجعل ${C(cmap === "gray_r" ? mn : mx)} أبيض و${C(cmap === "gray_r" ? mx : mn)} أسود.`;
+}
+$("#c15-img").addEventListener("click", e => { const b = e.target.closest("button[data-r]"); if (b) { pr = +b.dataset.r; pc = +b.dataset.c; draw15(); } });
+
+/* ---------- index ---------- */
+const LAB = {setup: "الإعداد", c11: "1.1", c12: "1.2", c13: "1.3", c14a: "1.4a", c14b: "1.4b", c14c: "1.4c", c15: "1.5"};
+function buildIndex() {
+ const where = {};
+ $$(".view").forEach(v => $$(".lines .tk", v).forEach(b => { where[b.dataset.k] = where[b.dataset.k] || v.dataset.view; }));
+ const order = ["py", "np", "pd", "plt", "sk"];
+ const rows = Object.entries(E).sort((x, y) => order.indexOf(x[1].l) - order.indexOf(y[1].l));
+ $("#glo tbody").innerHTML = rows.map(([k, e]) => `<tr><td class="n">${e.n}</td><td><span class="b ${e.l}">${LIB[e.l]}</span></td><td class="hide-ph"><span class="b ${ST[e.t][0]}">${ST[e.t][1]}</span></td><td>${e.s}</td><td><a href="#${where[k]}--${k}">${LAB[where[k]]}</a></td></tr>`).join("");
+}
+/* ---------- reading-order strip inside a cell ---------- */
+function buildSteps() {
+ $$(".view.cell .steps").forEach(s => {
+  if (!s.children.length) s.innerHTML = `<span class="sl">اقرأ بالترتيب:</span><button type="button" data-step="1"><b>1</b> الصيغة</button><span class="ar">←</span><button type="button" data-step="2" class="on"><b>2</b> الكود سطرًا سطرًا</button><span class="ar">←</span><button type="button" data-step="3"><b>3</b> المتغيرات الناتجة</button><span class="ar">←</span><button type="button" data-step="4"><b>4</b> جرّب</button>`;
+ });
+ document.addEventListener("click", ev => {
+  const b = ev.target.closest(".steps button"); if (!b) return;
+  const view = b.closest(".view"), n = b.dataset.step, el = view.querySelector(`:not(button)[data-step="${n}"]`);
+  $$(".steps button", view).forEach(x => x.classList.toggle("on", x === b));
+  if (!el) return;
+  if (el.tagName === "DETAILS") el.open = true;
+  el.scrollIntoView({block: "start", behavior: reduce ? "auto" : "smooth"});
+ });
+}
+/* ---------- views and hash routing ---------- */
+const VIEWS = ["setup", "c11", "c12", "c13", "c14a", "c14b", "c14c", "c15", "tasks", "traps", "index"];
+const NAME = {setup: "الإعداد", c11: "1.1 عشر سمكات مصفوفةً", c12: "1.2 قاعدة قرار", c13: "1.3 جدول pandas", c14a: "1.4a بيانات Iris", c14b: "1.4b سمة واحدة: مدرّجات", c14c: "1.4c سمتان: فضاء السمات", c15: "1.5 صورة متجهَ سمات", tasks: "مهامك", traps: "الفخاخ", index: "فهرس الأسماء"};
+const SHORT = {setup: "الإعداد", c11: "1.1", c12: "1.2", c13: "1.3", c14a: "1.4a", c14b: "1.4b", c14c: "1.4c", c15: "1.5", tasks: "مهامك", traps: "الفخاخ", index: "الفهرس"};
+let CUR = null;
+const SEEN = new Set();
+try { JSON.parse(localStorage.getItem("lg1-seen") || "[]").forEach(v => SEEN.add(v)); } catch (e) {}
+function showView(v) {
+ closeCard(true); closeVar(true);
+ $$(".view").forEach(s => s.hidden = s.dataset.view !== v);
+ CUR = v; SEEN.add(v);
+ try { localStorage.setItem("lg1-seen", JSON.stringify([...SEEN])); } catch (e) {}
+ const i = VIEWS.indexOf(v), pv = VIEWS[i - 1], nx = VIEWS[i + 1];
+ $$("#side .nv").forEach(a => { const on = a.dataset.v === v; if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); a.classList.toggle("done", SEEN.has(a.dataset.v) && !on); });
+ const cur = $(`#side .nv[data-v="${v}"]`), side = $("#side");
+ if (cur && side.scrollWidth > side.clientWidth + 2) { const r = cur.getBoundingClientRect(), s = side.getBoundingClientRect(); if (r.left < s.left || r.right > s.right) side.scrollLeft += (r.left + r.width / 2) - (s.left + s.width / 2); }
+ $("#tbcount").textContent = i <= 7 ? `الخلية ${i + 1} من 8` : `${NAME[v]} · بعد الخلايا`;
+ const pct = Math.round((i + 1) / VIEWS.length * 100);
+ $("#tbbar i").style.width = pct + "%"; $("#tbbar").setAttribute("aria-valuenow", pct);
+ const P = $("#tbprev"), N = $("#tbnext");
+ if (pv) { P.href = "#" + pv; P.textContent = `→ ${SHORT[pv]} السابق`; P.removeAttribute("aria-disabled"); P.removeAttribute("tabindex"); } else { P.href = "#" + v; P.textContent = "→ السابق"; P.setAttribute("aria-disabled", "true"); P.tabIndex = -1; }
+ if (nx) { N.href = "#" + nx; N.textContent = `التالي ${SHORT[nx]} ←`; N.removeAttribute("aria-disabled"); N.removeAttribute("tabindex"); } else { N.href = "#" + v; N.textContent = "التالي ←"; N.setAttribute("aria-disabled", "true"); N.tabIndex = -1; }
+ const pn = $(`.view[data-view="${v}"] .pn`);
+ if (pn) pn.innerHTML = (pv ? `<a href="#${pv}">→ السابق: ${NAME[pv]}</a>` : "") + (nx ? `<a class="primary" href="#${nx}">التالي: ${NAME[nx]} ←</a>` : `<a class="primary" href="#setup">إلى البداية: الإعداد ←</a>`);
+ $$(`.view[data-view="${v}"] .steps button`).forEach(b => b.classList.toggle("on", b.dataset.step === "2"));
+ document.title = `Lab 1 Code Guide · ${SHORT[v]}`;
+}
+function openSub(v, sub) {
+ const view = $(`.view[data-view="${v}"]`);
+ if (E[sub]) { const b = $(`.lines .tk[data-k="${sub}"]`, view); if (b) { openCard(b, {force: true, focus: true, center: true}); return; } }
+ if (sub.startsWith("var-")) { const i = (VARS[v] || []).findIndex(x => x.n === sub.slice(4)); if (i >= 0) { openVar(v, i, {force: true, focus: true}); $(`.vars[data-cell="${v}"]`).scrollIntoView({block: "start"}); } return; }
+ const el = document.getElementById(sub);
+ if (el && view.contains(el)) { el.scrollIntoView({block: "center", behavior: reduce ? "auto" : "smooth"}); flash(el); }
+}
+function route() {
+ let h = ""; try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) { h = location.hash.slice(1); }
+ let [v, sub] = h.split("--");
+ if (!VIEWS.includes(v)) { v = "setup"; sub = ""; }
+ const changed = v !== CUR;
+ if (changed) showView(v);
+ if (sub) requestAnimationFrame(() => openSub(v, sub));
+ else if (changed) scrollTo(0, 0);
+}
+addEventListener("hashchange", route);
+document.addEventListener("click", ev => {
+ const a = ev.target.closest('a[href^="#"]'); if (!a || ev.ctrlKey || ev.metaKey || ev.shiftKey) return;
+ const h = a.getAttribute("href"); if (!h || h === "#") return;
+ ev.preventDefault();
+ if (location.hash === h) route(); else location.hash = h;
+});
+document.addEventListener("keydown", ev => {
+ if (ev.key !== "Escape") return;
+ if (CARD) { ev.preventDefault(); closeCard(); } else if (VAR) { ev.preventDefault(); closeVar(false, true); }
+});
+
+/* ---------- theme and start ---------- */
+(() => {
+ const root = document.documentElement;
+ const apply = v => { if (v === "auto") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", v); setSeg("themeseg", v); };
+ let saved = "auto"; try { saved = localStorage.getItem("lg-theme") || "auto"; } catch (e) {}
+ apply(saved);
+ seg("themeseg", v => { apply(v); try { localStorage.setItem("lg-theme", v); } catch (e) {} });
+})();
+renderCode(); buildSteps(); buildVars(); buildIndex();
+drawSetup(); draw11(); draw12(); draw13(); draw14a(); draw14b(); draw14c(); draw15();
+route();
+</script>
+</body></html>

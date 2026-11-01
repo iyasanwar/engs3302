@@ -1,0 +1,1741 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lab 3 Code Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700&family=Fira+Sans:wght@400;600;700&family=Literata:opsz,wght@7..72,600;7..72,700&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>
+/* Layout: one notebook cell per view (hash route). Top bar with progress, side navigation (stacks above on phones),
+   and inside a cell a fixed reading order: 1 formula, 2 code line by line (the explanation card opens under its line,
+   with the live panel inside it), 3 the variables the cell makes (structure view opens inline), 4 try in the notebook. */
+:root{
+ --bg:#F5F7FA;--surface:#FFFFFF;--sunk:#EEF1F5;--fg:#14233B;--muted:#566173;--line:#DDE3EA;
+ --bass:#1D5C8C;--onbass:#FFFFFF;--basstint:#E6EEF6;--salmon:#E4734F;--salink:#B4472A;--saltint:#FBE9E3;
+ --sand:#F3E3B5;--sandfg:#6E5310;--sandline:#F3E3B5;--good:#28724F;--goodbg:#E3F4EA;--greentint:#E6F3EC;
+ --bad:#B3261E;--badbg:#FBE9E7;--warn:#9A5B00;--warnbg:#FFF4E0;--faint:#A3ADB8;
+ --py:#6A3FB0;--pybg:#F0EAFB;--np:#0D7377;--npbg:#E0F2F2;--pd:#A3346E;--pdbg:#F8E6EF;--plt:#A85A12;--pltbg:#FBEEDF;--sp:#2E6B30;--spbg:#E6F2E6;
+ --codebg:#14233B;--codefg:#E6EBF3;--codecm:#8EA0B8;--codeno:#627083;--codeline:#263347;--codehead:#D5DDE8;--tk:#F3E3B5;
+ --hkw:#D7A6F5;--hco:#7FB8F0;--hst:#F2A98A;--hnu:#C7E3A8;--hfn:#F3E3A0;--hmo:#6FD8C8;--hva:#B9DBF7;--hka:#F0C48A;
+ --kA:#9CC3E6;--kAbg:rgba(116,174,224,.25);--kAu:#74AEE0;--kB:#A8E0C0;--kBbg:rgba(99,192,143,.25);--kCu:#F08A6A;
+ --cA:#D8742B;--cC:#2E8B57;--cG:#2F6FB0;--dv:#6B3FB8;--dvbg:#F4EFFC;
+ --f-body:"Fira Sans","Cairo","Tajawal","Noto Sans Arabic",Tahoma,sans-serif;
+ --f-ar:"Cairo","Tajawal","Noto Sans Arabic",Tahoma,sans-serif;
+ --f-disp:"Literata","Cairo","Tajawal",Georgia,serif;
+ --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+ --bg:#0F141C;--surface:#161D29;--sunk:#1C2433;--fg:#E6EAF1;--muted:#9AA4B6;--line:#2A3344;
+ --bass:#79B3E3;--onbass:#0F141C;--basstint:#1B2C40;--salmon:#F29A7B;--salink:#F29A7B;--saltint:#3A221A;
+ --sand:#4A3F22;--sandfg:#F0D58C;--sandline:#8A7434;--good:#7FD3A6;--goodbg:#163225;--greentint:#16301F;
+ --bad:#F2A097;--badbg:#3A1B19;--warn:#F2C17A;--warnbg:#3A2A12;--faint:#5E6A7E;
+ --py:#C3A6F2;--pybg:#2A2140;--np:#6FD0D3;--npbg:#133233;--pd:#F09AC6;--pdbg:#3A1C2C;--plt:#F2B36E;--pltbg:#3A2914;--sp:#93D195;--spbg:#1A3019;
+ --codebg:#0A0F16;--codefg:#E6EBF3;--codecm:#7F90A8;--codeno:#56647A;--codeline:#1E2838;--codehead:#C9D2DF;--tk:#4A3F22;
+ --kA:#9CC3E6;--kAbg:rgba(116,174,224,.22);--kAu:#74AEE0;--kB:#A8E0C0;--kBbg:rgba(99,192,143,.22);--kCu:#F08A6A;
+ --cA:#F0A066;--cC:#6FCF97;--cG:#7DB1EA;--dv:#C3A6F2;--dvbg:#221B33;color-scheme:dark}}
+:root[data-theme="dark"]{
+ --bg:#0F141C;--surface:#161D29;--sunk:#1C2433;--fg:#E6EAF1;--muted:#9AA4B6;--line:#2A3344;
+ --bass:#79B3E3;--onbass:#0F141C;--basstint:#1B2C40;--salmon:#F29A7B;--salink:#F29A7B;--saltint:#3A221A;
+ --sand:#4A3F22;--sandfg:#F0D58C;--sandline:#8A7434;--good:#7FD3A6;--goodbg:#163225;--greentint:#16301F;
+ --bad:#F2A097;--badbg:#3A1B19;--warn:#F2C17A;--warnbg:#3A2A12;--faint:#5E6A7E;
+ --py:#C3A6F2;--pybg:#2A2140;--np:#6FD0D3;--npbg:#133233;--pd:#F09AC6;--pdbg:#3A1C2C;--plt:#F2B36E;--pltbg:#3A2914;--sp:#93D195;--spbg:#1A3019;
+ --codebg:#0A0F16;--codefg:#E6EBF3;--codecm:#7F90A8;--codeno:#56647A;--codeline:#1E2838;--codehead:#C9D2DF;--tk:#4A3F22;
+ --kA:#9CC3E6;--kAbg:rgba(116,174,224,.22);--kAu:#74AEE0;--kB:#A8E0C0;--kBbg:rgba(99,192,143,.22);--kCu:#F08A6A;
+ --cA:#F0A066;--cC:#6FCF97;--cG:#7DB1EA;--dv:#C3A6F2;--dvbg:#221B33;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-padding-top:90px}
+body{background:var(--bg);color:var(--fg);margin:0;font-family:var(--f-body);font-size:17px;line-height:1.85;overflow-x:hidden}
+.app{direction:rtl;text-align:right;min-height:100vh}
+h1{font-family:var(--f-disp);font-size:clamp(26px,4.4vw,34px);line-height:1.4;margin:0;text-wrap:balance}
+h2{font-family:var(--f-disp);font-size:clamp(21px,3vw,25px);line-height:1.45;margin:0;text-wrap:balance}
+h3{font-size:18px;margin:0;line-height:1.6}
+h1 bdi,h2 bdi{font-family:var(--f-body);font-weight:600;color:var(--muted);font-size:.7em}
+p{margin:0}
+a{color:var(--bass)}
+.lead{color:var(--muted);max-width:70ch}
+code,.mono{font-family:var(--f-mono);font-size:.86em;direction:ltr;unicode-bidi:isolate}
+.mono{display:inline-block}
+code{background:var(--sunk);border-radius:5px;padding:1px 5px;overflow-wrap:anywhere}
+bdi{unicode-bidi:isolate}
+:focus-visible{outline:2px solid var(--salmon);outline-offset:2px}
+.sub{font-weight:400;color:var(--muted);font-size:14px}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;background:var(--surface);border-bottom:1px solid var(--line);
+ padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
+.tb-title{display:flex;flex-direction:column;flex:1 1 220px;min-width:0}
+.tb-eyebrow{font-size:13px;font-weight:600;color:var(--muted);direction:ltr;text-align:right}
+.tb-name{font-family:var(--f-disp);font-size:22px;font-weight:700;line-height:1.4}
+.tb-prog{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+.bar{width:160px;height:8px;border-radius:999px;background:var(--line);overflow:hidden;display:flex}
+.bar i{display:block;height:100%;background:var(--bass);width:0;transition:width .3s}
+.tb-nav{display:flex;gap:8px;flex-wrap:wrap}
+.navbtn{min-height:44px;border-radius:999px;padding:8px 16px;font-weight:600;font-size:15px;border:1px solid var(--line);background:var(--surface);color:var(--fg);text-decoration:none;display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-family:inherit}
+.navbtn:hover{border-color:var(--fg)}
+.navbtn.primary{background:var(--bass);border-color:var(--bass);color:var(--onbass)}
+.navbtn[aria-disabled="true"]{opacity:.4;pointer-events:none}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;direction:ltr}
+.seg button{font-family:var(--f-mono);font-size:13px;background:var(--surface);color:var(--fg);border:0;border-inline-start:1px solid var(--line);padding:5px 9px;cursor:pointer;min-width:30px;min-height:40px}
+.seg button:first-child{border-inline-start:0}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--surface)}
+.seg button:focus-visible{outline:2px solid var(--salmon);outline-offset:-2px}
+#themeseg button{font-family:var(--f-body)}
+@media (max-width:860px){.topbar{position:static}.tb-name{font-size:19px}.bar{width:110px}}
+
+/* ---------- shell and side navigation ---------- */
+.shell{display:flex;gap:28px;align-items:flex-start;max-width:1400px;margin:0 auto;
+ padding:24px max(16px,env(safe-area-inset-right,0px)) 80px max(16px,env(safe-area-inset-left,0px))}
+.side{flex:0 0 250px;position:sticky;top:92px;display:flex;flex-direction:column;gap:3px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+.side .sh{font-size:13px;font-weight:700;color:var(--muted);padding:0 8px 4px}
+.nv{text-decoration:none;color:var(--fg);display:flex;gap:10px;align-items:center;padding:7px 10px;border-radius:8px;font-size:15px;min-height:40px;line-height:1.5}
+.nv:hover{background:var(--sunk)}
+.nv .nk{font-family:var(--f-mono);font-size:13px;color:var(--muted);min-width:46px;direction:ltr;text-align:right;white-space:nowrap}
+.nv.done{color:var(--muted)}
+.nv.done .nk{color:var(--good)}
+.nv.done .nk::before{content:"✓ "}
+.nv[aria-current="page"]{background:var(--basstint);color:var(--fg);font-weight:700}
+.nv[aria-current="page"] .nk{color:var(--bass)}
+.nv[aria-current="page"] .nk::before{content:"● "}
+.nv .nk.tr{color:var(--salink)}
+.side .sep{height:1px;background:var(--line);margin:6px 0}
+.side .scope{margin:8px 6px 2px;font-size:13px}
+main{flex:1 1 0;min-width:0}
+@media (max-width:860px){
+ .shell{flex-direction:column;gap:14px;padding-top:14px}
+ .side{position:static;flex:none;width:100%;flex-direction:row;overflow-x:auto;gap:6px;padding:8px;scrollbar-width:thin}
+ .side .sh,.side .sep,.side .scope{display:none}
+ .nv{flex:none;white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+ .nv .nk{min-width:0}
+}
+
+/* ---------- a view ---------- */
+.view{display:grid;gap:20px;min-width:0}
+.cellhead{display:grid;gap:6px}
+.cellno{font-family:var(--f-mono);font-size:14px;font-weight:700;color:var(--muted);direction:ltr;text-align:right}
+.goal{max-width:72ch;font-size:17.5px}
+.goal b{color:var(--bass)}
+.scope{display:inline-flex;gap:8px;align-items:center;background:var(--sand);color:var(--sandfg);border-radius:8px;padding:4px 12px;font-size:15px;font-weight:600;width:fit-content}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:14px}
+.intro{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 18px;display:grid;gap:10px}
+.steps{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0;padding:0;list-style:none}
+.steps .sl{font-size:14px;font-weight:700;color:var(--muted)}
+.steps .ar{color:var(--faint)}
+.steps button{display:inline-flex;gap:8px;align-items:center;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:15px;font-family:inherit;cursor:pointer;min-height:40px}
+.steps button b{color:var(--bass)}
+.steps button.on{background:var(--fg);color:var(--surface);border-color:var(--fg)}
+.steps button.on b{color:var(--surface)}
+.blk{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 18px}
+details.blk>summary{cursor:pointer;font-weight:700;line-height:1.8;min-height:40px;display:list-item;padding-top:4px}
+summary::marker{color:var(--salmon)}
+.b{display:inline-flex;align-items:center;font-family:var(--f-mono);font-size:12px;font-weight:700;line-height:1;border-radius:5px;padding:4px 7px;white-space:nowrap;direction:ltr}
+.b.py{color:var(--py);background:var(--pybg)}.b.np{color:var(--np);background:var(--npbg)}.b.pd{color:var(--pd);background:var(--pdbg)}
+.b.plt{color:var(--plt);background:var(--pltbg)}.b.sp{color:var(--sp);background:var(--spbg)}
+.b.new{color:var(--surface);background:var(--fg)}.b.rev{color:var(--muted);background:var(--sunk)}.b.trap{color:var(--warn);background:var(--warnbg)}
+a.b{text-decoration:none;min-height:32px;padding:6px 10px}
+a.b:hover{outline:1px solid currentColor}
+.formula{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:center;margin-top:10px}
+.formula .side2{display:grid;gap:2px;min-width:0}
+.formula .lab{font-size:13px;font-weight:700;color:var(--muted)}
+.formula .math{font-family:var(--f-disp);font-size:19px;line-height:1.9;direction:ltr;text-align:center;overflow-x:auto}
+.formula .py{font-family:var(--f-mono);font-size:15px;line-height:2.4;direction:ltr;text-align:center;overflow-x:auto;color:var(--bass)}
+.formula .eq{font-size:22px;color:var(--muted)}
+@media (max-width:640px){.formula{grid-template-columns:1fr}.formula .eq{text-align:center;transform:rotate(90deg)}}
+.pn{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:8px}
+.pn a{text-decoration:none;font-weight:600;color:var(--fg);border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 18px;min-height:44px;display:inline-flex;align-items:center}
+.pn a.primary{color:var(--onbass);background:var(--bass);border-color:var(--bass);margin-inline-start:auto}
+
+/* ---------- code, line by line ---------- */
+.codebox{background:var(--codebg);color:var(--codefg);border-radius:12px;overflow:hidden;min-width:0}
+.codehead{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px 14px;padding:10px 18px;border-bottom:1px solid var(--codeline);color:var(--codehead);font-size:14px;font-weight:700}
+.codehead .src{font-family:var(--f-mono);font-size:12px;font-weight:400;color:#9AA6B8;direction:ltr}
+.lines{direction:ltr;text-align:left;overflow-x:auto;padding:10px 0 12px;font-family:var(--f-mono);font-size:14.5px;line-height:2}
+.lines-in{min-width:100%;width:max-content}
+.ln{display:flex;gap:14px;padding:0 18px 0 10px;white-space:pre;border-left:3px solid transparent}
+.ln .no{color:var(--codeno);width:22px;text-align:right;flex:none;user-select:none;-webkit-user-select:none}
+.ln.cur{background:rgba(243,227,181,.08);border-left-color:var(--sandline)}
+.ln.flash{animation:lnflash 1.8s ease-out}
+@keyframes lnflash{0%,40%{background:rgba(243,227,181,.28)}100%{background:transparent}}
+.lines .hl-cm{color:var(--codecm);font-style:italic}.lines .hl-kw{color:var(--hkw)}.lines .hl-co{color:var(--hco)}.lines .hl-st{color:var(--hst)}
+.lines .hl-nu{color:var(--hnu)}.lines .hl-fn,.lines .hl-bi{color:var(--hfn)}.lines .hl-mo{color:var(--hmo)}.lines .hl-va,.lines .hl-at{color:var(--hva)}
+.lines .hl-kwarg{color:var(--hka)}.lines .hl-op{color:var(--codefg)}.lines .hl-br{color:var(--hco)}.lines .hl-fmt{color:var(--hnu)}
+.tk{font:inherit;color:inherit;background:transparent;border:0;border-bottom:2px dotted var(--codecm);padding:0 1px;margin:0;cursor:pointer;border-radius:3px;line-height:inherit;white-space:pre}
+.tk:hover{background:rgba(243,227,181,.16)}
+.tk:focus-visible{outline:2px solid var(--sand);outline-offset:1px}
+.tk.on{background:var(--tk);color:var(--sandfg);border-bottom-color:transparent}
+.tk.on span{color:inherit;font-style:normal}
+pre.code{display:none}
+
+/* ---------- explanation card under its line ---------- */
+.card{position:sticky;left:0;padding:8px 12px 12px;white-space:normal;font-family:var(--f-body)}
+.card-in{direction:rtl;text-align:right;background:var(--surface);color:var(--fg);border-radius:12px;border-top:4px solid var(--sandline);position:relative;padding:14px 18px 14px;display:grid;gap:12px;font-size:16.5px;line-height:1.85;box-shadow:0 6px 24px rgba(10,15,22,.25)}
+.caret{position:absolute;top:-14px;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:10px solid var(--sandline);transform:translateX(-50%)}
+.ctop{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ctop .name{font-family:var(--f-mono);font-size:16px;font-weight:700;direction:ltr;unicode-bidi:isolate;overflow-wrap:anywhere}
+.ctop .one{font-size:15.5px;color:var(--muted)}
+.xbtn{margin-inline-start:auto;width:44px;height:44px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:22px;line-height:1;cursor:pointer;font-family:var(--f-body)}
+.xbtn:hover{color:var(--fg);border-color:var(--fg)}
+.cbody{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+.ctext{flex:1 1 280px;min-width:0;display:grid;gap:10px}
+.ctext ul{margin:0;padding-inline-start:20px}
+.cside{flex:1.2 1 340px;min-width:0}
+.cside .panel{background:var(--bg)}
+.args{display:grid;gap:6px}
+.arg{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;align-items:baseline;border-top:1px dashed var(--line);padding-top:6px;font-size:15.5px}
+.arg code{font-weight:700;color:var(--np);background:var(--npbg)}
+.trapbox{background:var(--warnbg);color:var(--fg);border-radius:8px;padding:8px 12px;font-size:15.5px}
+.trapbox b{color:var(--warn)}
+.cfoot{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+.cfoot button{font-family:var(--f-mono);font-size:13px;color:var(--bass);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 12px;direction:ltr;cursor:pointer;min-height:40px}
+.cfoot button:hover{border-color:var(--bass)}
+.cfoot .cnt{margin-inline-start:auto}
+@media (max-width:640px){.card{padding:8px 6px 12px}.card-in{padding:12px 12px}}
+
+/* ---------- live panels ---------- */
+.rest{min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:12px;min-width:0}
+.panel .ptitle{font-size:14px;font-weight:700;color:var(--muted)}
+.ctrls{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.ctrl{direction:ltr;display:flex;gap:6px;align-items:center;flex-wrap:wrap;border-radius:8px;padding:2px 4px;transition:box-shadow .3s}
+.ctrl.flash,.dice.flash,.ds.flash{box-shadow:0 0 0 3px var(--salmon)}
+.ctrl label{font-family:var(--f-mono);font-size:13px;direction:ltr}
+input[type=range]{accent-color:var(--bass);width:150px;max-width:100%;min-height:32px}
+.out{font-family:var(--f-mono);font-size:13.5px;direction:ltr;text-align:left;background:var(--sunk);border-radius:8px;padding:8px 12px;white-space:pre;overflow-x:auto;line-height:1.7}
+svg{direction:ltr;display:block;width:100%;height:auto;max-width:100%}
+svg text{font-family:var(--f-mono);font-size:12px;fill:var(--muted)}
+svg .axis{stroke:var(--muted);stroke-width:1}
+svg .grid{stroke:var(--line);stroke-width:1}
+.note{font-size:15px;color:var(--muted)}
+.dice{display:flex;flex-wrap:wrap;gap:6px;direction:ltr;border-radius:8px;transition:box-shadow .3s}
+.die{width:34px;height:34px;border-radius:7px;border:1.5px solid var(--line);display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;background:var(--surface)}
+.die.six{background:var(--salmon);color:var(--surface);border-color:var(--salmon)}
+.chips{display:flex;gap:4px;direction:ltr;flex-wrap:wrap}
+.chip{font-family:var(--f-mono);font-size:13px;border-radius:6px;padding:2px 8px;background:var(--npbg);color:var(--np)}
+.chip.x{background:var(--badbg);color:var(--bad);text-decoration:line-through}
+table.t{border-collapse:collapse;font-family:var(--f-mono);font-size:14px;direction:ltr;margin:0 auto}
+table.t th,table.t td{border:1px solid var(--line);padding:4px 12px;text-align:center}
+table.t th{background:var(--sunk);font-weight:600}
+table.t td.hrow{background:color-mix(in srgb,var(--bass) 14%,transparent)}
+table.t td.hcol{background:color-mix(in srgb,var(--salmon) 18%,transparent)}
+table.t td.hit{background:var(--sand);color:var(--sandfg);font-weight:700}
+table.t td.marg,table.t th.marg{color:var(--muted)}
+.tw{overflow-x:auto;max-width:100%}
+.grid3{display:grid;grid-template-columns:auto repeat(3,52px) 16px 52px;gap:4px;direction:ltr;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:13px}
+.grid3 .c{height:30px;border-radius:5px;display:grid;place-items:center;background:var(--sunk)}
+.grid3 .c.T{background:color-mix(in srgb,var(--bass) 80%,transparent);color:#fff}
+.grid3 .c.F{background:color-mix(in srgb,var(--salmon) 25%,transparent)}
+.grid3 .c.sum{background:var(--sand);color:var(--sandfg);font-weight:700}
+.grid3 .rl{color:var(--muted);padding-right:6px}
+.shape{font-family:var(--f-mono);direction:ltr;text-align:center;font-size:14px}
+.shape b{color:var(--salink)}
+.ds{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;justify-content:center;direction:ltr;border-radius:8px}
+.ds figure{margin:0;display:grid;gap:4px;justify-items:center}
+.ds figcaption{font-size:12px;color:var(--muted);font-family:var(--f-mono)}
+
+/* ---------- variables strip and structure view ---------- */
+.vars{display:grid;gap:10px}
+.vars>h3{font-size:17px}
+.vchips{display:flex;flex-wrap:wrap;gap:10px;direction:ltr}
+.vchip{text-align:left;color:var(--fg);display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:7px 14px;min-width:140px;min-height:44px;cursor:pointer;font-family:inherit}
+.vchip b{font-family:var(--f-mono);font-size:15px}
+.vchip span{font-size:13px;color:var(--muted);font-family:var(--f-mono)}
+.vchip:hover{border-color:var(--bass)}
+.vchip[aria-expanded="true"]{border:2px solid var(--bass);background:var(--basstint);padding:6px 13px}
+.sv{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface);display:grid}
+.svbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--bg)}
+.svbar .back{font-family:inherit;font-weight:600;font-size:15px;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 14px;min-height:44px;cursor:pointer}
+.svbar .back:hover{border-color:var(--fg)}
+.svbar .svt{font-weight:700}
+.svcode{background:var(--codebg);color:var(--codefg);direction:ltr;text-align:left;font-family:var(--f-mono);font-size:14.5px;line-height:2;padding:10px 18px;overflow-x:auto;white-space:pre}
+.svcode .v{background:var(--tk);color:var(--sandfg);border-radius:4px;padding:0 4px;font-weight:700}
+.svcode .kA{background:var(--kAbg);color:var(--kA);border-radius:4px;padding:0 4px}
+.svcode .kB{background:var(--kBbg);color:var(--kB);border-radius:4px;padding:0 4px}
+.svcode .uA{border-bottom:2px solid var(--kAu)}
+.svcode .uC{border-bottom:2px solid var(--kCu)}
+.svcode .dsh{border:1.5px dashed var(--faint);border-radius:4px;padding:0 4px}
+.svcode .cm{color:var(--codecm);font-style:italic}
+.svbody{display:flex;flex-wrap:wrap;gap:24px;padding:18px 20px;align-items:flex-start}
+.svtext{flex:1 1 320px;min-width:0;display:grid;gap:10px}
+.svtext ol{list-style:none;margin:0;padding:0;display:grid;gap:8px;counter-reset:n}
+.svtext li{display:flex;gap:10px;align-items:baseline;counter-increment:n}
+.svtext li::before{content:counter(n);font-family:var(--f-mono);font-size:13px;font-weight:700;color:var(--surface);background:var(--fg);border-radius:50%;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.svtext .shp{background:var(--basstint);border-radius:10px;padding:8px 14px;font-family:var(--f-mono);font-size:14px;direction:ltr;text-align:left;overflow-wrap:anywhere}
+.svtext .shp span{font-family:var(--f-ar);font-size:14px;color:var(--muted);unicode-bidi:isolate;direction:rtl;display:inline-block;margin-left:10px}
+.svtext .dslink{font-size:15px;display:block}
+.card-in:focus,.sv:focus{outline:none}
+
+.svpic{flex:1 1 380px;min-width:0;display:flex;justify-content:center;direction:ltr}
+.frame{border:2px solid var(--sandline);border-radius:10px;overflow:hidden;font-family:var(--f-mono);font-size:14px;max-width:100%}
+.fr-wrap{overflow-x:auto;max-width:100%}
+.kAc{color:var(--bass);font-weight:700}.kBc{color:var(--good);font-weight:700}.kCc{color:var(--salink);font-weight:700}
+.dtab{border-collapse:collapse;font-family:var(--f-mono);font-size:13.5px}
+.dtab th,.dtab td{padding:4px 9px;text-align:left;border-top:1px solid var(--line);white-space:nowrap}
+.dtab thead th{background:var(--bg);font-weight:700;border-top:0}
+.dtab .ix{color:var(--muted)}
+.dtab .cA{background:var(--basstint);color:var(--bass)}
+.dtab .cB{background:var(--greentint);color:var(--good)}
+.dtab td.hit{background:var(--sand);color:var(--sandfg);font-weight:700}
+.dtab .gap td,.dtab .gap th{color:var(--muted)}
+.dtab tr.cut td,.dtab tr.cut th{border-top:2px solid var(--fg)}
+.dtab .dm{color:var(--muted)}
+.dtab .mg{color:var(--muted)}
+.dtab .dl{border-left:1.5px dashed var(--faint)}
+.dtab tr.dt td,.dtab tr.dt th{border-top:1.5px dashed var(--faint)}
+.brk{display:flex;flex-direction:column;font-family:var(--f-mono);font-size:13px}
+.brk div{border-left:3px solid;padding-left:8px;display:flex;align-items:center}
+.cells{display:flex;flex-wrap:wrap;gap:3px;font-family:var(--f-mono);font-size:13px;align-items:center}
+.cells span{border:1px solid var(--faint);border-radius:4px;padding:2px 7px;min-width:28px;text-align:center}
+.cells span.hit{background:var(--sand);color:var(--sandfg);border-color:var(--sandline);font-weight:700}
+.cells span.T{background:color-mix(in srgb,var(--bass) 80%,transparent);color:#fff;border-color:transparent}
+.cells span.F{background:var(--saltint);border-color:transparent}
+.cells span.six{background:var(--salmon);color:#fff;border-color:transparent}
+.cells span.dots{border:0;color:var(--muted);min-width:0}
+.cells span.ix{border:0;color:var(--muted);font-size:11px;min-width:28px;padding:0 2px}
+.pic{display:grid;gap:8px;justify-items:start;padding:12px 14px}
+.pic .cap{font-size:12px;color:var(--muted)}
+.kv{display:grid;grid-template-columns:auto auto auto;gap:4px 10px;align-items:center;font-family:var(--f-mono);font-size:14px}
+.kv .k{color:var(--bass);font-weight:700}
+.kv .ar2{color:var(--muted)}
+.kv .hit{background:var(--sand);color:var(--sandfg);border-radius:4px;padding:0 4px;font-weight:700}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:4px}
+.dsgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.dscard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;transition:box-shadow .3s}
+.dscard.flash{box-shadow:0 0 0 3px var(--salmon)}
+.dscard p{font-size:14.5px;text-align:right}
+.mini{display:flex;gap:3px;direction:ltr;font-family:var(--f-mono);font-size:12px;flex-wrap:wrap;justify-content:center}
+.mini span{border:1px solid var(--faint);border-radius:4px;padding:2px 6px}
+
+/* ---------- setup, tasks, traps, index ---------- */
+.libs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:10px}
+.lib{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:6px;align-content:start}
+.lib h3{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.lib .why{font-size:15px}
+.lib ul{margin:0;padding-inline-start:20px;font-size:15px}
+.tries ol{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:4px}
+.tries details{border-top:1px dashed var(--line);padding-top:6px}
+.tries li:first-child details{border-top:0}
+.tries details summary{cursor:pointer;line-height:1.8;font-weight:400;min-height:40px}
+.tries .ans{background:var(--goodbg);border-radius:8px;padding:8px 12px;margin-top:6px}
+.traps{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px}
+.trapcard{background:var(--surface);border:1px solid var(--line);border-inline-start:4px solid var(--warn);border-radius:10px;padding:12px 16px;display:grid;gap:6px}
+.trapcard h3{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.task{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:8px;transition:box-shadow .3s}
+.task .tools{display:flex;flex-wrap:wrap;gap:6px}
+.task .note.flash,.und.flash{box-shadow:0 0 0 3px var(--salmon);border-radius:8px}
+.glo{width:100%;border-collapse:collapse;font-size:15px}
+.glo th,.glo td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:right;vertical-align:top}
+.glo th{font-size:13px;color:var(--muted)}
+.glo td.n{font-family:var(--f-mono);direction:ltr;text-align:left;white-space:nowrap}
+.glo a{color:var(--bass);display:inline-flex;min-height:32px;align-items:center}
+@media (max-width:640px){.glo td.n{white-space:normal;overflow-wrap:anywhere}.glo .hide-ph{display:none}}
+.howto{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.howto div{background:var(--bg);border-radius:10px;padding:8px 12px;font-size:15px}
+.howto b{display:block;color:var(--bass)}
+.und{border:2px dashed var(--dv);background:var(--dvbg);border-radius:12px;padding:14px 18px;display:grid;gap:10px}
+.undhead{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.undtag{font-size:13px;font-weight:700;color:var(--surface);background:var(--dv);border-radius:6px;padding:2px 10px}
+.und h3{color:var(--dv)}
+.undstep{display:grid;gap:6px}
+.undstep h4{margin:0;font-size:16px}
+.undm{direction:ltr;text-align:left;font-family:var(--f-disp);font-size:18px;background:var(--surface);border-radius:8px;padding:6px 12px;overflow-x:auto;white-space:nowrap}
+.undm .r{background:color-mix(in srgb,var(--bass) 18%,transparent);border-radius:4px;padding:0 3px}
+.undm .c{background:color-mix(in srgb,var(--salmon) 22%,transparent);border-radius:4px;padding:0 3px}
+.undcode{font-size:15px;color:var(--muted)}
+#dv{direction:ltr;text-align:left;--dv:#6a4c93;--dv-soft:#f3eff9;--dv-line:#e3dbef;--ink:#14233B;--muted:#5A6477;--salmon:#E4734F;--good:#1F7A4D;--bar:#8a94a6;--font-text:"Fira Sans","Cairo",sans-serif;--font-display:"Literata",Georgia,serif;--font-mono:"JetBrains Mono",monospace}
+.dvbtn{--dv:#6a4c93;--dv-soft:#f3eff9;font-family:var(--font-text);font-size:20px;font-weight:600;color:var(--dv);background:var(--dv-soft);border:1.5px dashed var(--dv);border-radius:20px;padding:5px 16px 6px;cursor:pointer;letter-spacing:.01em;white-space:nowrap}
+.dvbtn:hover{filter:brightness(.96)}
+.dvbtn::before{content:"⤷ "}
+#dv{position:fixed;inset:0;z-index:900;background:rgba(20,35,59,.45)}
+#dvStage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:50% 50%;font-family:var(--font-text);color:var(--ink);cursor:pointer}
+#dv .dvpanel{position:absolute;left:36px;top:28px;width:1528px;height:846px;border-radius:18px;border:2px solid var(--dv);box-shadow:0 10px 40px rgba(20,35,59,.35);
+  background-color:#fdfcff;background-image:linear-gradient(var(--dv-line) 1px,transparent 1px),linear-gradient(90deg,var(--dv-line) 1px,transparent 1px);background-size:36px 36px;background-position:-1px -1px}
+#dv .dvhead{position:absolute;left:34px;top:24px;right:24px;display:flex;align-items:center;gap:18px}
+#dv .dvtag{font-size:18px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--dv);border-radius:6px;padding:3px 12px}
+#dv .dvtitle{font-family:var(--font-display);font-size:40px;font-weight:700;color:var(--ink)}
+#dv .dvclose{margin-left:auto;width:44px;height:44px;border-radius:50%;border:2px solid var(--dv);background:#fff;color:var(--dv);font-size:30px;line-height:36px;cursor:pointer}
+#dv .dvcols{position:absolute;left:40px;top:112px;width:1140px;height:706px;display:flex;flex-direction:column;flex-wrap:wrap;align-content:flex-start;column-gap:48px;row-gap:24px}
+#dv .dvcols{z-index:1}
+#dv .dvtrail{z-index:2}
+#dv .dvbreak{flex-basis:100%;width:0;margin-left:-48px}
+#dv .dvtrail{position:absolute;left:0;top:0;pointer-events:none;overflow:visible;color:var(--dv)}
+#dv .dvtrail path.tr{fill:none;stroke:var(--dv);stroke-width:1.6;stroke-dasharray:5 6;opacity:.22}
+#dv .dvtrail path.tr.new{opacity:.85;stroke-width:2.4}
+#dv .dvtrail path.tr.fresh{animation:dvin .5s both}
+#dv .dvside{position:absolute;left:1222px;top:112px;width:270px;font-size:19px;color:var(--muted)}
+#dv .dvcount{font-family:var(--font-mono);font-weight:700;font-size:24px;color:var(--dv);margin-bottom:18px}
+#dv .dvkey p{margin:0 0 12px;line-height:1.35}
+#dv .dvk1{display:inline-block;width:34px;border-top:2.5px dashed var(--dv);vertical-align:middle;margin-right:6px}
+#dv .dvk2{font-family:var(--font-mono);position:relative;padding:0 4px;margin-right:6px}
+#dv .dvk2::after{content:"";position:absolute;left:0;right:0;top:52%;height:3px;background:var(--salmon)}
+#dv .dvk3{font-size:15px;font-family:var(--font-mono);background:#fff;border:1.5px solid var(--dv);color:var(--dv);border-radius:6px;padding:1px 6px;margin-right:6px}
+#dv .dvhint{margin-top:22px;font-size:17px;color:var(--bar)}
+#dv .dl{display:flex;flex-direction:column;align-items:flex-start;gap:5px;max-width:530px}
+#dv .dl .ex{font-size:27px;line-height:1.5;white-space:nowrap;background:#fdfcff;border-radius:8px;padding:3px 10px}
+#dv .dl.now .ex{box-shadow:inset 4px 0 0 var(--dv)}
+#dv .dl .note{font-size:20px;color:var(--muted);white-space:normal;max-width:520px;padding:0 10px;background:#fdfcff;border-radius:6px}
+#dv .dl .rule{font-family:var(--font-mono);font-size:17px;color:var(--dv);background:#fff;border:1.5px solid var(--dv);border-radius:7px;padding:2px 9px;margin-left:18px}
+#dv .dl .rule b{font-family:var(--font-text);font-weight:600;margin-right:6px}
+#dv .dl .ok{color:var(--good);font-weight:700}
+#dv .dvcols [data-s]{visibility:hidden}
+#dv .dvcols [data-s].on{visibility:visible}
+#dv .dvcols [data-t]{display:inline-block;position:relative;border-radius:5px}
+#dv .dvcols [data-from]{background:var(--dv-soft)}
+#dv .dvcols [data-t]::after{content:"";position:absolute;left:-3px;right:-3px;top:54%;height:3px;border-radius:2px;background:var(--salmon);transform:scaleX(0);transform-origin:left center;transition:transform .55s ease}
+#dv .dvcols [data-t].struck{color:var(--muted)}
+#dv .dvcols [data-t].struck::after{transform:scaleX(1)}
+#dv .dvcols .inst,#dv .dvcols .inst::after{transition:none!important;animation:none!important}
+#dv .dl.now:not(.inst) .ex{animation:dvtxt .5s .8s both}
+#dv .dl.now:not(.inst) .rule,#dv .dl.now:not(.inst) .note,#dv .dl.now:not(.inst) .lbl{animation:dvin .45s .9s both}
+#dv .dvcols [data-from]{color:var(--ink)}
+#dv @keyframes dvtxt{from{color:transparent;background-color:rgba(255,255,255,0)}
+#dv to{color:var(--ink)}
+#dv }
+.dvcols [data-s]:not(.dl).now:not(.inst){animation:dvin .45s both}
+#dv @keyframes dvin{from{opacity:0}
+#dv to{opacity:1}
+#dv }
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.25;margin:0 3px}
+#dv .fr>span:first-child{border-bottom:2px solid currentColor;padding:0 4px}
+#dv .fr>span:last-child{padding:0 4px}
+#dvStage sup{vertical-align:super;font-size:.66em;line-height:0}
+#dvStage sub{vertical-align:sub;font-size:.66em;line-height:0}
+#dv .dl .lbl{font-family:var(--font-text);font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:5px;padding:1px 7px;margin-left:10px;vertical-align:middle}
+#wb{z-index:1000}
+#dv .dvside p,#dv .dvhint{direction:rtl;text-align:right}
+#dv .dl .note{font-family:var(--f-ar);font-size:19px}
+#dv .dl .rule .ar{font-family:var(--f-ar);font-weight:600;letter-spacing:0;direction:rtl;unicode-bidi:isolate}
+#dv .dvtitle{font-family:"Literata","Cairo",Georgia,serif;font-size:36px;direction:rtl;unicode-bidi:isolate}
+#dv .dvtag{letter-spacing:0;text-transform:none}
+.dvbtn{font-family:var(--f-body);font-size:16px;color:var(--dv);background:var(--dvbg);border-color:var(--dv)}
+.trapcard .tools{display:flex;flex-wrap:wrap;gap:6px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<div class="app">
+<header class="topbar">
+ <div class="tb-title"><span class="tb-eyebrow">ENGS 3302 Pattern Recognition · Week 3 · Lab_W03 · Iyas A. I. Alshaikhkhalil</span><span class="tb-name">دليل كود المعمل 3</span></div>
+ <div class="tb-prog"><span id="tbcount" aria-live="polite">الخلية 1 من 7</span><span class="bar" role="progressbar" aria-label="التقدم في الصفحة" aria-valuemin="0" aria-valuemax="100" id="tbbar"><i></i></span></div>
+ <div class="tb-nav"><a class="navbtn" id="tbprev" href="#setup">→ السابق</a><a class="navbtn primary" id="tbnext" href="#c11">التالي ←</a></div>
+ <span class="seg" id="themeseg" role="group" aria-label="لون الصفحة"><button type="button" aria-pressed="false" data-v="light">فاتح</button><button type="button" aria-pressed="false" data-v="dark">داكن</button><button type="button" aria-pressed="true" data-v="auto">تلقائي</button></span>
+</header>
+
+<div class="shell">
+<nav class="side" id="side" aria-label="خلايا الدفتر">
+ <span class="sh">خلايا الدفتر</span>
+ <a class="nv" href="#setup" data-v="setup"><span class="nk">0</span><span>الإعداد</span></a>
+ <a class="nv" href="#c11" data-v="c11"><span class="nk">1.1</span><span>رمي النرد</span></a>
+ <a class="nv" href="#c12" data-v="c12"><span class="nk">1.2</span><span>جدول العدّ</span></a>
+ <a class="nv" href="#c13" data-v="c13"><span class="nk">1.3</span><span>شبكة من 3 سمكات</span></a>
+ <a class="nv" href="#c14" data-v="c14"><span class="nk">1.4</span><span>المدرّج والكثافة</span></a>
+ <a class="nv" href="#c15" data-v="c15"><span class="nk">1.5</span><span>المنحنى الطبيعي</span></a>
+ <a class="nv" href="#c16" data-v="c16"><span class="nk">1.6</span><span>كثافة أكبر من 1</span></a>
+ <span class="sep"></span>
+ <a class="nv" href="#tasks" data-v="tasks"><span class="nk">2</span><span>مهامك</span></a>
+ <a class="nv" href="#traps" data-v="traps"><span class="nk tr">!</span><span>الفخاخ</span></a>
+ <a class="nv" href="#index" data-v="index"><span class="nk">A–Z</span><span>فهرس الأسماء</span></a>
+ <span class="scope">للفهم والتطبيق في المعمل. ليست مادة امتحان.</span>
+</nav>
+
+<main id="main">
+
+<!-- ================= SETUP ================= -->
+<section class="view cell" data-view="setup" hidden>
+ <div class="cellhead"><span class="cellno">Setup cell</span><h1>خلية الإعداد: المكتبات <bdi>(libraries)</bdi> والبيانات</h1>
+ <p class="goal"><b>الهدف:</b> نحمّل أربع مكتبات، ونعرّف دالة <bdi>(function)</bdi> اسمها <code>check</code> تعطيك ✅ أو ❌، ونحمّل جدول البطاريق. شغّل هذه الخلية أولًا في كل مرة تفتح الدفتر.</p></div>
+ <div class="intro">
+  <p class="lead">افتح دفتر <code>Lab_W03.ipynb</code> في Colab، وافتح هذه الصفحة بجانبه. الصفحة تعرض خلية واحدة في كل مرة، بترتيب الدفتر. <b>انقر أي اسم مُسطَّر في الكود</b>، فيفتح شرحه تحت سطره، ومعه لوحة حيّة ترى فيها أثره.</p>
+  <span class="scope">للفهم والتطبيق في المعمل. ليست مادة امتحان.</span>
+  <div class="legend">
+   <span class="b py">Python</span> اللغة نفسها
+   <span class="b np">NumPy</span><span class="b pd">pandas</span><span class="b plt">Matplotlib</span><span class="b sp">SciPy</span> المكتبات
+   <span class="b new">NEW</span> أول مرة
+   <span class="b rev">مراجعة</span> مرّ في الأسبوعين 1 و2
+   <span class="b trap">فخ</span> خطأ شائع
+  </div>
+ </div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"><span class="sl">اقرأ بالترتيب:</span>
+  <button type="button" data-step="1"><b>1</b> المكتبات</button><span class="ar">←</span>
+  <button type="button" data-step="2" class="on"><b>2</b> الكود سطرًا سطرًا</button><span class="ar">←</span>
+  <button type="button" data-step="3"><b>3</b> المتغيرات الناتجة</button><span class="ar">←</span>
+  <button type="button" data-step="4"><b>4</b> أشكال البيانات</button></div>
+ <details class="blk" data-step="1"><summary>1 · المكتبات الأربع: ماذا تفعل كل واحدة <span class="sub">(انقر لتفتح)</span></summary>
+ <div class="libs">
+  <div class="lib"><h3><span class="b np">NumPy</span> <span class="b rev">مراجعة</span></h3>
+   <p class="why">مكتبة المصفوفات <bdi>(arrays)</bdi> والحساب. تحسب على كل العناصر مرة واحدة: <code>rolls == 6</code> تقارن عشرة آلاف رقم في سطر واحد، بلا حلقة <bdi>(loop)</bdi>.</p>
+   <ul><li>الجديد منها هذا الأسبوع: <b>الأرقام العشوائية</b> <bdi>(random numbers)</bdi> عبر <code>default_rng</code>، و<code>histogram</code>، و<code>arange</code>، و<code>linspace</code>.</li></ul>
+   <p class="why"><b>ميزتها عن قوائم Python:</b> أسرع بكثير، والعمليات تُكتب كما تُكتب في الرياضيات.</p></div>
+  <div class="lib"><h3><span class="b pd">pandas</span> <span class="b rev">مراجعة</span></h3>
+   <p class="why">مكتبة الجداول. الجدول اسمه <code>DataFrame</code>، ولكل عمود <bdi>(column)</bdi> اسم مثل <code>"species"</code>.</p>
+   <ul><li>الجديد هذا الأسبوع: <code>crosstab</code> لعدّ الأزواج، واختيار الصفوف <bdi>(rows)</bdi> بشرط.</li></ul>
+   <p class="why"><b>ميزتها عن NumPy:</b> أعمدة بأسماء، ونصوص وأرقام في الجدول نفسه، وقراءة ملفات CSV.</p></div>
+  <div class="lib"><h3><span class="b plt">Matplotlib</span> <span class="b rev">مراجعة</span></h3>
+   <p class="why">مكتبة الرسم. <code>pyplot</code> هو الجزء الذي نرسم به، ونختصره <code>plt</code>.</p>
+   <ul><li>الجديد هذا الأسبوع: المدرّج التكراري <bdi>(histogram)</bdi> <code>plt.hist</code> والمنحنى <code>plt.plot</code> ومعاملاتهما <bdi>(arguments)</bdi>.</li></ul></div>
+  <div class="lib"><h3><span class="b sp">SciPy</span> <span class="b new">NEW</span></h3>
+   <p class="why">مكتبة العلوم، مبنية فوق NumPy. نأخذ منها جزء الإحصاء <code>scipy.stats</code>، ومنه التوزيع الطبيعي <bdi>(normal distribution)</bdi> <code>norm</code>.</p>
+   <ul><li><code>norm.pdf</code> ارتفاع المنحنى، و<code>norm.cdf</code> المساحة تحته.</li></ul>
+   <p class="why"><b>ميزتها عن NumPy:</b> التوزيعات جاهزة. لا نكتب صيغة الكثافة <bdi>(density)</bdi> بأيدينا، ونحصل على المساحة دون تكامل.</p></div>
+ </div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W03.ipynb · setup cell</span></div>
+ <pre class="code" data-cell="setup">[[imp|import numpy as np]]
+import pandas as pd
+import matplotlib.pyplot as plt
+[[from|from scipy.stats import norm]]
+
+[[def|def check(label, got, expected, tol=1e-2):]]
+    [[doc|"""Prints a green tick if `got` is close to `expected`, otherwise a red cross."""]]
+    ...                          # (rest of the function: compares got with expected)
+
+PENGUIN_FEATURES = [[list|["bill_length_mm", "bill_depth_mm", "flipper_length_mm", "body_mass_g"]]]
+def load_penguins():
+    [[try|try:]]
+        df = [[csv|pd.read_csv("penguins.csv")]]
+    except FileNotFoundError:
+        df = pd.read_csv("https://raw.githubusercontent.com/.../penguins.csv")
+    return [[dropna|df.dropna(subset=PENGUIN_FEATURES).reset_index(drop=True)]]
+
+peng = load_penguins()
+print("Ready.", [[len|len(peng)]], "penguins")      # Ready. 342 penguins</pre></section>
+ <div class="rest" data-cell="setup">
+  <div class="panel" id="p-setup"><span class="ptitle">ما الذي يحدث في هذه الخلية</span>
+   <div class="ds">
+    <figure><svg viewBox="0 0 260 120" role="img" aria-label="مخطط: ملف CSV فيه 344 صفًا يصبح جدولًا فيه 342 صفًا">
+     <rect x="4" y="18" width="92" height="84" rx="6" fill="var(--sunk)" stroke="var(--line)"></rect>
+     <text x="50" y="14" text-anchor="middle">penguins.csv</text>
+     <g id="csvrows"></g>
+     <path d="M104 60 H150" stroke="var(--pd)" stroke-width="2" marker-end="url(#ar)" fill="none"></path>
+     <text x="127" y="52" text-anchor="middle" style="fill:var(--pd)">dropna</text>
+     <rect x="160" y="18" width="92" height="84" rx="6" fill="var(--pdbg)" stroke="var(--pd)"></rect>
+     <text x="206" y="14" text-anchor="middle">peng</text>
+     <text x="50" y="114" text-anchor="middle">344 rows</text><text x="206" y="114" text-anchor="middle" style="fill:var(--pd)">342 rows</text>
+     <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--pd)"></path></marker></defs>
+    </svg><figcaption>2 penguins have no measurements</figcaption></figure>
+   </div>
+   <p class="note">بعد التشغيل يصبح عندك متغير <bdi>(variable)</bdi> اسمه <code>peng</code>: جدول <bdi>(DataFrame)</bdi> فيه 342 صفًا (بطريق) وأعمدة منها <code>species</code> و<code>flipper_length_mm</code>.</p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="setup" data-step="3"></section>
+ <section class="blk" id="ds" data-step="4" style="display:grid;gap:10px">
+  <h3>4 · أشكال البيانات <span class="sub">(مرة واحدة هنا، ثم نعود إليها من كل خلية)</span></h3>
+  <div class="dsgrid">
+   <div class="dscard" id="ds-list"><b>قائمة <bdi>(list)</bdi></b>
+    <div class="mini"><span>10</span><span>100</span><span>10000</span></div><span class="mono" style="color:var(--muted)">len = 3</span>
+    <p>قيم بالترتيب بين قوسين مربعين <code>[ ]</code>. نصل إلى العنصر برقمه <bdi>(index)</bdi>، والعدّ من 0.</p></div>
+   <div class="dscard" id="ds-dict"><b>قاموس <bdi>(dict)</bdi></b>
+    <div class="kv" style="direction:ltr"><span class="k">0</span><span class="ar2">→</span><span>0.064</span><span class="k">2</span><span class="ar2">→</span><span>0.432</span></div><span style="color:var(--muted);font-size:14px">مفتاح <bdi>(key)</bdi> ← قيمة <bdi>(value)</bdi></span>
+    <p>أزواج بين قوسين معقوصين <code>{ }</code>. نصل إلى القيمة بمفتاحها، لا برقم مكانها.</p></div>
+   <div class="dscard" id="ds-array"><b>مصفوفة <bdi>(array)</bdi></b>
+    <div style="display:grid;grid-template-columns:repeat(3,14px);gap:2px"><span style="height:14px;background:var(--bass);border-radius:2px"></span><span style="height:14px;background:var(--bass);border-radius:2px"></span><span style="height:14px;background:var(--saltint);border-radius:2px"></span><span style="height:14px;background:var(--saltint);border-radius:2px"></span><span style="height:14px;background:var(--bass);border-radius:2px"></span><span style="height:14px;background:var(--bass);border-radius:2px"></span></div><span class="mono" style="color:var(--muted)">shape (rows, cols)</span>
+    <p>أرقام من نوع واحد في شبكة. الشكل <bdi>(shape)</bdi> يقول كم صفًا وكم عمودًا. الحساب يعمل على كل العناصر معًا.</p></div>
+   <div class="dscard" id="ds-df"><b>جدول <bdi>(DataFrame)</bdi></b>
+    <div style="display:grid;grid-template-columns:30px 30px;gap:2px;font-size:10px;font-family:var(--f-mono)"><span style="background:var(--basstint);text-align:center">a</span><span style="background:var(--greentint);text-align:center">b</span><span style="border:1px solid var(--line);height:10px"></span><span style="border:1px solid var(--line);height:10px"></span></div><span style="color:var(--muted);font-size:14px">أعمدة بأسماء</span>
+    <p>صفوف وأعمدة، ولكل عمود اسم. العمود الواحد وحده اسمه <code>Series</code>: قائمة قيم مع رقم كل صف <bdi>(index)</bdi>.</p></div>
+  </div>
+ </section>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.1 ================= -->
+<section class="view cell" data-view="c11" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.1</span><h1>الاحتمال كسرٌ على المدى الطويل <bdi>(long-run frequency)</bdi></h1>
+ <p class="goal"><b>الهدف:</b> نرمي نردًا بالحاسوب 10 ثم 100 ثم 10000 مرة، ونعدّ الستّات. نريد أن نرى أن الكسر يقترب من 1/6 = 0.167 كلما زادت الرميات.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §3.1، الشكل 1)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">P(A) ≈ number of times A happens ÷ number of trials</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">np.mean(rolls == 6)</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W03.ipynb · cell 1.1</span></div>
+ <pre class="code" data-cell="c11">rng = [[rng|np.random.default_rng(0)]]          # fixed seed: everyone gets the same "random" rolls
+[[for|for n in (10, 100, 10000):]]
+    rolls = [[ints|rng.integers(1, 7, n)]]       # n whole numbers from 1 to 6
+    print([[fstr|f"{n:6d} rolls: fraction of sixes = {]][[meanb|np.mean(]][[eq|rolls == 6]][[meanb|)]][[fstr|:.4f}"]])</pre></section>
+ <div class="rest" data-cell="c11">
+  <div class="panel" id="p-c11"><span class="ptitle">جرّب البذرة <bdi>(seed)</bdi> وحدود integers</span>
+   <div class="ctrls">
+    <div class="ctrl" id="c11-seed"><label>default_rng(</label><span class="seg" id="seedseg"></span><label>)</label></div>
+    <div class="ctrl" id="c11-high"><label>integers(1,</label><span class="seg" id="highseg"><button type="button" aria-pressed="true" data-v="7">7</button><button type="button" aria-pressed="false" data-v="6">6</button></span><label>, n)</label></div>
+   </div>
+   <div><span class="note">القيم الممكنة:</span> <span class="chips" id="c11-chips"></span></div>
+   <div><span class="note">أول 10 رميات (الستّات ملوّنة):</span><div class="dice" id="c11-dice"></div></div>
+   <div class="out" id="c11-out"></div>
+   <svg id="c11-svg" viewBox="0 0 560 220" role="img" aria-label="الكسر الجاري للستات مع عدد الرميات"></svg>
+   <p class="note" id="c11-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c11" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(4 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>غيّر <code>default_rng(0)</code> إلى <code>default_rng(1)</code>. ماذا يتغير وماذا يبقى؟</summary><div class="ans">تتغير الأرقام: 0.2000 ثم 0.1500 ثم 0.1656. لكن الكسر يقترب من 0.167 في الحالتين. البذرة <bdi>(seed)</bdi> تغيّر الرميات، ولا تغيّر الاحتمال <bdi>(probability)</bdi>.</div></details></li>
+  <li><details><summary>احذف الرقم واكتب <code>default_rng()</code>، ثم شغّل الخلية مرتين.</summary><div class="ans">في كل مرة أرقام جديدة، وعند كل طالب أرقام مختلفة. لهذا نضع seed في المعمل: ليرى الجميع النتيجة نفسها، وتعمل خلايا التحقق.</div></details></li>
+  <li><details><summary>اكتب <code>rng.integers(1, 6, n)</code> بدل 7. توقّع الكسر قبل التشغيل.</summary><div class="ans">0.0000 دائمًا. الحد الأعلى <bdi>(high)</bdi> لا يدخل، فالقيم 1 إلى 5 فقط، ولا تظهر 6 أبدًا.</div></details></li>
+  <li><details><summary>أضف <code>1000000</code> إلى <code>(10, 100, 10000)</code>.</summary><div class="ans">الكسر يصير قريبًا جدًا من 0.167 (نحو 0.1669). مع مليون رمية يبتعد قليلًا جدًا عن 1/6.</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.2 ================= -->
+<section class="view cell" data-view="c12" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.2</span><h1>الاحتمالات من جدول عدّ <bdi>(contingency table)</bdi></h1>
+ <p class="goal"><b>الهدف:</b> نبني صيد اليوم، 100 سمكة، صفًّا لكل سمكة، ونترك pandas تعدّ. ثم نقرأ احتمالين شرطيين <bdi>(conditional probabilities)</bdi> من الجدول، ونرى أن قاعدة Bayes <bdi>(Bayes' rule)</bdi> تعطي الرقم نفسه.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §3.2 و§3.3، الجدول 1)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">P(A | B) = P(A, B) ÷ P(B)<br>P(B) = P(B|A)P(A) + P(B|not A)P(not A)</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">56 / 59<br>(56/60)*0.6 + (3/40)*0.4</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W03.ipynb · cell 1.2</span></div>
+ <pre class="code" data-cell="c12">catch = [[df|pd.DataFrame({]]
+    "species": [[lmul|["sea bass"] * 60 + ["salmon"] * 40]],
+    "look":    ["light"] * 56 + ["dark"] * 4 + ["light"] * 3 + ["dark"] * 37})
+table = [[ct|pd.crosstab(catch["species"], catch["look"], margins=True)]]
+print(table, "\n")
+
+p_light_given_bass = 56 / 60           # inside the sea bass row
+p_bass_given_light = 56 / 59           # inside the light column
+print("P(light | sea bass) =", [[round|round(p_light_given_bass, 3)]])   # 0.933
+print("P(sea bass | light) =", round(p_bass_given_light, 3))   # 0.949
+
+# Bayes' rule gives the second number from the first
+p_light = (56/60) * 0.6 + (3/40) * 0.4                       # total probability: 0.59
+print("Bayes:              ", round((56/60) * 0.6 / p_light, 3))   # 0.949</pre></section>
+ <div class="rest" data-cell="c12">
+  <div class="panel" id="p-c12"><span class="ptitle">من 100 صف إلى جدول</span>
+   <div class="ds" id="c12-df"></div>
+   <div class="ctrls">
+    <div class="ctrl" id="c12-marg"><label>margins=</label><span class="seg" id="margseg"><button type="button" aria-pressed="true" data-v="1">True</button><button type="button" aria-pressed="false" data-v="0">False</button></span></div>
+   </div>
+   <div class="ctrls" id="c12-q">
+    <span class="seg" id="qseg" style="direction:ltr;flex-wrap:wrap"><button type="button" aria-pressed="false" data-v="lb">P(light | sea bass)</button><button type="button" aria-pressed="true" data-v="bl">P(sea bass | light)</button><button type="button" aria-pressed="false" data-v="j">P(sea bass, light)</button></span>
+   </div>
+   <div class="tw"><table class="t" id="c12-tab"></table></div>
+   <p class="note" id="c12-note"></p>
+  </div>
+ </div>
+ <div class="und" id="c12-dv">
+  <div class="undhead"><span class="undtag">للفهم</span><h3>من أين تأتي قاعدة Bayes؟ من الخانة 56</h3></div>
+  <p>الاحتمالات الثلاثة في الجدول تشترك في الخانة 56. إذا كتبنا هذه الخانة بطريقتين، تخرج قاعدة Bayes وحدها. انقر الخطوات بالترتيب، وانظر إلى الجدول فوق.</p>
+  <div><button class="dvbtn" type="button" data-dv="bayes" title="الاشتقاق خطوة خطوة (D أو ي)">الاشتقاق الرياضي خطوة خطوة، كما في الشرائح</button></div>
+  <template id="dv-bayes" data-title="اشتقاق قاعدة Bayes من تعريف الاحتمال الشرطي"><div class="dl" data-s="1"><span class="ex">P(A | B) = <span class="fr"><span><i data-t="j1">P(A, B)</i></span><span><i data-t="b1">P(B)</i></span></span></span><span class="rule"><b>definition</b>Notes §3.2 · Duda App. A.4.6</span><span class="note" dir="rtl">تعريف الاحتمال الشرطي: داخل B فقط، كم منه A أيضًا؟</span></div><div class="dl" data-s="2"><span class="ex"><i data-t="j2" data-from="j1">P(A, B)</i> = P(A | B) <i data-t="b2" data-from="b1">P(B)</i></span><span class="rule"><b>× P(B)</b><span class="ar">على الطرفين</span></span><span class="note" dir="rtl">هذه قاعدة الضرب (product rule).</span></div><div class="dl" data-s="3"><span class="ex">P(B | A) = <span class="fr"><span><i data-t="j3">P(A, B)</i></span><span><i data-t="a3">P(A)</i></span></span></span><span class="rule"><b>definition</b><span class="ar">بتبديل A وB</span></span><span class="note" dir="rtl">التعريف نفسه، لكن داخل A هذه المرة.</span></div><div class="dl" data-s="4"><span class="ex"><i data-t="j4" data-from="j3">P(A, B)</i> = P(B | A) <i data-t="a4" data-from="a3">P(A)</i></span><span class="rule"><b>× P(A)</b><span class="ar">على الطرفين</span></span></div><div class="dl" data-s="5"><span class="ex">P(A | B) <i data-t="b5" data-x="6">P(B)</i> = P(B | A) P(A)</span><span class="note" dir="rtl">السطران 2 و4 يساويان P(A, B) نفسه، فهما متساويان.</span></div><div class="dl" data-s="6"><span class="ex">P(A | B) = <span class="fr"><span>P(B | A) P(A)</span><span><i data-t="b6" data-from="b5">P(B)</i></span></span> <span class="ok">✓</span></span><span class="rule"><b>÷ P(B)</b>· Duda Eq. 65</span><span class="note" dir="rtl">هذه قاعدة Bayes في §3.3.</span></div><div class="dl" data-s="7"><span class="ex">P(B) = P(B, A) + P(B, not A)</span><span class="rule"><b>total probability</b></span><span class="note" dir="rtl">B يقع مع A أو من دونه، ولا يجتمعان.</span></div><div class="dl" data-s="8"><span class="ex">= P(B | A) P(A) + P(B | not A) P(not A)</span><span class="rule"><b>product rule</b><span class="ar">مرتين</span></span></div><div class="dl" data-s="9"><span class="ex">A = sea bass, B = light:  <span class="fr"><span>0.933 × 0.60</span><span>0.933 × 0.60 + 0.075 × 0.40</span></span> = <span class="fr"><span>0.56</span><span>0.59</span></span> = <span class="ok">0.949 ✓</span></span></div></template>
+  <div class="ctrls"><span class="seg" id="dvseg"><button type="button" aria-pressed="true" data-v="1">1</button><button type="button" aria-pressed="false" data-v="2">2</button><button type="button" aria-pressed="false" data-v="3">3</button></span></div>
+  <div class="undstep" data-s="1"><h4>الخطوة 1 · الخانة نفسها بطريقتين</h4>
+   <div class="undm">P(sea bass, light) = 56/100 = 0.56</div>
+   <div class="undm">= <span class="r">56/60</span> × <span class="r">60/100</span> = P(light | sea bass) × P(sea bass) = 0.933 × 0.60</div>
+   <div class="undm">= <span class="c">56/59</span> × <span class="c">59/100</span> = P(sea bass | light) × P(light) = 0.949 × 0.59</div>
+   <p>في السطر الثاني نمرّ عبر <b>صف</b> sea bass (60)، وفي الثالث عبر <b>عمود</b> light (59). الـ 60 تُختصر من فوق ومن تحت، وكذلك الـ 59، فيبقى 56/100 في الحالتين. هذه قاعدة الضرب <bdi>(product rule)</bdi> في §3.2، مكتوبة مرتين.</p></div>
+  <div class="undstep" data-s="2" hidden><h4>الخطوة 2 · نساوي الطريقتين، ونقسم على P(light)</h4>
+   <div class="undm">P(sea bass | light) × P(light) = P(light | sea bass) × P(sea bass)</div>
+   <div class="undm">P(sea bass | light) = P(light | sea bass) × P(sea bass) ÷ P(light) = 0.933 × 0.60 ÷ 0.59 = 0.949</div>
+   <p>هذه قاعدة Bayes في §3.3. حوّلنا «كم من القاروص فاتح» إلى «كم من الفاتح قاروص»، وهذا سؤال المصنِّف <bdi>(classifier)</bdi>.</p></div>
+  <div class="undstep" data-s="3" hidden><h4>الخطوة 3 · من أين نعرف P(light)؟</h4>
+   <div class="undm">light fish = light sea bass + light salmon:   59 = 56 + 3</div>
+   <div class="undm">P(light) = P(light | sea bass) P(sea bass) + P(light | salmon) P(salmon) = 0.933 × 0.60 + 0.075 × 0.40 = 0.56 + 0.03 = 0.59</div>
+   <p>هذا الاحتمال الكلي <bdi>(total probability)</bdi>. كل سمكة فاتحة إما قاروص فاتح أو سلمون فاتح، وكل جزء احتمال مشترك <bdi>(joint probability)</bdi>: 0.56 و0.03.</p></div>
+  <p class="undcode">في الكود: <code>(56/60) * 0.6</code> في آخر سطرين من الخلية هو 0.56 نفسه، أي الاحتمال المشترك. وفي الأسبوع 4 سترى هذا الضرب (likelihood × prior) في متغير اسمه <code>joint</code>.</p>
+ </div>
+ <section class="vars blk" data-cell="c12" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(3 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>غيّر <code>margins=True</code> إلى <code>False</code>. ماذا يختفي؟</summary><div class="ans">يختفي صف <code>All</code> وعمود <code>All</code>: المجاميع <bdi>(margins)</bdi>. يبقى الجدول 2×2.</div></details></li>
+  <li><details><summary>أضف سطرًا يحسب P(sea bass, light). من أي خانة، وعلى ماذا تقسم؟</summary><div class="ans">56 ÷ 100 = 0.56. الاحتمال المشترك <bdi>(joint probability)</bdi> نقسمه على كل السمك، لا على صف ولا على عمود.</div></details></li>
+  <li><details><summary>لماذا نقسم 56 على 59 في <code>p_bass_given_light</code>، لا على 60؟</summary><div class="ans">لأننا نعرف أن السمكة فاتحة، فنبقى داخل عمود light فقط، وفيه 59 سمكة. الـ 60 هو صف sea bass.</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.3 ================= -->
+<section class="view cell" data-view="c13" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.3</span><h1>متغير عشوائي منفصل <bdi>(discrete random variable)</bdi>: القاروص في شبكة من 3 سمكات</h1>
+ <p class="goal"><b>الهدف:</b> نحاكي <bdi>(simulate)</bdi> 100 ألف شبكة، في كل شبكة 3 سمكات، وكل سمكة قاروص باحتمال 0.6. نعدّ القاروص في كل شبكة، ونقارن النسب بدالة الكتلة الاحتمالية <bdi>(PMF)</bdi> المحسوبة باليد في المثال 3.4.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §3.4، المثال 3.4)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">P(X = 2) = 3 × 0.6 × 0.6 × 0.4 = 0.432<br>E[X] = Σ x P(X = x) = 1.8</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">np.mean(nets == 2)<br>nets.mean()</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W03.ipynb · cell 1.3</span></div>
+ <pre class="code" data-cell="c13">rng = np.random.default_rng(2)
+nets = ([[rand|rng.random((100000, 3))]] [[lt|&lt; 0.6]])[[axis|.sum(axis=1)]]     # number of sea bass in each net
+exact = [[dict|{0: 0.064, 1: 0.288, 2: 0.432, 3: 0.216}]]
+for k in [[range|range(4)]]:
+    print(f"X = {k}: simulated {np.mean(nets == k):.4f}   exact {exact[k]}")
+print("average number of sea bass:", [[amean|nets.mean()]], "  expected value E[X] = 1.8")</pre></section>
+ <div class="rest" data-cell="c13">
+  <div class="panel" id="p-c13"><span class="ptitle">شكل البيانات خطوة خطوة (أول 6 شبكات من 100000)</span>
+   <div class="ctrls">
+    <div class="ctrl" id="c13-stage"><span class="seg" id="stageseg"><button type="button" aria-pressed="false" data-v="0">random</button><button type="button" aria-pressed="false" data-v="1">&lt; 0.6</button><button type="button" aria-pressed="true" data-v="2">.sum</button></span></div>
+    <div class="ctrl" id="c13-axis"><label>axis=</label><span class="seg" id="axisseg"><button type="button" aria-pressed="false" data-v="0">0</button><button type="button" aria-pressed="true" data-v="1">1</button></span></div>
+   </div>
+   <div class="grid3" id="c13-grid"></div>
+   <p class="shape" id="c13-shape"></p>
+   <p class="note" id="c13-note"></p>
+   <div class="ctrls"><div class="ctrl" id="c13-p"><label for="c13-pr">p = </label><input type="range" id="c13-pr" min="0.05" max="0.95" step="0.05" value="0.6"><span class="mono" id="c13-pv">0.60</span></div></div>
+   <svg id="c13-svg" viewBox="0 0 560 210" role="img" aria-label="PMF لعدد القاروص في شبكة من 3"></svg>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c13" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(3 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>غيّر <code>axis=1</code> إلى <code>axis=0</code>، واطبع <code>nets.shape</code>. توقّع الشكل <bdi>(shape)</bdi> قبل التشغيل.</summary><div class="ans"><code>(3,)</code>: ثلاثة أرقام فقط: 59695 و60163 و59974. كل رقم هو عدد القاروص في موقع واحد من الشبكة (الأولى، الثانية، الثالثة) عبر كل الشبكات. نحو 60% من 100000 في كل موقع. لكن هذا ليس ما نريده: نريد عدّ كل شبكة.</div></details></li>
+  <li><details><summary>غيّر 0.6 إلى 0.2. ما متوسط عدد القاروص المتوقع؟</summary><div class="ans">3 × 0.2 = 0.6. المحاكاة تعطي 0.59997. لاحظ أن القاموس <code>exact</code> لم يعد صحيحًا، لأنه مكتوب لـ 0.6.</div></details></li>
+  <li><details><summary>اطبع <code>rng.random((4, 3)) &lt; 0.6</code> وحده.</summary><div class="ans">مصفوفة 4×3 من True وFalse، أي قناع <bdi>(mask)</bdi>. كل True سمكة قاروص. هذه هي الشبكات قبل العدّ.</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.4 ================= -->
+<section class="view cell" data-view="c14" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.4</span><h1>من المدرّج التكراري <bdi>(histogram)</bdi> إلى الكثافة <bdi>(density)</bdi></h1>
+ <p class="goal"><b>الهدف:</b> نعدّ أطوال زعانف 342 بطريقًا في أعمدة <bdi>(bins)</bdi> عرضها <span dir="ltr">5 mm</span>، ثم نقسم كل عدد على <span dir="ltr">(342 × 5)</span>. الارتفاع الجديد كثافة: مساحة كل عمود هي نسبة البطاريق فيه، ومجموع المساحات 1.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §3.5، المثال 3.5: 62 بطريقًا، 0.0363)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">height = count ÷ (n × width)<br>area = height × width</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">counts / (len(fl) * 5)<br>np.sum(density * 5)</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W03.ipynb · cell 1.4</span></div>
+ <pre class="code" data-cell="c14">fl = [[tonp|peng["flipper_length_mm"].to_numpy()]]
+edges = [[arange|np.arange(170, 236, 5)]]
+[[unpack|counts, _]] = [[histo|np.histogram(fl, edges)]]
+density = counts / (len(fl) * 5)
+print("counts:  ", counts)
+print("bin 190-195: count", [[index|counts[4]]], " fraction", round(counts[4] / len(fl), 3), " height", round(density[4], 4))
+print("total area =", np.sum(density * 5))
+
+[[hist|plt.hist(fl, bins=edges, density=True, color="lightgray", edgecolor="white")]]   # the same heights
+[[labels|plt.xlabel("flipper length (mm)"); plt.ylabel("density (per mm)")]]; plt.show()</pre></section>
+ <div class="rest" data-cell="c14">
+  <div class="panel" id="p-c14"><span class="ptitle">plt.hist حيّ على الـ 342 بطريقًا</span>
+   <div class="ctrls">
+    <div class="ctrl" id="c14-w"><label>np.arange(170, 236,</label><span class="seg" id="wseg"><button type="button" aria-pressed="false" data-v="1">1</button><button type="button" aria-pressed="false" data-v="2">2</button><button type="button" aria-pressed="true" data-v="5">5</button><button type="button" aria-pressed="false" data-v="10">10</button></span><label>)</label></div>
+    <div class="ctrl" id="c14-d"><label>density=</label><span class="seg" id="dseg"><button type="button" aria-pressed="true" data-v="1">True</button><button type="button" aria-pressed="false" data-v="0">False</button></span></div>
+    <div class="ctrl" id="c14-e"><label>edgecolor=</label><span class="seg" id="eseg"><button type="button" aria-pressed="true" data-v="white">"white"</button><button type="button" aria-pressed="false" data-v="none">"none"</button></span></div>
+    <div class="ctrl" id="c14-c"><label>color=</label><span class="seg" id="cseg"><button type="button" aria-pressed="true" data-v="lightgray">"lightgray"</button><button type="button" aria-pressed="false" data-v="tab:blue">"tab:blue"</button></span></div>
+   </div>
+   <svg id="c14-svg" viewBox="0 0 560 280" role="img" aria-label="مدرّج أطوال الزعانف"></svg>
+   <div class="out" id="c14-out"></div>
+   <p class="note">انقر أي عمود لترى عدده وارتفاعه ومساحته.</p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c14" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(3 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>احذف <code>density=True</code> من <code>plt.hist</code>. ماذا يتغير في الرسم؟</summary><div class="ans">الشكل نفسه، لكن المحور العمودي صار عددًا <bdi>(count)</bdi>: أعلى عمود 62 بدل 0.0363. عندها يجب تغيير عنوان المحور، فهو لم يعد «density».</div></details></li>
+  <li><details><summary>اكتب <code>np.arange(170, 235, 5)</code> بدل 236. كم بطريقًا في الأعمدة الآن؟</summary><div class="ans">341 بدل 342، والمساحة الكلية 0.997. آخر حافة <bdi>(edge)</bdi> صارت 230، لأن الحد 235 لا يدخل، فخرج البطريق الوحيد الذي طول زعنفته <span dir="ltr">231 mm</span>. لهذا كتبنا 236.</div></details></li>
+  <li><details><summary>غيّر العرض إلى 10 (في <code>arange</code> وفي <code>len(fl) * 5</code>). هل يبقى مجموع المساحات 1؟</summary><div class="ans">نعم إذا غيّرت الرقمين معًا وغطّت الحواف كل البطاريق. الأعمدة أعرض والارتفاعات أقل، والمساحة 1. (انتبه: <code>np.arange(170, 236, 10)</code> آخر حافة فيها 230، فاكتب 241. جرّبها في اللوحة.)</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.5 ================= -->
+<section class="view cell" data-view="c15" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.5</span><h1>منحنى طبيعي <bdi>(normal curve)</bdi> لكل نوع</h1>
+ <p class="goal"><b>الهدف:</b> لكل نوع بطريق نحسب المتوسط <bdi>(mean)</bdi> والانحراف المعياري <bdi>(standard deviation)</bdi>، فنحصل على منحنى طبيعي نرسمه فوق المدرّج. ثم نحسب احتمال الأطوال 210 إلى <span dir="ltr">220 mm</span> عند Gentoo من المنحنى (مساحة)، ونقارنه بالنسبة الحقيقية في البيانات.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §3.6 و§3.7، المثال 3.6)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">p(x) = (0.3989 / σ) × e<sup>−z²/2</sup>, z = (x − μ)/σ<br>P(a ≤ X ≤ b) = area</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">norm.pdf(x, mu, sigma)<br>norm.cdf(b,…) − norm.cdf(a,…)</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W03.ipynb · cell 1.5</span></div>
+ <pre class="code" data-cell="c15">xs = [[linspace|np.linspace(165, 240, 300)]]
+colors = {"Adelie": "tab:orange", "Chinstrap": "tab:green", "Gentoo": "tab:blue"}
+for sp, col in [[items|colors.items()]]:
+    v = [[loc|peng.loc[peng["species"] == sp, "flipper_length_mm"]]]
+    print(f"{sp:10s} n={len(v):3d}  mean={v.mean():.2f}  sd={[[std|v.std(ddof=0)]]:.2f}")
+    plt.hist(v, bins=edges, density=True, [[alpha|alpha=0.3]], color=col)
+    [[plot|plt.plot(xs, norm.pdf(xs, v.mean(), v.std(ddof=0)), color=col, label=sp)]]
+[[legend|plt.legend()]]; plt.xlabel("flipper length (mm)"); plt.ylabel("density"); plt.show()
+
+# Flipper lengths are whole mm, so the lengths 210 to 220 stand for the interval 209.5 to <span dir="ltr">220.5 mm</span>.
+g = peng.loc[peng["species"] == "Gentoo", "flipper_length_mm"]
+model = [[cdf|norm.cdf(220.5, g.mean(), g.std(ddof=0)) - norm.cdf(209.5, g.mean(), g.std(ddof=0))]]
+data = [[andm|np.mean((g >= 210) & (g <= 220))]]
+print(f"Gentoo, 210 to <span dir="ltr">220 mm</span>:  normal model {model:.3f}   real fraction {data:.3f}")</pre></section>
+ <div class="rest" data-cell="c15">
+  <div class="panel" id="p-c15"><span class="ptitle">المنحنى والمساحة، على Gentoo</span>
+   <div class="ctrls">
+    <div class="ctrl" id="c15-n"><label for="c15-nr">linspace(…, num=</label><input type="range" id="c15-nr" min="4" max="300" step="1" value="300"><span class="mono" id="c15-nv">300</span><label>)</label></div>
+    <div class="ctrl" id="c15-al"><label for="c15-ar">alpha=</label><input type="range" id="c15-ar" min="0" max="1" step="0.1" value="0.3"><span class="mono" id="c15-av">0.3</span></div>
+    <div class="ctrl" id="c15-dd"><label>std(</label><span class="seg" id="ddseg"><button type="button" aria-pressed="true" data-v="0">ddof=0</button><button type="button" aria-pressed="false" data-v="1">no ddof</button></span><label>)</label></div>
+    <div class="ctrl" id="c15-sc"><label>norm.pdf(xs, mean,</label><span class="seg" id="scseg"><button type="button" aria-pressed="true" data-v="s">sd</button><button type="button" aria-pressed="false" data-v="v">sd**2</button></span><label>)</label></div>
+   </div>
+   <div class="ctrls">
+    <div class="ctrl" id="c15-ab"><label for="c15-a">a</label><input type="range" id="c15-a" min="195" max="240" step="1" value="210"><label for="c15-b">b</label><input type="range" id="c15-b" min="195" max="240" step="1" value="220"></div>
+    <div class="ctrl" id="c15-h"><label>±<span dir="ltr">0.5 mm</span></label><span class="seg" id="hseg"><button type="button" aria-pressed="true" data-v="1">yes</button><button type="button" aria-pressed="false" data-v="0">no</button></span></div>
+   </div>
+   <svg id="c15-svg" viewBox="0 0 560 280" role="img" aria-label="منحنى Gentoo الطبيعي فوق المدرّج"></svg>
+   <div class="out" id="c15-out"></div>
+   <p class="note" id="c15-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c15" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(4 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>احذف <code>ddof=0</code> من <code>v.std(ddof=0)</code> في سطر الطباعة. ماذا يتغير؟</summary><div class="ans">الانحرافات المعيارية <bdi>(standard deviations)</bdi> تكبر قليلًا: Adelie 6.54 بدل 6.52، وChinstrap 7.13 بدل 7.08، وGentoo 6.49 بدل 6.46. pandas يقسم على n−1 إن لم تكتب <code>ddof</code>. الفرق صغير، لكنه قد يُفشل خلية تحقق دقيقة.</div></details></li>
+  <li><details><summary>غيّر 300 في <code>linspace</code> إلى 8.</summary><div class="ans">المنحنى يصير خطوطًا مستقيمة مكسورة. <code>plt.plot</code> يصل النقاط بخطوط فقط، فنحتاج نقاطًا كثيرة ليبدو منحنيًا.</div></details></li>
+  <li><details><summary>اكتب <code>norm.pdf(xs, v.mean(), v.std(ddof=0)**2)</code>. لماذا صار المنحنى مسطحًا؟</summary><div class="ans">المعامل الثالث هو σ، وأنت أعطيته التباين <bdi>(variance)</bdi> σ² ≈ 41.7. صار المنحنى أعرض بنحو 6.5 مرات، وقمته عند Gentoo 0.0096 بدل 0.0618. هذا الخطأ لا يعطي رسالة خطأ، فانتبه له.</div></details></li>
+  <li><details><summary>احسب <code>model</code> بالحدين 210 و220 بدل 209.5 و220.5.</summary><div class="ans">0.536 بدل 0.579. الأطوال أعداد صحيحة، فالطول 210 يمثل كل ما بين 209.5 و210.5. بدون نصف المليمتر نخسر نصف العمود الأول ونصف الأخير.</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.6 ================= -->
+<section class="view cell" data-view="c16" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.6</span><h1>الكثافة <bdi>(density)</bdi> قد تكون أكبر من 1</h1>
+ <p class="goal"><b>الهدف:</b> نكتب زعانف Gentoo نفسها بالمتر بدل المليمتر. المنحنى يصير أطول 1000 مرة وأضيق 1000 مرة، والمساحة تبقى 1. فالكثافة ليست احتمالًا <bdi>(probability)</bdi>، والمساحة هي الاحتمال.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §3.5: 36.3 لكل متر، §3.6)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">area = Σ height × width ≈ 1</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">np.sum(norm.pdf(xm, …)) * (xm[1] - xm[0])</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W03.ipynb · cell 1.6</span></div>
+ <pre class="code" data-cell="c16">[[tuple2|m, s = g.mean(), g.std(ddof=0)]]
+print("peak in mm:", round(norm.pdf(m, m, s), 4), " peak in m:", round(norm.pdf(m/1000, m/1000, s/1000), 2))
+xm = np.linspace(0.18, 0.26, 2001)
+print("area in m:", round([[riem|np.sum(norm.pdf(xm, m/1000, s/1000)) * (xm[1] - xm[0])]], 3))</pre></section>
+ <div class="rest" data-cell="c16">
+  <div class="panel" id="p-c16"><span class="ptitle">الوحدة، والمساحة بالشرائح</span>
+   <div class="ctrls">
+    <div class="ctrl" id="c16-u"><label>unit</label><span class="seg" id="useg"><button type="button" aria-pressed="true" data-v="mm">mm</button><button type="button" aria-pressed="false" data-v="m">m</button></span></div>
+    <div class="ctrl" id="c16-k"><label for="c16-kr">strips</label><input type="range" id="c16-kr" min="2" max="80" step="1" value="8"><span class="mono" id="c16-kv">8</span></div>
+   </div>
+   <svg id="c16-svg" viewBox="0 0 560 250" role="img" aria-label="منحنى Gentoo مقسومًا إلى شرائح"></svg>
+   <div class="out" id="c16-out"></div>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c16" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(سؤالان، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>اطبع <code>xm[1] - xm[0]</code>. ما هذا الرقم؟</summary><div class="ans">0.00004 متر: عرض كل شريحة بين نقطتين متتاليتين. 2001 نقطة على مسافة 0.08 متر تعطي 2000 شريحة.</div></details></li>
+  <li><details><summary>احسب المساحة نفسها بالمليمتر: <code>np.linspace(170, 240, 2001)</code> و<code>norm.pdf(x, m, s)</code>.</summary><div class="ans">نحو 1.0 أيضًا (0.9998). الارتفاع صار أصغر 1000 مرة والعرض أكبر 1000 مرة، فالمساحة لم تتغير.</div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= TASKS ================= -->
+<section class="view" data-view="tasks" hidden>
+ <div class="cellhead"><span class="cellno">Part 2</span><h1>مهامك في الجزء 2</h1>
+ <p class="lead">هنا لا نعطيك الحل. لكل مهمة: ماذا تحسب، وأي الأسماء في هذه الصفحة تحتاجها، وتلميح. انقر اسمًا ليفتح شرحه في خليته. شغّل خلية التحقق تحت كل مهمة: ✅ يعني أن إجابتك قريبة من الصحيحة بما يكفي.</p></div>
+ <div class="task"><h3>Task 1 · اقرأ جدول الصيد</h3>
+  <p>احسب P(dark) والاحتمال الشرطي <bdi>(conditional probability)</bdi> P(salmon | dark) وP(dark | salmon) من الجدول في 1.2.</p>
+  <div class="tools"><a class="b pd" href="#c12--ct">crosstab</a></div>
+  <p class="note">تلميح: لكل احتمال اسأل نفسك أولًا: على أي عدد أقسم؟ كل السمك، أم عمود dark، أم صف salmon؟</p></div>
+ <div class="task"><h3>Task 2 · قاعدة Bayes دالةً <bdi>(function)</bdi></h3>
+  <p>أكمل <code>bayes(p_b_given_a, p_a, p_b_given_not_a)</code> لتعيد P(A | B)، ثم استعملها لصيد فيه 20% قاروص.</p>
+  <div class="tools"><a class="b py" href="#setup--def">def</a><a class="b pd" href="#c12--c12-dv">total probability</a></div>
+  <p class="note">تلميح: احسب P(B) بالاحتمال الكلي <bdi>(total probability)</bdi> في سطر، ثم <code>return</code> للقسمة. P(not A) هي 1 − p_a. خلية التحقق تجرب دالتك على 60% أولًا، فإن أعطت 0.949 فهي صحيحة.</p></div>
+ <div class="task"><h3>Task 3 · دالة الكتلة الاحتمالية <bdi>(PMF)</bdi> للنرد</h3>
+  <p>احسب القيمة المتوقعة <bdi>(expected value)</bdi> E[X] وP(X ≥ 5) للنرد بـ NumPy. المصفوفتان <code>x</code> و<code>pmf</code> جاهزتان.</p>
+  <div class="tools"><a class="b np" href="#c16--riem">np.sum</a><a class="b np" href="#tasks--t3">np.full</a><a class="b py" href="#c11--eq">مقارنة على مصفوفة</a></div>
+  <p class="note" id="t3">تلميح: <code>np.full(6, 1/6)</code> تصنع مصفوفة <bdi>(array)</bdi> من ستة عناصر كلها 1/6. <code>x * pmf</code> تضرب عنصرًا بعنصر. و<code>pmf[x &gt;= 5]</code> تأخذ الاحتمالات التي قيمتها 5 أو 6 فقط.</p></div>
+ <div class="task"><h3>Task 4 · النموذج <bdi>(model)</bdi> والبيانات لـ Chinstrap</h3>
+  <p>طبّق ما فعلناه مع Gentoo في 1.5 على Chinstrap، في المجال 190 إلى <span dir="ltr">200 mm</span>.</p>
+  <div class="tools"><a class="b sp" href="#c15--cdf">norm.cdf</a><a class="b pd" href="#c15--std">std(ddof=0)</a><a class="b py" href="#c15--andm">&amp;</a></div>
+  <p class="note">تلميح: لا تنسَ نصف المليمتر (189.5 و200.5)، ولا <code>ddof=0</code>، ولا الأقواس حول كل شرط. هذه الثلاثة هي أكثر ما يُفشل التحقق هنا.</p></div>
+ <div class="task"><h3>Task 5 · لأي نوع يُعدّ طول <span dir="ltr">195 mm</span> أكثر شيوعًا؟</h3>
+  <p>احسب كثافتي <bdi>(densities)</bdi> Adelie وChinstrap عند 195، واحفظ اسم النوع الذي كثافته أعلى نصًّا <bdi>(string)</bdi>: <code>"Adelie"</code> أو <code>"Chinstrap"</code>.</p>
+  <div class="tools"><a class="b sp" href="#c15--plot">norm.pdf</a><a class="b py" href="#tasks--t5">if / else</a></div>
+  <p class="note" id="t5">تلميح: يمكنك أن تكتب الاسم بيدك بعد أن ترى الرقمين، أو أن تكتب <code>"Adelie" if p_adelie &gt; p_chinstrap else "Chinstrap"</code>. الاسم يجب أن يطابق تمامًا، بحرف كبير في أوله.</p></div>
+ <div class="task"><h3>Reflect · النموذج أم البيانات؟</h3>
+  <p>اكتب جملتين أو ثلاثًا: لماذا يختلف 0.579 عن 0.602؟ وبأيهما تثق لبطاريق جديدة؟ جرّب الحدين في <a href="#c15--cdf">لوحة 1.5</a> لترى كيف يتغير الفرق.</p></div>
+ <nav class="pn" aria-label="التنقل بين الأقسام"></nav>
+</section>
+
+<!-- ================= TRAPS ================= -->
+<section class="view" data-view="traps" hidden>
+ <div class="cellhead"><span class="cellno">Traps</span><h1>الفخاخ: أخطاء لا تعطي رسالة خطأ <bdi>(error message)</bdi></h1>
+ <p class="lead">أغلب هذه الأخطاء تجعل الكود يعمل، لكن بأرقام خاطئة. لهذا هي خطيرة. انقر الاسم في كل بطاقة لترى شرحه في خليته.</p></div>
+ <div class="traps">
+  <div class="trapcard"><h3><span class="b np">NumPy</span> الحد الأعلى لا يدخل</h3><p><code>rng.integers(1, 7)</code> تعطي 1 إلى 6. و<code>np.arange(170, 236, 5)</code> آخرها 235. إن كتبت الحد نفسه الذي تريده تخسر آخر قيمة.</p><div class="tools"><a class="b np" href="#c11--ints">integers</a> <a class="b np" href="#c14--arange">arange</a></div></div>
+  <div class="trapcard"><h3><span class="b pd">pandas</span> <code>std()</code> يقسم على n−1</h3><p>في pandas يقسم الانحراف المعياري <bdi>(standard deviation)</bdi> افتراضيًا على n−1، وفي NumPy على n. في المعمل نكتب <code>ddof=0</code> لنقسم على n كما في الـ Notes.</p><div class="tools"><a class="b pd" href="#c15--std">std(ddof=0)</a></div></div>
+  <div class="trapcard"><h3><span class="b sp">SciPy</span> المعامل الثالث هو σ</h3><p>نكتب التوزيع N(μ, σ²)، لكن <code>norm.pdf(x, mu, sigma)</code> يأخذ σ لا التباين <bdi>(variance)</bdi> σ². لـ N(7, 4) نكتب <code>norm.pdf(x, 7, 2)</code>.</p><div class="tools"><a class="b sp" href="#c15--cdf">norm.cdf</a></div></div>
+  <div class="trapcard"><h3><span class="b py">Python</span> <code>&amp;</code> مع الأقواس</h3><p><code>(g &gt;= 210) &amp; (g &lt;= 220)</code> صحيحة. بدون أقواس تُحسب <code>&amp;</code> أولًا فيخطئ الكود. و<code>and</code> لا تعمل على المصفوفات (رسالة truth value is ambiguous).</p><div class="tools"><a class="b py" href="#c15--andm">&amp;</a></div></div>
+  <div class="trapcard"><h3><span class="b np">NumPy</span> المولّد <bdi>(generator)</bdi> يتابع</h3><p>كل استدعاء لـ <code>rng</code> يكمل من حيث توقف. إذا شغّلت جزءًا من الخلية مرة ثانية تحصل على أرقام أخرى. لتعود إلى الأرقام نفسها شغّل الخلية كلها من سطر <code>default_rng</code>.</p><div class="tools"><a class="b np" href="#c11--rng">default_rng</a></div></div>
+  <div class="trapcard"><h3><span class="b plt">Matplotlib</span> ارتفاع الكثافة ليس احتمالًا</h3><p>مع <code>density=True</code> الاحتمال هو المساحة (الارتفاع × العرض)، لا الارتفاع. بالمتر صار الارتفاع 61.77 وهو ليس احتمالًا.</p><div class="tools"><a class="b plt" href="#c14--hist">plt.hist</a> <a class="b np" href="#c16--riem">np.sum * dx</a></div></div>
+  <div class="trapcard"><h3><span class="b py">بيانات</span> الأطوال أعداد صحيحة <bdi>(integers)</bdi></h3><p>الطول <span dir="ltr">210 mm</span> يمثل 209.5 إلى 210.5. عند حساب المساحة من النموذج أضف نصف مليمتر على كل طرف.</p><div class="tools"><a class="b sp" href="#c15--cdf">norm.cdf</a></div></div>
+ </div>
+ <nav class="pn" aria-label="التنقل بين الأقسام"></nav>
+</section>
+
+<!-- ================= INDEX ================= -->
+<section class="view" data-view="index" hidden>
+ <div class="cellhead"><span class="cellno">Index</span><h1>فهرس الأسماء</h1>
+ <p class="lead">كل اسم مرّ في هذا المعمل، مع مكتبته ومكان شرحه. انقر الخلية لتفتح الشرح تحت سطره. الفهرس يكبر كل أسبوع: الاسم الذي يُشرح هنا لن يُعاد شرحه، بل يُحال إليه.</p></div>
+ <div class="tw"><table class="glo" id="glo"><thead><tr><th>الاسم</th><th>المكتبة</th><th class="hide-ph">الحالة</th><th>بجملة</th><th>الشرح</th></tr></thead><tbody></tbody></table></div>
+ <nav class="pn" aria-label="التنقل بين الأقسام"></nav>
+</section>
+
+</main>
+</div>
+</div>
+
+<script>window.Reveal = window.Reveal || {isReady: () => true, getCurrentSlide: () => document.querySelector(".view:not([hidden])") || document.body};</script>
+<script>
+/* Derivation window for ENGS 3302 decks ("how we get this", for understanding).
+   A slide holds a button  <button class="dvbtn" data-dv="ID">  and a  <template id="dv-ID" data-title="...">  with the lines.
+   Inside the template every element with data-s="k" appears at step k. A token <i data-t="name"> with data-from="other"
+   flies from the token "other" (in an earlier line) to its place and leaves a dashed trail. data-x="k" strikes a token at step k.
+   Lines flow into columns (no scrolling). Click or → / Space / PageDown: next step; ← / PageUp: back; Esc or D (ي): back to the slide,
+   which stays at the same slide and step. While the window is open no key reaches the deck. */
+(function(){
+  var dv, stage, cols, svg, cnt, ttl, cur = null, step = 0, max = 0, busy = 0;
+  var NS = 'http://www.w3.org/2000/svg';
+  function scale(){ var k = Math.min(innerWidth / 1600, innerHeight / 900); stage.style.transform = 'translate(-50%,-50%) scale(' + k + ')'; return k; }
+  function K(){ return stage.getBoundingClientRect().width / 1600; }
+  function local(r){ var b = svg.getBoundingClientRect(), k = K(); return {x: (r.left - b.left) / k, y: (r.top - b.top) / k, w: r.width / k, h: r.height / k}; }
+  function build(){
+    dv = document.createElement('div'); dv.id = 'dv'; dv.hidden = true;
+    dv.innerHTML = '<div id="dvStage"><div class="dvpanel"><div class="dvhead"><span class="dvtag">للفهم</span><span class="dvtitle"></span>'
+      + '<button class="dvclose" type="button" aria-label="رجوع إلى الدليل">×</button></div><div class="dvcols"></div>'
+      + '<svg class="dvtrail" width="1600" height="900" viewBox="0 0 1600 900" aria-hidden="true"><defs><marker id="dvar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="currentColor"></path></marker></defs></svg>'
+      + '<div class="dvside"><div class="dvcount"></div><div class="dvkey"><p><span class="dvk1"></span> حدّ ينتقل: الخط المتقطع يدل على مصدره</p>'
+      + '<p><span class="dvk2">a</span> يُختصر: يُشطب</p><p><span class="dvk3">rule</span> القاعدة المستعملة في السطر</p></div>'
+      + '<div class="dvhint">انقر للخطوة التالية، وEsc للرجوع</div></div></div></div>';
+    document.body.appendChild(dv);
+    stage = dv.querySelector('#dvStage'); cols = dv.querySelector('.dvcols'); svg = dv.querySelector('.dvtrail'); cnt = dv.querySelector('.dvcount'); ttl = dv.querySelector('.dvtitle');
+    dv.querySelector('.dvclose').addEventListener('click', function(e){ e.stopPropagation(); close(); });
+    stage.addEventListener('click', function(e){ e.stopPropagation(); go(step + 1); });
+    dv.addEventListener('click', function(e){ e.stopPropagation(); });
+    addEventListener('resize', function(){ if(!dv.hidden){ scale(); trails(step, false); } });
+  }
+  function open(id){
+    var t = document.getElementById('dv-' + id); if(!t) return;
+    cur = id; ttl.innerHTML = t.dataset.title || ''; cols.innerHTML = t.innerHTML;
+    max = 0; cols.querySelectorAll('[data-s]').forEach(function(el){ max = Math.max(max, +el.dataset.s); });
+    cols.querySelectorAll('[data-x]').forEach(function(el){ max = Math.max(max, +el.dataset.x); });
+    dv.hidden = false; scale(); document.body.classList.add('dv-on'); set(1, true);
+  }
+  function close(){ dv.hidden = true; cur = null; document.body.classList.remove('dv-on'); }
+  function go(k){ if(k < 1 || k > max || busy) return; set(k, k === step + 1); }
+  function set(k, anim){
+    step = k; cnt.textContent = 'step ' + k + ' / ' + max;
+    cols.querySelectorAll('[data-s]').forEach(function(el){ var s = +el.dataset.s; el.classList.toggle('on', s <= k); el.classList.toggle('now', s === k); el.classList.toggle('inst', !anim || s !== k); });
+    cols.querySelectorAll('[data-x]').forEach(function(el){ var x = +el.dataset.x; el.classList.toggle('struck', x <= k); el.classList.toggle('inst', !anim || x !== k); });
+    var movers = [].filter.call(cols.querySelectorAll('[data-from]'), function(el){ return +sOf(el) === k; });
+    if(!anim || !movers.length){ trails(k, false); return; }
+    trails(k - 1, false);                     // the old trails stay; the new ones come after the move
+    busy++; var k0 = K();
+    movers.forEach(function(el, i){
+      var src = cols.querySelector('[data-t="' + el.dataset.from + '"]'); if(!src) return;
+      var a = src.getBoundingClientRect(), b = el.getBoundingClientRect();
+      el.style.transition = 'none'; el.style.transform = 'translate(' + ((a.left - b.left) / k0) + 'px,' + ((a.top - b.top) / k0) + 'px)'; el.style.opacity = '1';
+      el.getBoundingClientRect();
+      el.style.transition = 'transform 800ms cubic-bezier(.45,.05,.25,1) ' + (i * 140) + 'ms'; el.style.transform = '';
+    });
+    setTimeout(function(){ movers.forEach(function(el){ el.style.transition = ''; }); busy--; if(step === k) trails(k, true); }, 800 + movers.length * 140 + 60);
+  }
+  function sOf(el){ var p = el; while(p && p !== cols){ if(p.dataset && p.dataset.s) return p.dataset.s; p = p.parentNode; } return 0; }
+  function trails(k, fresh){
+    [].slice.call(svg.querySelectorAll('path.tr')).forEach(function(p){ p.remove(); });
+    cols.querySelectorAll('[data-from]').forEach(function(el){
+      var s = +sOf(el); if(s > k) return;
+      var src = cols.querySelector('[data-t="' + el.dataset.from + '"]'); if(!src) return;
+      var a = local(src.getBoundingClientRect()), b = local(el.getBoundingClientRect());
+      var x1 = a.x + a.w / 2, y1 = a.y + a.h, x2 = b.x + b.w / 2, y2 = b.y, d;
+      if(x2 - x1 > 300 || x1 - x2 > 300){ d = 'M' + x1 + ',' + y1 + ' C' + x1 + ',' + (y1 + 60) + ' ' + x2 + ',' + (y2 - 60) + ' ' + x2 + ',' + (y2 - 3); }
+      else d = 'M' + x1 + ',' + y1 + ' C' + x1 + ',' + (y1 + (y2 - y1) * 0.5) + ' ' + x2 + ',' + (y1 + (y2 - y1) * 0.5) + ' ' + x2 + ',' + (y2 - 3);
+      var p = document.createElementNS(NS, 'path'); p.setAttribute('d', d); p.setAttribute('class', 'tr' + (s === step ? ' new' : '') + (fresh && s === k ? ' fresh' : ''));
+      p.setAttribute('marker-end', 'url(#dvar)'); svg.appendChild(p);
+    });
+  }
+  function init(){
+    build();
+    document.addEventListener('click', function(e){ var b = e.target.closest && e.target.closest('.dvbtn'); if(b){ e.preventDefault(); e.stopPropagation(); b.blur(); open(b.dataset.dv); } }, true);
+    document.addEventListener('keydown', function(e){
+      var t = e.target; if(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+      var wb = document.getElementById('wb'); if(wb && !wb.hidden) return;                    // the whiteboard has the keys
+      var mod = e.ctrlKey || e.metaKey || e.altKey;
+      var isD = !mod && (e.key === 'd' || e.key === 'D' || e.key === 'ي' || e.code === 'KeyD');   // ي = D on an Arabic keyboard
+      var isW = !mod && (e.key === 'w' || e.key === 'W' || e.key === 'ص' || e.code === 'KeyW');
+      if(dv.hidden){
+        if(!isD) return;
+        var b = Reveal.getCurrentSlide().querySelector('.dvbtn'); if(!b) return;
+        e.preventDefault(); e.stopImmediatePropagation(); open(b.dataset.dv); return;
+      }
+      if(isW) return;                                                                         // let the whiteboard open over the window
+      e.preventDefault(); e.stopImmediatePropagation();
+      if(isD || e.key === 'Escape') close();
+      else if(['ArrowRight', 'ArrowDown', ' ', 'PageDown', 'Enter', 'n'].indexOf(e.key) >= 0) go(step + 1);
+      else if(['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace', 'p'].indexOf(e.key) >= 0) go(step - 1);
+    }, true);
+    window.EngsDeriv = {open: open, close: close, go: function(k){ go(k); }, set: function(k){ set(k, false); }, state: function(){ return {id: cur, step: step, max: max}; }};
+  }
+  (function wait(){ if(window.Reveal && Reveal.isReady && Reveal.isReady()) init(); else setTimeout(wait, 50); })();
+})();
+
+</script>
+<script>
+const D = {"s11":{"0":{"first10":[6,4,4,2,2,1,1,1,2,5],"frac":[0.1,0.16,0.1689],"curve":[[1,0.0],[2,0.0],[3,0.3333],[4,0.25],[5,0.4],[6,0.3333],[7,0.2857],[8,0.25],[9,0.2222],[10,0.2],[11,0.1818],[12,0.1667],[13,0.2308],[14,0.2143],[15,0.2667],[16,0.25],[18,0.2222],[19,0.2632],[20,0.25],[22,0.2727],[24,0.2917],[26,0.3077],[28,0.2857],[30,0.2667],[33,0.2424],[35,0.2571],[38,0.2632],[41,0.2439],[44,0.25],[48,0.2708],[52,0.2692],[56,0.25],[60,0.2333],[65,0.2308],[71,0.2394],[76,0.2632],[82,0.2805],[89,0.2809],[96,0.2708],[104,0.2692],[112,0.2589],[121,0.2479],[131,0.2519],[142,0.2465],[153,0.2418],[165,0.2242],[179,0.2235],[193,0.2228],[209,0.2201],[225,0.2133],[244,0.2131],[263,0.2167],[284,0.2113],[307,0.2117],[332,0.2139],[359,0.2033],[387,0.2041],[419,0.2005],[452,0.1991],[489,0.1984],[528,0.1894],[571,0.1874],[616,0.1851],[666,0.1817],[720,0.1917],[778,0.1825],[840,0.1798],[908,0.1784],[981,0.1733],[1060,0.1717],[1145,0.1712],[1237,0.1754],[1337,0.1795],[1444,0.1787],[1561,0.1762],[1686,0.1773],[1822,0.1784],[1968,0.1743],[2127,0.1744],[2298,0.178],[2483,0.1756],[2683,0.1744],[2899,0.178],[3132,0.1801],[3384,0.1797],[3656,0.1786],[3950,0.1772],[4268,0.1764],[4612,0.1752],[4983,0.176],[5384,0.1718],[5817,0.1719],[6285,0.169],[6791,0.1682],[7337,0.1687],[7928,0.1664],[8566,0.1668],[9255,0.1686],[10000,0.1689]]},"1":{"first10":[3,4,5,6,1,1,5,6,2,2],"frac":[0.2,0.15,0.1656],"curve":[[1,0.0],[2,0.0],[3,0.0],[4,0.25],[5,0.2],[6,0.3333],[7,0.4286],[8,0.5],[9,0.4444],[10,0.4],[11,0.3636],[12,0.3333],[13,0.3846],[14,0.3571],[15,0.4],[16,0.375],[18,0.3333],[19,0.3158],[20,0.35],[22,0.3636],[24,0.3333],[26,0.3077],[28,0.3214],[30,0.3667],[33,0.3636],[35,0.3429],[38,0.3421],[41,0.3415],[44,0.3182],[48,0.3333],[52,0.3269],[56,0.3036],[60,0.3167],[65,0.2923],[71,0.2676],[76,0.25],[82,0.2317],[89,0.2135],[96,0.2188],[104,0.2115],[112,0.2143],[121,0.2149],[131,0.1985],[142,0.1901],[153,0.183],[165,0.1818],[179,0.1844],[193,0.1917],[209,0.1962],[225,0.1956],[244,0.1967],[263,0.1939],[284,0.1901],[307,0.1824],[332,0.1807],[359,0.1783],[387,0.1783],[419,0.1695],[452,0.1726],[489,0.1759],[528,0.1742],[571,0.1681],[616,0.164],[666,0.1652],[720,0.1667],[778,0.1607],[840,0.1607],[908,0.1641],[981,0.1651],[1060,0.1623],[1145,0.1642],[1237,0.1673],[1337,0.1758],[1444,0.1752],[1561,0.1775],[1686,0.1851],[1822,0.1866],[1968,0.1819],[2127,0.1787],[2298,0.1802],[2483,0.18],[2683,0.1767],[2899,0.1763],[3132,0.1756],[3384,0.1758],[3656,0.174],[3950,0.1716],[4268,0.1706],[4612,0.1687],[4983,0.1694],[5384,0.1681],[5817,0.1666],[6285,0.1674],[6791,0.1662],[7337,0.1674],[7928,0.1674],[8566,0.1682],[9255,0.1678],[10000,0.1656]]},"2":{"first10":[6,2,1,2,3,5,3,1,3,4],"frac":[0.1,0.18,0.1696],"curve":[[1,0.0],[2,0.5],[3,0.3333],[4,0.25],[5,0.2],[6,0.1667],[7,0.1429],[8,0.125],[9,0.1111],[10,0.1],[11,0.1818],[12,0.1667],[13,0.1538],[14,0.1429],[15,0.1333],[16,0.125],[18,0.1111],[19,0.1053],[20,0.1],[22,0.1364],[24,0.125],[26,0.1154],[28,0.1071],[30,0.1],[33,0.0909],[35,0.1143],[38,0.1053],[41,0.122],[44,0.1364],[48,0.125],[52,0.1346],[56,0.1429],[60,0.1333],[65,0.1231],[71,0.1127],[76,0.1184],[82,0.122],[89,0.1348],[96,0.125],[104,0.1346],[112,0.1429],[121,0.1653],[131,0.1756],[142,0.162],[153,0.1634],[165,0.1636],[179,0.1564],[193,0.1554],[209,0.1483],[225,0.16],[244,0.1598],[263,0.1597],[284,0.1585],[307,0.1629],[332,0.1687],[359,0.1671],[387,0.1731],[419,0.1695],[452,0.1637],[489,0.1595],[528,0.161],[571,0.1611],[616,0.1591],[666,0.1637],[720,0.1694],[778,0.1671],[840,0.1643],[908,0.1652],[981,0.1631],[1060,0.1708],[1145,0.1712],[1237,0.1698],[1337,0.1675],[1444,0.1641],[1561,0.1634],[1686,0.1643],[1822,0.1685],[1968,0.1692],[2127,0.1716],[2298,0.1706],[2483,0.1683],[2683,0.1714],[2899,0.1742],[3132,0.1695],[3384,0.1693],[3656,0.1707],[3950,0.1676],[4268,0.1654],[4612,0.1672],[4983,0.1662],[5384,0.169],[5817,0.1676],[6285,0.1685],[6791,0.1705],[7337,0.1676],[7928,0.1693],[8566,0.1697],[9255,0.1715],[10000,0.1696]]},"3":{"first10":[5,1,2,2,2,5,6,4,1,1],"frac":[0.1,0.16,0.1655],"curve":[[1,0.0],[2,0.0],[3,0.0],[4,0.0],[5,0.0],[6,0.0],[7,0.0],[8,0.0],[9,0.1111],[10,0.1],[11,0.0909],[12,0.0833],[13,0.0769],[14,0.0714],[15,0.0667],[16,0.0625],[18,0.0556],[19,0.1053],[20,0.15],[22,0.1364],[24,0.1667],[26,0.1538],[28,0.2143],[30,0.2333],[33,0.2424],[35,0.2571],[38,0.2368],[41,0.2439],[44,0.2273],[48,0.2083],[52,0.2115],[56,0.1964],[60,0.2167],[65,0.2154],[71,0.2113],[76,0.1974],[82,0.1829],[89,0.1685],[96,0.1771],[104,0.1635],[112,0.1696],[121,0.157],[131,0.1603],[142,0.169],[153,0.1634],[165,0.1636],[179,0.162],[193,0.1606],[209,0.1722],[225,0.1822],[244,0.1844],[263,0.1787],[284,0.1761],[307,0.1661],[332,0.1717],[359,0.1643],[387,0.168],[419,0.1671],[452,0.1659],[489,0.1656],[528,0.1705],[571,0.1611],[616,0.1591],[666,0.1607],[720,0.1611],[778,0.1542],[840,0.1512],[908,0.1498],[981,0.1519],[1060,0.1528],[1145,0.1476],[1237,0.1479],[1337,0.1496],[1444,0.1537],[1561,0.1531],[1686,0.1566],[1822,0.1575],[1968,0.158],[2127,0.1594],[2298,0.1614],[2483,0.1615],[2683,0.1681],[2899,0.169],[3132,0.1686],[3384,0.169],[3656,0.1677],[3950,0.1643],[4268,0.1649],[4612,0.1648],[4983,0.1636],[5384,0.1636],[5817,0.1633],[6285,0.1634],[6791,0.1621],[7337,0.1619],[7928,0.1637],[8566,0.1633],[9255,0.1653],[10000,0.1655]]},"4":{"first10":[5,6,6,4,6,6,6,1,3,4],"frac":[0.5,0.21,0.1711],"curve":[[1,1.0],[2,0.5],[3,0.6667],[4,0.5],[5,0.4],[6,0.3333],[7,0.2857],[8,0.375],[9,0.3333],[10,0.3],[11,0.2727],[12,0.25],[13,0.2308],[14,0.2857],[15,0.3333],[16,0.375],[18,0.3333],[19,0.3158],[20,0.3],[22,0.2727],[24,0.25],[26,0.2308],[28,0.2857],[30,0.3],[33,0.303],[35,0.2857],[38,0.2632],[41,0.2439],[44,0.2273],[48,0.2292],[52,0.2308],[56,0.2143],[60,0.2167],[65,0.2],[71,0.1972],[76,0.1974],[82,0.1829],[89,0.1798],[96,0.1667],[104,0.1538],[112,0.1518],[121,0.1488],[131,0.145],[142,0.1479],[153,0.1503],[165,0.1576],[179,0.1676],[193,0.171],[209,0.177],[225,0.1689],[244,0.1639],[263,0.1673],[284,0.1655],[307,0.1661],[332,0.1627],[359,0.1671],[387,0.1628],[419,0.1695],[452,0.1792],[489,0.1861],[528,0.1856],[571,0.1839],[616,0.1786],[666,0.1787],[720,0.1847],[778,0.1825],[840,0.1833],[908,0.1773],[981,0.1764],[1060,0.1783],[1145,0.1712],[1237,0.1681],[1337,0.1668],[1444,0.1655],[1561,0.171],[1686,0.1684],[1822,0.1723],[1968,0.1733],[2127,0.1758],[2298,0.1732],[2483,0.1732],[2683,0.1726],[2899,0.1694],[3132,0.1692],[3384,0.1711],[3656,0.1693],[3950,0.1704],[4268,0.1673],[4612,0.1702],[4983,0.1726],[5384,0.1725],[5817,0.1716],[6285,0.1728],[6791,0.1727],[7337,0.1734],[7928,0.1731],[8566,0.1737],[9255,0.1737],[10000,0.1711]]},"5":{"first10":[5,5,1,5,3,4,4,2,6,1],"frac":[0.1,0.19,0.1706],"curve":[[1,0.0],[2,0.5],[3,0.3333],[4,0.25],[5,0.2],[6,0.1667],[7,0.1429],[8,0.125],[9,0.1111],[10,0.1],[11,0.1818],[12,0.1667],[13,0.1538],[14,0.1429],[15,0.2],[16,0.1875],[18,0.1667],[19,0.1579],[20,0.15],[22,0.1364],[24,0.1667],[26,0.1923],[28,0.1786],[30,0.1667],[33,0.1515],[35,0.1714],[38,0.1579],[41,0.1463],[44,0.1818],[48,0.1667],[52,0.1538],[56,0.1786],[60,0.1667],[65,0.1692],[71,0.1549],[76,0.1711],[82,0.1707],[89,0.1573],[96,0.1562],[104,0.1538],[112,0.1607],[121,0.1488],[131,0.1527],[142,0.162],[153,0.1503],[165,0.1455],[179,0.1453],[193,0.1451],[209,0.1435],[225,0.1422],[244,0.1434],[263,0.1445],[284,0.1373],[307,0.1336],[332,0.1446],[359,0.1421],[387,0.1447],[419,0.1504],[452,0.1527],[489,0.1554],[528,0.1534],[571,0.1506],[616,0.1526],[666,0.1547],[720,0.15],[778,0.1517],[840,0.156],[908,0.1553],[981,0.1549],[1060,0.1585],[1145,0.1572],[1237,0.156],[1337,0.1548],[1444,0.1551],[1561,0.1595],[1686,0.159],[1822,0.1658],[1968,0.1677],[2127,0.1702],[2298,0.171],[2483,0.172],[2683,0.1696],[2899,0.1697],[3132,0.1731],[3384,0.1711],[3656,0.1704],[3950,0.1684],[4268,0.1668],[4612,0.1663],[4983,0.1674],[5384,0.1668],[5817,0.1655],[6285,0.166],[6791,0.168],[7337,0.1674],[7928,0.1697],[8566,0.1692],[9255,0.1701],[10000,0.1706]]},"6":{"first10":[3,4,4,3,6,3,4,3,3,6],"frac":[0.2,0.18,0.1686],"curve":[[1,0.0],[2,0.0],[3,0.3333],[4,0.5],[5,0.4],[6,0.3333],[7,0.2857],[8,0.25],[9,0.2222],[10,0.2],[11,0.1818],[12,0.1667],[13,0.1538],[14,0.1429],[15,0.1333],[16,0.1875],[18,0.1667],[19,0.2105],[20,0.2],[22,0.1818],[24,0.1667],[26,0.1538],[28,0.1786],[30,0.2],[33,0.2121],[35,0.2],[38,0.2105],[41,0.2195],[44,0.2045],[48,0.1875],[52,0.1731],[56,0.1964],[60,0.1833],[65,0.1846],[71,0.169],[76,0.1842],[82,0.1829],[89,0.1798],[96,0.1771],[104,0.1731],[112,0.1607],[121,0.1736],[131,0.1908],[142,0.1901],[153,0.1765],[165,0.1758],[179,0.1844],[193,0.171],[209,0.1675],[225,0.1689],[244,0.1721],[263,0.1673],[284,0.169],[307,0.1759],[332,0.1747],[359,0.1727],[387,0.168],[419,0.1695],[452,0.1726],[489,0.1656],[528,0.1629],[571,0.1646],[616,0.1688],[666,0.1682],[720,0.1708],[778,0.1671],[840,0.1714],[908,0.1696],[981,0.1662],[1060,0.167],[1145,0.1677],[1237,0.1706],[1337,0.1705],[1444,0.169],[1561,0.1646],[1686,0.1649],[1822,0.1701],[1968,0.1743],[2127,0.174],[2298,0.1745],[2483,0.1744],[2683,0.177],[2899,0.1783],[3132,0.1804],[3384,0.1794],[3656,0.177],[3950,0.1759],[4268,0.1731],[4612,0.1715],[4983,0.1708],[5384,0.1699],[5817,0.1692],[6285,0.1698],[6791,0.1683],[7337,0.167],[7928,0.1674],[8566,0.1683],[9255,0.1687],[10000,0.1686]]},"7":{"first10":[6,4,5,6,4,5,6,2,1,2],"frac":[0.3,0.17,0.1692],"curve":[[1,0.0],[2,0.0],[3,0.0],[4,0.0],[5,0.0],[6,0.0],[7,0.0],[8,0.125],[9,0.1111],[10,0.1],[11,0.0909],[12,0.0833],[13,0.0769],[14,0.0714],[15,0.0667],[16,0.0625],[18,0.1111],[19,0.1053],[20,0.1],[22,0.0909],[24,0.0833],[26,0.0769],[28,0.1071],[30,0.1333],[33,0.1212],[35,0.1143],[38,0.1316],[41,0.1463],[44,0.1818],[48,0.2083],[52,0.1923],[56,0.1964],[60,0.2],[65,0.2],[71,0.1972],[76,0.2105],[82,0.1951],[89,0.191],[96,0.1875],[104,0.1827],[112,0.1875],[121,0.1983],[131,0.2061],[142,0.2042],[153,0.2092],[165,0.2121],[179,0.2235],[193,0.2176],[209,0.2105],[225,0.2089],[244,0.1967],[263,0.2091],[284,0.2007],[307,0.1987],[332,0.1958],[359,0.1894],[387,0.1886],[419,0.1838],[452,0.1836],[489,0.182],[528,0.1761],[571,0.1804],[616,0.1818],[666,0.1862],[720,0.1875],[778,0.1838],[840,0.181],[908,0.1773],[981,0.1702],[1060,0.1689],[1145,0.1686],[1237,0.1673],[1337,0.1645],[1444,0.1634],[1561,0.1634],[1686,0.1643],[1822,0.1674],[1968,0.1707],[2127,0.1702],[2298,0.1706],[2483,0.1736],[2683,0.1681],[2899,0.1659],[3132,0.166],[3384,0.1646],[3656,0.1663],[3950,0.1648],[4268,0.1647],[4612,0.1661],[4983,0.1674],[5384,0.169],[5817,0.1673],[6285,0.1672],[6791,0.1682],[7337,0.1679],[7928,0.1681],[8566,0.1666],[9255,0.1676],[10000,0.1692]]},"8":{"first10":[5,2,2,6,2,2,4,5,4,6],"frac":[0.2,0.16,0.1619],"curve":[[1,0.0],[2,0.0],[3,0.0],[4,0.0],[5,0.0],[6,0.0],[7,0.0],[8,0.0],[9,0.0],[10,0.0],[11,0.0],[12,0.0],[13,0.0769],[14,0.0714],[15,0.1333],[16,0.125],[18,0.1111],[19,0.1053],[20,0.1],[22,0.0909],[24,0.125],[26,0.1154],[28,0.1429],[30,0.1667],[33,0.1515],[35,0.1429],[38,0.1316],[41,0.1707],[44,0.1591],[48,0.1458],[52,0.1538],[56,0.1786],[60,0.1833],[65,0.1692],[71,0.169],[76,0.1711],[82,0.1707],[89,0.1685],[96,0.1667],[104,0.1635],[112,0.1607],[121,0.1488],[131,0.1374],[142,0.1338],[153,0.1438],[165,0.1455],[179,0.1397],[193,0.1451],[209,0.1388],[225,0.1422],[244,0.1475],[263,0.1597],[284,0.1655],[307,0.1596],[332,0.1596],[359,0.1671],[387,0.168],[419,0.1718],[452,0.1726],[489,0.1697],[528,0.1629],[571,0.1629],[616,0.1607],[666,0.1607],[720,0.1597],[778,0.1581],[840,0.1655],[908,0.1608],[981,0.158],[1060,0.1547],[1145,0.1546],[1237,0.1609],[1337,0.1586],[1444,0.1593],[1561,0.1595],[1686,0.1578],[1822,0.1553],[1968,0.1514],[2127,0.1481],[2298,0.148],[2483,0.1502],[2683,0.1502],[2899,0.1563],[3132,0.1542],[3384,0.154],[3656,0.1524],[3950,0.1534],[4268,0.1528],[4612,0.1518],[4983,0.1515],[5384,0.1516],[5817,0.1544],[6285,0.1567],[6791,0.1576],[7337,0.1574],[7928,0.1587],[8566,0.1601],[9255,0.1618],[10000,0.1619]]},"9":{"first10":[3,6,6,2,1,4,5,5,4,5],"frac":[0.2,0.24,0.1637],"curve":[[1,0.0],[2,0.0],[3,0.0],[4,0.0],[5,0.0],[6,0.0],[7,0.0],[8,0.0],[9,0.0],[10,0.0],[11,0.0],[12,0.0],[13,0.0],[14,0.0],[15,0.0],[16,0.0],[18,0.0],[19,0.0],[20,0.0],[22,0.0],[24,0.0417],[26,0.0385],[28,0.0357],[30,0.0667],[33,0.0606],[35,0.0857],[38,0.0789],[41,0.0976],[44,0.0909],[48,0.0833],[52,0.0962],[56,0.1071],[60,0.1],[65,0.0923],[71,0.0845],[76,0.1053],[82,0.1098],[89,0.1236],[96,0.125],[104,0.1346],[112,0.125],[121,0.124],[131,0.1298],[142,0.1338],[153,0.1307],[165,0.1333],[179,0.1341],[193,0.1347],[209,0.134],[225,0.1378],[244,0.1393],[263,0.1521],[284,0.1549],[307,0.1531],[332,0.1446],[359,0.1448],[387,0.1473],[419,0.1527],[452,0.1527],[489,0.1493],[528,0.1477],[571,0.1471],[616,0.1494],[666,0.1502],[720,0.1514],[778,0.1542],[840,0.1512],[908,0.1531],[981,0.1529],[1060,0.1519],[1145,0.1572],[1237,0.1528],[1337,0.1511],[1444,0.1524],[1561,0.155],[1686,0.1572],[1822,0.1537],[1968,0.1535],[2127,0.1519],[2298,0.1532],[2483,0.1538],[2683,0.1543],[2899,0.1535],[3132,0.1536],[3384,0.154],[3656,0.157],[3950,0.157],[4268,0.1593],[4612,0.1605],[4983,0.1611],[5384,0.1603],[5817,0.1613],[6285,0.1634],[6791,0.1614],[7337,0.1606],[7928,0.1618],[8566,0.1606],[9255,0.1612],[10000,0.1637]]}},"s13":{"vals":[[0.26,0.3,0.81],[0.09,0.6,0.73],[0.19,0.06,0.27],[0.66,0.56,0.15],[0.43,0.67,0.42],[0.63,0.97,0.68]],"bool":[[1,1,0],[1,0,0],[1,1,1],[0,1,1],[1,0,1],[0,0,0]],"rows":[2,1,3,2,2,0],"cols":[59695,60163,59974],"pmf":[0.0647,0.2885,0.4306,0.2162],"mean":1.79832},"fl":[181,186,195,193,190,181,195,193,190,186,180,182,191,198,185,195,197,184,194,174,180,189,185,180,187,183,187,172,180,178,178,188,184,195,196,190,180,181,184,182,195,186,196,185,190,182,179,190,191,186,188,190,200,187,191,186,193,181,194,185,195,185,192,184,192,195,188,190,198,190,190,196,197,190,195,191,184,187,195,189,196,187,193,191,194,190,189,189,190,202,205,185,186,187,208,190,196,178,192,192,203,183,190,193,184,199,190,181,197,198,191,193,197,191,196,188,199,189,189,187,198,176,202,186,199,191,195,191,210,190,197,193,199,187,190,191,200,185,193,193,187,188,190,192,185,190,184,195,193,187,201,192,196,193,188,197,198,178,197,195,198,193,194,185,201,190,201,197,181,190,195,181,191,187,193,195,197,200,200,191,205,187,201,187,203,195,199,195,210,192,205,210,187,196,196,196,201,190,212,187,198,199,201,193,203,187,197,191,203,202,194,206,189,195,207,202,193,210,198,211,230,210,218,215,210,211,219,209,215,214,216,214,213,210,217,210,221,209,222,218,215,213,215,215,215,216,215,210,220,222,209,207,230,220,220,213,219,208,208,208,225,210,216,222,217,210,225,213,215,210,220,210,225,217,220,208,220,208,224,208,221,214,231,219,230,214,229,220,223,216,221,221,217,216,230,209,220,215,223,212,221,212,224,212,228,218,218,212,230,218,228,212,224,214,226,216,222,203,225,219,228,215,228,216,215,210,219,208,209,216,229,213,230,217,230,217,222,214,215,222,212,213],"sp":["Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Adelie","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Chinstrap","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo","Gentoo"],"stats":{"Adelie":{"n":151,"mean":189.95,"sd0":6.518,"sd1":6.539,"npsd":6.518},"Chinstrap":{"n":68,"mean":195.82,"sd0":7.079,"sd1":7.132,"npsd":7.079},"Gentoo":{"n":123,"mean":217.19,"sd0":6.459,"sd1":6.485,"npsd":6.459}},"gentoo":{"m":217.1869918699187,"s":6.4585603287620605,"model":0.579,"model_noh":0.536,"data":0.602,"pk":0.0618,"pkm":61.77,"wrongvar_pk":0.00956}};
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const LIB = {py: "Python", np: "NumPy", pd: "pandas", plt: "Matplotlib", sp: "SciPy"};
+const ST = {new: ["new", "NEW"], rev: ["rev", "مراجعة"], trap: ["trap", "فخ"]};
+const C = n => `<code>${n}</code>`;
+const T = (ar, en) => `${ar} <bdi>(${en})</bdi>`;
+
+/* ---------- explanations: key -> entry. l = library, t = status, n = name, s = one line (index), d = body, a = args, x = trap,
+   c = control to flash (an entry with c shows its cell's live panel inside the card), go = action ---------- */
+const E = {
+ imp: {l: "py", t: "rev", n: "import numpy as np", s: `تحميل ${T("مكتبة", "library")} باسم مختصر`,
+  d: `<p>${C("import")} يحمّل ${T("مكتبة", "library")} لنستعملها. و${C("as np")} يعطيها اسمًا قصيرًا، فنكتب ${C("np.mean")} بدل ${C("numpy.mean")}.</p><p>السطور الثلاثة الأولى بالطريقة نفسها: ${C("np")} و${C("pd")} و${C("plt")}. هذه الأسماء المختصرة يستعملها كل العالم، فستجدها في أي كود تقرؤه.</p>`},
+ from: {l: "py", t: "new", n: "from scipy.stats import norm", s: `أخذ شيء واحد من ${T("مكتبة", "library")}`,
+  d: `<p>${C("from … import …")} تأخذ شيئًا واحدًا من داخل مكتبة. هنا نأخذ ${C("norm")}، أي ${T("التوزيع الطبيعي", "normal distribution")}، من جزء الإحصاء ${C("scipy.stats")}.</p><p>بعدها نكتب ${C("norm.pdf(...)")} مباشرة، بدل ${C("scipy.stats.norm.pdf(...)")}.</p>`},
+ def: {l: "py", t: "rev", n: "def check(label, got, expected, tol=1e-2)", s: `تعريف ${T("دالة", "function")}، ومعامل بقيمة افتراضية`,
+  d: `<p>${C("def")} تعرّف ${T("دالة", "function")} اسمها ${C("check")}، وتأخذ أربعة ${T("معاملات", "parameters")}.</p><p>${C("tol=1e-2")} معامل له ${T("قيمة افتراضية", "default value")}: إن لم تكتبه يأخذ 0.01. و${C("1e-2")} ${T("كتابة علمية", "scientific notation")} تعني 1 × 10⁻² = 0.01.</p>`,
+  a: [["label", "نص يظهر بجانب ✅ أو ❌"], ["got", "إجابتك"], ["expected", "الإجابة الصحيحة"], ["tol", `الفرق المسموح ${T("", "tolerance")}؛ في Task 4 مثلًا 0.002`]]},
+ doc: {l: "py", t: "new", n: '"""docstring"""', s: `${T("وصف الدالة", "docstring")} داخلها`,
+  d: `<p>النص بين ثلاث علامات تنصيص في أول الدالة اسمه ${T("نص التوثيق", "docstring")}. يشرح ماذا تفعل الدالة. لا يُنفَّذ، لكن Colab يعرضه حين تمرّ بالمؤشر على اسم الدالة.</p>`},
+ list: {l: "py", t: "rev", n: "[ … ]", s: T("قائمة", "list"),
+  d: `<p>${T("القائمة", "list")} قيم بين قوسين مربعين، بينها فواصل. هنا قائمة بأسماء الأعمدة الأربعة التي نريدها كاملة.</p><p>انقر ${C("PENGUIN_FEATURES")} في «المتغيرات الناتجة» لترى شكلها.</p>`},
+ try: {l: "py", t: "rev", n: "try: … except FileNotFoundError:", s: `جرّب، وإن فشل افعل شيئًا آخر ${T("", "exception")}`,
+  d: `<p>${C("try")} تجرّب السطر. إن لم يوجد الملف ${C("penguins.csv")} بجانب الدفتر يظهر ${T("استثناء", "exception")} اسمه ${C("FileNotFoundError")}. عندها ينتقل البرنامج إلى ${C("except")} ويحمّل البيانات من الإنترنت بدل أن يتوقف.</p>`},
+ csv: {l: "pd", t: "rev", n: "pd.read_csv(path)", s: `قراءة ملف CSV إلى ${T("جدول", "DataFrame")}`,
+  d: `<p>تقرأ ملفًا نصيًا فيه قيم بينها فواصل، وتعيد ${T("جدولًا", "DataFrame")}. الصف الأول في الملف يصير أسماء ${T("الأعمدة", "columns")}.</p>`},
+ dropna: {l: "pd", t: "rev", n: "df.dropna(subset=…).reset_index(drop=True)", s: `حذف الصفوف الناقصة ${T("", "NaN")} وإعادة الترقيم`,
+  d: `<p>${C("dropna")} تحذف كل ${T("صف", "row")} فيه ${T("قيمة ناقصة", "missing value, NaN")} في الأعمدة المذكورة في ${C("subset")}. بطريقان بلا قياسات، فيبقى 342 من 344.</p><p>${C("reset_index(drop=True)")} يعيد ${T("ترقيم الصفوف", "index")} 0، 1، 2… بعد الحذف، حتى لا تبقى فجوات.</p>`,
+  a: [["subset", "الأعمدة التي نفحصها فقط"], ["drop=True", "لا تحفظ الترقيم القديم عمودًا جديدًا"]]},
+ len: {l: "py", t: "new", n: "len(x)", s: `عدد العناصر ${T("", "length")}`,
+  d: `<p>${C("len")} تعيد ${T("عدد العناصر", "length")}: في قائمة، أو مصفوفة، أو عدد صفوف جدول. ${C("len(peng)")} = 342.</p><p>في 1.4 نستعملها في القسمة: ${C("counts / (len(fl) * 5)")}، أي n في الصيغة.</p>`},
+ rng: {l: "np", t: "new", n: "np.random.default_rng(seed)", s: `${T("مولّد أرقام عشوائية", "random generator")} بنقطة بداية`, c: "c11-seed",
+  d: `<p>يصنع ${T("مولّد أرقام عشوائية", "random number generator")}، ونحفظه في ${C("rng")}. منه نطلب الرميات: ${C("rng.integers")} و${C("rng.random")}.</p><p>${T("البذرة", "seed")} رقم البداية. الحاسوب لا يرمي نردًا حقيقيًا، بل يحسب سلسلة أرقام تبدو عشوائية. السلسلة كلها تتحدد بالبذرة: البذرة نفسها تعطي الأرقام نفسها، عندك وعند زميلك وعندي.</p><p>جرّب الأزرار في اللوحة: غيّر البذرة ثم ارجع إلى 0، فتعود الرميات نفسها.</p>`,
+  a: [["seed", "أي عدد صحيح. 0 و1 و42 كلها صالحة؛ المهم أن يبقى ثابتًا. بلا رقم: أرقام جديدة في كل تشغيل"]]},
+ for: {l: "py", t: "rev", n: "for n in (10, 100, 10000):", s: `${T("حلقة", "loop")} على مجموعة قيم`,
+  d: `<p>${T("الحلقة", "for loop")} تكرر السطور المزاحة تحتها، مرة لكل قيمة. في المرة الأولى ${C("n = 10")}، ثم 100، ثم 10000.</p><p>القيم بين قوسين عاديين اسمها ${T("صف ثابت", "tuple")}: مثل القائمة، لكن لا نغيّرها.</p><p>انتبه: الرميات المئة <b>ليست</b> أول مئة رمية؛ المولّد يكمل بعد العشر الأولى. انظر الفخ «المولّد يتابع».</p>`},
+ ints: {l: "np", t: "new", n: "rng.integers(low, high, size)", s: `${T("أعداد صحيحة", "integers")} عشوائية، high لا يدخل`, c: "c11-high", x: `<b>فخ:</b> ${C("high")} لا يدخل. ${C("integers(1, 7)")} تعطي 1 إلى 6. جرّب 6 في اللوحة.`,
+  d: `<p>تعطي ${C("size")} ${T("عددًا صحيحًا", "integer")} عشوائيًا، وكل قيمة ممكنة لها الفرصة نفسها. هذا نرد عادل.</p><p>النتيجة ${T("مصفوفة", "array")} نحفظها في ${C("rolls")}.</p>`,
+  a: [["low", "أصغر قيمة ممكنة (تدخل)"], ["high", "الحد الأعلى (لا يدخل)"], ["size", `كم عددًا نريد؛ هنا n. ويمكن أن يكون ${T("شكلًا", "shape")} مثل (100, 3)`]]},
+ fstr: {l: "py", t: "new", n: 'f"{n:6d} … {x:.4f}"', s: `${T("نص منسَّق", "f-string")} فيه قيم`,
+  d: `<p>${T("النص المنسَّق", "f-string")} يبدأ بحرف ${C("f")}، وما بين ${C("{ }")} يُحسب ويوضع مكانه. هذا مرّ عليك. الجديد هنا ${T("التنسيق", "format spec")} بعد النقطتين:</p>`,
+  a: [[":6d", "عدد صحيح (d) في 6 خانات، فتصطف الأرقام تحت بعضها"], [":.4f", "عدد عشري (f) بأربع منازل بعد الفاصلة: 0.1689"], [":10s", "نص (s) في 10 خانات (في 1.5)"]]},
+ eq: {l: "np", t: "new", n: "rolls == 6", s: `مقارنة على كل عناصر ${T("المصفوفة", "array")}`, c: "c11-dice",
+  d: `<p>في NumPy ${T("المقارنة", "comparison")} تعمل على كل عنصر وحده، وتعطي مصفوفة بالطول نفسه من ${C("True")} و${C("False")}.</p><p>${C("[6, 4, 4, 2] == 6")} تعطي ${C("[True, False, False, False]")}. هذه المصفوفة اسمها ${T("قناع", "mask")}.</p>`},
+ meanb: {l: "np", t: "new", n: "np.mean(rolls == 6)", s: `${T("متوسط", "mean")} True/False = الكسر`,
+  d: `<p>هذه أهم حيلة في الخلية. Python يعدّ ${C("True")} = 1 و${C("False")} = 0. فـ${T("متوسط", "mean")} ${T("القناع", "mask")} = عدد الـ True ÷ عدد الكل.</p><p>وهذه بالضبط صيغة النظري: <b>عدد مرات حدوث A ÷ عدد المحاولات</b>. سطر واحد بدل حلقة عدّ.</p>`},
+ df: {l: "pd", t: "rev", n: "pd.DataFrame({ … })", s: `${T("جدول", "DataFrame")} من ${T("قاموس", "dict")}`, c: "c12-df",
+  d: `<p>نبني ${T("الجدول", "DataFrame")} من ${T("قاموس", "dict")}: كل ${T("مفتاح", "key")} يصير اسم ${T("عمود", "column")}، وقائمته تصير قيم العمود.</p><p>القائمتان طولهما 100، فالجدول 100 صف وعمودان. انظر أول صفوفه في اللوحة، أو انقر ${C("catch")} في «المتغيرات الناتجة».</p>`},
+ lmul: {l: "py", t: "new", n: '["sea bass"] * 60 + ["salmon"] * 40', s: `تكرار ${T("قائمة", "list")} ووصل قائمتين`, c: "c12-df",
+  d: `<p>${C("* 60")} على ${T("قائمة", "list")} يكرر عناصرها 60 مرة. و${C("+")} بين قائمتين يصلهما: الثانية بعد الأولى.</p><p>النتيجة قائمة طولها 100: ستون «sea bass» ثم أربعون «salmon».</p><p>انتبه: على ${T("مصفوفة", "array")} NumPy العملية ${C("*")} تضرب الأرقام، أما على قائمة Python فتكرر.</p>`},
+ ct: {l: "pd", t: "new", n: "pd.crosstab(index, columns, margins=…)", s: `${T("جدول عدّ", "contingency table")} لكل زوج من قيمتين`, c: "c12-marg",
+  d: `<p>${C("crosstab")} تمرّ على الصفوف المئة، وتعدّ كم صفًا فيه كل زوج: (sea bass, light)، (sea bass, dark)… وتضع العدد في خانته. النتيجة ${T("جدول عدّ", "contingency table")}، وهو الجدول 1 في الـ Notes.</p>`,
+  a: [["index", "العمود الذي تصير قيمه صفوفًا (species)"], ["columns", "العمود الذي تصير قيمه أعمدة (look)"], ["margins", `True تضيف صف وعمود ${T("المجاميع", "margins")} باسم All`]]},
+ round: {l: "py", t: "rev", n: "round(x, 3)", s: `${T("تقريب", "rounding")} إلى منازل عشرية`,
+  d: `<p>${T("تقرّب", "round")} الرقم إلى 3 منازل: 0.93333 تصير 0.933. التقريب للطباعة فقط؛ لا تقرّب قبل أن تنتهي من الحساب.</p>`},
+ rand: {l: "np", t: "new", n: "rng.random(size)", s: `أعداد ${T("عشرية", "float")} عشوائية بين 0 و1`, c: "c13-stage", go: () => setStage(0),
+  d: `<p>تعطي ${T("أعدادًا عشرية", "floats")} بين 0 و1، كلها بالفرصة نفسها.</p><p>الـ ${C("size")} هنا ${T("شكل", "shape")}: ${C("(100000, 3)")} أي ${T("مصفوفة", "array")} فيها 100000 صف و3 أعمدة. كل صف شبكة، وكل عمود سمكة في الشبكة.</p>`,
+  a: [["size", "عدد، أو شكل بين قوسين: (rows, columns)"]]},
+ lt: {l: "np", t: "new", n: "… < 0.6", s: `True ${T("باحتمال", "with probability")} 0.6`, c: "c13-stage", go: () => setStage(1),
+  d: `<p>كل رقم عشوائي بين 0 و1 يكون أصغر من 0.6 في 60% من المرات. فالمقارنة تعطي ${C("True")} ${T("باحتمال", "with probability")} 0.6: هذه سمكة قاروص.</p><p>هكذا نحاكي أي حدث احتماله p: ${C("rng.random() < p")}.</p><p>${T("الشكل", "shape")} لا يتغير: ما زال (100000, 3)، لكن القيم صارت True وFalse، أي ${T("قناع", "mask")}.</p>`},
+ axis: {l: "np", t: "new", n: ".sum(axis=1)", s: `الجمع على ${T("محور", "axis")}: 0 الأعمدة، 1 الصفوف`, c: "c13-axis", go: () => setStage(2),
+  d: `<p>${T("المحور", "axis")} هو <b>الاتجاه الذي نطويه</b> بالجمع.</p><ul><li>${C("axis=1")}: نجمع على طول كل ${T("صف", "row")}، فيبقى رقم لكل صف: عدد القاروص في كل شبكة. ${T("الشكل", "shape")} (100000,).</li><li>${C("axis=0")}: نجمع على طول كل ${T("عمود", "column")}، نازلين، فيبقى رقم لكل عمود. الشكل (3,).</li></ul><p>قاعدة للتذكر: الرقم في ${C("axis")} هو البُعد الذي <b>يختفي</b> من الشكل (100000, 3).</p><p>جرّب الزرين في اللوحة.</p>`,
+  a: [["axis=0", "يختفي الصف: نتيجة لكل عمود"], ["axis=1", "يختفي العمود: نتيجة لكل صف"], ["(بلا axis)", "مجموع كل العناصر في رقم واحد"]],
+  x: `<b>فخ:</b> ${C("axis=0")} لا يعطي رسالة خطأ، لكنه يعدّ شيئًا آخر.`},
+ dict: {l: "py", t: "new", n: "{0: 0.064, 1: 0.288, …}", s: `${T("قاموس", "dict")}: مفتاح ← قيمة`,
+  d: `<p>${T("القاموس", "dict")} أزواج ${C("key: value")} بين قوسين معقوصين. نصل إلى ${T("القيمة", "value")} بـ${T("مفتاحها", "key")}: ${C("exact[2]")} = 0.432.</p><p>هنا المفتاح قيمة X، والقيمة احتمالها من المثال 3.4. هذه ${T("دالة الكتلة الاحتمالية", "PMF")} مكتوبة في سطر.</p>`},
+ range: {l: "py", t: "rev", n: "range(4)", s: "0، 1، 2، 3",
+  d: `<p>${C("range(4)")} تعطي 0 و1 و2 و3. أربعة أعداد، و4 لا تدخل، كالعادة في Python. نستعملها في ${T("الحلقة", "loop")}.</p>`},
+ amean: {l: "np", t: "rev", n: "nets.mean()", s: `${T("المتوسط", "mean")}، وهنا يقابل E[X]`,
+  d: `<p>${T("متوسط", "mean")} عدد القاروص في 100000 شبكة: 1.79832. ${T("القيمة المتوقعة", "expected value")} من الصيغة E[X] = Σ x P(X = x) = 1.8.</p><p>المتوسط على عينة كبيرة يقترب من القيمة المتوقعة، كما اقترب الكسر من 1/6 في 1.1.</p>`},
+ tonp: {l: "pd", t: "rev", n: 'peng["flipper_length_mm"].to_numpy()', s: `عمود من الجدول إلى ${T("مصفوفة", "array")}`,
+  d: `<p>${C('peng["flipper_length_mm"]')} يأخذ ${T("عمودًا", "column")} واحدًا، ونوعه ${C("Series")}. و${C("to_numpy()")} يحوله إلى ${T("مصفوفة", "array")} NumPy عادية فيها 342 رقمًا.</p>`},
+ arange: {l: "np", t: "new", n: "np.arange(start, stop, step)", s: `أرقام بـ${T("خطوة", "step")} ثابتة، stop لا يدخل`, c: "c14-w", x: `<b>فخ:</b> ${C("stop")} لا يدخل. لذلك كتبنا 236 لتكون 235 آخر حافة.`,
+  d: `<p>تعطي أرقامًا تبدأ من ${C("start")} وتزيد ${C("step")} كل مرة، وتتوقف قبل ${C("stop")}.</p><p>${C("np.arange(170, 236, 5)")} = 170، 175، … 235: هذه ${T("حواف", "edges")} ${T("الأعمدة", "bins")}، 14 حافة تصنع 13 عمودًا.</p>`,
+  a: [["start", "أول رقم"], ["stop", "الحد (لا يدخل)"], ["step", "الخطوة، وهي هنا عرض العمود"]]},
+ unpack: {l: "py", t: "new", n: "counts, _ = …", s: `${T("توزيع", "unpacking")} نتيجتين على اسمين`,
+  d: `<p>${C("np.histogram")} تعيد شيئين معًا: الأعداد والحواف. الكتابة ${C("a, b = …")} اسمها ${T("التوزيع", "unpacking")}: تضع الأول في ${C("a")} والثاني في ${C("b")}.</p><p>الاسم ${C("_")} يعني «لا أحتاجه». الحواف عندنا أصلًا في ${C("edges")}.</p>`},
+ histo: {l: "np", t: "new", n: "np.histogram(a, bins)", s: `العدّ في ${T("الأعمدة", "bins")} دون رسم`, c: "c14-w",
+  d: `<p>تعدّ كم قيمة تقع في كل ${T("عمود", "bin")}، ولا ترسم شيئًا. تعيد (الأعداد، الحواف).</p><p>كل عمود يأخذ ${T("حافته", "edge")} اليسرى ولا يأخذ اليمنى: العمود 190–195 فيه 190 إلى 194. إلا العمود الأخير فيأخذ الحافتين.</p>`,
+  a: [["a", "البيانات"], ["bins", "قائمة الحواف، أو عدد الأعمدة"]]},
+ index: {l: "py", t: "rev", n: "counts[4]", s: `العنصر رقم 4 ${T("", "index")}، والعدّ من 0`,
+  d: `<p>${T("الترقيم", "indexing")} يبدأ من 0. فـ${C("counts[4]")} هو العمود الخامس: 170، 175، 180، 185، <b>190</b>. عدده 62.</p>`},
+ hist: {l: "plt", t: "new", n: "plt.hist(x, bins, density, color, edgecolor)", s: `رسم ${T("المدرّج التكراري", "histogram")}`, c: "c14-d",
+  d: `<p>ترسم ${T("المدرّج التكراري", "histogram")}: تعدّ وترسم معًا. مع ${C("density=True")} تقسم كل عدد على <span dir="ltr">(n × width)</span> بنفسها، فيصير الارتفاع ${T("كثافة", "density")} وتطابق الأعمدة ${C("density")} التي حسبناها باليد.</p><p>غيّر المعاملات في اللوحة.</p>`,
+  a: [["bins", "الحواف (أو عدد الأعمدة)"], ["density", "True: الارتفاع كثافة والمساحة 1. False: الارتفاع عدد"], ["color", "لون الأعمدة"], ["edgecolor", "لون حدود كل عمود؛ الأبيض يفصل الأعمدة"], ["alpha", `${T("الشفافية", "transparency")} من 0 إلى 1 (في 1.5)`]]},
+ labels: {l: "plt", t: "rev", n: "plt.xlabel / plt.ylabel", s: `عناوين ${T("المحاور", "axes")}`,
+  d: `<p>عنوان ${T("المحور", "axis")} الأفقي والعمودي. اكتب الوحدة دائمًا. والعنوان يجب أن يطابق الرسم: إن جعلت ${C("density=False")} فالمحور صار عددًا، لا ${T("كثافة", "density")}.</p>`},
+ linspace: {l: "np", t: "new", n: "np.linspace(start, stop, num)", s: `num رقمًا ${T("متساوية البعد", "evenly spaced")}، الطرفان يدخلان`, c: "c15-n",
+  d: `<p>تعطي ${C("num")} رقمًا ${T("متساوية البعد", "evenly spaced")} بين ${C("start")} و${C("stop")}، <b>والطرفان يدخلان</b>.</p><p><b>الفرق عن arange:</b> في ${C("arange")} تعطي الخطوة، وفي ${C("linspace")} تعطي العدد. للرسم نستعمل ${C("linspace")} لأننا نريد عددًا كافيًا من النقاط.</p><p>${C("plt.plot")} يصل النقاط بخطوط مستقيمة. حرّك ${C("num")} في اللوحة وانظر متى يبدو المنحنى مكسورًا.</p>`,
+  a: [["start, stop", "الطرفان (يدخلان)"], ["num", "عدد النقاط"]]},
+ items: {l: "py", t: "new", n: "for sp, col in colors.items():", s: `المرور على أزواج ${T("القاموس", "dict")}`,
+  d: `<p>${C(".items()")} تعطي أزواج ${T("القاموس", "dict")}: ${C('("Adelie", "tab:orange")')}، ثم Chinstrap، ثم Gentoo.</p><p>و${C("sp, col")} ${T("يوزع", "unpacks")} كل زوج على اسمين، فنحصل على الاسم واللون معًا في كل دورة.</p>`},
+ loc: {l: "pd", t: "new", n: 'peng.loc[condition, column]', s: `اختيار صفوف بشرط وعمود باسمه ${T("", "label-based selection")}`,
+  d: `<p>${C(".loc[rows, column]")}: الصفوف أولًا، ثم العمود. الصفوف هنا <b>شرط</b>: ${C('peng["species"] == sp')} ${T("قناع", "mask")} من 342 True/False، True للبطاريق من النوع sp.</p><p>النتيجة عمود الزعانف لهذا النوع فقط، ونوعه ${C("Series")}. لـ Adelie: 151 رقمًا.</p>`,
+  a: [["condition", "قناع True/False بطول الجدول"], ["column", "اسم العمود الذي نريده"]]},
+ std: {l: "pd", t: "trap", n: "v.std(ddof=0)", s: `${T("الانحراف المعياري", "standard deviation")} بالقسمة على n`, c: "c15-dd",
+  x: `<b>فخ:</b> في pandas القيمة الافتراضية ${C("ddof=1")} (القسمة على n−1)، وفي NumPy ${C("ddof=0")}. بلا ${C("ddof=0")} تختلف أرقامك عن الـ Notes وعن خلايا التحقق.`,
+  d: `<p>${T("الانحراف المعياري", "standard deviation")} σ: متوسط بُعد القيم عن ${T("المتوسط", "mean")}. ${C("ddof")} يحدد على ماذا نقسم: n − ddof.</p>`,
+  a: [["ddof=0", "نقسم على n (كما في الـ Notes)"], ["ddof=1", "نقسم على n−1 (الافتراضي في pandas)"]]},
+ alpha: {l: "plt", t: "new", n: "alpha=0.3", s: T("الشفافية", "transparency"), c: "c15-al",
+  d: `<p>${C("alpha")} هو ${T("الشفافية", "transparency")}: من 0 (شفاف تمامًا) إلى 1 (معتم). المدرّجات الثلاثة متداخلة، فنجعلها شفافة لنرى ما تحتها والمنحنى فوقها.</p>`},
+ plot: {l: "plt", t: "new", n: "plt.plot(x, y, color, label)", s: `رسم خط يصل النقاط ${T("", "line plot")}`, c: "c15-sc",
+  d: `<p>ترسم خطًا يصل النقاط (x, y) بالترتيب. هنا x هي ${C("xs")}، وy ارتفاع ${T("المنحنى الطبيعي", "normal curve")} عند كل نقطة.</p><p>${C("norm.pdf(xs, mean, sd)")} تحسب ${T("الكثافة", "density")} عند الـ 300 نقطة مرة واحدة.</p>`,
+  a: [["x, y", "مصفوفتان بالطول نفسه"], ["color", "لون الخط"], ["label", `الاسم الذي يظهر في ${T("مفتاح الرسم", "legend")}`]]},
+ legend: {l: "plt", t: "rev", n: "plt.legend()", s: T("مفتاح الرسم", "legend"),
+  d: `<p>يعرض ${T("مفتاح الرسم", "legend")}: مربع فيه لون كل خط واسمه. يأخذ الأسماء من ${C("label")} في ${C("plt.plot")}. بلا ${C("label")} لا شيء يظهر.</p>`},
+ cdf: {l: "sp", t: "new", n: "norm.cdf(x, loc, scale)", s: `المساحة تحت المنحنى يسار x ${T("", "CDF")}`, c: "c15-ab",
+  d: `<p>${C("norm.pdf")} ارتفاع المنحنى، أي ${T("الكثافة", "density")}. و${C("norm.cdf")} ${T("دالة التوزيع التراكمي", "CDF")}: <b>المساحة تحت المنحنى من اليسار حتى x</b>، أي P(X ≤ x).</p><p>المساحة بين a وb = ${C("cdf(b) − cdf(a)")}: كل ما يسار b ناقص ما يسار a. هذا ${T("الاحتمال", "probability")} P(a ≤ X ≤ b).</p><p>حرّك a وb في اللوحة. ونصف المليمتر: الطول 210 يمثل 209.5 إلى 210.5.</p>`,
+  x: `<b>فخ:</b> المعامل الثالث ${C("scale")} هو σ لا ${T("التباين", "variance")} σ². جرّب زر ${C("sd**2")} في اللوحة.`,
+  a: [["x", "النقطة (أو مصفوفة نقاط)"], ["loc", `${T("المتوسط", "mean")} μ`], ["scale", `${T("الانحراف المعياري", "standard deviation")} σ`]]},
+ andm: {l: "py", t: "trap", n: "np.mean((g >= 210) & (g <= 220))", s: `شرطان معًا على مصفوفة ${T("", "element-wise AND")}`,
+  x: `<b>فخ:</b> الأقواس حول كل شرط إجبارية، و${C("and")} لا تعمل هنا. اكتب ${C("&")}.`,
+  d: `<p>${C("&")} تعني «و» ${T("عنصرًا بعنصر", "element-wise")}: True فقط إذا تحقق الشرطان. ثم ${C("np.mean")} يعطي الكسر، كما في 1.1.</p><p>البيانات أعداد صحيحة، فهنا نكتب 210 و220 كما هما، بلا نصف مليمتر.</p>`},
+ tuple2: {l: "py", t: "new", n: "m, s = g.mean(), g.std(ddof=0)", s: `${T("إسناد", "assignment")} قيمتين في سطر`,
+  d: `<p>القيمتان على اليمين تذهبان بالترتيب إلى الاسمين على اليسار: ${C("m")} ${T("المتوسط", "mean")} و${C("s")} ${T("الانحراف المعياري", "standard deviation")}. هذا ${T("التوزيع", "unpacking")} نفسه الذي فككنا به نتيجة ${C("np.histogram")}.</p>`},
+ riem: {l: "np", t: "new", n: "np.sum(pdf) * dx", s: `المساحة = مجموع الارتفاع × العرض ${T("", "Riemann sum")}`, c: "c16-k",
+  d: `<p>نقسم المجال إلى شرائح رفيعة عرضها ${C("dx = xm[1] - xm[0]")}. مساحة كل شريحة ≈ ارتفاع × عرض. نجمع الارتفاعات ونضرب في العرض. هذا ${T("مجموع ريمان", "Riemann sum")}.</p><p>هذه فكرة مساحة الأعمدة في المدرّج نفسها (1.4)، بأعمدة رفيعة جدًا. حرّك عدد الشرائح في اللوحة.</p>`}
+};
+/* T("", en) gives a bare English tag after an Arabic phrase: tidy the leading space */
+/* shapes such as (100000, 3) or (3,) are isolated LTR so the Arabic sentence does not reorder them */
+const ltrShapes = h => h.replace(/(^|[^\w(">])(\(\d[\d, ]*,?\))/g, (m, p, t) => `${p}<span dir="ltr">${t}</span>`);
+Object.values(E).forEach(e => ["s", "d", "x"].forEach(f => { if (e[f]) e[f] = ltrShapes(e[f].replace(/ +<bdi>/g, " <bdi>").replace(/^ <bdi>/, "<bdi>")); }));
+Object.values(E).forEach(e => { if (e.a) e.a = e.a.map(([n, m]) => [n, ltrShapes(m)]); });
+
+/* ---------- syntax colours (editor style) ---------- */
+const KW = new Set(["import","from","as","def","return","for","in","try","except","if","else","elif","and","or","not","while","with","lambda","pass"]);
+const CONST = new Set(["True","False","None"]);
+const BUILTIN = new Set(["print","len","range","round","isinstance","str","int","float","list","dict","sum","max","min","abs"]);
+const MODS = new Set(["np","pd","plt","norm"]);
+function classify(t) {
+ const cls = new Array(t.length).fill("");
+ const fill = (i, j, c) => { for (let k = i; k < j; k++) cls[k] = c; };
+ let i = 0;
+ while (i < t.length) {
+  const ch = t[i];
+  if (ch === "#") { let j = t.indexOf("\n", i); if (j < 0) j = t.length; fill(i, j, "cm"); i = j; continue; }
+  const sm = /^([fFrRbB]{0,2})("""|'''|"|')/.exec(t.slice(i, i + 5));
+  if (sm && !(sm[1] && /\w/.test(t[i - 1] || ""))) {
+   const q = sm[2], st = i, isF = /[fF]/.test(sm[1]);
+   let j = i + sm[0].length;
+   while (j < t.length && t.slice(j, j + q.length) !== q && !(q.length === 1 && t[j] === "\n")) { if (t[j] === "\\") { j += 2; continue; } j++; }
+   const end = Math.min(t.length, j + q.length);
+   fill(st, end, "st");
+   if (isF) {
+    let k = st + sm[0].length;
+    while (k < j) {
+     if (t[k] === "{") {
+      let d = 1, m = k + 1; while (m < j && d) { if (t[m] === "{") d++; else if (t[m] === "}") d--; if (d) m++; }
+      cls[k] = "br"; if (m < t.length) cls[m] = "br";
+      const inner = t.slice(k + 1, m), colon = inner.search(/:[^}()]*$/), expr = colon >= 0 ? inner.slice(0, colon) : inner;
+      classify(expr).forEach((c, n) => cls[k + 1 + n] = c || "op");
+      if (expr.length < inner.length) fill(k + 1 + expr.length, m, "fmt");
+      k = m + 1;
+     } else k++;
+    }
+   }
+   i = end; continue;
+  }
+  if (/[0-9]/.test(ch) && !/\w/.test(t[i - 1] || "")) { const m = /^\d+(\.\d+)?(e-?\d+)?/.exec(t.slice(i)); fill(i, i + m[0].length, "nu"); i += m[0].length; continue; }
+  if (/[A-Za-z_]/.test(ch)) {
+   const w = /^[A-Za-z_]\w*/.exec(t.slice(i))[0], after = t.slice(i + w.length), prev = t[i - 1];
+   let c = "va";
+   if (KW.has(w)) c = "kw"; else if (CONST.has(w)) c = "co";
+   else if (prev !== "." && MODS.has(w)) c = "mo";
+   else if (/^\s*\(/.test(after)) c = BUILTIN.has(w) ? "bi" : "fn";
+   else if (/^=(?!=)/.test(after) && /[(,]\s*$/.test(t.slice(0, i))) c = "kwarg";
+   else if (prev === ".") c = "at";
+   fill(i, i + w.length, c); i += w.length; continue;
+  }
+  if (/[-+*/<>=!&|%]/.test(ch)) cls[i] = "op";
+  i++;
+ }
+ return cls;
+}
+const esc = c => c === "<" ? "&lt;" : c === ">" ? "&gt;" : c === "&" ? "&amp;" : c;
+
+/* ---------- code rendering: one row per line (number + code), each marked name is a button ---------- */
+const attr = s => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+function renderCode() {
+ $$("pre.code").forEach(pre => {
+  const raw = pre.textContent, segs = [], re = /\[\[([\w-]+)\|(.*?)\]\]/g; let last = 0, m, plain = "";
+  while ((m = re.exec(raw))) { if (m.index > last) segs.push([null, raw.slice(last, m.index)]); segs.push([m[1], m[2]]); last = re.lastIndex; }
+  if (last < raw.length) segs.push([null, raw.slice(last)]);
+  const segAt = [];
+  segs.forEach((sg, i) => { for (let n = 0; n < sg[1].length; n++) segAt.push(sg[0] ? i : -1); plain += sg[1]; });
+  const cls = classify(plain), rows = [];
+  let cur = "", oc = null, os = -1;
+  const closeSpan = () => { if (oc) { cur += "</span>"; oc = null; } };
+  const closeBtn = () => { closeSpan(); if (os >= 0) { cur += "</button>"; os = -1; } };
+  for (let i = 0; i < plain.length; i++) {
+   const ch = plain[i];
+   if (ch === "\n") { closeBtn(); rows.push(cur); cur = ""; continue; }
+   const s = segAt[i];
+   if (s !== os) { closeBtn(); if (s >= 0) { const k = segs[s][0]; cur += `<button type="button" class="tk" data-k="${k}" aria-expanded="false" aria-label="${attr("شرح " + (E[k] ? E[k].n : k))}">`; } os = s; }
+   const c = cls[i] || "";
+   if (c !== (oc || "")) { closeSpan(); if (c) { cur += `<span class="hl-${c}">`; oc = c; } }
+   cur += esc(ch);
+  }
+  closeBtn(); rows.push(cur);
+  pre.insertAdjacentHTML("afterend", `<div class="lines"><div class="lines-in">${rows.map((h, i) => `<div class="ln" data-line="${i + 1}"><span class="no">${i + 1}</span><span class="lc">${h || " "}</span></div>`).join("")}</div></div>`);
+ });
+}
+
+/* ---------- the explanation card under its line ---------- */
+let CARD = null;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function flash(el) { if (typeof el === "string") el = document.getElementById(el); if (!el) return; el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); setTimeout(() => el.classList.remove("flash"), 1600); }
+function setHashQuiet(h) { try { history.replaceState(null, "", "#" + h); } catch (e) {} }
+function lineKeys(ln) { const ks = []; $$(".tk", ln).forEach(b => { if (!ks.includes(b.dataset.k)) ks.push(b.dataset.k); }); return ks; }
+function openCard(btn, opt = {}) {
+ const view = btn.closest(".view"), cell = view.dataset.view, k = btn.dataset.k, e = E[k];
+ if (!e) return;
+ if (CARD && CARD.ln === btn.closest(".ln") && CARD.k === k && !opt.force) { closeCard(); return; }
+ closeCard(true); closeVar(true);
+ const ln = btn.closest(".ln"), lines = btn.closest(".lines"), ks = lineKeys(ln), st = ST[e.t];
+ const others = ks.filter(x => x !== k);
+ const card = document.createElement("div");
+ card.className = "card";
+ card.style.width = lines.clientWidth + "px";
+ card.innerHTML = `<div class="card-in" role="region" tabindex="-1" aria-label="${attr("شرح " + e.n)}"><span class="caret" aria-hidden="true"></span>
+  <div class="ctop"><span class="b ${e.l}">${LIB[e.l]}</span><span class="b ${st[0]}">${st[1]}</span><span class="name">${e.n}</span><span class="one">${e.s}</span>
+  <button class="xbtn" type="button" aria-label="إغلاق الشرح (Esc)">×</button></div>
+  <div class="cbody"><div class="ctext">${e.d}
+   ${e.a ? `<div class="args">${e.a.map(([n, m]) => `<div class="arg"><code>${n}</code><span>${m}</span></div>`).join("")}</div>` : ""}
+   ${e.x ? `<div class="trapbox">${e.x}</div>` : ""}</div>${e.c ? `<div class="cside"></div>` : ""}</div>
+  ${others.length ? `<div class="cfoot"><span>في السطر نفسه:</span>${others.map(o => `<button type="button" data-k="${o}">${E[o].n}</button>`).join("")}<span class="cnt">الاسم ${ks.indexOf(k) + 1} من ${ks.length} في هذا السطر</span></div>` : ""}</div>`;
+ ln.after(card);
+ ln.classList.add("cur");
+ $$(`.tk[data-k="${k}"]`, ln).forEach(b => { b.classList.add("on"); b.setAttribute("aria-expanded", "true"); });
+ if (e.c) {
+  const panel = $("#p-" + cell), rest = $(`.rest[data-cell="${cell}"]`);
+  if (panel) { $(".cside", card).appendChild(panel); rest.hidden = true; }
+  if (e.go) e.go();
+  setTimeout(() => flash(e.c), 60);
+ }
+ CARD = {cell, k, btn, card, ln, lines};
+ placeCaret();
+ setHashQuiet(cell + "--" + k);
+ if (opt.scroll !== false) {
+  const r = card.getBoundingClientRect(), top = ln.getBoundingClientRect().top;
+  if (opt.center) ln.scrollIntoView({block: "start", behavior: reduce ? "auto" : "smooth"});
+  else if (r.bottom > innerHeight && top > 140) scrollBy({top: Math.min(r.bottom - innerHeight + 16, top - 120), behavior: reduce ? "auto" : "smooth"});
+ }
+ if (opt.focus) $(".card-in", card).focus({preventScroll: true});
+}
+function placeCaret() {
+ if (!CARD) return;
+ const {card, btn, lines} = CARD;
+ card.style.width = lines.clientWidth + "px";
+ const cin = $(".card-in", card), car = $(".caret", card), r = btn.getBoundingClientRect(), c = cin.getBoundingClientRect();
+ car.style.left = Math.max(18, Math.min(c.width - 18, r.left + r.width / 2 - c.left)) + "px";
+}
+function closeCard(silent) {
+ if (!CARD) return;
+ const {cell, card, ln, btn} = CARD, panel = $(".cside .panel", card);
+ if (panel) { const rest = $(`.rest[data-cell="${cell}"]`); rest.appendChild(panel); rest.hidden = false; }
+ card.remove(); ln.classList.remove("cur");
+ $$(".tk.on", ln).forEach(b => { b.classList.remove("on"); b.setAttribute("aria-expanded", "false"); });
+ CARD = null;
+ if (!silent) { setHashQuiet(cell); btn.focus({preventScroll: true}); }
+}
+document.addEventListener("click", ev => {
+ const t = ev.target;
+ const tk = t.closest(".tk"); if (tk) { openCard(tk); return; }
+ if (CARD && t.closest(".card .xbtn")) { closeCard(); return; }
+ const ob = t.closest(".cfoot button[data-k]");
+ if (ob && CARD) { const b = $(`.tk[data-k="${ob.dataset.k}"]`, CARD.ln); if (b) openCard(b, {focus: true}); return; }
+});
+addEventListener("resize", () => placeCaret());
+document.addEventListener("scroll", ev => { if (CARD && ev.target === CARD.lines) placeCaret(); }, true);
+
+/* ---------- variables strip and structure views ---------- */
+/* lines of a structure view may hold shapes like (100, 2) */
+const sh = (code, txt) => `<div class="shp">${code}${txt ? `<span>${txt}</span>` : ""}</div>`;
+const cellsHTML = (vals, f = v => v, cls = () => "") => `<div class="cells">${vals.map((v, i) => v === "…" ? `<span class="dots">…</span>` : `<span class="${cls(v, i)}">${f(v, i)}</span>`).join("")}</div>`;
+const dsl = (id, ar, en) => `<a class="dslink" href="#setup--${id}">ما ${ar} <bdi>(${en})</bdi>؟ الشكل العام ←</a>`;
+const BINS = (() => { const e = []; for (let v = 170; v < 236; v += 5) e.push(v); return e; })();
+function binTable(row) {
+ const c = npHist(D.fl, BINS), dens = c.map(v => v / (D.fl.length * 5));
+ const hd = BINS.slice(0, -1).map(v => `${v}–${v + 5}`);
+ const tr = (lab, vals, on, fmt) => `<tr><th class="ix">${lab}</th>${vals.map((v, i) => `<td class="${on && i === 4 ? "hit" : ""}">${fmt(v)}</td>`).join("")}</tr>`;
+ return `<div class="frame fr-wrap"><table class="dtab"><thead><tr><th class="ix">bin</th>${hd.map((h, i) => `<th class="${i === 4 ? "cA" : ""}">${h}</th>`).join("")}</tr></thead><tbody>
+  ${tr("counts", c, row !== "density", v => v)}${row === "density" ? tr("density", dens, true, v => v.toFixed(4)) : ""}</tbody></table></div>`;
+}
+function scalarPic(name, val, note) { return `<div class="frame pic"><span class="cap">${name}</span><span style="font-size:22px;font-weight:700;color:var(--sandfg);background:var(--sand);border-radius:6px;padding:2px 10px">${val}</span>${note ? `<span class="cap">${note}</span>` : ""}</div>`; }
+function seriesPic(passes) {
+ return `<div style="display:flex;gap:10px;align-items:stretch"><div class="frame"><table class="dtab"><thead><tr><th class="ix">index</th><th class="cA">flipper_length_mm</th></tr></thead><tbody>
+  <tr><th class="ix">219</th><td>211.0</td></tr><tr><th class="ix">220</th><td>230.0</td></tr><tr><th class="ix">221</th><td>210.0</td></tr>
+  <tr class="gap"><th>⋮</th><td>⋮</td></tr><tr><th class="ix">341</th><td>213.0</td></tr></tbody></table></div>
+  ${passes ? `<div class="brk" style="padding-top:6px;gap:6px"><span style="color:var(--muted)">loop passes:</span><div style="border-color:var(--cA)">1 · Adelie: 151 rows (0–150)</div><div style="border-color:var(--cC)">2 · Chinstrap: 68 rows (151–218)</div><div style="border-color:var(--cG);font-weight:700">3 · Gentoo: 123 rows (219–341) ← v now</div></div>` : ""}</div>`;
+}
+const VARS = {
+ setup: [
+  {n: "peng", t: "DataFrame · shape (342, 7)", line: 18, title: T("جدول", "DataFrame"),
+   code: `    return df.dropna(subset=<span class="kA">PENGUIN_FEATURES</span>).reset_index(drop=True)\n\n<span class="v">peng</span> = load_penguins()`,
+   lines: [`متغيرًا ${T("", "variable")} اسمه ${C("peng")}، نوعه ${T("جدول", "DataFrame")}.`,
+    `كل ${T("صف", "row")} بطريق واحد: 342 صفًا. وكل ${T("عمود", "column")} قياس أو صفة: 7 أعمدة.`,
+    `الأعمدة الأربعة <span class="kAc">الملوّنة</span> هي ${C("PENGUIN_FEATURES")}: لا ${T("قيمة ناقصة", "NaN")} فيها بعد ${C("dropna")}. في عمود ${C("sex")} بقيت 9 قيم ناقصة، لأن ${C("dropna")} لم تفحصه.`,
+    `${T("الترقيم", "index")} من 0 إلى 341 بلا فجوات، بفضل ${C("reset_index")}.`],
+   shape: sh("peng.shape → (342, 7)", "342 صفًا، 7 أعمدة"), link: dsl("ds-df", "الجدول", "DataFrame"),
+   pic: () => { const F = ["bill_length_mm", "bill_depth_mm", "flipper_length_mm", "body_mass_g"], R = [[0, "Adelie", "Torgersen", "39.1", "18.7", "181.0", "3750.0", "MALE"], [1, "Adelie", "Torgersen", "39.5", "17.4", "186.0", "3800.0", "FEMALE"], [2, "Adelie", "Torgersen", "40.3", "18.0", "195.0", "3250.0", "FEMALE"], ["⋮", "⋮", "⋮", "⋮", "⋮", "⋮", "⋮", "⋮"], [341, "Gentoo", "Biscoe", "49.9", "16.1", "213.0", "5400.0", "MALE"]];
+    return `<div class="frame fr-wrap"><table class="dtab"><thead><tr><th class="ix">index</th><th>species</th><th>island</th>${F.map(f => `<th class="cA">${f}</th>`).join("")}<th>sex</th></tr></thead><tbody>${R.map(r => `<tr class="${r[0] === "⋮" ? "gap" : ""}"><th class="ix">${r[0]}</th>${r.slice(1).map((v, j) => `<td class="${j >= 2 && j <= 5 && r[0] !== "⋮" ? "" : ""}">${v}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`; }},
+  {n: "PENGUIN_FEATURES", t: "list · len 4", line: 10, title: T("قائمة", "list"),
+   code: `<span class="v">PENGUIN_FEATURES</span> = [<span class="kA">"bill_length_mm", "bill_depth_mm", "flipper_length_mm", "body_mass_g"</span>]`,
+   lines: [`متغيرًا اسمه ${C("PENGUIN_FEATURES")}، نوعه ${T("قائمة", "list")}.`, `فيها 4 ${T("نصوص", "strings")}: أسماء أعمدة القياسات، بالترتيب، من 0 إلى 3.`, `نعطيها لـ ${C("dropna(subset=…)")}: الصف الذي ينقصه أحد هذه القياسات يُحذف. الأعمدة نفسها <span class="kAc">ملوّنة</span> في جدول ${C("peng")}.`],
+   shape: sh("len(PENGUIN_FEATURES) → 4") + sh('PENGUIN_FEATURES[2] → "flipper_length_mm"'), link: dsl("ds-list", "القائمة", "list"),
+   pic: () => `<div class="frame pic"><span class="cap">PENGUIN_FEATURES</span><div class="cells">${["bill_length_mm", "bill_depth_mm", "flipper_length_mm", "body_mass_g"].map((v, i) => `<span style="display:inline-grid;gap:2px;border:0;padding:0"><small style="color:var(--muted)">[${i}]</small><span class="${i === 2 ? "hit" : ""}" style="background:${i === 2 ? "" : "var(--basstint)"};color:${i === 2 ? "" : "var(--bass)"}">"${v}"</span></span>`).join("")}</div><span class="cap">len = 4</span></div>`}],
+ c11: [
+  {n: "rng", t: "Generator · seed 0", line: 1, title: T("مولّد", "Generator"),
+   code: `<span class="v">rng</span> = np.random.default_rng(<span class="kA">0</span>)`,
+   lines: [`متغيرًا اسمه ${C("rng")}، نوعه ${T("مولّد", "Generator")}. هو آلة تعطي أرقامًا، وليس أرقامًا.`, `${T("البذرة", "seed")} <span class="kAc">0</span> تحدد كل الأرقام التي سيعطيها.`, `كل طلب منه يكمل من حيث توقف: الرميات العشر، ثم المئة، ثم العشرة آلاف.`],
+   shape: sh("type(rng) → numpy.random.Generator", "لا شكل له: ليس مصفوفة"),
+   pic: () => `<div class="frame pic"><div class="cells"><span style="background:var(--basstint);color:var(--bass)">seed 0</span><span class="dots">→</span><span class="hit">rng</span><span class="dots">→ integers(1, 7, 10) →</span></div>${cellsHTML(D.s11[0].first10, v => v, v => v === 6 ? "six" : "")}<span class="cap">the first 10 rolls (n = 10), the same on every computer</span></div>`},
+  {n: "rolls", t: "array · shape (10000,)", line: 3, title: T("مصفوفة", "array"),
+   code: `for n in (10, 100, 10000):\n    <span class="v">rolls</span> = rng.integers(1, 7, <span class="kA">n</span>)`,
+   lines: [`${C("rolls")} ${T("مصفوفة", "array")} من ${T("أعداد صحيحة", "integers")} من 1 إلى 6.`, `في كل دورة من ${T("الحلقة", "loop")} نكتب فوقها: طولها <span class="kAc">10</span> ثم <span class="kAc">100</span> ثم <span class="kAc">10000</span>.`, `بعد الحلقة يبقى آخرها: 10000 رمية.`, `${C("rolls == 6")} ${T("قناع", "mask")} بالشكل نفسه، و${C("np.mean")} له = 0.1689.`],
+   shape: sh("rolls.shape → (10000,)", "بُعد واحد، 10000 عنصر"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => `<div class="frame pic" style="gap:6px"><span class="cap">n = 10 · shape (10,)</span>${cellsHTML(D.s11[0].first10, v => v, v => v === 6 ? "six" : "")}
+    <span class="cap">n = 100 · shape (100,) · first 10</span>${cellsHTML([4, 6, 4, 4, 6, 5, 4, 4, 4, 6, "…"], v => v, v => v === 6 ? "six" : "")}
+    <span class="cap">n = 10000 · shape (10000,) · first 10 ← rolls after the loop</span>${cellsHTML([4, 1, 6, 3, 6, 5, 5, 2, 5, 1, "…"], v => v, v => v === 6 ? "six" : "hit")}
+    <span class="cap">rolls == 6 (a mask, same shape)</span>${cellsHTML([4, 1, 6, 3, 6, 5, 5, 2, 5, 1, "…"], v => v === 6 ? "T" : "F", v => v === 6 ? "T" : "F")}</div>`}],
+ c12: [
+  {n: "catch", t: "DataFrame · shape (100, 2)", line: 1, title: `${T("جدول", "DataFrame")} من ${T("قاموس", "dict")}`,
+   code: `<span class="v">catch</span> = pd.DataFrame({\n    <span class="kA">"species"</span>: <span class="uA">["sea bass"] * 60</span> + <span class="uC">["salmon"] * 40</span>,\n    <span class="kB">"look"</span>:    ["light"] * 56 + ["dark"] * 4 + ["light"] * 3 + ["dark"] * 37})`,
+   lines: [`متغيرًا اسمه ${C("catch")}، نوعه ${T("جدول", "DataFrame")}.`, `كل ${T("مفتاح", "key")} في القاموس صار ${T("عمودًا", "column")}: <span class="kAc">species</span> و<span class="kBc">look</span>.`, `كل عنصر في القائمة صار ${T("صفًّا", "row")}: أول 60 صفًّا <span class="kAc">sea bass</span>، وآخر 40 <span class="kCc">salmon</span>.`],
+   shape: sh("catch.shape → (100, 2)", "100 صف، عمودان"), link: dsl("ds-df", "الجدول", "DataFrame") + dsl("ds-dict", "القاموس", "dict"),
+   pic: () => `<div style="display:flex;gap:10px;align-items:stretch"><div class="frame"><table class="dtab"><thead><tr><th class="ix">index</th><th class="cA">species</th><th class="cB">look</th></tr></thead><tbody>
+    <tr><th class="ix">0</th><td>sea bass</td><td>light</td></tr><tr class="gap"><th>⋮</th><td>⋮</td><td>⋮</td></tr><tr><th class="ix">59</th><td>sea bass</td><td>dark</td></tr>
+    <tr class="cut"><th class="ix">60</th><td>salmon</td><td>light</td></tr><tr class="gap"><th>⋮</th><td>⋮</td><td>⋮</td></tr><tr><th class="ix">99</th><td>salmon</td><td>dark</td></tr></tbody></table></div>
+    <div class="brk" style="padding:34px 0 4px;gap:4px"><div style="flex:1;border-color:var(--kAu);color:var(--bass)">["sea bass"] * 60</div><div style="flex:1;border-color:var(--kCu);color:var(--salink)">["salmon"] * 40</div></div></div>`},
+  {n: "table", t: "DataFrame · shape (3, 3)", line: 4, title: T("جدول عدّ", "contingency table"),
+   code: `<span class="v">table</span> = pd.crosstab(<span class="kA">catch["species"]</span>, <span class="kB">catch["look"]</span>, <span class="dsh">margins=True</span>)`,
+   lines: [`${T("جدول عدّ", "contingency table")}: <span class="kAc">قيم species</span> صارت صفوفًا، و<span class="kBc">قيم look</span> صارت أعمدة.`, `في كل خانة عدد السمك الذي يجمع القيمتين: 56 سمكة قاروص فاتحة.`, `${C("margins=True")} أضاف صف ${T("المجاميع", "margins")} وعمودها ${C("All")} (المحيط المتقطع).`],
+   shape: sh("table.shape → (3, 3)", "مع صف All وعمود All"), link: dsl("ds-df", "الجدول", "DataFrame"),
+   pic: () => `<div class="frame"><table class="dtab"><thead><tr><th class="ix">species \\ look</th><th class="cB">dark</th><th class="cB">light</th><th class="mg dl">All</th></tr></thead><tbody>
+    <tr><th class="cA">salmon</th><td>37</td><td>3</td><td class="mg dl">40</td></tr><tr><th class="cA">sea bass</th><td>4</td><td class="hit">56</td><td class="mg dl">60</td></tr>
+    <tr class="dt"><th class="mg">All</th><td class="mg">41</td><td class="mg">59</td><td class="mg dl">100</td></tr></tbody></table></div>`},
+  {n: "p_light_given_bass", t: "float · 0.9333…", line: 7, title: T("عدد عشري", "float"),
+   code: `<span class="v">p_light_given_bass</span> = 56 / <span class="kA">60</span>           <span class="cm"># inside the sea bass row</span>`,
+   lines: [`عددًا ${T("عشريًا", "float")} واحدًا، لا جدولًا.`, `56 خانة (sea bass, light)، و<span class="kAc">60</span> مجموع صف sea bass.`, `هذا ${T("احتمال شرطي", "conditional probability")}: P(light | sea bass).`],
+   shape: sh("round(p_light_given_bass, 3) → 0.933"), pic: () => scalarPic("p_light_given_bass", "0.9333333333333333", "56 / 60")},
+  {n: "p_bass_given_light", t: "float · 0.9491…", line: 8, title: T("عدد عشري", "float"),
+   code: `<span class="v">p_bass_given_light</span> = 56 / <span class="kB">59</span>           <span class="cm"># inside the light column</span>`,
+   lines: [`عددًا ${T("عشريًا", "float")} واحدًا.`, `البسط نفسه 56، لكن القسمة على <span class="kBc">59</span>، مجموع عمود light.`, `هذا ${T("احتمال شرطي", "conditional probability")} آخر: P(sea bass | light).`],
+   shape: sh("round(p_bass_given_light, 3) → 0.949"), pic: () => scalarPic("p_bass_given_light", "0.9491525423728814", "56 / 59")},
+  {n: "p_light", t: "float · 0.59", line: 13, title: T("الاحتمال الكلي", "total probability"),
+   code: `<span class="v">p_light</span> = <span class="kA">(56/60) * 0.6</span> + <span class="kB">(3/40) * 0.4</span>`,
+   lines: [`عددًا ${T("عشريًا", "float")} قيمته 0.59.`, `<span class="kAc">الجزء الأول</span> 0.56 قاروص فاتح، و<span class="kBc">الثاني</span> 0.03 سلمون فاتح. كل جزء ${T("احتمال مشترك", "joint probability")}.`, `مجموعهما ${T("الاحتمال الكلي", "total probability")} P(light) = 59/100.`],
+   shape: sh("p_light → 0.59"), pic: () => scalarPic("p_light", "0.59", "0.56 + 0.03")}],
+ c13: [
+  {n: "rng", t: "Generator · seed 2", line: 1, title: T("مولّد", "Generator"),
+   code: `<span class="v">rng</span> = np.random.default_rng(<span class="kA">2</span>)`,
+   lines: [`${T("مولّد", "Generator")} جديد ${T("ببذرة", "seed")} <span class="kAc">2</span>.`, `يبدأ من جديد، فلا علاقة له بمولّد 1.1.`, `منه نطلب ${C("rng.random")} في السطر 2.`],
+   shape: sh("type(rng) → numpy.random.Generator"),
+   pic: () => `<div class="frame pic"><div class="cells"><span style="background:var(--basstint);color:var(--bass)">seed 2</span><span class="dots">→</span><span class="hit">rng</span><span class="dots">→ random((100000, 3)) →</span></div>${cellsHTML(D.s13.vals[0], v => v.toFixed(2))}<span class="cap">net 0: the first three numbers (rounded)</span></div>`},
+  {n: "nets", t: "array · shape (100000,)", line: 2, title: T("مصفوفة", "array"),
+   code: `<span class="v">nets</span> = (<span class="kA">rng.random((100000, 3)) &lt; 0.6</span>)<span class="kB">.sum(axis=1)</span>`,
+   lines: [`${C("rng.random((100000, 3))")} صنع ${T("مصفوفة", "array")} شكلها (100000, 3).`, `<span class="kAc">${C("&lt; 0.6")}</span> صنع ${T("قناعًا", "mask")} بالشكل نفسه: True (1) سمكة قاروص.`, `<span class="kBc">${C(".sum(axis=1)")}</span> طوى الأعمدة: رقم واحد لكل شبكة. هذا ${C("nets")}.`],
+   shape: sh("nets.shape → (100000,)") + sh("nets[:6] → [2 1 3 2 2 0]"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => { const S = D.s13; let h = `<div class="frame pic"><span class="cap">mask (100000, 3) · first 6 nets → sum(axis=1)</span><div class="grid3" style="grid-template-columns:auto repeat(3,40px) 22px 44px">`;
+    h += `<span></span><span class="rl" style="text-align:center">f1</span><span class="rl" style="text-align:center">f2</span><span class="rl" style="text-align:center">f3</span><span></span><span class="rl" style="text-align:center">nets</span>`;
+    S.bool.forEach((r, i) => { h += `<span class="rl">net ${i}</span>${r.map(b => `<span class="c ${b ? "T" : "F"}">${b}</span>`).join("")}<span style="color:var(--salmon);text-align:center">→</span><span class="c sum">${S.rows[i]}</span>`; });
+    h += `<span class="rl">⋮</span><span class="rl" style="text-align:center">⋮</span><span class="rl" style="text-align:center">⋮</span><span class="rl" style="text-align:center">⋮</span><span></span><span class="rl" style="text-align:center">⋮</span></div><span class="shape">(100000, <b>3</b>) → (100000,)</span></div>`; return h; }},
+  {n: "exact", t: "dict · 4 keys", line: 3, title: T("قاموس", "dict"),
+   code: `<span class="v">exact</span> = {<span class="kA">0</span>: 0.064, <span class="kA">1</span>: 0.288, <span class="kA">2</span>: 0.432, <span class="kA">3</span>: 0.216}`,
+   lines: [`${T("قاموسًا", "dict")} فيه 4 أزواج.`, `<span class="kAc">${T("المفتاح", "key")}</span> قيمة X، و${T("القيمة", "value")} احتمالها P(X = x) من المثال 3.4.`, `في الحلقة، ${C("exact[k]")} يقرأ القيمة بمفتاحها، ونقارنها بالمحاكاة.`],
+   shape: sh("len(exact) → 4") + sh("exact[2] → 0.432"), link: dsl("ds-dict", "القاموس", "dict"),
+   pic: () => `<div class="frame pic"><div class="kv" style="grid-template-columns:auto auto auto auto"><span class="cap">key</span><span></span><span class="cap">value</span><span class="cap">simulated</span>${[0, 1, 2, 3].map(k => `<span class="k">${k}</span><span class="ar2">→</span><span class="${k === 2 ? "hit" : ""}">${[0.064, 0.288, 0.432, 0.216][k]}</span><span style="color:var(--muted)">${D.s13.pmf[k].toFixed(4)}</span>`).join("")}</div><span class="cap">exact[2] reads the value of key 2</span></div>`}],
+ c14: [
+  {n: "fl", t: "array · shape (342,)", line: 1, title: T("مصفوفة", "array"),
+   code: `<span class="v">fl</span> = <span class="kA">peng["flipper_length_mm"]</span>.to_numpy()`,
+   lines: [`${C("fl")} ${T("مصفوفة", "array")} فيها 342 طولًا.`, `جاءت من <span class="kAc">عمود</span> في الجدول ${C("peng")}، ففقدت اسم العمود و${T("الترقيم", "index")}.`, `القيم ${T("أعداد عشرية", "float")}: ${C("181.")} تعني 181.0، لأن العمود في الملف كان فيه ${C("NaN")}.`],
+   shape: sh("fl.shape → (342,)"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => `<div class="frame pic"><span class="cap">fl</span>${cellsHTML([...D.fl.slice(0, 6), "…", ...D.fl.slice(-3)], v => v + ".", () => "hit")}<span class="cap">342 numbers, index 0 … 341</span></div>`},
+  {n: "edges", t: "array · shape (14,)", line: 2, title: T("مصفوفة", "array"),
+   code: `<span class="v">edges</span> = np.arange(170, <span class="kA">236</span>, 5)`,
+   lines: [`${C("edges")} ${T("مصفوفة", "array")} فيها 14 ${T("حافة", "edge")}: 170، 175، … 235.`, `<span class="kAc">236</span> لا يدخل، فآخر حافة 235.`, `بين كل حافتين ${T("عمود", "bin")}: 14 حافة تصنع 13 عمودًا.`],
+   shape: sh("edges.shape → (14,)") + sh("edges[-1] → 235"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => `<div class="frame pic"><span class="cap">edges</span>${cellsHTML(BINS, v => v, (v, i) => i === 13 ? "hit" : "")}${cellsHTML(BINS, (v, i) => "[" + i + "]", () => "ix")}<span class="cap">14 edges → 13 bins</span></div>`},
+  {n: "counts", t: "array · shape (13,)", line: 3, title: T("مصفوفة", "array"),
+   code: `<span class="v">counts</span>, _ = np.histogram(fl, <span class="kA">edges</span>)`,
+   lines: [`${C("counts")} ${T("مصفوفة", "array")} فيها 13 عددًا، عدد لكل ${T("عمود", "bin")}.`, `الأعمدة تأتي من <span class="kAc">${C("edges")}</span>: 14 حافة، 13 عمودًا.`, `${C("counts[4]")} هو العمود 190–195: 62 بطريقًا.`],
+   shape: sh("counts.shape → (13,)") + sh("counts.sum() → 342"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => binTable("counts")},
+  {n: "density", t: "array · shape (13,)", line: 4, title: T("الكثافة", "density"),
+   code: `<span class="v">density</span> = <span class="kA">counts</span> / (len(fl) * 5)`,
+   lines: [`${C("density")} ${T("مصفوفة", "array")} بالشكل نفسه (13,).`, `كل عدد من <span class="kAc">${C("counts")}</span> قُسم على 342 × 5 = 1710، ${T("عنصرًا بعنصر", "element-wise")}.`, `${C("density[4]")} = 62 ÷ 1710 = 0.0363. ومجموع ${C("density * 5")} هو 1.`],
+   shape: sh("density.shape → (13,)") + sh("np.sum(density * 5) → 1.0"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => binTable("density")}],
+ c15: [
+  {n: "xs", t: "array · shape (300,)", line: 1, title: T("مصفوفة", "array"),
+   code: `<span class="v">xs</span> = np.linspace(165, 240, <span class="kA">300</span>)`,
+   lines: [`${C("xs")} ${T("مصفوفة", "array")} فيها <span class="kAc">300</span> نقطة.`, `من 165 إلى 240، والطرفان يدخلان.`, `البعد بين كل نقطتين 75 ÷ 299 = 0.2508.`],
+   shape: sh("xs.shape → (300,)"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => `<div class="frame pic"><span class="cap">xs</span>${cellsHTML(["165.00", "165.25", "165.50", "…", "239.75", "240.00"], v => v, () => "hit")}<span class="cap">300 evenly spaced points, step 0.2508</span></div>`},
+  {n: "colors", t: "dict · 3 keys", line: 2, title: T("قاموس", "dict"),
+   code: `<span class="v">colors</span> = {<span class="kA">"Adelie"</span>: <span class="kB">"tab:orange"</span>, <span class="kA">"Chinstrap"</span>: <span class="kB">"tab:green"</span>, <span class="kA">"Gentoo"</span>: <span class="kB">"tab:blue"</span>}\nfor <span class="kA">sp</span>, <span class="kB">col</span> in colors.items():`,
+   lines: [`${T("قاموسًا", "dict")} فيه 3 أزواج.`, `<span class="kAc">${T("المفتاح", "key")}</span> اسم النوع، و<span class="kBc">${T("القيمة", "value")}</span> لونه.`, `${C(".items()")} يعطي الأزواج بالترتيب: كل زوج يذهب إلى <span class="kAc">sp</span> و<span class="kBc">col</span>.`],
+   shape: sh("len(colors) → 3") + sh('colors["Gentoo"] → "tab:blue"'), link: dsl("ds-dict", "القاموس", "dict"),
+   pic: () => `<div class="frame pic"><div class="kv"><span class="cap">key → sp</span><span></span><span class="cap">value → col</span>${[["Adelie", "tab:orange", "var(--cA)"], ["Chinstrap", "tab:green", "var(--cC)"], ["Gentoo", "tab:blue", "var(--cG)"]].map(([k, v, c]) => `<span class="k">"${k}"</span><span class="ar2">→</span><span style="color:var(--good)"><i class="sw" style="background:${c}"></i>"${v}"</span>`).join("")}</div></div>`},
+  {n: "v", t: "Series · shape (123,)", line: 4, title: T("عمود", "Series"),
+   code: `    <span class="v">v</span> = peng.loc[<span class="kA">peng["species"] == sp</span>, <span class="kB">"flipper_length_mm"</span>]`,
+   lines: [`${C("v")} عمود واحد، نوعه ${C("Series")}: قيم مع ${T("ترقيمها", "index")}.`, `<span class="kAc">الشرط</span> يختار صفوف نوع واحد، و<span class="kBc">الاسم</span> يختار العمود. في كل دورة نوع: 151 ثم 68 ثم 123 قيمة.`, `بعد الحلقة يبقى Gentoo. الترقيم يبدأ من 219 لا من 0: ${C(".loc")} يحفظ أرقام الصفوف من ${C("peng")}.`],
+   shape: sh("v.shape → (123,)", "بعد الحلقة: Gentoo"), link: dsl("ds-df", "الجدول والعمود", "DataFrame, Series"),
+   pic: () => seriesPic(true)},
+  {n: "g", t: "Series · shape (123,)", line: 11, title: T("عمود", "Series"),
+   code: `<span class="v">g</span> = peng.loc[<span class="kA">peng["species"] == "Gentoo"</span>, <span class="kB">"flipper_length_mm"</span>]`,
+   lines: [`${C("g")} ${C("Series")} لزعانف Gentoo فقط، بلا حلقة.`, `قيمه هي قيم ${C("v")} بعد الحلقة نفسها: 123 قيمة، والترقيم من 219 إلى 341.`, `منه نحسب ${C("g.mean()")} = 217.19 و${C("g.std(ddof=0)")} = 6.46.`],
+   shape: sh("g.shape → (123,)"), link: dsl("ds-df", "الجدول والعمود", "DataFrame, Series"),
+   pic: () => seriesPic(false)},
+  {n: "model", t: "float64 · 0.579…", line: 12, title: T("عدد عشري", "float"),
+   code: `<span class="v">model</span> = <span class="kA">norm.cdf(220.5, …)</span> - <span class="kB">norm.cdf(209.5, …)</span>`,
+   lines: [`عددًا ${T("عشريًا", "float")} واحدًا من NumPy.`, `<span class="kAc">المساحة يسار 220.5</span> ناقص <span class="kBc">المساحة يسار 209.5</span>.`, `هذا ${T("احتمال", "probability")} النموذج الطبيعي للأطوال 210 إلى 220.`],
+   shape: sh('f"{model:.3f}" → 0.579'), pic: () => scalarPic("model", "0.5790282144995689", "normal model")},
+  {n: "data", t: "float64 · 0.602…", line: 13, title: T("عدد عشري", "float"),
+   code: `<span class="v">data</span> = np.mean(<span class="kA">(g &gt;= 210)</span> &amp; <span class="kB">(g &lt;= 220)</span>)`,
+   lines: [`عددًا ${T("عشريًا", "float")} واحدًا.`, `${T("قناعان", "masks")} بطول 123: <span class="kAc">الأول</span> و<span class="kBc">الثاني</span>، و${C("&amp;")} يجمعهما.`, `متوسط القناع = النسبة الحقيقية في البيانات: 74 من 123.`],
+   shape: sh('f"{data:.3f}" → 0.602'), pic: () => scalarPic("data", "0.6016260162601627", "74 / 123")}],
+ c16: [
+  {n: "m", t: "float64 · 217.19…", line: 1, title: T("المتوسط", "mean"),
+   code: `<span class="v">m</span>, s = <span class="kA">g.mean()</span>, g.std(ddof=0)`,
+   lines: [`عددًا ${T("عشريًا", "float")} واحدًا: ${T("المتوسط", "mean")} μ لزعانف Gentoo بالمليمتر.`, `<span class="kAc">القيمة الأولى</span> على اليمين تذهب إلى الاسم الأول ${C("m")}.`, `${C("m/1000")} هو المتوسط نفسه بالمتر: 0.217.`],
+   shape: sh("m → 217.1869918699187"), pic: () => scalarPic("m", "217.1869918699187", "mm")},
+  {n: "s", t: "float64 · 6.459…", line: 1, title: T("الانحراف المعياري", "standard deviation"),
+   code: `m, <span class="v">s</span> = g.mean(), <span class="kA">g.std(ddof=0)</span>`,
+   lines: [`عددًا ${T("عشريًا", "float")}: ${T("الانحراف المعياري", "standard deviation")} σ بالمليمتر.`, `<span class="kAc">القيمة الثانية</span> تذهب إلى الاسم الثاني ${C("s")}.`, `${C("s/1000")} = 0.00646 متر. الانحراف الأصغر يجعل القمة أعلى.`],
+   shape: sh("s → 6.4585603287620605"), pic: () => scalarPic("s", "6.4585603287620605", "mm")},
+  {n: "xm", t: "array · shape (2001,)", line: 3, title: T("مصفوفة", "array"),
+   code: `<span class="v">xm</span> = np.linspace(0.18, 0.26, <span class="kA">2001</span>)`,
+   lines: [`${C("xm")} ${T("مصفوفة", "array")} فيها <span class="kAc">2001</span> نقطة بالمتر.`, `من 0.18 إلى 0.26 متر، والطرفان يدخلان.`, `2001 نقطة تصنع 2000 شريحة، عرض كل شريحة ${C("xm[1] - xm[0]")} = 0.00004.`],
+   shape: sh("xm.shape → (2001,)") + sh("xm[1] - xm[0] → 4.000000000001225e-05"), link: dsl("ds-array", "المصفوفة", "array"),
+   pic: () => `<div class="frame pic"><span class="cap">xm</span>${cellsHTML(["0.18", "0.18004", "0.18008", "…", "0.25996", "0.26"], v => v, () => "hit")}<span class="cap">2001 points, step 0.00004 m</span></div>`}]
+};
+let VAR = null;
+function buildVars() {
+ $$(".vars[data-cell]").forEach(sec => {
+  const cell = sec.dataset.cell, list = VARS[cell] || [];
+  sec.innerHTML = `<h3>3 · المتغيرات بعد تشغيل الخلية <span class="sub">انقر متغيرًا ${T("", "variable")} لترى شكله تحت الشريط</span></h3>
+   <div class="vchips">${list.map((v, i) => `<button type="button" class="vchip" data-var="${i}" aria-expanded="false" aria-controls="vv-${cell}"><b>${v.n}</b><span>${v.t}</span></button>`).join("")}</div>
+   <div class="varview" id="vv-${cell}" hidden></div>`;
+ });
+}
+function openVar(cell, i, opt = {}) {
+ const v = VARS[cell][i], sec = $(`.vars[data-cell="${cell}"]`), box = $(".varview", sec);
+ if (VAR && VAR.cell === cell && VAR.i === i && !opt.force) { closeVar(); return; }
+ closeVar(true); closeCard(true);
+ box.innerHTML = `<div class="sv" role="region" tabindex="-1" aria-label="${attr("شكل " + v.n)}">
+  <div class="svbar"><button type="button" class="back">→ رجوع إلى الكود (السطر ${v.line})</button><span class="svt"><code>${v.n}</code> · ${v.title}</span><button type="button" class="xbtn" aria-label="إغلاق (Esc)">×</button></div>
+  <div class="svcode">${v.code}</div>
+  <div class="svbody"><div class="svtext"><b>ماذا صنع هذا السطر؟</b><ol>${v.lines.map(l => `<li><span>${ltrShapes(l)}</span></li>`).join("")}</ol>${v.shape}${v.link || ""}</div>
+  <div class="svpic">${v.pic()}</div></div></div>`;
+ box.hidden = false;
+ const chip = $(`.vchip[data-var="${i}"]`, sec); chip.setAttribute("aria-expanded", "true");
+ VAR = {cell, i, chip, line: v.line};
+ setHashQuiet(cell + "--var-" + v.n);
+ if (opt.scroll !== false) { const r = box.getBoundingClientRect(); if (r.bottom > innerHeight) box.scrollIntoView({block: r.height > innerHeight - 100 ? "start" : "nearest", behavior: reduce ? "auto" : "smooth"}); }
+ if (opt.focus) $(".sv", box).focus({preventScroll: true});
+}
+function closeVar(silent, back) {
+ if (!VAR) return;
+ const {cell, chip, line} = VAR, box = $(`#vv-${cell}`);
+ box.hidden = true; box.innerHTML = ""; chip.setAttribute("aria-expanded", "false"); VAR = null;
+ if (silent) return;
+ setHashQuiet(cell);
+ if (back) {
+  const ln = $(`.view[data-view="${cell}"] .ln[data-line="${line}"]`);
+  if (ln) { ln.scrollIntoView({block: "center", behavior: reduce ? "auto" : "smooth"}); flash(ln); const b = $(".tk", ln); (b || chip).focus({preventScroll: true}); }
+ } else chip.focus({preventScroll: true});
+}
+document.addEventListener("click", ev => {
+ const t = ev.target, ch = t.closest(".vchip");
+ if (ch) { openVar(ch.closest(".vars").dataset.cell, +ch.dataset.var); return; }
+ if (VAR && t.closest(".sv .back")) { closeVar(false, true); return; }
+ if (VAR && t.closest(".sv .xbtn")) { closeVar(false, true); return; }
+});
+
+/* ---------- helpers ---------- */
+const NS = "http://www.w3.org/2000/svg";
+function seg(id, cb) {
+ const s = document.getElementById(id);
+ s.addEventListener("click", ev => {
+  const b = ev.target.closest("button"); if (!b) return;
+  $$("button", s).forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+  cb(b.dataset.v);
+ });
+ return () => $("button[aria-pressed=true]", s).dataset.v;
+}
+function setSeg(id, v) { $$(`#${id} button`).forEach(x => x.setAttribute("aria-pressed", x.dataset.v === String(v) ? "true" : "false")); }
+function scale(d0, d1, r0, r1) { return v => r0 + (v - d0) / (d1 - d0) * (r1 - r0); }
+function axes(svg, X, Y, xt, yt, xl, yl, W, H, L, B, fmtY) {
+ let g = "";
+ yt.forEach(v => { g += `<line class="grid" x1="${L}" x2="${W - 10}" y1="${Y(v)}" y2="${Y(v)}"></line><text x="${L - 6}" y="${Y(v) + 4}" text-anchor="end">${fmtY ? fmtY(v) : v}</text>`; });
+ xt.forEach(v => { g += `<line class="axis" x1="${X(v)}" x2="${X(v)}" y1="${H - B}" y2="${H - B + 4}"></line><text x="${X(v)}" y="${H - B + 17}" text-anchor="middle">${v}</text>`; });
+ g += `<line class="axis" x1="${L}" x2="${W - 10}" y1="${H - B}" y2="${H - B}"></line>`;
+ g += `<text x="${(L + W) / 2}" y="${H - 4}" text-anchor="middle">${xl}</text><text x="12" y="${(H - B) / 2}" text-anchor="middle" transform="rotate(-90 12 ${(H - B) / 2})">${yl}</text>`;
+ return g;
+}
+function erf(x) { // Abramowitz-Stegun 7.1.26
+ const s = Math.sign(x); x = Math.abs(x); const t = 1 / (1 + 0.3275911 * x);
+ const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
+ return s * y;
+}
+const pdf = (x, m, s) => Math.exp(-0.5 * ((x - m) / s) ** 2) / (Math.sqrt(2 * Math.PI) * s);
+const cdf = (x, m, s) => 0.5 * (1 + erf((x - m) / (s * Math.SQRT2)));
+const f = (v, n) => v.toFixed(n);
+
+/* ---------- setup diagram ---------- */
+(() => { let g = ""; for (let i = 0; i < 9; i++) g += `<rect x="12" y="${26 + i * 8.4}" width="76" height="5" rx="1.5" fill="${i === 3 || i === 7 ? "var(--salmon)" : "var(--line)"}"></rect>`; $("#csvrows").innerHTML = g; })();
+
+/* ---------- 1.1 dice ---------- */
+let seed = 0, high = 7;
+const seedseg = $("#seedseg");
+seedseg.innerHTML = Array.from({length: 10}, (_, i) => `<button type="button" aria-pressed="${i === 0}" data-v="${i}">${i}</button>`).join("");
+seg("seedseg", v => { seed = +v; draw11(); });
+seg("highseg", v => { high = +v; draw11(); });
+function draw11() {
+ const s = D.s11[seed];
+ $("#c11-chips").innerHTML = [1, 2, 3, 4, 5, 6, 7].map(v => v < high ? `<span class="chip">${v}</span>` : v === high ? `<span class="chip x">${v}</span>` : "").join("");
+ const ok = high === 7;
+ $("#c11-dice").innerHTML = s.first10.map(v => `<span class="die ${ok && v === 6 ? "six" : ""}">${ok ? v : "?"}</span>`).join("");
+ const fr = ok ? s.frac : [0, 0, 0];
+ $("#c11-out").textContent = [10, 100, 10000].map((n, i) => `${String(n).padStart(6)} rolls: fraction of sixes = ${f(fr[i], 4)}`).join("\n");
+ $("#c11-note").innerHTML = ok ? `الخط المتقطع 1/6 = 0.167. المنحنى هو الكسر الجاري <bdi>(running fraction)</bdi> للرميات العشرة آلاف (الدورة الثالثة في الحلقة): في البداية يقفز الكسر كثيرًا، ثم يهدأ قرب 1/6. كل الأرقام هنا أرقام NumPy الحقيقية للبذرة <bdi>(seed)</bdi> ${seed}.`
+  : `مع ${C("integers(1, 6, n)")} القيم 1 إلى 5 فقط، فلا تظهر 6 أبدًا والكسر 0 دائمًا. الكود يعمل بلا رسالة خطأ <bdi>(error)</bdi>، والرقم خاطئ.`;
+ const W = 560, H = 220, L = 48, B = 34, X = v => L + Math.log10(v) / 4 * (W - L - 34), Y = scale(0, 0.5, H - B, 12);
+ let g = axes(null, X, Y, [1, 10, 100, 1000, 10000], [0, 0.1, 0.2, 0.3, 0.4, 0.5], "number of rolls (log scale)", "fraction of sixes", W, H, L, B);
+ g += `<line x1="${L}" x2="${W - 10}" y1="${Y(1 / 6)}" y2="${Y(1 / 6)}" stroke="var(--salmon)" stroke-dasharray="6 5" stroke-width="1.5"></line>`;
+ const pts = ok ? s.curve.map(([n, v]) => [n, Math.min(v, 0.5)]) : s.curve.map(([n]) => [n, 0]);
+ g += `<polyline fill="none" stroke="var(--bass)" stroke-width="2" points="${pts.map(([n, v]) => `${f(X(n), 1)},${f(Y(v), 1)}`).join(" ")}"></polyline>`;
+ $("#c11-svg").innerHTML = g;
+}
+
+/* ---------- 1.2 table ---------- */
+let marg = 1, q = "bl";
+seg("margseg", v => { marg = +v; draw12(); });
+seg("qseg", v => { q = v; draw12(); });
+(() => {
+ const rows = [[0, "sea bass", "light"], [1, "sea bass", "light"], ["⋮", "⋮", "⋮"], [59, "sea bass", "dark"], [60, "salmon", "light"], ["⋮", "⋮", "⋮"], [99, "salmon", "dark"]];
+ $("#c12-df").innerHTML = `<figure><table class="t"><thead><tr><th></th><th>species</th><th>look</th></tr></thead><tbody>${rows.map(r => `<tr><th class="marg">${r[0]}</th><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table><figcaption>catch · 100 rows × 2 columns</figcaption></figure>`;
+})();
+function draw12() {
+ const T = {"salmon": [37, 3, 40], "sea bass": [4, 56, 60], "All": [41, 59, 100]};
+ const cols = marg ? ["dark", "light", "All"] : ["dark", "light"], rows = marg ? ["salmon", "sea bass", "All"] : ["salmon", "sea bass"];
+ const cls = (r, c) => {
+  const ri = r === "sea bass", ci = c === "light", tot = r === "All" || c === "All";
+  if (q === "lb") return ri && ci ? "hit" : (ri && c === "All") ? "hit" : ri ? "hrow" : "";
+  if (q === "bl") return ri && ci ? "hit" : (r === "All" && ci) ? "hit" : ci ? "hcol" : "";
+  if (q === "both") return ri && ci ? "hit" : (ri && c === "All") ? "hrow" : (r === "All" && ci) ? "hcol" : "";
+  if (q === "tot") return ci && r !== "All" ? "hit" : (r === "All" && ci) ? "hcol" : "";
+  return ri && ci ? "hit" : (r === "All" && c === "All") ? "hit" : "";
+ };
+ $("#c12-tab").innerHTML = `<thead><tr><th>species \\ look</th>${cols.map(c => `<th class="${c === "All" ? "marg" : ""}">${c}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr><th class="${r === "All" ? "marg" : ""}">${r}</th>${cols.map((c, j) => `<td class="${cls(r, c)} ${r === "All" || c === "All" ? "marg" : ""}">${T[r][["dark", "light", "All"].indexOf(c)]}</td>`).join("")}</tr>`).join("")}</tbody>`;
+ const N = {lb: `${C("P(light | sea bass)")} = 56 ÷ 60 = 0.933، وهو احتمال شرطي <bdi>(conditional probability)</bdi>: نبقى داخل <b>صف</b> <bdi>(row)</bdi> sea bass (الملوّن)، ونقسم على مجموع الصف.`,
+  bl: `${C("P(sea bass | light)")} = 56 ÷ 59 = 0.949، وهو احتمال شرطي <bdi>(conditional probability)</bdi>: نبقى داخل <b>عمود</b> <bdi>(column)</bdi> light، ونقسم على مجموع العمود. الرقم في الأعلى نفسه 56، والقسمة مختلفة.`,
+  j: `${C("P(sea bass, light)")} = 56 ÷ 100 = 0.56، وهو الاحتمال المشترك <bdi>(joint probability)</bdi>: السمكة قاروص <b>و</b>فاتحة معًا، فنقسم على كل السمك. هذا هو الجزء المشترك بين الاحتمالين الشرطيين: 0.56 ÷ 0.60 = 0.933، و0.56 ÷ 0.59 = 0.949. انظر «للفهم» تحت.`,
+  both: `الخانة 56 نفسها نصل إليها من <b>صف</b> sea bass (60) أو من <b>عمود</b> light (59).`,
+  tot: `${C("P(light)")} = 59 ÷ 100: الاحتمال الكلي <bdi>(total probability)</bdi>: كل السمك الفاتح، قاروص (56) وسلمون (3).`};
+ $("#c12-note").innerHTML = N[q] + (marg ? "" : ` <b>بلا margins لا نرى المجاميع <bdi>(margins)</bdi></b>، فعلينا جمعها بأنفسنا.`);
+}
+
+seg("dvseg", v => {
+ $$("#c12-dv .undstep").forEach(d => d.hidden = d.dataset.s !== v);
+ if (!marg) { marg = 1; setSeg("margseg", 1); }
+ q = {1: "both", 2: "bl", 3: "tot"}[v]; setSeg("qseg", q); draw12();
+});
+/* ---------- 1.3 nets ---------- */
+let stage = 2, ax = 1, pp = 0.6;
+seg("stageseg", v => { stage = +v; draw13(); });
+seg("axisseg", v => { ax = +v; if (stage < 2) { stage = 2; setSeg("stageseg", 2); } draw13(); });
+function setStage(v) { stage = v; setSeg("stageseg", v); draw13(); }
+$("#c13-pr").addEventListener("input", e => { pp = +e.target.value; $("#c13-pv").textContent = f(pp, 2); drawPMF(); });
+function draw13() {
+ const S = D.s13;
+ let h = `<span></span><span class="rl" style="text-align:center">fish 1</span><span class="rl" style="text-align:center">fish 2</span><span class="rl" style="text-align:center">fish 3</span><span></span><span class="rl" style="text-align:center">${stage === 2 && ax === 1 ? "sum" : ""}</span>`;
+ S.vals.forEach((r, i) => {
+  h += `<span class="rl">net ${i}</span>`;
+  r.forEach((v, j) => { const b = S.bool[i][j]; h += stage === 0 ? `<span class="c">${f(v, 2)}</span>` : `<span class="c ${b ? "T" : "F"} ${stage === 2 && ax === 0 ? "" : ""}">${stage === 1 ? (b ? "True" : "False") : b}</span>`; });
+  h += `<span></span>` + (stage === 2 && ax === 1 ? `<span class="c sum">${S.rows[i]}</span>` : `<span></span>`);
+ });
+ h += `<span class="rl">⋮</span><span class="rl" style="text-align:center">⋮</span><span class="rl" style="text-align:center">⋮</span><span class="rl" style="text-align:center">⋮</span><span></span><span class="rl" style="text-align:center">${stage === 2 && ax === 1 ? "⋮" : ""}</span>`;
+ if (stage === 2 && ax === 0) h += `<span class="rl">sum</span>${S.cols.map(v => `<span class="c sum" style="font-size:11px">${v}</span>`).join("")}<span></span><span></span>`;
+ $("#c13-grid").innerHTML = h;
+ const sh = stage < 2 ? `shape (100000, 3)` : ax === 1 ? `(100000, <b>3</b>) → .sum(axis=1) → (100000,)` : `(<b>100000</b>, 3) → .sum(axis=0) → (3,)`;
+ $("#c13-shape").innerHTML = sh;
+ $("#c13-note").innerHTML = [
+  `${C("rng.random((100000, 3))")}: كل خانة رقم بين 0 و1. صف <bdi>(row)</bdi> لكل شبكة، وعمود <bdi>(column)</bdi> لكل سمكة. الشكل <bdi>(shape)</bdi> (100000, 3).`,
+  `${C("< 0.6")}: قناع <bdi>(mask)</bdi>: True (أزرق) حيث الرقم أصغر من 0.6، أي سمكة قاروص. لاحظ 0.60 في الشبكة 1: الرقم الحقيقي 0.6 وكسور، فهو ليس أصغر من 0.6. في الحساب True = 1 وFalse = 0.`,
+  ax === 1 ? `${C("axis=1")}: المحور <bdi>(axis)</bdi> 1، نجمع كل صف أفقيًا، فيصير لكل شبكة عدد قاروصها. هذا ما نريده: ${C("nets")}.`
+   : `${C("axis=0")}: المحور <bdi>(axis)</bdi> 0، نجمع كل عمود نازلين عبر كل الـ 100000 شبكة. ثلاثة أرقام نحو 60000. هذا ليس عدد كل شبكة.`][stage];
+}
+function drawPMF() {
+ const W = 560, H = 210, L = 48, B = 34, X = k => L + 40 + k * ((W - L - 80) / 3), Y = scale(0, 0.8, H - B, 12);
+ const ch = [1, 3, 3, 1], ex = [0, 1, 2, 3].map(k => ch[k] * pp ** k * (1 - pp) ** (3 - k));
+ let g = axes(null, X, Y, [0, 1, 2, 3], [0, 0.2, 0.4, 0.6, 0.8], "X = number of sea bass in a net", "P(X = x)", W, H, L, B);
+ ex.forEach((v, k) => { g += `<rect x="${X(k) - 26}" y="${Y(v)}" width="52" height="${Y(0) - Y(v)}" fill="var(--bass)" opacity=".85"></rect><text x="${X(k)}" y="${Y(v) - 5}" text-anchor="middle" style="fill:var(--fg)">${f(v, 3)}</text>`; });
+ if (Math.abs(pp - 0.6) < 1e-9) D.s13.pmf.forEach((v, k) => { g += `<line x1="${X(k) - 32}" x2="${X(k) + 32}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--salmon)" stroke-width="3"></line>`; });
+ g += `<text x="${W - 12}" y="24" text-anchor="end" style="fill:var(--fg)">E[X] = 3 × ${f(pp, 2)} = ${f(3 * pp, 2)}</text>`;
+ if (Math.abs(pp - 0.6) < 1e-9) g += `<text x="${W - 12}" y="42" text-anchor="end" style="fill:var(--salmon)">— simulated (seed 2)</text>`;
+ $("#c13-svg").innerHTML = g;
+}
+
+/* ---------- 1.4 histogram ---------- */
+const FL = D.fl, SP = D.sp, NFL = FL.length;
+let bw = 5, dens = 1, edge = "white", col = "lightgray", pick = 4;
+seg("wseg", v => { bw = +v; pick = -1; draw14(); });
+seg("dseg", v => { dens = +v; draw14(); });
+seg("eseg", v => { edge = v; draw14(); });
+seg("cseg", v => { col = v; draw14(); });
+function npHist(data, edges) {
+ const c = new Array(edges.length - 1).fill(0), last = edges.length - 2;
+ data.forEach(x => { if (x < edges[0] || x > edges[last + 1]) return; let i = Math.floor((x - edges[0]) / (edges[1] - edges[0])); if (i > last) i = last; c[i]++; });
+ return c;
+}
+const arange = (a, b, s) => { const r = []; for (let v = a; v < b; v += s) r.push(v); return r; };
+function draw14() {
+ const edges = arange(170, 236, bw), c = npHist(FL, edges), inside = c.reduce((a, b) => a + b, 0), hts = c.map(v => dens ? v / (NFL * bw) : v);
+ const W = 560, H = 280, L = 58, B = 36, X = scale(165, 240, L, W - 14);
+ const ymax = dens ? (bw === 1 ? 0.07 : 0.05) : Math.max(...c) * 1.15, Y = scale(0, ymax, H - B, 12);
+ const yt = dens ? (bw === 1 ? [0, 0.02, 0.04, 0.06] : [0, 0.01, 0.02, 0.03, 0.04, 0.05]) : (() => { const st = ymax > 100 ? 40 : ymax > 40 ? 10 : 5; return arange(0, ymax, st); })();
+ let g = axes(null, X, Y, [170, 180, 190, 200, 210, 220, 230, 240], yt, "flipper length (mm)", dens ? "density (per mm)" : "count", W, H, L, B, v => dens ? v.toFixed(2) : v);
+ const fill = col === "lightgray" ? "var(--line)" : "var(--cG)";
+ c.forEach((v, i) => {
+  const x0 = X(edges[i]), x1 = X(edges[i] + bw);
+  g += `<rect data-i="${i}" x="${f(x0, 1)}" y="${f(Y(hts[i]), 1)}" width="${f(x1 - x0, 1)}" height="${f(Y(0) - Y(hts[i]), 1)}" fill="${fill}" stroke="${edge === "white" ? "var(--surface)" : "none"}" stroke-width="${edge === "white" ? (bw === 1 ? 0.8 : 1.6) : 0}" style="cursor:pointer;${i === pick ? "fill:var(--salmon)" : ""}"></rect>`;
+ });
+ $("#c14-svg").innerHTML = g;
+ const area = hts.reduce((a, h) => a + (dens ? h * bw : 0), 0), out = NFL - inside;
+ let t = `edges: ${edges[0]}, ${edges[1]}, … ${edges[edges.length - 1]}   (${edges.length} edges, ${c.length} bars)\n`;
+ t += dens ? `total area = ${f(area, 3)}` : `total count = ${inside}`;
+ if (out) t += `   ⚠ ${out} penguin${out > 1 ? "s" : ""} outside the edges`;
+ if (pick >= 0 && pick < c.length) {
+  const lo = edges[pick], hi = edges[pick] + bw, h = c[pick] / (NFL * bw);
+  t += `\nbar ${lo}–${hi}: count ${c[pick]}   height ${c[pick]} / (${NFL} × ${bw}) = ${f(h, 4)}   area ${f(h, 4)} × ${bw} = ${f(h * bw, 3)}`;
+ }
+ $("#c14-out").textContent = t;
+}
+$("#c14-svg").addEventListener("click", e => { const r = e.target.closest("rect[data-i]"); if (r) { pick = +r.dataset.i; draw14(); } });
+
+/* ---------- 1.5 normal ---------- */
+const GT = FL.filter((_, i) => SP[i] === "Gentoo"), gm = D.gentoo.m, gs0 = D.gentoo.s, gs1 = D.stats.Gentoo.sd1;
+let num = 300, alp = 0.3, ddof = 0, sc = "s", a = 210, b = 220, half = 1;
+$("#c15-nr").addEventListener("input", e => { num = +e.target.value; $("#c15-nv").textContent = num; draw15(); });
+$("#c15-ar").addEventListener("input", e => { alp = +e.target.value; $("#c15-av").textContent = f(alp, 1); draw15(); });
+$("#c15-a").addEventListener("input", e => { a = +e.target.value; if (a > b) { b = a; $("#c15-b").value = b; } draw15(); });
+$("#c15-b").addEventListener("input", e => { b = +e.target.value; if (b < a) { a = b; $("#c15-a").value = a; } draw15(); });
+seg("ddseg", v => { ddof = +v; draw15(); });
+seg("scseg", v => { sc = v; draw15(); });
+seg("hseg", v => { half = +v; draw15(); });
+function draw15() {
+ const sd = ddof ? gs1 : gs0, s2 = sc === "v" ? sd * sd : sd;
+ const W = 560, H = 280, L = 58, B = 36, X = scale(165, 240, L, W - 14), Y = scale(0, 0.075, H - B, 12);
+ let g = axes(null, X, Y, [170, 180, 190, 200, 210, 220, 230, 240], [0, 0.02, 0.04, 0.06], "flipper length (mm)", "density", W, H, L, B, v => v.toFixed(2));
+ const edges = arange(170, 236, 5), c = npHist(GT, edges);
+ c.forEach((v, i) => { const h = v / (GT.length * 5); g += `<rect x="${f(X(edges[i]), 1)}" y="${f(Y(h), 1)}" width="${f(X(edges[i] + 5) - X(edges[i]), 1)}" height="${f(Y(0) - Y(h), 1)}" fill="var(--cG)" opacity="${alp}"></rect>`; });
+ const lo = half ? a - 0.5 : a, hi = half ? b + 0.5 : b;
+ let sh = `M${f(X(lo), 1)},${f(Y(0), 1)}`; for (let i = 0; i <= 60; i++) { const x = lo + (hi - lo) * i / 60; sh += ` L${f(X(x), 1)},${f(Y(pdf(x, gm, s2)), 1)}`; } sh += ` L${f(X(hi), 1)},${f(Y(0), 1)} Z`;
+ g += `<path d="${sh}" fill="var(--salmon)" opacity=".35"></path>`;
+ g += `<line x1="${X(lo)}" x2="${X(lo)}" y1="${Y(0)}" y2="20" stroke="var(--salmon)" stroke-dasharray="4 4"></line><line x1="${X(hi)}" x2="${X(hi)}" y1="${Y(0)}" y2="20" stroke="var(--salmon)" stroke-dasharray="4 4"></line>`;
+ const xs = Array.from({length: num}, (_, i) => 165 + 75 * i / (num - 1));
+ g += `<polyline fill="none" stroke="var(--cG)" stroke-width="2.4" points="${xs.map(x => `${f(X(x), 1)},${f(Y(pdf(x, gm, s2)), 1)}`).join(" ")}"></polyline>`;
+ if (num <= 40) xs.forEach(x => { g += `<circle cx="${f(X(x), 1)}" cy="${f(Y(pdf(x, gm, s2)), 1)}" r="3" fill="var(--cG)"></circle>`; });
+ g += `<text x="${W - 16}" y="26" text-anchor="end" style="fill:var(--cG)">Gentoo</text>`;
+ $("#c15-svg").innerHTML = g;
+ const model = cdf(hi, gm, s2) - cdf(lo, gm, s2), data = GT.filter(x => x >= a && x <= b).length / GT.length;
+ $("#c15-out").textContent = `sd = ${f(sd, 3)}${ddof ? "   (pandas default, divides by n − 1)" : ""}\n` +
+  `model = norm.cdf(${f(hi, 1)}, ${f(gm, 2)}, ${f(s2, 2)}) - norm.cdf(${f(lo, 1)}, …) = ${f(model, 3)}\n` +
+  `data  = np.mean((g >= ${a}) & (g <= ${b})) = ${f(data, 3)}\n` +
+  `peak height = norm.pdf(${f(gm, 2)}, ${f(gm, 2)}, ${f(s2, 2)}) = ${f(pdf(gm, gm, s2), 4)}`;
+ const z = (225 - gm) / sd;
+ $("#c15-note").innerHTML = sc === "v" ? `<b>هذا خطأ:</b> أعطينا التباين <bdi>(variance)</bdi> σ² = ${f(sd * sd, 1)} مكان σ. المنحنى مسطح ولا يطابق المدرّج، والكود لم يشتكِ.` :
+  `الربط بصيغة الكثافة <bdi>(density)</bdi> عند x = 225: <span class="mono">z = (225 − ${f(gm, 2)}) / ${f(sd, 2)} = ${f(z, 3)}</span>، ثم <span class="mono">0.3989 / ${f(sd, 2)} × e^(−z²/2) = ${f(pdf(225, gm, sd), 4)}</span>. هذا بالضبط ما تحسبه ${C("norm.pdf(225, m, s)")}.` +
+  (half ? "" : ` <b>بلا نصف المليمتر</b> يصغر الرقم، لأننا نخسر نصف العمود الأول ونصف الأخير.`);
+}
+
+/* ---------- 1.6 units ---------- */
+let unit = "mm", K = 8;
+seg("useg", v => { unit = v; draw16(); });
+$("#c16-kr").addEventListener("input", e => { K = +e.target.value; $("#c16-kv").textContent = K; draw16(); });
+function draw16() {
+ const k = unit === "m" ? 1000 : 1, m = gm / k, s = gs0 / k, x0 = 180 / k, x1 = 260 / k;
+ const W = 560, H = 250, L = 64, B = 36, X = scale(x0, x1, L, W - 14), pk = pdf(m, m, s), Y = scale(0, pk * 1.15, H - B, 12);
+ const xt = [180, 200, 220, 240, 260].map(v => unit === "m" ? +(v / 1000).toFixed(2) : v), yt = [0, pk / 2, pk].map(v => +v.toPrecision(3));
+ let g = axes(null, X, Y, xt, yt, `flipper length (${unit})`, `density (per ${unit})`, W, H, L, B, v => unit === "m" ? v.toFixed(1) : v.toFixed(4));
+ const dx = (x1 - x0) / K; let area = 0;
+ for (let i = 0; i < K; i++) { const xm = x0 + (i + 0.5) * dx, h = pdf(xm, m, s); area += h * dx; g += `<rect x="${f(X(x0 + i * dx), 2)}" y="${f(Y(h), 2)}" width="${f(X(x0 + dx) - X(x0), 2)}" height="${f(Y(0) - Y(h), 2)}" fill="var(--sand)" stroke="var(--sandfg)" stroke-width=".6"></rect>`; }
+ const pts = Array.from({length: 200}, (_, i) => x0 + (x1 - x0) * i / 199);
+ g += `<polyline fill="none" stroke="var(--cG)" stroke-width="2.4" points="${pts.map(x => `${f(X(x), 1)},${f(Y(pdf(x, m, s)), 1)}`).join(" ")}"></polyline>`;
+ $("#c16-svg").innerHTML = g;
+ $("#c16-out").textContent = `peak height  = ${unit === "m" ? f(pk, 2) : f(pk, 4)} per ${unit}${unit === "m" ? "   (bigger than 1, and that is fine)" : ""}\n` +
+  `strip width  = ${unit === "m" ? f(dx, 4) : f(dx, 1)} ${unit}\n` +
+  `area = Σ height × width = ${f(area, 4)}`;
+}
+
+/* ---------- index ---------- */
+function buildIndex() {
+ const where = {};
+ $$(".view").forEach(v => $$(".lines .tk", v).forEach(b => { where[b.dataset.k] = where[b.dataset.k] || v.dataset.view; }));
+ const lab = {setup: "الإعداد", c11: "1.1", c12: "1.2", c13: "1.3", c14: "1.4", c15: "1.5", c16: "1.6"};
+ const order = ["py", "np", "pd", "plt", "sp"];
+ const rows = Object.entries(E).sort((x, y) => order.indexOf(x[1].l) - order.indexOf(y[1].l));
+ $("#glo tbody").innerHTML = rows.map(([k, e]) => `<tr><td class="n">${e.n}</td><td><span class="b ${e.l}">${LIB[e.l]}</span></td><td class="hide-ph"><span class="b ${ST[e.t][0]}">${ST[e.t][1]}</span></td><td>${e.s}</td><td><a href="#${where[k]}--${k}">${lab[where[k]]}</a></td></tr>`).join("");
+}
+
+/* ---------- reading-order strip inside a cell ---------- */
+function buildSteps() {
+ $$(".view.cell .steps").forEach(s => {
+  if (!s.children.length) s.innerHTML = `<span class="sl">اقرأ بالترتيب:</span><button type="button" data-step="1"><b>1</b> الصيغة</button><span class="ar">←</span><button type="button" data-step="2" class="on"><b>2</b> الكود سطرًا سطرًا</button><span class="ar">←</span><button type="button" data-step="3"><b>3</b> المتغيرات الناتجة</button><span class="ar">←</span><button type="button" data-step="4"><b>4</b> جرّب</button>`;
+ });
+ document.addEventListener("click", ev => {
+  const b = ev.target.closest(".steps button"); if (!b) return;
+  const view = b.closest(".view"), n = b.dataset.step, el = view.querySelector(`:not(button)[data-step="${n}"]`);
+  $$(".steps button", view).forEach(x => x.classList.toggle("on", x === b));
+  if (!el) return;
+  if (el.tagName === "DETAILS") el.open = true;
+  el.scrollIntoView({block: "start", behavior: reduce ? "auto" : "smooth"});
+ });
+}
+
+/* ---------- views and hash routing ---------- */
+const VIEWS = ["setup", "c11", "c12", "c13", "c14", "c15", "c16", "tasks", "traps", "index"];
+const NAME = {setup: "الإعداد", c11: "1.1 رمي النرد", c12: "1.2 جدول العدّ", c13: "1.3 شبكة من 3 سمكات", c14: "1.4 المدرّج والكثافة", c15: "1.5 المنحنى الطبيعي", c16: "1.6 كثافة أكبر من 1", tasks: "مهامك", traps: "الفخاخ", index: "فهرس الأسماء"};
+const SHORT = {setup: "الإعداد", c11: "1.1", c12: "1.2", c13: "1.3", c14: "1.4", c15: "1.5", c16: "1.6", tasks: "مهامك", traps: "الفخاخ", index: "الفهرس"};
+let CUR = null;
+const SEEN = new Set();
+try { JSON.parse(localStorage.getItem("lg3-seen") || "[]").forEach(v => SEEN.add(v)); } catch (e) {}
+function showView(v) {
+ closeCard(true); closeVar(true);
+ $$(".view").forEach(s => s.hidden = s.dataset.view !== v);
+ CUR = v; SEEN.add(v);
+ try { localStorage.setItem("lg3-seen", JSON.stringify([...SEEN])); } catch (e) {}
+ const i = VIEWS.indexOf(v), pv = VIEWS[i - 1], nx = VIEWS[i + 1];
+ $$("#side .nv").forEach(a => { const on = a.dataset.v === v; if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); a.classList.toggle("done", SEEN.has(a.dataset.v) && !on); });
+ const cur = $(`#side .nv[data-v="${v}"]`), side = $("#side");
+ if (cur && side.scrollWidth > side.clientWidth + 2) { const r = cur.getBoundingClientRect(), s = side.getBoundingClientRect(); if (r.left < s.left || r.right > s.right) side.scrollLeft += (r.left + r.width / 2) - (s.left + s.width / 2); }
+ $("#tbcount").textContent = i <= 6 ? `الخلية ${i + 1} من 7` : `${NAME[v]} · بعد الخلايا`;
+ const pct = Math.round((i + 1) / VIEWS.length * 100);
+ $("#tbbar i").style.width = pct + "%"; $("#tbbar").setAttribute("aria-valuenow", pct);
+ const P = $("#tbprev"), N = $("#tbnext");
+ if (pv) { P.href = "#" + pv; P.textContent = `→ ${SHORT[pv]} السابق`; P.removeAttribute("aria-disabled"); P.removeAttribute("tabindex"); } else { P.href = "#" + v; P.textContent = "→ السابق"; P.setAttribute("aria-disabled", "true"); P.tabIndex = -1; }
+ if (nx) { N.href = "#" + nx; N.textContent = `التالي ${SHORT[nx]} ←`; N.removeAttribute("aria-disabled"); N.removeAttribute("tabindex"); } else { N.href = "#" + v; N.textContent = "التالي ←"; N.setAttribute("aria-disabled", "true"); N.tabIndex = -1; }
+ const pn = $(`.view[data-view="${v}"] .pn`);
+ if (pn) pn.innerHTML = (pv ? `<a href="#${pv}">→ السابق: ${NAME[pv]}</a>` : "") + (nx ? `<a class="primary" href="#${nx}">التالي: ${NAME[nx]} ←</a>` : `<a class="primary" href="#setup">إلى البداية: الإعداد ←</a>`);
+ $$(`.view[data-view="${v}"] .steps button`).forEach(b => b.classList.toggle("on", b.dataset.step === "2"));
+ document.title = `Lab 3 Code Guide · ${SHORT[v]}`;
+}
+function openSub(v, sub) {
+ const view = $(`.view[data-view="${v}"]`);
+ if (E[sub]) { const b = $(`.lines .tk[data-k="${sub}"]`, view); if (b) { openCard(b, {force: true, focus: true, center: true}); return; } }
+ if (sub.startsWith("var-")) { const i = (VARS[v] || []).findIndex(x => x.n === sub.slice(4)); if (i >= 0) { openVar(v, i, {force: true, focus: true}); $(`.vars[data-cell="${v}"]`).scrollIntoView({block: "start"}); } return; }
+ const el = document.getElementById(sub);
+ if (el && view.contains(el)) { el.scrollIntoView({block: "center", behavior: reduce ? "auto" : "smooth"}); flash(el); }
+}
+function route() {
+ let h = ""; try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) { h = location.hash.slice(1); }
+ let [v, sub] = h.split("--");
+ if (!VIEWS.includes(v)) { v = "setup"; sub = ""; }
+ const changed = v !== CUR;
+ if (changed) showView(v);
+ if (sub) requestAnimationFrame(() => openSub(v, sub));
+ else if (changed) scrollTo(0, 0);
+}
+addEventListener("hashchange", route);
+document.addEventListener("click", ev => {
+ const a = ev.target.closest('a[href^="#"]'); if (!a || ev.ctrlKey || ev.metaKey || ev.shiftKey) return;
+ const h = a.getAttribute("href"); if (!h || h === "#") return;
+ ev.preventDefault();
+ if (location.hash === h) route(); else location.hash = h;
+});
+document.addEventListener("keydown", ev => {
+ if (ev.key !== "Escape") return;
+ if (CARD) { ev.preventDefault(); closeCard(); } else if (VAR) { ev.preventDefault(); closeVar(false, true); }
+});
+
+/* ---------- theme and start ---------- */
+(() => {
+ const root = document.documentElement;
+ const apply = v => { if (v === "auto") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", v); setSeg("themeseg", v); };
+ let saved = "auto"; try { saved = localStorage.getItem("lg-theme") || "auto"; } catch (e) {}
+ apply(saved);
+ seg("themeseg", v => { apply(v); try { localStorage.setItem("lg-theme", v); } catch (e) {} });
+})();
+renderCode(); buildSteps(); buildVars(); buildIndex();
+draw11(); draw12(); draw13(); drawPMF(); draw14(); draw15(); draw16();
+route();
+</script>
+</body>
+</html>

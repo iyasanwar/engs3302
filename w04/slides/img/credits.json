@@ -1,0 +1,50 @@
+{
+ "seabass": {
+  "file": "Dicentrarchus labrax (Belgium).jpg",
+  "author": "Hans Hillewaert",
+  "license": "CC BY-SA 4.0",
+  "source": "Wikimedia Commons"
+ },
+ "salmon": {
+  "file": "Salmo salar.jpg",
+  "author": "Timothy Knepp, U.S. Fish and Wildlife Service",
+  "license": "Public domain",
+  "source": "Wikimedia Commons"
+ },
+ "sorting_hands": {
+  "file": "Pêcheurs au tri de la pêche du jour… (Ifremer 00776-88788 - 48325).jpg",
+  "author": "Olivier Dugornay / IFREMER",
+  "license": "CC BY 4.0",
+  "source": "Wikimedia Commons"
+ },
+ "adelie": {
+  "file": "Hope Bay-2016-Trinity Peninsula–Adélie penguin (Pygoscelis adeliae) 02.jpg",
+  "author": "Godot13",
+  "license": "CC BY-SA 4.0",
+  "source": "Wikimedia Commons"
+ },
+ "chinstrap": {
+  "file": "South Shetland-2016-Deception Island–Chinstrap penguin (Pygoscelis antarctica) 04.jpg",
+  "author": "Godot13",
+  "license": "CC BY-SA 4.0",
+  "source": "Wikimedia Commons"
+ },
+ "gentoo": {
+  "file": "Brown Bluff-2016-Tabarin Peninsula–Gentoo penguin (Pygoscelis papua) 02.jpg",
+  "author": "Godot13",
+  "license": "CC BY-SA 4.0",
+  "source": "Wikimedia Commons"
+ },
+ "xray": {
+  "file": "Normal posteroanterior (PA) chest radiograph (X-ray).jpg",
+  "author": "Mikael Häggström",
+  "license": "CC0",
+  "source": "Wikimedia Commons"
+ },
+ "conveyor": {
+  "file": "Grandi fish processing conveyor belt1 2011.jpg",
+  "author": "Jabbi",
+  "license": "CC BY-SA 3.0",
+  "source": "Wikimedia Commons"
+ }
+}

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where Should the Boundary Go</title>
+<style>
+@font-face{font-family:"Literata";src:url("fonts/Literata-700.woff2") format("woff2");font-weight:700}
+@font-face{font-family:"Fira Sans";src:url("fonts/FiraSans-400.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"Fira Sans";src:url("fonts/FiraSans-600.woff2") format("woff2");font-weight:600}
+@font-face{font-family:"Fira Sans";src:url("fonts/FiraSans-700.woff2") format("woff2");font-weight:700}
+@font-face{font-family:"JetBrains Mono";src:url("fonts/JetBrainsMono-400.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"JetBrains Mono";src:url("fonts/JetBrainsMono-700.woff2") format("woff2");font-weight:700}
+:root{color-scheme:light;--bg:#fff;--panel:#f5f7fa;--ink:#14233b;--muted:#566173;--line:#dde3ea;--bass:#1d5c8c;--bass-soft:#e6eef6;--salmon:#e4734f;--salmon-ink:#b4472a;--salmon-soft:#fbe9e3;--good:#28724f;--highlight:#f3e3b5;
+  --f-ui:"Fira Sans",Carlito,sans-serif;--f-num:"JetBrains Mono","DejaVu Sans Mono",monospace;--f-body:Literata,Georgia,serif}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--f-ui);overflow:hidden}
+#fit{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{width:1600px;height:900px;flex:none;transform-origin:center center;position:relative}
+h1{position:absolute;left:40px;top:26px;margin:0;font-family:var(--f-body);font-size:44px}
+.sub{position:absolute;left:40px;top:92px;margin:0;font-size:24px;color:var(--muted)}
+.panel{position:absolute;background:var(--panel);border:2px solid var(--line);border-radius:14px}
+#chart{left:40px;top:140px;width:900px;height:430px;padding:10px 14px}
+#right{left:970px;top:140px;width:590px;height:400px;padding:18px 24px;display:flex;flex-direction:column;gap:10px}
+.lab{font-size:20px;color:var(--muted);font-weight:600;letter-spacing:.06em}
+.row{display:flex;justify-content:space-between;align-items:baseline;font-size:26px}
+.row b{font-family:var(--f-num);font-size:32px}
+.tot{font-family:var(--f-num);font-weight:700;font-size:60px}
+.ctl{position:absolute;left:40px;width:1150px;display:grid;grid-template-columns:300px 1fr 110px;gap:18px;align-items:center;font-size:26px}
+#c1{top:592px} #c2{top:648px}
+input[type=range]{width:100%;height:34px} #t{accent-color:var(--ink)} #pi{accent-color:var(--bass)}
+output{font-family:var(--f-num);font-weight:700;font-size:28px;text-align:right}
+#go{position:absolute;left:40px;top:712px;font:inherit;font-size:22px;border:2px solid var(--good);color:var(--good);background:#fff;border-radius:999px;padding:6px 18px;cursor:pointer;font-weight:600}
+.verdict{position:absolute;left:290px;top:708px;width:900px;margin:0;font-family:var(--f-body);font-size:26px;line-height:1.3}
+.src{position:absolute;left:40px;bottom:16px;margin:0;font-size:16px;color:var(--muted)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--bass);outline-offset:2px}
+</style></head><body>
+<div id="fit"><div id="stage">
+<h1>Where should the boundary go?</h1>
+<p class="sub">Rule: decide sea bass when x &gt; t. Sea bass N(7, 1), salmon N(4, 1). The shaded areas are the mistakes, counted in 1000 fish.</p>
+<div class="panel" id="chart"><svg id="sv" width="870" height="408" viewBox="0 0 870 408" role="img" aria-label="Likelihood times prior for each class, the threshold and the two error areas"></svg></div>
+<div class="panel" id="right"><span class="lab">MISTAKES IN 1000 FISH</span>
+<div class="row"><span style="color:var(--bass)">sea bass called salmon</span><b id="eb"></b></div>
+<div class="row"><span style="color:var(--salmon-ink)">salmon called sea bass</span><b id="es"></b></div>
+<div class="row" style="border-top:2px solid var(--line);padding-top:8px"><span>all mistakes</span><span class="tot" id="et"></span></div>
+<div class="row" style="font-size:22px;color:var(--good)"><span>Bayes boundary <b id="xs" style="font-size:24px"></b></span><span>best possible <b id="eo" style="font-size:24px"></b></span></div>
+<svg id="mini" width="540" height="120" viewBox="0 0 540 120" role="img" aria-label="Mistakes for every threshold"></svg></div>
+<div class="ctl" id="c1"><label for="t">threshold t</label><input type="range" id="t" min="4" max="7" step="0.01" value="6"><output id="to"></output></div>
+<div class="ctl" id="c2"><label for="pi">sea bass in the catch</label><input type="range" id="pi" min="5" max="95" step="1" value="60"><output id="pio"></output></div>
+<button id="go" type="button">Bayes boundary</button>
+<p class="verdict" id="verdict" aria-live="polite"></p>
+<p class="src">ENGS 3302 · Week 4 · Video 4.3 · Notes §4.4. Mistakes = P(sea bass) · P(x &lt; t | sea bass) + P(salmon) · P(x &gt; t | salmon).</p>
+</div></div>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const pdf=(x,m,s)=>Math.exp(-(((x-m)/s)**2)/2)/(s*Math.sqrt(2*Math.PI));
+const erf=x=>{const t=1/(1+0.3275911*Math.abs(x));const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x);return x>=0?y:-y;};
+const cdf=(x,m,s)=>0.5*(1+erf((x-m)/(s*Math.SQRT2)));
+const parts=(t,P)=>[P*cdf(t,7,1),(1-P)*(1-cdf(t,4,1))];
+const err=(t,P)=>{const a=parts(t,P);return a[0]+a[1];};
+function xstar(P){let a=0,b=11;for(let i=0;i<80;i++){const m=(a+b)/2;(pdf(m,7,1)*P-pdf(m,4,1)*(1-P))>0?b=m:a=m;}return (a+b)/2;}
+window.__model={err,xstar,parts};
+// main chart geometry
+const X0=60,Y0=16,W=790,H=330,xa=1,xb=10;
+const X=x=>X0+(x-xa)/(xb-xa)*W;
+let ymx=0.3;const Y=y=>Y0+H-Math.min(y,ymx*1.05)/ymx*H;
+const path=(f,a,b,close)=>{let d="";for(let i=0;i<=200;i++){const x=a+(b-a)*i/200;d+=(i?" L":"M")+X(x).toFixed(1)+","+Y(f(x)).toFixed(1);}return close?d+` L${X(b).toFixed(1)},${Y(0)} L${X(a).toFixed(1)},${Y(0)} Z`:d;};
+let ax=`<line x1="${X0}" x2="${X0+W}" y1="${Y0+H}" y2="${Y0+H}" stroke="#566173" stroke-width="1.5"/>`;
+for(let v=1;v<=10;v++)ax+=`<text x="${X(v)}" y="${Y0+H+28}" text-anchor="middle" font-size="20" fill="#566173">${v}</text>`;
+ax+=`<text x="${X0+W/2}" y="${Y0+H+58}" text-anchor="middle" font-size="22" fill="#566173">lightness x</text><text x="${X0}" y="${Y0+4}" font-size="20" fill="#566173">likelihood × prior</text>`;
+$("sv").innerHTML=`<path id="ab" fill="#1d5c8c" opacity=".35"/><path id="as" fill="#e4734f" opacity=".45"/>${ax}<path id="cs" fill="none" stroke="#e4734f" stroke-width="4"/><path id="cb" fill="none" stroke="#1d5c8c" stroke-width="4"/>
+<line id="bl" stroke="#28724f" stroke-width="3" stroke-dasharray="6 6"/><text id="blt" font-size="20" fill="#28724f" font-weight="700" text-anchor="middle"></text>
+<line id="tl" stroke="#14233b" stroke-width="4"/><text id="tlt" font-size="22" font-weight="700" text-anchor="middle"></text>
+<text x="${X(1.3)}" y="${Y0+H-12}" font-size="20" fill="#b4472a" font-weight="600">← say salmon</text><text x="${X(9.7)}" y="${Y0+H-12}" font-size="20" fill="#1d5c8c" font-weight="600" text-anchor="end">say sea bass →</text>`;
+// mini chart: mistakes for every t
+const mx0=40,mw=480,my0=20,mh=70,mX=t=>mx0+(t-4)/3*mw;
+function mini(P){let d="",top=0;for(let i=0;i<=120;i++){top=Math.max(top,err(4+3*i/120,P));}
+  const mY=v=>my0+mh-v/top*mh;for(let i=0;i<=120;i++){const t=4+3*i/120;d+=(i?" L":"M")+mX(t).toFixed(1)+","+mY(err(t,P)).toFixed(1);}
+  let g=`<path d="${d}" fill="none" stroke="#14233b" stroke-width="3"/><line x1="${mx0}" x2="${mx0+mw}" y1="${my0+mh}" y2="${my0+mh}" stroke="#566173"/>`;
+  [4,5,6,7].forEach(v=>g+=`<text x="${mX(v)}" y="${my0+mh+22}" text-anchor="middle" font-size="16" fill="#566173">${v}</text>`);
+  g+=`<text x="${mx0}" y="${my0+10}" font-size="18" fill="#566173">mistakes for every t</text><circle id="md" r="7" fill="#e4734f"/><circle id="mo" r="6" fill="#fff" stroke="#28724f" stroke-width="3"/>`;
+  $("mini").innerHTML=g;return mY;}
+let mY=null,lastP=null;
+function render(){
+  const t=+$("t").value, P=+$("pi").value/100, xs=xstar(P);
+  ymx=Math.max(pdf(7,7,1)*P,pdf(4,4,1)*(1-P))*1.12;
+  const fb=x=>pdf(x,7,1)*P, fs=x=>pdf(x,4,1)*(1-P);
+  $("cb").setAttribute("d",path(fb,xa,xb));$("cs").setAttribute("d",path(fs,xa,xb));
+  $("ab").setAttribute("d",path(fb,xa,t,true));$("as").setAttribute("d",path(fs,t,xb,true));
+  [["tl",t,"t = "+t.toFixed(2),"tlt",Y0+14],["bl",xs,"Bayes "+xs.toFixed(2),"blt",Y0+H+0]].forEach(([id,v,lab,tid,ty])=>{const e=$(id);e.setAttribute("x1",X(v));e.setAttribute("x2",X(v));e.setAttribute("y1",Y0+22);e.setAttribute("y2",Y0+H);
+    const tt=$(tid);tt.setAttribute("x",X(v));tt.setAttribute("y",id==="tl"?Y0+14:Y0+H-40);tt.textContent=lab;});
+  if(Math.abs(t-xs)<0.06){$("blt").setAttribute("y",Y0+42);}
+  const [a,b]=parts(t,P), e=a+b, eo=err(xs,P);
+  $("eb").textContent=(1000*a).toFixed(1);$("es").textContent=(1000*b).toFixed(1);$("et").textContent=(1000*e).toFixed(1);
+  $("xs").textContent=xs.toFixed(2);$("eo").textContent=(1000*eo).toFixed(1);
+  if(lastP!==P){mY=mini(P);lastP=P;}
+  $("md").setAttribute("cx",mX(t));$("md").setAttribute("cy",mY(e));$("mo").setAttribute("cx",mX(xs));$("mo").setAttribute("cy",mY(eo));
+  $("to").textContent=t.toFixed(2);$("pio").textContent=Math.round(P*100)+"%";
+  const extra=1000*(e-eo);
+  $("verdict").textContent=extra<0.25?"This is the Bayes boundary: no threshold makes fewer mistakes.":`${extra.toFixed(1)} more mistakes than the best line. Move t towards ${xs.toFixed(2)}.`;
+}
+$("t").oninput=render;$("pi").oninput=render;
+$("go").onclick=()=>{$("t").value=xstar(+$("pi").value/100).toFixed(2);render();};
+const fit=()=>{const s=Math.min(innerWidth/1600,innerHeight/900);$("stage").style.transform=`scale(${s})`;};
+addEventListener("resize",fit);fit();render();window.__render=render;
+})();
+</script>
+<script>
+if(window.parent!==window){addEventListener("keydown",e=>{const t=e.target,onRange=t&&t.type==="range";
+ const go=m=>{e.preventDefault();window.parent.postMessage(JSON.stringify({method:m}),"*");};
+ if(e.key==="PageDown"||e.key==="n"||(!onRange&&(e.key==="ArrowRight"||e.key===" ")))go("next");
+ else if(e.key==="PageUp"||e.key==="p"||(!onRange&&e.key==="ArrowLeft"))go("prev");});}
+</script>
+</body></html>

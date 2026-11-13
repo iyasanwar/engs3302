@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where Are the Boundaries</title>
+<style>
+@font-face{font-family:"Literata";src:url("fonts/Literata-700.woff2") format("woff2");font-weight:700}
+@font-face{font-family:"Fira Sans";src:url("fonts/FiraSans-400.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"Fira Sans";src:url("fonts/FiraSans-600.woff2") format("woff2");font-weight:600}
+@font-face{font-family:"Fira Sans";src:url("fonts/FiraSans-700.woff2") format("woff2");font-weight:700}
+@font-face{font-family:"JetBrains Mono";src:url("fonts/JetBrainsMono-400.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"JetBrains Mono";src:url("fonts/JetBrainsMono-700.woff2") format("woff2");font-weight:700}
+:root{color-scheme:light;--bg:#fff;--panel:#f5f7fa;--ink:#14233b;--muted:#566173;--line:#dde3ea;--bass:#1d5c8c;--bass-soft:#e6eef6;--salmon:#e4734f;--salmon-ink:#b4472a;--salmon-soft:#fbe9e3;--good:#28724f;
+  --f-ui:"Fira Sans",Carlito,sans-serif;--f-num:"Fira Sans",Carlito,sans-serif;--f-body:Literata,Georgia,serif}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--f-ui);overflow:hidden}
+#fit{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{width:1600px;height:900px;flex:none;transform-origin:center center;position:relative}
+h1{position:absolute;left:40px;top:26px;margin:0;font-family:var(--f-body);font-size:44px}
+.sub{position:absolute;left:40px;top:92px;margin:0;font-size:24px;color:var(--muted)}
+.panel{position:absolute;background:var(--panel);border-radius:12px}
+#chart{left:40px;top:140px;width:900px;height:430px;padding:10px 14px}
+#right{left:970px;top:140px;width:590px;height:400px;padding:18px 26px;display:flex;flex-direction:column;gap:4px}
+.lab{font-size:20px;color:var(--muted);font-weight:600;letter-spacing:.06em}
+.row{display:flex;justify-content:space-between;align-items:baseline;font-size:24px}
+.row b{font-family:var(--f-num);font-weight:600;font-size:28px;font-feature-settings:"tnum" 1}
+.row.win b,.row.win span{font-weight:700;color:var(--ink)} .row.lose{color:var(--muted)} .row.lose b{font-weight:400}
+.sep{border-top:1px solid var(--line);margin:4px 0}
+.big{font-family:var(--f-num);font-weight:600;font-size:40px;font-feature-settings:"tnum" 1}
+.ctl{position:absolute;left:40px;width:1150px;display:grid;grid-template-columns:300px 1fr 110px;gap:18px;align-items:center;font-size:26px}
+#c1{top:592px} #c2{top:646px} #c3{top:700px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:34px;background:transparent;--c:var(--ink);--p:50%} #sb{--c:var(--bass)} #ss{--c:var(--salmon)} #pb{--c:var(--ink)}
+input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:linear-gradient(90deg,var(--c) var(--p),var(--line) var(--p))}
+input[type=range]::-moz-range-track{height:8px;border-radius:4px;background:var(--line)} input[type=range]::-moz-range-progress{height:8px;border-radius:4px;background:var(--c)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;margin-top:-10px;border-radius:50%;background:#fff;border:3px solid var(--c);box-shadow:0 2px 6px rgba(20,35,59,.2)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid var(--c)}
+output{font-family:var(--f-num);font-weight:600;font-size:28px;text-align:right;font-feature-settings:"tnum" 1}
+.verdict{margin:auto 0 0;padding-top:8px;border-top:1px solid var(--line);font-family:var(--f-body);font-weight:700;font-size:22px;line-height:1.3}
+.src{position:absolute;left:40px;bottom:16px;margin:0;font-size:16px;color:var(--muted)}
+input:focus-visible{outline:3px solid var(--bass);outline-offset:2px}
+#home{position:absolute;right:40px;top:34px;display:inline-flex;align-items:center;gap:6px;height:42px;padding:0 18px;border-radius:999px;border:1.5px solid var(--bass);color:var(--bass);background:#fff;font:600 20px/1 var(--f-ui);text-decoration:none}
+#home:hover{background:var(--bass-soft)} #home:focus-visible{outline:3px solid var(--bass);outline-offset:3px} #home[hidden]{display:none}
+</style></head><body>
+<div id="fit"><div id="stage">
+<h1>Where are the boundaries?</h1><a id="home" href="index.html" hidden>← Week 5</a>
+<p class="sub">Sea bass N(7, σ₁²) and salmon N(4, σ₂²). Shaded: the class that wins. Move the spreads and the share of sea bass.</p>
+<div class="panel" id="chart"><svg id="sv" width="870" height="408" viewBox="0 0 870 408" role="img" aria-label="Likelihood times prior of both classes, the regions and the boundaries"></svg></div>
+<div class="panel" id="right"><span class="lab">BOUNDARIES</span>
+<div class="big" id="bd"></div>
+<div class="row"><span>number of boundaries</span><b id="nb"></b></div>
+<div class="row" id="frow"><span>formula (same spread)</span><b id="fx"></b></div>
+<div class="sep"></div><span class="lab">SCORE AT x = 0.5</span>
+<div class="row" id="r05b"><span>sea bass</span><b id="g05b"></b></div><div class="row" id="r05s"><span>salmon</span><b id="g05s"></b></div>
+<p class="verdict" id="verdict" aria-live="polite"></p></div>
+<div class="ctl" id="c1"><label for="sb">spread of sea bass σ₁</label><input type="range" id="sb" min="0.5" max="3" step="0.05" value="1"><output id="sbo"></output></div>
+<div class="ctl" id="c2"><label for="ss">spread of salmon σ₂</label><input type="range" id="ss" min="0.5" max="3" step="0.05" value="1"><output id="sso"></output></div>
+<div class="ctl" id="c3"><label for="pb">sea bass in the catch</label><input type="range" id="pb" min="5" max="95" step="1" value="60"><output id="pbo"></output></div>
+<p class="src">ENGS 3302 · Week 5 · Video 5.5 · Notes §5.4.1. Score gᵢ(x) = −(x − μᵢ)²/(2σᵢ²) − ln σᵢ + ln P(ωᵢ); a boundary is where the two scores are equal.</p>
+</div></div>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const pdf=(x,m,s)=>Math.exp(-(((x-m)/s)**2)/2)/(s*Math.sqrt(2*Math.PI));
+const g=(x,m,s,P)=>-((x-m)**2)/(2*s*s)-Math.log(s)+Math.log(P);
+function bounds(sb,ss,P){   // g1 - g2 = A x^2 + B x + C exactly (same as g below); two real roots, one (equal spreads) or none
+  const A=-1/(2*sb*sb)+1/(2*ss*ss),B=7/(sb*sb)-4/(ss*ss),C=-49/(2*sb*sb)+16/(2*ss*ss)-Math.log(sb)+Math.log(ss)+Math.log(P)-Math.log(1-P);
+  if(Math.abs(A)<1e-12)return Math.abs(B)<1e-12?[]:[-C/B];
+  const d=B*B-4*A*C;if(d<=0)return [];            // d = 0: the curves only touch, the same class wins on both sides
+  const r=Math.sqrt(d);return [(-B-r)/(2*A),(-B+r)/(2*A)].sort((u,v)=>u-v);}
+const formula=(s,P)=>5.5+s*s/3*Math.log((1-P)/P);
+window.__model={bounds,formula,g};
+const X0=60,Y0=16,W=790,H=330,xa=0,xb=11;const X=x=>X0+(x-xa)/(xb-xa)*W;let ymx=0.3;const Y=y=>Y0+H-Math.min(y,ymx*1.05)/ymx*H;
+const path=f=>{let d="";for(let i=0;i<=300;i++){const x=xa+(xb-xa)*i/300;d+=(i?" L":"M")+X(x).toFixed(1)+","+Y(f(x)).toFixed(1);}return d;};
+let ax=`<line x1="${X0}" x2="${X0+W}" y1="${Y0+H}" y2="${Y0+H}" stroke="#a3adb8" stroke-width="1.5"/>`;
+for(let v=0;v<=11;v++)ax+=`<text x="${X(v)}" y="${Y0+H+28}" text-anchor="middle" font-size="20" fill="#566173">${v}</text>`;
+ax+=`<text x="${X0+W/2}" y="${Y0+H+58}" text-anchor="middle" font-size="22" fill="#566173">lightness x</text><text x="${X0}" y="${Y0+4}" font-size="20" fill="#566173">likelihood × prior</text>`;
+$("sv").innerHTML=`<g id="regs"></g>${ax}<path id="cs" fill="none" stroke="#e4734f" stroke-width="4"/><path id="cb" fill="none" stroke="#1d5c8c" stroke-width="4"/><g id="bls"></g>`;
+function render(){
+  const sb=+$("sb").value, ss=+$("ss").value, P=+$("pb").value/100, bs=bounds(sb,ss,P);
+  ymx=Math.max(pdf(7,7,sb)*P,pdf(4,4,ss)*(1-P))*1.12;
+  $("cb").setAttribute("d",path(x=>pdf(x,7,sb)*P));$("cs").setAttribute("d",path(x=>pdf(x,4,ss)*(1-P)));
+  const cuts=[xa,...bs.filter(b=>b>xa&&b<xb),xb];let r="";
+  for(let i=0;i<cuts.length-1;i++){const m=(cuts[i]+cuts[i+1])/2,win=g(m,7,sb,P)>g(m,4,ss,1-P);
+    r+=`<rect x="${X(cuts[i])}" y="${Y0}" width="${X(cuts[i+1])-X(cuts[i])}" height="${H}" fill="${win?"#e6eef6":"#fbe9e3"}"/>`;}
+  $("regs").innerHTML=r;
+  $("bls").innerHTML=bs.filter(b=>b>xa&&b<xb).map(b=>`<line x1="${X(b)}" x2="${X(b)}" y1="${Y0+10}" y2="${Y0+H}" stroke="#14233b" stroke-width="3"/><text x="${X(b)+6}" y="${Y0+28}" font-size="22" font-weight="700" fill="#14233b">${b.toFixed(2)}</text>`).join("");
+  $("bd").textContent=bs.length?bs.map(b=>b.toFixed(2).replace("-","−")).join("  and  "):"none";
+  $("nb").textContent=bs.length;
+  const same=Math.abs(sb-ss)<1e-9;$("frow").style.opacity=same?1:.35;$("fx").textContent=same?formula(sb,P).toFixed(3):"—";
+  const gb=g(0.5,7,sb,P),gs=g(0.5,4,ss,1-P),M=v=>v.toFixed(2).replace("-","−");$("g05b").textContent=M(gb);$("g05s").textContent=M(gs);
+  $("r05b").className="row "+(gb>gs?"win":"lose");$("r05s").className="row "+(gb>gs?"lose":"win");
+  [["sb",0.5,3],["ss",0.5,3],["pb",5,95]].forEach(([id,a,b])=>$(id).style.setProperty("--p",((+$(id).value-a)/(b-a)*100)+"%"));
+  $("sbo").textContent=sb.toFixed(2);$("sso").textContent=ss.toFixed(2);$("pbo").textContent=Math.round(P*100)+"%";
+  $("verdict").textContent=same?`Same spread: one boundary, and the formula gives it. The x² terms cancel.`:
+    bs.length===0?"Different spreads, and no boundary at all: one class wins everywhere.":
+    (()=>{const out=bs.filter(v=>v<xa||v>xb);return out.length?`Different spreads: two boundaries. The other one is at ${out.map(v=>v.toFixed(1).replace("-","−")).join(" and ")}, outside this picture.`:"Different spreads: two boundaries. The wider class wins in both tails.";})();
+}
+["sb","ss","pb"].forEach(id=>$(id).oninput=render);
+const fit=()=>{const s=Math.min(innerWidth/1600,innerHeight/900);$("stage").style.transform=`scale(${s})`;};
+addEventListener("resize",fit);fit();render();window.__render=render;
+})();
+</script>
+<script>
+if(window.parent!==window){addEventListener("keydown",e=>{const t=e.target,onRange=t&&t.type==="range";
+ const go=m=>{e.preventDefault();window.parent.postMessage(JSON.stringify({method:m}),"*");};
+ const deck=["KeyW","KeyP","KeyR","KeyD","KeyC","KeyQ","BracketRight","BracketLeft","KeyH","KeyF","Slash"].includes(e.code)||"wpdcrqWPDCRQ][hHfF?؟صحقيؤاض".includes(e.key)&&e.key.length===1;
+ if(e.ctrlKey||e.metaKey||e.altKey)return;
+ if(e.key==="Escape"||deck){e.preventDefault();if(t&&t.blur)t.blur();window.parent.postMessage({engsKey:{key:e.key,code:e.code,shiftKey:e.shiftKey}},"*");}
+ else if(e.key==="PageDown"||e.key==="n"||(!onRange&&(e.key==="ArrowRight"||e.key===" ")))go("next");
+ else if(e.key==="PageUp"||(!onRange&&e.key==="ArrowLeft"))go("prev");});}
+else document.getElementById("home").hidden=false;
+/* presenter mode (present.js): the sliders are reported to the deck and can be set from it, so the recording window follows */
+if(window.parent!==window){["sb","ss","pb"].forEach(id=>document.getElementById(id).addEventListener("input",e=>window.parent.postMessage({engsLive:{id,value:e.target.value}},"*")));
+ addEventListener("message",e=>{const m=e.data;if(e.source!==window.parent||!m||!m.engsLiveSet)return;const el=document.getElementById(m.engsLiveSet.id);
+  if(el&&el.type==="range"){el.value=m.engsLiveSet.value;if(window.__render)window.__render();}});
+ window.parent.postMessage({engsLive:{ready:1}},"*");}
+</script>
+</body></html>

@@ -1,0 +1,1635 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lab 5 Code Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700&family=Fira+Sans:wght@400;600;700&family=Literata:opsz,wght@7..72,600;7..72,700&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>
+/* Layout: one notebook cell per view (hash route). Top bar with progress, side navigation (stacks above on phones),
+   and inside a cell a fixed reading order: 1 formula, 2 code line by line (the explanation card opens under its line,
+   with the live panel inside it), 3 the variables the cell makes (structure view opens inline), 4 try in the notebook. */
+:root{
+ --bg:#F5F7FA;--surface:#FFFFFF;--sunk:#EEF1F5;--fg:#14233B;--muted:#566173;--line:#DDE3EA;
+ --bass:#1D5C8C;--onbass:#FFFFFF;--basstint:#E6EEF6;--salmon:#E4734F;--salink:#B4472A;--saltint:#FBE9E3;
+ --sand:#F3E3B5;--sandfg:#6E5310;--sandline:#F3E3B5;--good:#28724F;--goodbg:#E3F4EA;--greentint:#E6F3EC;
+ --bad:#B3261E;--badbg:#FBE9E7;--warn:#9A5B00;--warnbg:#FFF4E0;--faint:#A3ADB8;
+ --py:#6A3FB0;--pybg:#F0EAFB;--np:#0D7377;--npbg:#E0F2F2;--pd:#A3346E;--pdbg:#F8E6EF;--plt:#A85A12;--pltbg:#FBEEDF;--sp:#2E6B30;--spbg:#E6F2E6;--sk:#3949AB;--skbg:#E8EAF6;
+ --codebg:#14233B;--codefg:#E6EBF3;--codecm:#8EA0B8;--codeno:#627083;--codeline:#263347;--codehead:#D5DDE8;--tk:#F3E3B5;
+ --hkw:#D7A6F5;--hco:#7FB8F0;--hst:#F2A98A;--hnu:#C7E3A8;--hfn:#F3E3A0;--hmo:#6FD8C8;--hva:#B9DBF7;--hka:#F0C48A;
+ --kA:#9CC3E6;--kAbg:rgba(116,174,224,.25);--kAu:#74AEE0;--kB:#A8E0C0;--kBbg:rgba(99,192,143,.25);--kCu:#F08A6A;
+ --cA:#D8742B;--cC:#2E8B57;--cG:#2F6FB0;--dv:#6B3FB8;--dvbg:#F4EFFC;
+ --f-body:"Fira Sans","Cairo","Tajawal","Noto Sans Arabic",Tahoma,sans-serif;
+ --f-ar:"Cairo","Tajawal","Noto Sans Arabic",Tahoma,sans-serif;
+ --f-disp:"Literata","Cairo","Tajawal",Georgia,serif;
+ --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+ --bg:#0F141C;--surface:#161D29;--sunk:#1C2433;--fg:#E6EAF1;--muted:#9AA4B6;--line:#2A3344;
+ --bass:#79B3E3;--onbass:#0F141C;--basstint:#1B2C40;--salmon:#F29A7B;--salink:#F29A7B;--saltint:#3A221A;
+ --sand:#4A3F22;--sandfg:#F0D58C;--sandline:#8A7434;--good:#7FD3A6;--goodbg:#163225;--greentint:#16301F;
+ --bad:#F2A097;--badbg:#3A1B19;--warn:#F2C17A;--warnbg:#3A2A12;--faint:#5E6A7E;
+ --py:#C3A6F2;--pybg:#2A2140;--np:#6FD0D3;--npbg:#133233;--pd:#F09AC6;--pdbg:#3A1C2C;--plt:#F2B36E;--pltbg:#3A2914;--sp:#93D195;--spbg:#1A3019;--sk:#AAB4F0;--skbg:#1E2246;
+ --codebg:#0A0F16;--codefg:#E6EBF3;--codecm:#7F90A8;--codeno:#56647A;--codeline:#1E2838;--codehead:#C9D2DF;--tk:#4A3F22;
+ --kA:#9CC3E6;--kAbg:rgba(116,174,224,.22);--kAu:#74AEE0;--kB:#A8E0C0;--kBbg:rgba(99,192,143,.22);--kCu:#F08A6A;
+ --cA:#F0A066;--cC:#6FCF97;--cG:#7DB1EA;--dv:#C3A6F2;--dvbg:#221B33;color-scheme:dark}}
+:root[data-theme="dark"]{
+ --bg:#0F141C;--surface:#161D29;--sunk:#1C2433;--fg:#E6EAF1;--muted:#9AA4B6;--line:#2A3344;
+ --bass:#79B3E3;--onbass:#0F141C;--basstint:#1B2C40;--salmon:#F29A7B;--salink:#F29A7B;--saltint:#3A221A;
+ --sand:#4A3F22;--sandfg:#F0D58C;--sandline:#8A7434;--good:#7FD3A6;--goodbg:#163225;--greentint:#16301F;
+ --bad:#F2A097;--badbg:#3A1B19;--warn:#F2C17A;--warnbg:#3A2A12;--faint:#5E6A7E;
+ --py:#C3A6F2;--pybg:#2A2140;--np:#6FD0D3;--npbg:#133233;--pd:#F09AC6;--pdbg:#3A1C2C;--plt:#F2B36E;--pltbg:#3A2914;--sp:#93D195;--spbg:#1A3019;--sk:#AAB4F0;--skbg:#1E2246;
+ --codebg:#0A0F16;--codefg:#E6EBF3;--codecm:#7F90A8;--codeno:#56647A;--codeline:#1E2838;--codehead:#C9D2DF;--tk:#4A3F22;
+ --kA:#9CC3E6;--kAbg:rgba(116,174,224,.22);--kAu:#74AEE0;--kB:#A8E0C0;--kBbg:rgba(99,192,143,.22);--kCu:#F08A6A;
+ --cA:#F0A066;--cC:#6FCF97;--cG:#7DB1EA;--dv:#C3A6F2;--dvbg:#221B33;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-padding-top:90px}
+body{background:var(--bg);color:var(--fg);margin:0;font-family:var(--f-body);font-size:17px;line-height:1.85;overflow-x:hidden}
+.app{direction:rtl;text-align:right;min-height:100vh}
+h1{font-family:var(--f-disp);font-size:clamp(26px,4.4vw,34px);line-height:1.4;margin:0;text-wrap:balance}
+h2{font-family:var(--f-disp);font-size:clamp(21px,3vw,25px);line-height:1.45;margin:0;text-wrap:balance}
+h3{font-size:18px;margin:0;line-height:1.6}
+h1 bdi,h2 bdi{font-family:var(--f-body);font-weight:600;color:var(--muted);font-size:.7em}
+p{margin:0}
+a{color:var(--bass)}
+.lead{color:var(--muted);max-width:70ch}
+code,.mono{font-family:var(--f-mono);font-size:.86em;direction:ltr;unicode-bidi:isolate}
+.mono{display:inline-block}
+code{background:var(--sunk);border-radius:5px;padding:1px 5px;overflow-wrap:anywhere}
+bdi{unicode-bidi:isolate}
+:focus-visible{outline:2px solid var(--salmon);outline-offset:2px}
+.sub{font-weight:400;color:var(--muted);font-size:14px}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;background:var(--surface);border-bottom:1px solid var(--line);
+ padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
+.tb-title{display:flex;flex-direction:column;flex:1 1 220px;min-width:0}
+.tb-eyebrow{font-size:13px;font-weight:600;color:var(--muted);direction:ltr;text-align:right}
+.tb-name{font-family:var(--f-disp);font-size:22px;font-weight:700;line-height:1.4}
+.tb-prog{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+.bar{width:160px;height:8px;border-radius:999px;background:var(--line);overflow:hidden;display:flex}
+.bar i{display:block;height:100%;background:var(--bass);width:0;transition:width .3s}
+.tb-nav{display:flex;gap:8px;flex-wrap:wrap}
+.navbtn{min-height:44px;border-radius:999px;padding:8px 16px;font-weight:600;font-size:15px;border:1px solid var(--line);background:var(--surface);color:var(--fg);text-decoration:none;display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-family:inherit}
+.navbtn:hover{border-color:var(--fg)}
+.navbtn.primary{background:var(--bass);border-color:var(--bass);color:var(--onbass)}
+.navbtn[aria-disabled="true"]{opacity:.4;pointer-events:none}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;direction:ltr}
+.seg button{font-family:var(--f-mono);font-size:13px;background:var(--surface);color:var(--fg);border:0;border-inline-start:1px solid var(--line);padding:5px 9px;cursor:pointer;min-width:30px;min-height:40px}
+.seg button:first-child{border-inline-start:0}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--surface)}
+.seg button:focus-visible{outline:2px solid var(--salmon);outline-offset:-2px}
+#themeseg button{font-family:var(--f-body)}
+@media (max-width:860px){.topbar{position:static}.tb-name{font-size:19px}.bar{width:110px}}
+
+/* ---------- shell and side navigation ---------- */
+.shell{display:flex;gap:28px;align-items:flex-start;max-width:1400px;margin:0 auto;
+ padding:24px max(16px,env(safe-area-inset-right,0px)) 80px max(16px,env(safe-area-inset-left,0px))}
+.side{flex:0 0 250px;position:sticky;top:92px;display:flex;flex-direction:column;gap:3px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+.side .sh{font-size:13px;font-weight:700;color:var(--muted);padding:0 8px 4px}
+.nv{text-decoration:none;color:var(--fg);display:flex;gap:10px;align-items:center;padding:7px 10px;border-radius:8px;font-size:15px;min-height:40px;line-height:1.5}
+.nv:hover{background:var(--sunk)}
+.nv .nk{font-family:var(--f-mono);font-size:13px;color:var(--muted);min-width:46px;direction:ltr;text-align:right;white-space:nowrap}
+.nv.done{color:var(--muted)}
+.nv.done .nk{color:var(--good)}
+.nv.done .nk::before{content:"✓ "}
+.nv[aria-current="page"]{background:var(--basstint);color:var(--fg);font-weight:700}
+.nv[aria-current="page"] .nk{color:var(--bass)}
+.nv[aria-current="page"] .nk::before{content:"● "}
+.nv .nk.tr{color:var(--salink)}
+.side .sep{height:1px;background:var(--line);margin:6px 0}
+.side .scope{margin:8px 6px 2px;font-size:13px}
+main{flex:1 1 0;min-width:0}
+@media (max-width:860px){
+ .shell{flex-direction:column;gap:14px;padding-top:14px}
+ .side{position:static;flex:none;width:100%;flex-direction:row;overflow-x:auto;gap:6px;padding:8px;scrollbar-width:thin}
+ .side .sh,.side .sep,.side .scope{display:none}
+ .nv{flex:none;white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+ .nv .nk{min-width:0}
+}
+
+/* ---------- a view ---------- */
+.view{display:grid;gap:20px;min-width:0}
+.cellhead{display:grid;gap:6px}
+.cellno{font-family:var(--f-mono);font-size:14px;font-weight:700;color:var(--muted);direction:ltr;text-align:right}
+.goal{max-width:72ch;font-size:17.5px}
+.goal b{color:var(--bass)}
+.scope{display:inline-flex;gap:8px;align-items:center;background:var(--sand);color:var(--sandfg);border-radius:8px;padding:4px 12px;font-size:15px;font-weight:600;width:fit-content}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:14px}
+.intro{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 18px;display:grid;gap:10px}
+.steps{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0;padding:0;list-style:none}
+.steps .sl{font-size:14px;font-weight:700;color:var(--muted)}
+.steps .ar{color:var(--faint)}
+.steps button{display:inline-flex;gap:8px;align-items:center;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:15px;font-family:inherit;cursor:pointer;min-height:40px}
+.steps button b{color:var(--bass)}
+.steps button.on{background:var(--fg);color:var(--surface);border-color:var(--fg)}
+.steps button.on b{color:var(--surface)}
+.blk{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 18px}
+details.blk>summary{cursor:pointer;font-weight:700;line-height:1.8;min-height:40px;display:list-item;padding-top:4px}
+summary::marker{color:var(--salmon)}
+.b{display:inline-flex;align-items:center;font-family:var(--f-mono);font-size:12px;font-weight:700;line-height:1;border-radius:5px;padding:4px 7px;white-space:nowrap;direction:ltr}
+.b.py{color:var(--py);background:var(--pybg)}.b.np{color:var(--np);background:var(--npbg)}.b.pd{color:var(--pd);background:var(--pdbg)}
+.b.plt{color:var(--plt);background:var(--pltbg)}.b.sp{color:var(--sp);background:var(--spbg)}
+.b.new{color:var(--surface);background:var(--fg)}.b.rev{color:var(--muted);background:var(--sunk)}.b.trap{color:var(--warn);background:var(--warnbg)}
+a.b{text-decoration:none;min-height:32px;padding:6px 10px}
+a.b:hover{outline:1px solid currentColor}
+.formula{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:center;margin-top:10px}
+.formula .side2{display:grid;gap:2px;min-width:0}
+.formula .lab{font-size:13px;font-weight:700;color:var(--muted)}
+.formula .math{font-family:var(--f-disp);font-size:19px;line-height:1.9;direction:ltr;text-align:center;overflow-x:auto}
+.formula .py{font-family:var(--f-mono);font-size:15px;line-height:2.4;direction:ltr;text-align:center;overflow-x:auto;color:var(--bass)}
+.formula .eq{font-size:22px;color:var(--muted)}
+@media (max-width:640px){.formula{grid-template-columns:1fr}.formula .eq{text-align:center;transform:rotate(90deg)}}
+.pn{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:8px}
+.pn a{text-decoration:none;font-weight:600;color:var(--fg);border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 18px;min-height:44px;display:inline-flex;align-items:center}
+.pn a.primary{color:var(--onbass);background:var(--bass);border-color:var(--bass);margin-inline-start:auto}
+
+/* ---------- code, line by line ---------- */
+.codebox{background:var(--codebg);color:var(--codefg);border-radius:12px;overflow:hidden;min-width:0}
+.codehead{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px 14px;padding:10px 18px;border-bottom:1px solid var(--codeline);color:var(--codehead);font-size:14px;font-weight:700}
+.codehead .src{font-family:var(--f-mono);font-size:12px;font-weight:400;color:#9AA6B8;direction:ltr}
+.lines{direction:ltr;text-align:left;overflow-x:auto;padding:10px 0 12px;font-family:var(--f-mono);font-size:14.5px;line-height:2}
+.lines-in{min-width:100%;width:max-content}
+.ln{display:flex;gap:14px;padding:0 18px 0 10px;white-space:pre;border-left:3px solid transparent}
+.ln .no{color:var(--codeno);width:22px;text-align:right;flex:none;user-select:none;-webkit-user-select:none}
+.ln.cur{background:rgba(243,227,181,.08);border-left-color:var(--sandline)}
+.ln.flash{animation:lnflash 1.8s ease-out}
+@keyframes lnflash{0%,40%{background:rgba(243,227,181,.28)}100%{background:transparent}}
+.lines .hl-cm{color:var(--codecm);font-style:italic}.lines .hl-kw{color:var(--hkw)}.lines .hl-co{color:var(--hco)}.lines .hl-st{color:var(--hst)}
+.lines .hl-nu{color:var(--hnu)}.lines .hl-fn,.lines .hl-bi{color:var(--hfn)}.lines .hl-mo{color:var(--hmo)}.lines .hl-va,.lines .hl-at{color:var(--hva)}
+.lines .hl-kwarg{color:var(--hka)}.lines .hl-op{color:var(--codefg)}.lines .hl-br{color:var(--hco)}.lines .hl-fmt{color:var(--hnu)}
+.tk{font:inherit;color:inherit;background:transparent;border:0;border-bottom:2px dotted var(--codecm);padding:0 1px;margin:0;cursor:pointer;border-radius:3px;line-height:inherit;white-space:pre}
+.tk:hover{background:rgba(243,227,181,.16)}
+.tk:focus-visible{outline:2px solid var(--sand);outline-offset:1px}
+.tk.on{background:var(--tk);color:var(--sandfg);border-bottom-color:transparent}
+.tk.on span{color:inherit;font-style:normal}
+pre.code{display:none}
+
+/* ---------- explanation card under its line ---------- */
+.card{position:sticky;left:0;padding:8px 12px 12px;white-space:normal;font-family:var(--f-body)}
+.card-in{direction:rtl;text-align:right;background:var(--surface);color:var(--fg);border-radius:12px;border-top:4px solid var(--sandline);position:relative;padding:14px 18px 14px;display:grid;gap:12px;font-size:16.5px;line-height:1.85;box-shadow:0 6px 24px rgba(10,15,22,.25)}
+.caret{position:absolute;top:-14px;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:10px solid var(--sandline);transform:translateX(-50%)}
+.ctop{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ctop .name{font-family:var(--f-mono);font-size:16px;font-weight:700;direction:ltr;unicode-bidi:isolate;overflow-wrap:anywhere}
+.ctop .one{font-size:15.5px;color:var(--muted)}
+.xbtn{margin-inline-start:auto;width:44px;height:44px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:22px;line-height:1;cursor:pointer;font-family:var(--f-body)}
+.xbtn:hover{color:var(--fg);border-color:var(--fg)}
+.cbody{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+.ctext{flex:1 1 280px;min-width:0;display:grid;gap:10px}
+.ctext ul{margin:0;padding-inline-start:20px}
+.cside{flex:1.2 1 340px;min-width:0}
+.cside .panel{background:var(--bg)}
+.args{display:grid;gap:6px}
+.arg{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;align-items:baseline;border-top:1px dashed var(--line);padding-top:6px;font-size:15.5px}
+.arg code{font-weight:700;color:var(--np);background:var(--npbg)}
+.trapbox{background:var(--warnbg);color:var(--fg);border-radius:8px;padding:8px 12px;font-size:15.5px}
+.trapbox b{color:var(--warn)}
+.cfoot{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+.cfoot button{font-family:var(--f-mono);font-size:13px;color:var(--bass);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 12px;direction:ltr;cursor:pointer;min-height:40px}
+.cfoot button:hover{border-color:var(--bass)}
+.cfoot .cnt{margin-inline-start:auto}
+@media (max-width:640px){.card{padding:8px 6px 12px}.card-in{padding:12px 12px}}
+
+/* ---------- live panels ---------- */
+.rest{min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:12px;min-width:0}
+.panel .ptitle{font-size:14px;font-weight:700;color:var(--muted)}
+.ctrls{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.ctrl{direction:ltr;display:flex;gap:6px;align-items:center;flex-wrap:wrap;border-radius:8px;padding:2px 4px;transition:box-shadow .3s}
+.ctrl.flash,.dice.flash,.ds.flash{box-shadow:0 0 0 3px var(--salmon)}
+.ctrl label{font-family:var(--f-mono);font-size:13px;direction:ltr}
+input[type=range]{accent-color:var(--bass);width:150px;max-width:100%;min-height:32px}
+.out{font-family:var(--f-mono);font-size:13.5px;direction:ltr;text-align:left;background:var(--sunk);border-radius:8px;padding:8px 12px;white-space:pre;overflow-x:auto;line-height:1.7}
+svg{direction:ltr;display:block;width:100%;height:auto;max-width:100%}
+svg text{font-family:var(--f-mono);font-size:12px;fill:var(--muted)}
+svg .axis{stroke:var(--muted);stroke-width:1}
+svg .grid{stroke:var(--line);stroke-width:1}
+.note{font-size:15px;color:var(--muted)}
+.dice{display:flex;flex-wrap:wrap;gap:6px;direction:ltr;border-radius:8px;transition:box-shadow .3s}
+.die{width:34px;height:34px;border-radius:7px;border:1.5px solid var(--line);display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;background:var(--surface)}
+.die.six{background:var(--salmon);color:var(--surface);border-color:var(--salmon)}
+.chips{display:flex;gap:4px;direction:ltr;flex-wrap:wrap}
+.chip{font-family:var(--f-mono);font-size:13px;border-radius:6px;padding:2px 8px;background:var(--npbg);color:var(--np)}
+.chip.x{background:var(--badbg);color:var(--bad);text-decoration:line-through}
+table.t{border-collapse:collapse;font-family:var(--f-mono);font-size:14px;direction:ltr;margin:0 auto}
+table.t th,table.t td{border:1px solid var(--line);padding:4px 12px;text-align:center}
+table.t th{background:var(--sunk);font-weight:600}
+table.t td.hrow{background:color-mix(in srgb,var(--bass) 14%,transparent)}
+table.t td.hcol{background:color-mix(in srgb,var(--salmon) 18%,transparent)}
+table.t td.hit{background:var(--sand);color:var(--sandfg);font-weight:700}
+table.t td.marg,table.t th.marg{color:var(--muted)}
+.tw{overflow-x:auto;max-width:100%}
+.grid3{display:grid;grid-template-columns:auto repeat(3,52px) 16px 52px;gap:4px;direction:ltr;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:13px}
+.grid3 .c{height:30px;border-radius:5px;display:grid;place-items:center;background:var(--sunk)}
+.grid3 .c.T{background:color-mix(in srgb,var(--bass) 80%,transparent);color:#fff}
+.grid3 .c.F{background:color-mix(in srgb,var(--salmon) 25%,transparent)}
+.grid3 .c.sum{background:var(--sand);color:var(--sandfg);font-weight:700}
+.grid3 .rl{color:var(--muted);padding-right:6px}
+.shape{font-family:var(--f-mono);direction:ltr;text-align:center;font-size:14px}
+.shape b{color:var(--salink)}
+.ds{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;justify-content:center;direction:ltr;border-radius:8px}
+.ds figure{margin:0;display:grid;gap:4px;justify-items:center}
+.ds figcaption{font-size:12px;color:var(--muted);font-family:var(--f-mono)}
+
+/* ---------- variables strip and structure view ---------- */
+.vars{display:grid;gap:10px}
+.vars>h3{font-size:17px}
+.vchips{display:flex;flex-wrap:wrap;gap:10px;direction:ltr}
+.vchip{text-align:left;color:var(--fg);display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:7px 14px;min-width:140px;min-height:44px;cursor:pointer;font-family:inherit}
+.vchip b{font-family:var(--f-mono);font-size:15px}
+.vchip span{font-size:13px;color:var(--muted);font-family:var(--f-mono)}
+.vchip:hover{border-color:var(--bass)}
+.vchip[aria-expanded="true"]{border:2px solid var(--bass);background:var(--basstint);padding:6px 13px}
+.sv{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface);display:grid}
+.svbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--bg)}
+.svbar .back{font-family:inherit;font-weight:600;font-size:15px;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 14px;min-height:44px;cursor:pointer}
+.svbar .back:hover{border-color:var(--fg)}
+.svbar .svt{font-weight:700}
+.svcode{background:var(--codebg);color:var(--codefg);direction:ltr;text-align:left;font-family:var(--f-mono);font-size:14.5px;line-height:2;padding:10px 18px;overflow-x:auto;white-space:pre}
+.svcode .v{background:var(--tk);color:var(--sandfg);border-radius:4px;padding:0 4px;font-weight:700}
+.svcode .kA{background:var(--kAbg);color:var(--kA);border-radius:4px;padding:0 4px}
+.svcode .kB{background:var(--kBbg);color:var(--kB);border-radius:4px;padding:0 4px}
+.svcode .uA{border-bottom:2px solid var(--kAu)}
+.svcode .uC{border-bottom:2px solid var(--kCu)}
+.svcode .dsh{border:1.5px dashed var(--faint);border-radius:4px;padding:0 4px}
+.svcode .cm{color:var(--codecm);font-style:italic}
+.svbody{display:flex;flex-wrap:wrap;gap:24px;padding:18px 20px;align-items:flex-start}
+.svtext{flex:1 1 320px;min-width:0;display:grid;gap:10px}
+.svtext ol{list-style:none;margin:0;padding:0;display:grid;gap:8px;counter-reset:n}
+.svtext li{display:flex;gap:10px;align-items:baseline;counter-increment:n}
+.svtext li::before{content:counter(n);font-family:var(--f-mono);font-size:13px;font-weight:700;color:var(--surface);background:var(--fg);border-radius:50%;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.svtext .shp{background:var(--basstint);border-radius:10px;padding:8px 14px;font-family:var(--f-mono);font-size:14px;direction:ltr;text-align:left;overflow-wrap:anywhere}
+.svtext .shp span{font-family:var(--f-ar);font-size:14px;color:var(--muted);unicode-bidi:isolate;direction:rtl;display:inline-block;margin-left:10px}
+.svtext .dslink{font-size:15px;display:block}
+.card-in:focus,.sv:focus{outline:none}
+
+.svpic{flex:1 1 380px;min-width:0;display:flex;justify-content:center;direction:ltr}
+.frame{border:2px solid var(--sandline);border-radius:10px;overflow:hidden;font-family:var(--f-mono);font-size:14px;max-width:100%}
+.fr-wrap{overflow-x:auto;max-width:100%}
+.kAc{color:var(--bass);font-weight:700}.kBc{color:var(--good);font-weight:700}.kCc{color:var(--salink);font-weight:700}
+.dtab{border-collapse:collapse;font-family:var(--f-mono);font-size:13.5px}
+.dtab th,.dtab td{padding:4px 9px;text-align:left;border-top:1px solid var(--line);white-space:nowrap}
+.dtab thead th{background:var(--bg);font-weight:700;border-top:0}
+.dtab .ix{color:var(--muted)}
+.dtab .cA{background:var(--basstint);color:var(--bass)}
+.dtab .cB{background:var(--greentint);color:var(--good)}
+.dtab td.hit{background:var(--sand);color:var(--sandfg);font-weight:700}
+.dtab .gap td,.dtab .gap th{color:var(--muted)}
+.dtab tr.cut td,.dtab tr.cut th{border-top:2px solid var(--fg)}
+.dtab .dm{color:var(--muted)}
+.dtab .mg{color:var(--muted)}
+.dtab .dl{border-left:1.5px dashed var(--faint)}
+.dtab tr.dt td,.dtab tr.dt th{border-top:1.5px dashed var(--faint)}
+.brk{display:flex;flex-direction:column;font-family:var(--f-mono);font-size:13px}
+.brk div{border-left:3px solid;padding-left:8px;display:flex;align-items:center}
+.cells{display:flex;flex-wrap:wrap;gap:3px;font-family:var(--f-mono);font-size:13px;align-items:center}
+.cells span{border:1px solid var(--faint);border-radius:4px;padding:2px 7px;min-width:28px;text-align:center}
+.cells span.hit{background:var(--sand);color:var(--sandfg);border-color:var(--sandline);font-weight:700}
+.cells span.T{background:color-mix(in srgb,var(--bass) 80%,transparent);color:#fff;border-color:transparent}
+.cells span.F{background:var(--saltint);border-color:transparent}
+.cells span.six{background:var(--salmon);color:#fff;border-color:transparent}
+.cells span.dots{border:0;color:var(--muted);min-width:0}
+.cells span.ix{border:0;color:var(--muted);font-size:11px;min-width:28px;padding:0 2px}
+.pic{display:grid;gap:8px;justify-items:start;padding:12px 14px}
+.pic .cap{font-size:12px;color:var(--muted)}
+.kv{display:grid;grid-template-columns:auto auto auto;gap:4px 10px;align-items:center;font-family:var(--f-mono);font-size:14px}
+.kv .k{color:var(--bass);font-weight:700}
+.kv .ar2{color:var(--muted)}
+.kv .hit{background:var(--sand);color:var(--sandfg);border-radius:4px;padding:0 4px;font-weight:700}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:4px}
+.dsgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.dscard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;transition:box-shadow .3s}
+.dscard.flash{box-shadow:0 0 0 3px var(--salmon)}
+.dscard p{font-size:14.5px;text-align:right}
+.mini{display:flex;gap:3px;direction:ltr;font-family:var(--f-mono);font-size:12px;flex-wrap:wrap;justify-content:center}
+.mini span{border:1px solid var(--faint);border-radius:4px;padding:2px 6px}
+
+/* ---------- setup, tasks, traps, index ---------- */
+.libs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:10px}
+.lib{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:6px;align-content:start}
+.lib h3{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.lib .why{font-size:15px}
+.lib ul{margin:0;padding-inline-start:20px;font-size:15px}
+.tries ol{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:4px}
+.tries details{border-top:1px dashed var(--line);padding-top:6px}
+.tries li:first-child details{border-top:0}
+.tries details summary{cursor:pointer;line-height:1.8;font-weight:400;min-height:40px}
+.tries .ans{background:var(--goodbg);border-radius:8px;padding:8px 12px;margin-top:6px}
+.traps{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px}
+.trapcard{background:var(--surface);border:1px solid var(--line);border-inline-start:4px solid var(--warn);border-radius:10px;padding:12px 16px;display:grid;gap:6px}
+.trapcard h3{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.task{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:8px;transition:box-shadow .3s}
+.task .tools{display:flex;flex-wrap:wrap;gap:6px}
+.task .note.flash,.und.flash{box-shadow:0 0 0 3px var(--salmon);border-radius:8px}
+.glo{width:100%;border-collapse:collapse;font-size:15px}
+.glo th,.glo td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:right;vertical-align:top}
+.glo th{font-size:13px;color:var(--muted)}
+.glo td.n{font-family:var(--f-mono);direction:ltr;text-align:left;white-space:nowrap}
+.glo a{color:var(--bass);display:inline-flex;min-height:32px;align-items:center}
+@media (max-width:640px){.glo td.n{white-space:normal;overflow-wrap:anywhere}.glo .hide-ph{display:none}}
+.howto{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.howto div{background:var(--bg);border-radius:10px;padding:8px 12px;font-size:15px}
+.howto b{display:block;color:var(--bass)}
+.und{border:2px dashed var(--dv);background:var(--dvbg);border-radius:12px;padding:14px 18px;display:grid;gap:10px}
+.undhead{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.undtag{font-size:13px;font-weight:700;color:var(--surface);background:var(--dv);border-radius:6px;padding:2px 10px}
+.und h3{color:var(--dv)}
+.undstep{display:grid;gap:6px}
+.undstep h4{margin:0;font-size:16px}
+.undm{direction:ltr;text-align:left;font-family:var(--f-disp);font-size:18px;background:var(--surface);border-radius:8px;padding:6px 12px;overflow-x:auto;white-space:nowrap}
+.undm .r{background:color-mix(in srgb,var(--bass) 18%,transparent);border-radius:4px;padding:0 3px}
+.undm .c{background:color-mix(in srgb,var(--salmon) 22%,transparent);border-radius:4px;padding:0 3px}
+.undcode{font-size:15px;color:var(--muted)}
+#dv{direction:ltr;text-align:left;--dv:#6a4c93;--dv-soft:#f3eff9;--dv-line:#e3dbef;--ink:#14233B;--muted:#5A6477;--salmon:#E4734F;--good:#1F7A4D;--bar:#8a94a6;--font-text:"Fira Sans","Cairo",sans-serif;--font-display:"Literata",Georgia,serif;--font-mono:"JetBrains Mono",monospace}
+.dvbtn{--dv:#6a4c93;--dv-soft:#f3eff9;font-family:var(--font-text);font-size:20px;font-weight:600;color:var(--dv);background:var(--dv-soft);border:1.5px dashed var(--dv);border-radius:20px;padding:5px 16px 6px;cursor:pointer;letter-spacing:.01em;white-space:nowrap}
+.dvbtn:hover{filter:brightness(.96)}
+.dvbtn::before{content:"⤷ "}
+#dv{position:fixed;inset:0;z-index:900;background:rgba(20,35,59,.45)}
+#dvStage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:50% 50%;font-family:var(--font-text);color:var(--ink);cursor:pointer}
+#dv .dvpanel{position:absolute;left:36px;top:28px;width:1528px;height:846px;border-radius:18px;border:2px solid var(--dv);box-shadow:0 10px 40px rgba(20,35,59,.35);
+  background-color:#fdfcff;background-image:linear-gradient(var(--dv-line) 1px,transparent 1px),linear-gradient(90deg,var(--dv-line) 1px,transparent 1px);background-size:36px 36px;background-position:-1px -1px}
+#dv .dvhead{position:absolute;left:34px;top:24px;right:24px;display:flex;align-items:center;gap:18px}
+#dv .dvtag{font-size:18px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--dv);border-radius:6px;padding:3px 12px}
+#dv .dvtitle{font-family:var(--font-display);font-size:40px;font-weight:700;color:var(--ink)}
+#dv .dvclose{margin-left:auto;width:44px;height:44px;border-radius:50%;border:2px solid var(--dv);background:#fff;color:var(--dv);font-size:30px;line-height:36px;cursor:pointer}
+#dv .dvcols{position:absolute;left:40px;top:112px;width:1140px;height:706px;display:flex;flex-direction:column;flex-wrap:wrap;align-content:flex-start;column-gap:48px;row-gap:24px}
+#dv .dvcols{z-index:1}
+#dv .dvtrail{z-index:2}
+#dv .dvbreak{flex-basis:100%;width:0;margin-left:-48px}
+#dv .dvtrail{position:absolute;left:0;top:0;pointer-events:none;overflow:visible;color:var(--dv)}
+#dv .dvtrail path.tr{fill:none;stroke:var(--dv);stroke-width:1.6;stroke-dasharray:5 6;opacity:.22}
+#dv .dvtrail path.tr.new{opacity:.85;stroke-width:2.4}
+#dv .dvtrail path.tr.fresh{animation:dvin .5s both}
+#dv .dvside{position:absolute;left:1222px;top:112px;width:270px;font-size:19px;color:var(--muted)}
+#dv .dvcount{font-family:var(--font-mono);font-weight:700;font-size:24px;color:var(--dv);margin-bottom:18px}
+#dv .dvkey p{margin:0 0 12px;line-height:1.35}
+#dv .dvk1{display:inline-block;width:34px;border-top:2.5px dashed var(--dv);vertical-align:middle;margin-right:6px}
+#dv .dvk2{font-family:var(--font-mono);position:relative;padding:0 4px;margin-right:6px}
+#dv .dvk2::after{content:"";position:absolute;left:0;right:0;top:52%;height:3px;background:var(--salmon)}
+#dv .dvk3{font-size:15px;font-family:var(--font-mono);background:#fff;border:1.5px solid var(--dv);color:var(--dv);border-radius:6px;padding:1px 6px;margin-right:6px}
+#dv .dvhint{margin-top:22px;font-size:17px;color:var(--bar)}
+#dv .dl{display:flex;flex-direction:column;align-items:flex-start;gap:5px;max-width:530px}
+#dv .dl .ex{font-size:27px;line-height:1.5;white-space:nowrap;background:#fdfcff;border-radius:8px;padding:3px 10px}
+#dv .dl.now .ex{box-shadow:inset 4px 0 0 var(--dv)}
+#dv .dl .note{font-size:20px;color:var(--muted);white-space:normal;max-width:520px;padding:0 10px;background:#fdfcff;border-radius:6px}
+#dv .dl .rule{font-family:var(--font-mono);font-size:17px;color:var(--dv);background:#fff;border:1.5px solid var(--dv);border-radius:7px;padding:2px 9px;margin-left:18px}
+#dv .dl .rule b{font-family:var(--font-text);font-weight:600;margin-right:6px}
+#dv .dl .ok{color:var(--good);font-weight:700}
+#dv .dvcols [data-s]{visibility:hidden}
+#dv .dvcols [data-s].on{visibility:visible}
+#dv .dvcols [data-t]{display:inline-block;position:relative;border-radius:5px}
+#dv .dvcols [data-from]{background:var(--dv-soft)}
+#dv .dvcols [data-t]::after{content:"";position:absolute;left:-3px;right:-3px;top:54%;height:3px;border-radius:2px;background:var(--salmon);transform:scaleX(0);transform-origin:left center;transition:transform .55s ease}
+#dv .dvcols [data-t].struck{color:var(--muted)}
+#dv .dvcols [data-t].struck::after{transform:scaleX(1)}
+#dv .dvcols .inst,#dv .dvcols .inst::after{transition:none!important;animation:none!important}
+#dv .dl.now:not(.inst) .ex{animation:dvtxt .5s .8s both}
+#dv .dl.now:not(.inst) .rule,#dv .dl.now:not(.inst) .note,#dv .dl.now:not(.inst) .lbl{animation:dvin .45s .9s both}
+#dv .dvcols [data-from]{color:var(--ink)}
+#dv @keyframes dvtxt{from{color:transparent;background-color:rgba(255,255,255,0)}
+#dv to{color:var(--ink)}
+#dv }
+.dvcols [data-s]:not(.dl).now:not(.inst){animation:dvin .45s both}
+#dv @keyframes dvin{from{opacity:0}
+#dv to{opacity:1}
+#dv }
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.25;margin:0 3px}
+#dv .fr>span:first-child{border-bottom:2px solid currentColor;padding:0 4px}
+#dv .fr>span:last-child{padding:0 4px}
+#dvStage sup{vertical-align:super;font-size:.66em;line-height:0}
+#dvStage sub{vertical-align:sub;font-size:.66em;line-height:0}
+#dv .dl .lbl{font-family:var(--font-text);font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:5px;padding:1px 7px;margin-left:10px;vertical-align:middle}
+#wb{z-index:1000}
+#dv .dvside p,#dv .dvhint{direction:rtl;text-align:right}
+#dv .dl .note{font-family:var(--f-ar);font-size:19px}
+#dv .dl .rule .ar{font-family:var(--f-ar);font-weight:600;letter-spacing:0;direction:rtl;unicode-bidi:isolate}
+#dv .dvtitle{font-family:"Literata","Cairo",Georgia,serif;font-size:36px;direction:rtl;unicode-bidi:isolate}
+#dv .dvtag{letter-spacing:0;text-transform:none}
+.dvbtn{font-family:var(--f-body);font-size:16px;color:var(--dv);background:var(--dvbg);border-color:var(--dv)}
+.trapcard .tools{display:flex;flex-wrap:wrap;gap:6px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+/* ---------- week 4 additions ---------- */
+.b.sk{color:var(--sk);background:var(--skbg)}
+.revlink{display:inline-flex;align-items:center;min-height:40px;font-weight:600;font-size:15px;color:var(--bass);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:4px 14px;width:fit-content}
+.revlink:hover{border-color:var(--bass)}
+.card-in.isrev{border-top-color:var(--faint)}
+.glo a.wk{color:var(--muted)}
+.glo td.n{white-space:normal;overflow-wrap:anywhere;max-width:300px}
+.glo td:last-child{white-space:nowrap}
+.mm{display:flex;align-items:center;gap:10px;direction:ltr;flex-wrap:wrap;justify-content:center}
+.mmg{display:grid;gap:4px;padding:4px 6px;border-left:2px solid var(--fg);border-right:2px solid var(--fg);border-radius:6px}
+.mmg .c{height:32px;display:grid;place-items:center;font-family:var(--f-mono);font-size:14px;border-radius:5px;background:var(--sunk);padding:0 4px}
+.mmg .c.hl{background:var(--saltint);color:var(--salink);font-weight:700}
+.mmg .c.pv{background:var(--basstint);color:var(--bass)}
+.mmg .c.win{background:var(--sand);color:var(--sandfg);font-weight:700}
+.mm .op{font-family:var(--f-mono);font-size:20px;color:var(--muted)}
+.und .ctrls .dvbtn{white-space:normal;text-align:start}
+.panel .frame,.panel .dtab{direction:ltr}
+.card-in span[dir="ltr"],.svtext span[dir="ltr"],.trapcard span[dir="ltr"]{white-space:nowrap}
+</style>
+</head><body>
+
+
+<div class="app">
+<header class="topbar">
+ <div class="tb-title"><span class="tb-eyebrow">ENGS 3302 Pattern Recognition · Week 5 · Lab_W05 · Iyas A. I. Alshaikhkhalil</span><span class="tb-name">دليل كود المعمل 5</span></div>
+ <div class="tb-prog"><span id="tbcount" aria-live="polite">الخلية 1 من 6</span><span class="bar" role="progressbar" aria-label="التقدم في الصفحة" aria-valuemin="0" aria-valuemax="100" id="tbbar"><i></i></span></div>
+ <div class="tb-nav"><a class="navbtn" id="tbprev" href="#setup">→ السابق</a><a class="navbtn primary" id="tbnext" href="#c01">التالي ←</a></div>
+ <span class="seg" id="themeseg" role="group" aria-label="لون الصفحة"><button type="button" aria-pressed="false" data-v="light">فاتح</button><button type="button" aria-pressed="false" data-v="dark">داكن</button><button type="button" aria-pressed="true" data-v="auto">تلقائي</button></span>
+</header>
+
+<div class="shell">
+<nav class="side" id="side" aria-label="خلايا الدفتر">
+ <span class="sh">خلايا الدفتر</span>
+ <a class="nv" href="#setup" data-v="setup"><span class="nk">0</span><span>الإعداد</span></a>
+ <a class="nv" href="#c01" data-v="c01"><span class="nk">0.1</span><span>متجه المتوسطات</span></a>
+ <a class="nv" href="#c11" data-v="c11"><span class="nk">1.1</span><span>الأرجحية العظمى</span></a>
+ <a class="nv" href="#c12" data-v="c12"><span class="nk">1.2</span><span>التغاير والارتباط</span></a>
+ <a class="nv" href="#c13" data-v="c13"><span class="nk">1.3</span><span>صيغة العتبة</span></a>
+ <a class="nv" href="#c14" data-v="c14"><span class="nk">1.4</span><span>LDA وQDA وnaive Bayes</span></a>
+ <span class="sep"></span>
+ <a class="nv" href="#tasks" data-v="tasks"><span class="nk">2</span><span>مهامك</span></a>
+ <a class="nv" href="#traps" data-v="traps"><span class="nk tr">!</span><span>الفخاخ</span></a>
+ <a class="nv" href="#index" data-v="index"><span class="nk">A–Z</span><span>فهرس الأسماء</span></a>
+ <span class="scope">للفهم والتطبيق في المعمل. ليست مادة امتحان.</span>
+</nav>
+
+<main id="main">
+
+<!-- ================= SETUP ================= -->
+<section class="view cell" data-view="setup" hidden>
+ <div class="cellhead"><span class="cellno">Setup cell</span><h1>خلية الإعداد: المكتبات <bdi>(libraries)</bdi> والبيانات</h1>
+ <p class="goal"><b>الهدف:</b> نحمّل المكتبات، ومعها ثلاثة مصنِّفات <bdi>(classifiers)</bdi> جديدة من scikit-learn، ودالة التحقق <code>check</code>، وجدول البطاريق. شغّلها أولًا في كل مرة تفتح الدفتر.</p></div>
+ <div class="intro">
+  <p class="lead">افتح دفتر <code>Lab_W05.ipynb</code> في Colab، وافتح هذه الصفحة بجانبه. الصفحة تعرض خلية واحدة في كل مرة، بترتيب الدفتر. <b>انقر أي اسم مُسطَّر في الكود</b>، فيفتح شرحه تحت سطره، ومعه لوحة حيّة ترى فيها أثره.</p>
+  <p class="lead">الاسم الذي شُرح في أسبوع سابق تجد له هنا بطاقة قصيرة «مراجعة»، ورابطًا إلى شرحه الكامل في دليل ذلك الأسبوع.</p>
+  <span class="scope">للفهم والتطبيق في المعمل. ليست مادة امتحان.</span>
+  <div class="legend">
+   <span class="b py">Python</span> اللغة نفسها
+   <span class="b np">NumPy</span><span class="b pd">pandas</span><span class="b plt">Matplotlib</span><span class="b sp">SciPy</span><span class="b sk">scikit-learn</span> المكتبات
+   <span class="b new">NEW</span> أول مرة
+   <span class="b rev">مراجعة</span> شُرح في أسبوع سابق
+   <span class="b trap">فخ</span> خطأ شائع
+  </div>
+ </div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"><span class="sl">اقرأ بالترتيب:</span>
+  <button type="button" data-step="1"><b>1</b> المكتبات</button><span class="ar">←</span>
+  <button type="button" data-step="2" class="on"><b>2</b> الكود سطرًا سطرًا</button><span class="ar">←</span>
+  <button type="button" data-step="3"><b>3</b> المتغيرات الناتجة</button><span class="ar">←</span>
+  <button type="button" data-step="4"><b>4</b> ما الجديد هذا الأسبوع</button></div>
+ <details class="blk" data-step="1"><summary>1 · المكتبات: ماذا نأخذ من كل واحدة <span class="sub">(انقر لتفتح)</span></summary>
+ <div class="libs">
+  <div class="lib"><h3><span class="b np">NumPy</span> <span class="b rev">مراجعة</span></h3>
+   <p class="why">المصفوفات <bdi>(arrays)</bdi> والحساب. الجديد هذا الأسبوع: <code>np.cov</code> لمصفوفة التغاير <bdi>(covariance matrix)</bdi>، و<code>np.prod</code> للضرب، و<code>np.log</code>، و<code>np.meshgrid</code> لشبكة نقاط.</p></div>
+  <div class="lib"><h3><span class="b pd">pandas</span> <span class="b rev">مراجعة</span></h3>
+   <p class="why">الجداول. الجديد: اختيار الصفوف بشرط بين قوسين <code>peng[شرط]</code>، والعمود بعد نقطة <code>.flipper_length_mm</code>.</p></div>
+  <div class="lib"><h3><span class="b plt">Matplotlib</span> <span class="b rev">مراجعة</span></h3>
+   <p class="why">الرسم. الجديد: <code>plt.scatter</code> لمخطط الانتشار <bdi>(scatter plot)</bdi>، و<code>plt.subplots</code> لثلاثة رسوم جنبًا إلى جنب، و<code>contourf</code> لتلوين مناطق القرار <bdi>(decision regions)</bdi>.</p></div>
+  <div class="lib"><h3><span class="b sp">SciPy</span> <span class="b rev">مراجعة</span></h3>
+   <p class="why"><code>norm</code> كما في الأسبوعين 3 و4. الجديد: <code>norm.logpdf</code>، لوغاريتم الكثافة <bdi>(log-density)</bdi> مباشرة.</p></div>
+  <div class="lib"><h3><span class="b sk">scikit-learn</span> <span class="b new">NEW</span></h3>
+   <p class="why">ثلاثة نماذج جاهزة: LDA وQDA وnaive Bayes. كلها تعمل بالطريقة نفسها: <code>fit</code> على بيانات التدريب <bdi>(training data)</bdi>، ثم <code>predict</code> على بيانات الاختبار <bdi>(test data)</bdi>.</p></div>
+ </div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W05.ipynb · setup cell</span></div>
+ <pre class="code" data-cell="setup">import warnings; [[warn|warnings.filterwarnings("ignore")]]
+[[imp|import numpy as np, pandas as pd]]
+import matplotlib.pyplot as plt
+[[from|from scipy.stats import norm, multivariate_normal]]
+[[tts0|from sklearn.model_selection import train_test_split]]
+[[skm|from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis]]
+[[skm|from sklearn.naive_bayes import GaussianNB]]
+
+[[def|def check(label, got, expected, tol=1e-3):]]
+    """Prints a green tick if `got` is close to `expected`, otherwise a red cross."""
+    try:
+        ok = got is not None and [[allclose|np.allclose(np.asarray(got, dtype=float), np.asarray(expected, dtype=float), atol=tol)]]
+    except Exception:
+        ok = False
+    print(f"✅ {label}" if ok else f"❌ {label}: expected {expected}, got {got}")
+
+FEATURES = [[list|["bill_length_mm", "bill_depth_mm", "flipper_length_mm", "body_mass_g"]]]
+def load_penguins():
+    """Returns the cleaned table: 342 penguins with all four measurements."""
+    [[try|try:]]
+        df = pd.read_csv("penguins.csv")
+    except FileNotFoundError:
+        df = pd.read_csv("https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv")
+    return [[dropna|df.dropna(subset=FEATURES).reset_index(drop=True)]]   # 2 penguins have no measurements
+
+peng = load_penguins()
+print("Ready.", [[len|len(peng)]], "penguins")      # Ready. 342 penguins</pre></section>
+ <div class="rest" data-cell="setup">
+  <div class="panel" id="p-setup"><span class="ptitle">ما الذي يحدث في هذه الخلية</span>
+   <div class="ds">
+    <figure><svg viewBox="0 0 260 120" role="img" aria-label="مخطط: ملف CSV فيه 344 صفًا يصبح جدولًا فيه 342 صفًا">
+     <rect x="4" y="18" width="92" height="84" rx="6" fill="var(--sunk)" stroke="var(--line)"></rect>
+     <text x="50" y="14" text-anchor="middle">penguins.csv</text>
+     <g id="csvrows"></g>
+     <path d="M104 60 H150" stroke="var(--pd)" stroke-width="2" marker-end="url(#ar)" fill="none"></path>
+     <text x="127" y="52" text-anchor="middle" style="fill:var(--pd)">dropna</text>
+     <rect x="160" y="18" width="92" height="84" rx="6" fill="var(--pdbg)" stroke="var(--pd)"></rect>
+     <text x="206" y="14" text-anchor="middle">peng</text>
+     <text x="50" y="114" text-anchor="middle" id="nraw"></text><text x="206" y="114" text-anchor="middle" style="fill:var(--pd)" id="npeng"></text>
+     <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--pd)"></path></marker></defs>
+    </svg><figcaption>2 penguins have no measurements</figcaption></figure>
+   </div>
+   <p class="note">بعد التشغيل يصبح عندك جدول <bdi>(DataFrame)</bdi> اسمه <code>peng</code> فيه 342 بطريقًا. نحتاجه في 1.1 و1.2 و1.4 وفي كل مهامك.</p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="setup" data-step="3"></section>
+ <section class="blk" id="ds" data-step="4" style="display:grid;gap:10px">
+  <h3>4 · ما الجديد هذا الأسبوع <span class="sub">(الأفكار الأربع التي يبنيها الكود)</span></h3>
+  <div class="dsgrid">
+   <div class="dscard" id="ds-mle"><b>الأرجحية العظمى <bdi>(maximum likelihood)</bdi></b>
+    <span class="mono" style="color:var(--muted)">argmax of Σ ln p(xₖ)</span>
+    <p>نجرّب قيمًا للمتوسط ونأخذ التي تجعل البيانات أكثر احتمالًا. الفائز هو المتوسط نفسه. في 1.1.</p></div>
+   <div class="dscard" id="ds-cov"><b>مصفوفة التغاير <bdi>(covariance matrix)</bdi></b>
+    <span class="mono" style="color:var(--muted)">np.cov(G.T, bias=True)</span>
+    <p>التباينان على القطر، والتغاير خارجه. منها الارتباط ρ والميل. في 0.1 و1.2.</p></div>
+   <div class="dscard" id="ds-thr"><b>صيغة العتبة <bdi>(threshold)</bdi></b>
+    <span class="mono" style="color:var(--muted)">x* = 5.365</span>
+    <p>الحد بين صنفين بانتشار واحد، في سطر واحد بدل البحث. في 1.3.</p></div>
+   <div class="dscard" id="ds-clf"><b>ثلاثة مصنِّفات <bdi>(classifiers)</bdi></b>
+    <span class="mono" style="color:var(--muted)">fit → predict</span>
+    <p>LDA وQDA وnaive Bayes على مناقير البطاريق، وحدود كل واحد. في 1.4.</p></div>
+  </div>
+ </section>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 0.1 ================= -->
+<section class="view cell" data-view="c01" hidden>
+ <div class="cellhead"><span class="cellno">Cell 0.1</span><h1>متوسط لكل عمود: متجه المتوسطات <bdi>(mean vector)</bdi></h1>
+ <p class="goal"><b>الهدف:</b> ثلاث نقاط، لكل نقطة ميزتان <bdi>(features)</bdi>. نريد مركز السحابة: متوسطًا لكل ميزة وحدها. هذا متجه المتوسطات μ في §5.2.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §5.2)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">μ̂ = (1/n) Σ xₖ  (one average per feature)</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">X.mean(axis=0)</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W05.ipynb · cell 0.1</span></div>
+ <pre class="code" data-cell="c01">X = [[arr|np.array([[1, 2], [2, 4], [3, 3]])]]
+print("mean vector:", [[meanax|X.mean(axis=0)]])        # [2. 3.]</pre></section>
+ <div class="rest" data-cell="c01">
+  <div class="panel" id="p-c01"><span class="ptitle">أي اتجاه نطويه؟ جرّب axis</span>
+   <div class="ctrls"><div class="ctrl" id="c01-ax"><label>X.mean(</label><span class="seg" id="c01seg"><button type="button" aria-pressed="true" data-v="0">axis=0</button><button type="button" aria-pressed="false" data-v="1">axis=1</button><button type="button" aria-pressed="false" data-v="n">(none)</button></span><label>)</label></div></div>
+   <div id="c01-pic"></div>
+   <div class="out" id="c01-out"></div>
+   <p class="note" id="c01-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c01" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(3 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>اطبع <code>X.shape</code>. ماذا يعني كل رقم؟</summary><div class="ans" id="tr01a"></div></details></li>
+  <li><details><summary>اطبع <code>X.mean()</code> بلا <code>axis</code>. لماذا لا يصلح مركزًا؟</summary><div class="ans" id="tr01b"></div></details></li>
+  <li><details><summary>أضف نقطة رابعة <code>[6, 7]</code> إلى <code>X</code>. توقّع متجه المتوسطات قبل التشغيل.</summary><div class="ans" id="tr01c"></div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.1 ================= -->
+<section class="view cell" data-view="c11" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.1</span><h1>الأرجحية العظمى <bdi>(maximum likelihood)</bdi> بميزة واحدة</h1>
+ <p class="goal"><b>الهدف:</b> نجرّب 301 تخمين لمتوسط زعانف Gentoo. لكل تخمين نجمع لوغاريتمات الكثافات: الأرجحية اللوغاريتمية <bdi>(log-likelihood)</bdi>. ونرى أن الفائز هو متوسط البيانات نفسه.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §5.1، المثال 5.1)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">ln L(μ) = Σ ln p(xₖ | μ, σ)<br>μ̂ = argmax ln L(μ) = (1/n) Σ xₖ</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">norm.logpdf(x, mu, sd).sum()<br>guesses[np.argmax(loglik)]</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W05.ipynb · cell 1.1</span></div>
+ <pre class="code" data-cell="c11">x = [[rowsel|peng[peng.species == "Gentoo"]]][[dotcol|.flipper_length_mm.values]]
+sd = [[npstd|x.std()]]                                    # np.std divides by n
+guesses = [[linspace|np.linspace(210, 225, 301)]]
+loglik = [[lcomp|[]][[logpdf|norm.logpdf(x, mu, sd).sum()]][[lcomp| for mu in guesses]]]
+best = [[argmax|guesses[np.argmax(loglik)]]]
+print("best guess:", [[round|round(best, 2)]], "  average:", round(x.mean(), 2))
+[[plot|plt.plot(guesses, loglik)]]; [[axvline|plt.axvline(x.mean(), color="tab:orange", ls="--")]]
+plt.xlabel("guess for the mean (mm)"); plt.ylabel("log-likelihood"); plt.show()
+print("product of the densities:", [[prod|np.prod(norm.pdf(x, x.mean(), sd))]])   # tiny: this is why we use logs</pre></section>
+ <div class="rest" data-cell="c11">
+  <div class="panel" id="p-c11"><span class="ptitle">حرّك التخمين: أين أكبر أرجحية؟</span>
+   <div class="ctrls">
+    <div class="ctrl" id="c11-mu"><label for="c11-r">mu =</label><input type="range" id="c11-r" min="0" max="300" step="1" value="60"><span class="mono" id="c11-v"></span></div>
+    <div class="ctrl" id="c11-sd"><label>sd =</label><span class="seg" id="c11sseg"><button type="button" aria-pressed="true" data-v="0">x.std()</button><button type="button" aria-pressed="false" data-v="1">x.std(ddof=1)</button></span></div>
+   </div>
+   <svg id="c11-svg" viewBox="0 0 560 260" role="img" aria-label="الأرجحية اللوغاريتمية لكل تخمين للمتوسط"></svg>
+   <div class="out" id="c11-out"></div>
+   <div class="ctrls"><div class="ctrl" id="c11-n"><label>np.prod(norm.pdf(x[:n], …)) with n =</label><span class="seg" id="c11nseg"><button type="button" aria-pressed="false" data-v="5">5</button><button type="button" aria-pressed="false" data-v="50">50</button><button type="button" aria-pressed="false" data-v="100">100</button><button type="button" aria-pressed="true" data-v="123">123</button></span></div></div>
+   <div class="out" id="c11-prod"></div>
+   <p class="note" id="c11-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c11" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(4 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>غيّر 301 في <code>linspace</code> إلى 16. ما التخمين الأفضل الآن؟ ولماذا ليس المتوسط؟</summary><div class="ans" id="tr11a"></div></details></li>
+  <li><details><summary>اكتب <code>sd = x.std(ddof=1)</code>. هل يتغير التخمين الأفضل؟</summary><div class="ans" id="tr11b"></div></details></li>
+  <li><details><summary>اطبع <code>np.argmax(loglik)</code> و<code>max(loglik)</code>. ما الفرق بينهما؟</summary><div class="ans" id="tr11c"></div></details></li>
+  <li><details><summary>اطبع <code>np.prod(norm.pdf(x[:5], x.mean(), sd))</code>، ثم بـ 50 بطريقًا. ماذا ترى؟</summary><div class="ans" id="tr11d"></div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.2 ================= -->
+<section class="view cell" data-view="c12" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.2</span><h1>ميزتان: متجه المتوسطات والتغاير <bdi>(covariance)</bdi> والارتباط <bdi>(correlation)</bdi></h1>
+ <p class="goal"><b>الهدف:</b> زعنفة Gentoo وكتلته معًا. نحسب مركز السحابة، ومصفوفة التغاير Σ، ثم الارتباط ρ الذي يقيس الميل. ونرسم السحابة.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §5.2، المثال 5.2)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">σ₁₂ = (1/n) Σ (x₁ − μ₁)(x₂ − μ₂)<br>ρ = σ₁₂ / (σ₁ σ₂)</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">np.cov(G.T, bias=True)<br>S[0, 1] / np.sqrt(S[0, 0] * S[1, 1])</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W05.ipynb · cell 1.2</span></div>
+ <pre class="code" data-cell="c12">G = peng[peng.species == "Gentoo"][[cols2|[["flipper_length_mm", "body_mass_g"]].values]]
+mu, S = [[mvec|G.mean(axis=0)]], [[cov|np.cov(]][[tr|G.T]][[cov|, bias=True)]]
+rho = [[idx2|S[0, 1]]] / [[sqrt|np.sqrt(S[0, 0] * S[1, 1])]]
+print("mean vector:", [[rround|mu.round(1)]]); print("covariance matrix:\n", S.round(1)); print("correlation:", round(rho, 3))
+[[scatter|plt.scatter(G[:, 0], G[:, 1], s=10)]]; plt.xlabel("flipper length (mm)"); plt.ylabel("body mass (g)"); plt.show()</pre></section>
+ <div class="rest" data-cell="c12">
+  <div class="panel" id="p-c12"><span class="ptitle">السحابة ومصفوفتها: غيّر المعاملات</span>
+   <div class="ctrls">
+    <div class="ctrl" id="c12-T"><label>np.cov(</label><span class="seg" id="c12tseg"><button type="button" aria-pressed="true" data-v="T">G.T</button><button type="button" aria-pressed="false" data-v="G">G</button></span><label>,</label></div>
+    <div class="ctrl" id="c12-bias"><label>bias=</label><span class="seg" id="c12bseg"><button type="button" aria-pressed="true" data-v="1">True</button><button type="button" aria-pressed="false" data-v="0">False</button></span><label>)</label></div>
+    <div class="ctrl" id="c12-units"><label>mass in</label><span class="seg" id="c12useg"><button type="button" aria-pressed="true" data-v="g">g</button><button type="button" aria-pressed="false" data-v="kg">kg</button></span></div>
+   </div>
+   <div class="ds"><div id="c12-mat"></div><svg id="c12-svg" viewBox="0 0 380 280" role="img" aria-label="مخطط انتشار زعانف Gentoo وكتلتها مع إهليلجي r = 1 و r = 2" style="max-width:380px"></svg></div>
+   <div class="out" id="c12-out"></div>
+   <p class="note" id="c12-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c12" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(4 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>احذف <code>bias=True</code>. أي الأرقام تتغير، وبكم؟</summary><div class="ans" id="tr12a"></div></details></li>
+  <li><details><summary>اكتب <code>np.cov(G, bias=True)</code> بلا <code>.T</code>، واطبع <code>.shape</code>.</summary><div class="ans" id="tr12b"></div></details></li>
+  <li><details><summary>حوّل الكتلة إلى كيلوغرام: <code>G = G / [1, 1000]</code>. ماذا يحدث للتغاير، وللارتباط؟</summary><div class="ans" id="tr12c"></div></details></li>
+  <li><details><summary>اطبع <code>np.corrcoef(G.T)</code>. أين ترى ρ؟</summary><div class="ans" id="tr12d"></div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.3 ================= -->
+<section class="view cell" data-view="c13" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.3</span><h1>صيغة العتبة <bdi>(threshold formula)</bdi> مقابل البحث</h1>
+ <p class="goal"><b>الهدف:</b> صنفان بانتشار واحد σ. نحسب العتبة بالصيغة في سطر، ثم بالبحث على المحور كما في الأسبوع 4، ونرى أنهما يتفقان. ثم نضاعف σ ونرى الاحتمال القبلي <bdi>(prior)</bdi> يدفع العتبة أبعد.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §5.4، المثال 5.4)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">x* = (μ₁ + μ₂)/2 + σ²/(μ₁ − μ₂) · ln(P(ω₂)/P(ω₁))</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">(m1 + m2) / 2 + s**2 / (m1 - m2) * np.log((1 - P1) / P1)</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W05.ipynb · cell 1.3</span></div>
+ <pre class="code" data-cell="c13">[[thr|def threshold(m1, m2, s, P1):]]
+    """Same spread s, m1 > m2: decide class 1 above the threshold."""
+    return (m1 + m2) / 2 + [[pow|s**2]] / (m1 - m2) * [[log|np.log((1 - P1) / P1)]]
+
+print("formula:", round([[call3|threshold(7, 4, 1, 0.6)]], 3))
+xs = np.linspace(1, 10, 90001)
+score1 = [[grid|norm.pdf(xs, 7, 1) * 0.6]]; score2 = norm.pdf(xs, 4, 1) * 0.4
+print("search: ", round([[search|xs[np.argmax(score1 > score2)]]], 3))
+print("spread 2:", round(threshold(7, 4, 2, 0.6), 3), " (the prior moves it further)")</pre></section>
+ <div class="rest" data-cell="c13">
+  <div class="panel" id="p-c13"><span class="ptitle">threshold(7, 4, s, P1) حيّة: الصيغة والبحث معًا</span>
+   <div class="ctrls">
+    <div class="ctrl" id="c13-p"><label for="c13-pr">P1 =</label><input type="range" id="c13-pr" min="0.1" max="0.9" step="0.05" value="0.6"><span class="mono" id="c13-pv">0.60</span></div>
+    <div class="ctrl" id="c13-s"><label>s =</label><span class="seg" id="c13sseg"><button type="button" aria-pressed="false" data-v="0.5">0.5</button><button type="button" aria-pressed="true" data-v="1">1</button><button type="button" aria-pressed="false" data-v="1.5">1.5</button><button type="button" aria-pressed="false" data-v="2">2</button></span></div>
+   </div>
+   <svg id="c13-svg" viewBox="0 0 560 260" role="img" aria-label="الدرجتان والعتبة بالصيغة وبالبحث"></svg>
+   <div class="out" id="c13-out"></div>
+   <p class="note" id="c13-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c13" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(4 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>اطبع <code>threshold(7, 4, 1, 0.5)</code> و<code>threshold(7, 4, 2, 0.5)</code>. لماذا الرقم نفسه؟</summary><div class="ans" id="tr13a"></div></details></li>
+  <li><details><summary>اطبع <code>threshold(7, 4, 1, 0.9)</code>. إلى أين تحركت العتبة، ولماذا؟</summary><div class="ans" id="tr13b"></div></details></li>
+  <li><details><summary>غيّر <code>90001</code> إلى <code>91</code>. ماذا يطبع البحث؟</summary><div class="ans" id="tr13c"></div></details></li>
+  <li><details><summary>اكتب <code>threshold(4, 7, 1, 0.6)</code>. هل الرقم صحيح؟</summary><div class="ans" id="tr13d"></div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= 1.4 ================= -->
+<section class="view cell" data-view="c14" hidden>
+ <div class="cellhead"><span class="cellno">Cell 1.4</span><h1>LDA وQDA وnaive Bayes على مناقير البطاريق</h1>
+ <p class="goal"><b>الهدف:</b> نقسم البطاريق إلى تدريب واختبار، وندرّب النماذج الثلاثة، ونعدّ إجاباتها الصحيحة. ثم نصنّف كل نقطة في شبكة لنرى مناطق القرار <bdi>(decision regions)</bdi>: مستقيمة في LDA، ومنحنية في QDA.</p></div>
+ <div class="steps" role="group" aria-label="ترتيب القراءة"></div>
+ <details class="blk fbox" data-step="1"><summary>1 · الصيغة في النظري ومقابلها في الكود <span class="sub">(Notes §5.5 إلى §5.7)</span></summary>
+ <div class="formula"><div class="side2"><span class="lab">في النظري</span><span class="math">LDA: one shared Σ → straight boundaries<br>QDA: one Σᵢ per class → curved<br>naive Bayes: no tilt, one curve per feature</span></div>
+  <span class="eq">⟷</span><div class="side2"><span class="lab">في الكود</span><span class="py">LinearDiscriminantAnalysis()<br>QuadraticDiscriminantAnalysis()<br>GaussianNB()</span></div></div></details>
+ <section class="codebox" data-step="2" aria-label="الكود"><div class="codehead"><span>2 · الكود: انقر أي اسم مُسطَّر، فيفتح شرحه تحت سطره</span><span class="src">Lab_W05.ipynb · cell 1.4</span></div>
+ <pre class="code" data-cell="c14">Xb = [[vals2|peng[["bill_length_mm", "bill_depth_mm"]].values]]; yb = peng.species.values
+X_train, X_test, y_train, y_test = [[split|train_test_split(Xb, yb, test_size=0.3, random_state=0, stratify=yb)]]
+models = [[models|{"LDA": LinearDiscriminantAnalysis(), "QDA": QuadraticDiscriminantAnalysis(), "naive Bayes": GaussianNB()}]]
+[[subplots|fig, ax = plt.subplots(1, 3, figsize=(14, 4), sharey=True)]]
+gx, gy = [[mesh|np.meshgrid(np.linspace(30, 61, 300), np.linspace(12.5, 22, 250))]]
+[[zip|for a, (name, m) in zip(ax, models.items()):]]
+    [[fit|m.fit(X_train, y_train)]]
+    correct = [[pred|(m.predict(X_test) == y_test).sum()]]
+    Z = [[sorted|np.searchsorted(m.classes_, ]]m.predict([[cr|np.c_[gx.ravel(), gy.ravel()]]])[[sorted|).reshape(gx.shape)]]
+    [[contour|a.contourf(gx, gy, Z, alpha=0.15, levels=[-.5, .5, 1.5, 2.5]); a.contour(gx, gy, Z, levels=[.5, 1.5], colors="k")]]
+    for sp in m.classes_:
+        k = yb == sp; a.scatter(Xb[k, 0], Xb[k, 1], s=8, label=sp)
+    [[settitle|a.set_title(f"{name}: {correct} of {len(y_test)} correct")]]; a.set_xlabel("bill length (mm)")
+ax[0].set_ylabel("bill depth (mm)"); ax[0].legend(); plt.show()</pre></section>
+ <div class="rest" data-cell="c14">
+  <div class="panel" id="p-c14"><span class="ptitle">مناطق القرار الحقيقية من scikit-learn</span>
+   <div class="ctrls">
+    <div class="ctrl" id="c14-m"><label>model =</label><span class="seg" id="c14mseg"><button type="button" aria-pressed="true" data-v="LDA">LDA</button><button type="button" aria-pressed="false" data-v="QDA">QDA</button><button type="button" aria-pressed="false" data-v="naive Bayes">naive Bayes</button></span></div>
+    <div class="ctrl" id="c14-pts"><label>points:</label><span class="seg" id="c14pseg"><button type="button" aria-pressed="false" data-v="all">all 342</button><button type="button" aria-pressed="true" data-v="test">test 103</button></span></div>
+   </div>
+   <svg id="c14-svg" viewBox="0 0 560 330" role="img" aria-label="مناطق القرار للنموذج المختار ونقاط البطاريق"></svg>
+   <div class="out" id="c14-out"></div>
+   <p class="note" id="c14-note"></p>
+  </div>
+ </div>
+ <section class="vars blk" data-cell="c14" data-step="3"></section>
+ <details class="blk tries" data-step="4"><summary>4 · جرّب في الدفتر <span class="sub">(4 أسئلة، الإجابة مخفية)</span></summary><ol>
+  <li><details><summary>«Try it» في الدفتر: استعمل <code>peng[FEATURES].values</code> بدل عمودي المنقار، واحذف الرسم. كم يصيب كل نموذج؟</summary><div class="ans" id="tr14a"></div></details></li>
+  <li><details><summary>غيّر <code>random_state=0</code> إلى <code>1</code>. هل يبقى QDA الأفضل؟</summary><div class="ans" id="tr14b"></div></details></li>
+  <li><details><summary>احذف <code>stratify=yb</code>، واطبع <code>np.unique(y_test, return_counts=True)</code>.</summary><div class="ans" id="tr14c"></div></details></li>
+  <li><details><summary>اطبع <code>m.classes_</code> و<code>m.means_</code> بعد الحلقة. ماذا تعلّم QDA؟</summary><div class="ans" id="tr14d"></div></details></li>
+ </ol></details>
+ <nav class="pn" aria-label="التنقل بين الخلايا"></nav>
+</section>
+
+<!-- ================= TASKS ================= -->
+<section class="view" data-view="tasks" hidden>
+ <div class="cellhead"><span class="cellno">Part 0.2 · Part 2</span><h1>مهامك</h1>
+ <p class="lead">هنا لا نعطيك الحل. لكل مهمة: ماذا تحسب، وأي الأسماء في هذه الصفحة تحتاجها، وتلميح. انقر اسمًا ليفتح شرحه في خليته. شغّل خلية التحقق تحت كل مهمة: ✅ يعني أن إجابتك قريبة من الصحيحة بما يكفي. اللوحات الحيّة تعرض Gentoo وحده، ولا تعرض قيم المهام عمدًا.</p></div>
+ <div class="task"><h3>Task 0.2 · مصفوفة التغاير <bdi>(covariance matrix)</bdi> للنقاط الثلاث</h3>
+  <p>احسب مصفوفة التغاير لـ <code>X</code> من الخلية 0.1، واحفظها في <code>S</code>.</p>
+  <div class="tools"><a class="b np" href="#c12--cov">np.cov</a><a class="b np" href="#c12--tr">.T</a></div>
+  <p class="note">تلميح: <code>np.cov</code> تريد ميزة في كل صف، وتقسم على n−1 إلا إذا طلبت غير ذلك. قارن رقمًا واحدًا باليد: تباين العمود الأول (1، 2، 3) بالقسمة على 3.</p></div>
+ <div class="task"><h3>Task 2.1 · تقديرات الأرجحية العظمى <bdi>(maximum-likelihood estimates)</bdi></h3>
+  <p>أكمل <code>fit_normal(x)</code> لتعيد المتوسط والتباين <bdi>(variance)</bdi> بالقسمة على n. ثم تُطبَّق على زعانف Adelie.</p>
+  <div class="tools"><a class="b np" href="#c11--npstd">x.std()</a><a class="b np" href="#tasks--t21">np.var</a><a class="b py" href="#tasks--t21">return a, b</a></div>
+  <p class="note" id="t21">تلميح: التباين هو متوسط مربعات البعد عن المتوسط: <code>np.mean((x - mu) ** 2)</code>، أو <code>np.var(x)</code> وهو يقسم على n مثل <code>x.std()</code>. لا تكتب <code>.var()</code> على عمود pandas: يقسم على n−1. الدالة تعيد قيمتين بفاصلة.</p></div>
+ <div class="task"><h3>Task 2.2 · تغاير باليد <bdi>(covariance by hand)</bdi></h3>
+  <p>لـ Chinstrap: احسب الانحرافات <code>dev</code>، ثم التغاير <code>cov12</code> بين طول المنقار وعمقه بلا <code>np.cov</code>، ثم الارتباط <code>rho</code>.</p>
+  <div class="tools"><a class="b np" href="#c01--meanax">mean(axis=0)</a><a class="b np" href="#c12--idx2">dev[:, 0]</a><a class="b np" href="#c12--sqrt">np.sqrt</a></div>
+  <p class="note">تلميح: <code>C - C.mean(axis=0)</code> يطرح المتوسط من كل صف مرة واحدة. ثم اضرب العمودين عنصرًا بعنصر، وخذ المتوسط. للارتباط تحتاج الانحرافين المعياريين بالقسمة على n أيضًا. قارن بالمثال 5.2 في الـ Notes: الخطوات نفسها على خمسة Gentoo.</p></div>
+ <div class="task"><h3>Task 2.3 · المسافة بلا ميل ومع الميل <bdi>(tilt)</bdi></h3>
+  <p>للبطريق الجديد (44, 17) ولكل نوع: <code>r2_no_tilt[sp]</code> = z₁² + z₂²، و<code>r2_tilt[sp]</code> = <code>d @ np.linalg.inv(S) @ d</code>.</p>
+  <div class="tools"><a class="b np" href="#c01--meanax">mean(axis=0)</a><a class="b np" href="#c12--cov">np.cov(…, bias=True)</a><a class="b np" href="#tasks--t23">np.linalg.inv, @</a></div>
+  <p class="note" id="t23">تلميح: <code>d = new - A.mean(axis=0)</code>. للتي بلا ميل: <code>z = d / A.std(axis=0)</code> ثم <code>(z ** 2).sum()</code>. <code>np.linalg.inv(S)</code> هي معكوس المصفوفة <bdi>(inverse)</bdi> Σ⁻¹، و<code>@</code> ضرب المصفوفات <bdi>(matrix product)</bdi> من الأسبوع 4. القاموس يُملأ هكذا: <code>r2_tilt[sp] = …</code>.</p></div>
+ <div class="task"><h3>Task 2.4 · naive Bayes باليد</h3>
+  <p>لكل نوع: الاحتمال القبلي × p(44 | ω) × p(17 | ω)، بمنحنى طبيعي لكل ميزة. ثم حوّل الدرجات الثلاث إلى احتمالات بعدية <bdi>(posteriors)</bdi> في قاموس <code>post_nb</code>.</p>
+  <div class="tools"><a class="b sp" href="#c11--logpdf">norm.pdf / norm.logpdf</a><a class="b np" href="#c11--npstd">std (n)</a><a class="b py" href="#tasks--t24">dict comprehension</a></div>
+  <p class="note" id="t24">تلميح: الاحتمال القبلي <code>len(A) / len(peng)</code>: نسبة النوع في كل البطاريق الـ 342، لا في التدريب. ثم اقسم كل درجة على مجموع الدرجات الثلاث، كما في الأسبوع 4. يمكنك كتابة القاموس في سطر: <code>{sp: s / total for sp, s in scores.items()}</code>.</p></div>
+ <div class="task"><h3>Reflect · بأي جواب تثق؟</h3>
+  <p>اكتب جملتين أو ثلاثًا: naive Bayes يقول Adelie، والمسافة مع الميل تقول Chinstrap. أي الجوابين تثق به لهذا البطريق، ولماذا؟ انظر إلى ارتباط Chinstrap في المهمة 2.2، وإلى <a href="#c12--idx2">ρ في 1.2</a>.</p></div>
+ <nav class="pn" aria-label="التنقل بين الأقسام"></nav>
+</section>
+
+<!-- ================= TRAPS ================= -->
+<section class="view" data-view="traps" hidden>
+ <div class="cellhead"><span class="cellno">Traps</span><h1>الفخاخ: أخطاء لا تعطي رسالة خطأ <bdi>(error message)</bdi></h1>
+ <p class="lead">أغلب هذه الأخطاء تجعل الكود يعمل، لكن بأرقام خاطئة. لهذا هي خطيرة. انقر الاسم في كل بطاقة لترى شرحه في خليته.</p></div>
+ <div class="traps">
+  <div class="trapcard"><h3><span class="b np">NumPy</span> <code>np.cov</code> بلا <code>.T</code></h3><p><code>np.cov</code> تريد ميزة في كل صف. بلا <code>.T</code> تعطي مصفوفة <span id="trcovs"></span>: تغاير كل بطريقين، لا كل ميزتين.</p><div class="tools"><a class="b np" href="#c12--cov">np.cov</a><a class="b np" href="#c12--tr">.T</a></div></div>
+  <div class="trapcard"><h3><span class="b np">NumPy</span> <code>np.cov</code> تقسم على n−1</h3><p>بلا <code>bias=True</code> تقسم على n−1، والـ Notes والأرجحية العظمى على n. تباين زعانف Gentoo: <span id="trbias"></span>.</p><div class="tools"><a class="b np" href="#c12--cov">bias=True</a></div></div>
+  <div class="trapcard"><h3><span class="b pd">pandas</span> <code>.std()</code> و<code>.var()</code> على عمود</h3><p>على عمود pandas يقسمان على n−1، وعلى مصفوفة NumPy على n. الأمر نفسه، ورقمان: <span id="trstd"></span>.</p><div class="tools"><a class="b np" href="#c11--npstd">x.std()</a><a class="b pd" href="#c11--dotcol">.values</a></div></div>
+  <div class="trapcard"><h3><span class="b np">NumPy</span> حاصل ضرب يصير 0.0</h3><p>ضرب كثافات كثيرة يصغر بسرعة: <span id="trprod"></span>. مع 1000 بطريق يصير <code>0.0</code> بلا رسالة. اجمع اللوغاريتمات.</p><div class="tools"><a class="b np" href="#c11--prod">np.prod</a><a class="b sp" href="#c11--logpdf">norm.logpdf</a></div></div>
+  <div class="trapcard"><h3><span class="b py">Python</span> شروط صيغة العتبة</h3><p>الصيغة لصنفين بانتشار <b>واحد</b>، وm1 > m2. بانتشارين مختلفين لا تصلح أصلًا: الحدّان أو لا شيء (§5.4.1). وبتبديل m1 وm2 تعطي رقمًا خاطئًا بلا شكوى.</p><div class="tools"><a class="b py" href="#c13--thr">threshold</a></div></div>
+  <div class="trapcard"><h3><span class="b np">NumPy</span> <code>argmax</code> على قناع كله False</h3><p>إذا لم يفز الصنف 1 في أي نقطة، يعيد <code>np.argmax</code> المكان 0، فيطبع البحث 1.0: أول نقطة في الشبكة.</p><div class="tools"><a class="b np" href="#c13--search">xs[np.argmax(…)]</a></div></div>
+  <div class="trapcard"><h3><span class="b np">NumPy</span> <code>reshape</code> بالترتيب الخطأ</h3><p><code>gx</code> شكله (250, 300): صف لكل قيمة عمودية. <code>.reshape(300, 250)</code> يعمل بلا خطأ، لكن الرسم يخرج مشوهًا. اكتب <code>gx.shape</code>.</p><div class="tools"><a class="b np" href="#c14--sorted">reshape(gx.shape)</a><a class="b np" href="#c14--mesh">np.meshgrid</a></div></div>
+  <div class="trapcard"><h3><span class="b sk">scikit-learn</span> نتعلم من التدريب فقط</h3><p><code>fit</code> على <code>X_train</code>، و<code>predict</code> على <code>X_test</code>. إن درّبت على كل البطاريق، رأى النموذج بطاريق الاختبار مسبقًا، فلا يعود العدد اختبارًا.</p><div class="tools"><a class="b sk" href="#c14--fit">fit</a><a class="b sk" href="#c14--split">train_test_split</a></div></div>
+  <div class="trapcard"><h3><span class="b sk">scikit-learn</span> فرق بطريق أو بطريقين</h3><p>QDA أصاب 101 وLDA أصاب 99. مع <code>random_state=1</code>: <span id="trrs"></span>. فرق صغير يتغير مع التقسيم، فلا نحكم منه.</p><div class="tools"><a class="b sk" href="#c14--pred">predict</a><a class="b sk" href="#c14--split">random_state</a></div></div>
+ </div>
+ <nav class="pn" aria-label="التنقل بين الأقسام"></nav>
+</section>
+
+<!-- ================= INDEX ================= -->
+<section class="view" data-view="index" hidden>
+ <div class="cellhead"><span class="cellno">Index</span><h1>فهرس الأسماء</h1>
+ <p class="lead">كل اسم مرّ في هذا المعمل، مع مكتبته ومكان شرحه. انقر الخلية لتفتح الشرح تحت سطره. الاسم المشروح في أسبوع سابق له رابط إلى دليل ذلك الأسبوع.</p></div>
+ <div class="tw"><table class="glo" id="glo"><thead><tr><th>الاسم</th><th>المكتبة</th><th class="hide-ph">الحالة</th><th>بجملة</th><th>الشرح</th></tr></thead><tbody></tbody></table></div>
+ <nav class="pn" aria-label="التنقل بين الأقسام"></nav>
+</section>
+
+</main>
+</div>
+</div>
+
+<script>window.Reveal = window.Reveal || {isReady: () => true, getCurrentSlide: () => document.querySelector(".view:not([hidden])") || document.body};</script>
+<script>
+/* Derivation window for ENGS 3302 decks ("how we get this", for understanding).
+   A slide holds a button  <button class="dvbtn" data-dv="ID">  and a  <template id="dv-ID" data-title="...">  with the lines.
+   Inside the template every element with data-s="k" appears at step k. A token <i data-t="name"> with data-from="other"
+   flies from the token "other" (in an earlier line) to its place and leaves a dashed trail. data-x="k" strikes a token at step k.
+   Lines flow into columns (no scrolling). Click or → / Space / PageDown: next step; ← / PageUp: back; Esc or D (ي): back to the slide,
+   which stays at the same slide and step. While the window is open no key reaches the deck. */
+(function(){
+  var dv, stage, cols, svg, cnt, ttl, cur = null, step = 0, max = 0, busy = 0;
+  var NS = 'http://www.w3.org/2000/svg';
+  function scale(){ var k = Math.min(innerWidth / 1600, innerHeight / 900); stage.style.transform = 'translate(-50%,-50%) scale(' + k + ')'; return k; }
+  function K(){ return stage.getBoundingClientRect().width / 1600; }
+  function local(r){ var b = svg.getBoundingClientRect(), k = K(); return {x: (r.left - b.left) / k, y: (r.top - b.top) / k, w: r.width / k, h: r.height / k}; }
+  function build(){
+    dv = document.createElement('div'); dv.id = 'dv'; dv.hidden = true;
+    dv.innerHTML = '<div id="dvStage"><div class="dvpanel"><div class="dvhead"><span class="dvtag">للفهم</span><span class="dvtitle"></span>'
+      + '<button class="dvclose" type="button" aria-label="رجوع إلى الدليل">×</button></div><div class="dvcols"></div>'
+      + '<svg class="dvtrail" width="1600" height="900" viewBox="0 0 1600 900" aria-hidden="true"><defs><marker id="dvar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="currentColor"></path></marker></defs></svg>'
+      + '<div class="dvside"><div class="dvcount"></div><div class="dvkey"><p><span class="dvk1"></span> حدّ ينتقل: الخط المتقطع يدل على مصدره</p>'
+      + '<p><span class="dvk2">a</span> يُختصر: يُشطب</p><p><span class="dvk3">rule</span> القاعدة المستعملة في السطر</p></div>'
+      + '<div class="dvhint">انقر للخطوة التالية، وEsc للرجوع</div></div></div></div>';
+    document.body.appendChild(dv);
+    stage = dv.querySelector('#dvStage'); cols = dv.querySelector('.dvcols'); svg = dv.querySelector('.dvtrail'); cnt = dv.querySelector('.dvcount'); ttl = dv.querySelector('.dvtitle');
+    dv.querySelector('.dvclose').addEventListener('click', function(e){ e.stopPropagation(); close(); });
+    stage.addEventListener('click', function(e){ e.stopPropagation(); go(step + 1); });
+    dv.addEventListener('click', function(e){ e.stopPropagation(); });
+    addEventListener('resize', function(){ if(!dv.hidden){ scale(); trails(step, false); } });
+  }
+  function open(id){
+    var t = document.getElementById('dv-' + id); if(!t) return;
+    cur = id; ttl.innerHTML = t.dataset.title || ''; cols.innerHTML = t.innerHTML;
+    max = 0; cols.querySelectorAll('[data-s]').forEach(function(el){ max = Math.max(max, +el.dataset.s); });
+    cols.querySelectorAll('[data-x]').forEach(function(el){ max = Math.max(max, +el.dataset.x); });
+    dv.hidden = false; scale(); document.body.classList.add('dv-on'); set(1, true);
+  }
+  function close(){ dv.hidden = true; cur = null; document.body.classList.remove('dv-on'); }
+  function go(k){ if(k < 1 || k > max || busy) return; set(k, k === step + 1); }
+  function set(k, anim){
+    step = k; cnt.textContent = 'step ' + k + ' / ' + max;
+    cols.querySelectorAll('[data-s]').forEach(function(el){ var s = +el.dataset.s; el.classList.toggle('on', s <= k); el.classList.toggle('now', s === k); el.classList.toggle('inst', !anim || s !== k); });
+    cols.querySelectorAll('[data-x]').forEach(function(el){ var x = +el.dataset.x; el.classList.toggle('struck', x <= k); el.classList.toggle('inst', !anim || x !== k); });
+    var movers = [].filter.call(cols.querySelectorAll('[data-from]'), function(el){ return +sOf(el) === k; });
+    if(!anim || !movers.length){ trails(k, false); return; }
+    trails(k - 1, false);                     // the old trails stay; the new ones come after the move
+    busy++; var k0 = K();
+    movers.forEach(function(el, i){
+      var src = cols.querySelector('[data-t="' + el.dataset.from + '"]'); if(!src) return;
+      var a = src.getBoundingClientRect(), b = el.getBoundingClientRect();
+      el.style.transition = 'none'; el.style.transform = 'translate(' + ((a.left - b.left) / k0) + 'px,' + ((a.top - b.top) / k0) + 'px)'; el.style.opacity = '1';
+      el.getBoundingClientRect();
+      el.style.transition = 'transform 800ms cubic-bezier(.45,.05,.25,1) ' + (i * 140) + 'ms'; el.style.transform = '';
+    });
+    setTimeout(function(){ movers.forEach(function(el){ el.style.transition = ''; }); busy--; if(step === k) trails(k, true); }, 800 + movers.length * 140 + 60);
+  }
+  function sOf(el){ var p = el; while(p && p !== cols){ if(p.dataset && p.dataset.s) return p.dataset.s; p = p.parentNode; } return 0; }
+  function trails(k, fresh){
+    [].slice.call(svg.querySelectorAll('path.tr')).forEach(function(p){ p.remove(); });
+    cols.querySelectorAll('[data-from]').forEach(function(el){
+      var s = +sOf(el); if(s > k) return;
+      var src = cols.querySelector('[data-t="' + el.dataset.from + '"]'); if(!src) return;
+      var a = local(src.getBoundingClientRect()), b = local(el.getBoundingClientRect());
+      var x1 = a.x + a.w / 2, y1 = a.y + a.h, x2 = b.x + b.w / 2, y2 = b.y, d;
+      if(x2 - x1 > 300 || x1 - x2 > 300){ d = 'M' + x1 + ',' + y1 + ' C' + x1 + ',' + (y1 + 60) + ' ' + x2 + ',' + (y2 - 60) + ' ' + x2 + ',' + (y2 - 3); }
+      else d = 'M' + x1 + ',' + y1 + ' C' + x1 + ',' + (y1 + (y2 - y1) * 0.5) + ' ' + x2 + ',' + (y1 + (y2 - y1) * 0.5) + ' ' + x2 + ',' + (y2 - 3);
+      var p = document.createElementNS(NS, 'path'); p.setAttribute('d', d); p.setAttribute('class', 'tr' + (s === step ? ' new' : '') + (fresh && s === k ? ' fresh' : ''));
+      p.setAttribute('marker-end', 'url(#dvar)'); svg.appendChild(p);
+    });
+  }
+  function init(){
+    build();
+    document.addEventListener('click', function(e){ var b = e.target.closest && e.target.closest('.dvbtn'); if(b){ e.preventDefault(); e.stopPropagation(); b.blur(); open(b.dataset.dv); } }, true);
+    document.addEventListener('keydown', function(e){
+      var t = e.target; if(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+      var wb = document.getElementById('wb'); if(wb && !wb.hidden) return;                    // the whiteboard has the keys
+      var mod = e.ctrlKey || e.metaKey || e.altKey;
+      var isD = !mod && (e.key === 'd' || e.key === 'D' || e.key === 'ي' || e.code === 'KeyD');   // ي = D on an Arabic keyboard
+      var isW = !mod && (e.key === 'w' || e.key === 'W' || e.key === 'ص' || e.code === 'KeyW');
+      if(dv.hidden){
+        if(!isD) return;
+        var b = Reveal.getCurrentSlide().querySelector('.dvbtn'); if(!b) return;
+        e.preventDefault(); e.stopImmediatePropagation(); open(b.dataset.dv); return;
+      }
+      if(isW) return;                                                                         // let the whiteboard open over the window
+      e.preventDefault(); e.stopImmediatePropagation();
+      if(isD || e.key === 'Escape') close();
+      else if(['ArrowRight', 'ArrowDown', ' ', 'PageDown', 'Enter', 'n'].indexOf(e.key) >= 0) go(step + 1);
+      else if(['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace', 'p'].indexOf(e.key) >= 0) go(step - 1);
+    }, true);
+    window.EngsDeriv = {open: open, close: close, go: function(k){ go(k); }, set: function(k){ set(k, false); }, state: function(){ return {id: cur, step: step, max: max}; }};
+  }
+  (function wait(){ if(window.Reveal && Reveal.isReady && Reveal.isReady()) init(); else setTimeout(wait, 50); })();
+})();
+
+</script>
+<script>
+const D = {"nraw":344,"npeng":342,"pshape":[342,7],"sex_nan":9,"peng_rows":[[0,"Adelie","Torgersen","39.1","18.7","181.0","3750.0","MALE"],[1,"Adelie","Torgersen","39.5","17.4","186.0","3800.0","FEMALE"],[2,"Adelie","Torgersen","40.3","18.0","195.0","3250.0","FEMALE"],[341,"Gentoo","Biscoe","49.9","16.1","213.0","5400.0","MALE"]],"counts":{"Adelie":151,"Gentoo":123,"Chinstrap":68},"c01":{"m0":[2.0,3.0],"m1":[1.5,3.0,3.0],"mall":2.5,"shape":[3,2]},"c11":{"n":123,"x":[211.0,230.0,210.0,218.0,215.0,210.0,211.0,219.0,209.0,215.0,214.0,216.0,214.0,213.0,210.0,217.0,210.0,221.0,209.0,222.0,218.0,215.0,213.0,215.0,215.0,215.0,216.0,215.0,210.0,220.0,222.0,209.0,207.0,230.0,220.0,220.0,213.0,219.0,208.0,208.0,208.0,225.0,210.0,216.0,222.0,217.0,210.0,225.0,213.0,215.0,210.0,220.0,210.0,225.0,217.0,220.0,208.0,220.0,208.0,224.0,208.0,221.0,214.0,231.0,219.0,230.0,214.0,229.0,220.0,223.0,216.0,221.0,221.0,217.0,216.0,230.0,209.0,220.0,215.0,223.0,212.0,221.0,212.0,224.0,212.0,228.0,218.0,218.0,212.0,230.0,218.0,228.0,212.0,224.0,214.0,226.0,216.0,222.0,203.0,225.0,219.0,228.0,215.0,228.0,216.0,215.0,210.0,219.0,208.0,209.0,216.0,229.0,213.0,230.0,217.0,230.0,217.0,222.0,214.0,215.0,222.0,212.0,213.0],"x10":[211.0,230.0,210.0,218.0,215.0,210.0,211.0,219.0,209.0,215.0],"mean":217.1869918699187,"sd":6.4585603287620605,"sd1":6.484975818673946,"loglik":[-480.129,-479.073,-478.025,-476.984,-475.95,-474.923,-473.904,-472.893,-471.888,-470.891,-469.902,-468.92,-467.945,-466.977,-466.017,-465.064,-464.119,-463.181,-462.25,-461.327,-460.411,-459.503,-458.602,-457.708,-456.822,-455.943,-455.071,-454.207,-453.35,-452.5,-451.658,-450.823,-449.996,-449.176,-448.363,-447.558,-446.76,-445.969,-445.186,-444.41,-443.642,-442.881,-442.127,-441.381,-440.642,-439.91,-439.186,-438.469,-437.76,-437.058,-436.363,-435.676,-434.996,-434.323,-433.658,-433.0,-432.35,-431.706,-431.071,-430.442,-429.821,-429.208,-428.601,-428.003,-427.411,-426.827,-426.25,-425.681,-425.119,-424.564,-424.017,-423.477,-422.944,-422.419,-421.901,-421.391,-420.888,-420.392,-419.904,-419.423,-418.949,-418.483,-418.024,-417.573,-417.129,-416.692,-416.263,-415.841,-415.426,-415.019,-414.619,-414.227,-413.842,-413.464,-413.094,-412.731,-412.375,-412.027,-411.686,-411.352,-411.026,-410.707,-410.396,-410.092,-409.795,-409.506,-409.224,-408.95,-408.683,-408.423,-408.17,-407.925,-407.688,-407.457,-407.234,-407.019,-406.811,-406.61,-406.416,-406.23,-406.052,-405.88,-405.716,-405.56,-405.411,-405.269,-405.134,-405.007,-404.888,-404.775,-404.67,-404.573,-404.482,-404.4,-404.324,-404.256,-404.195,-404.142,-404.096,-404.057,-404.026,-404.002,-403.986,-403.976,-403.975,-403.98,-403.993,-404.014,-404.041,-404.076,-404.119,-404.169,-404.226,-404.29,-404.362,-404.442,-404.528,-404.623,-404.724,-404.833,-404.949,-405.073,-405.203,-405.342,-405.487,-405.64,-405.801,-405.969,-406.144,-406.326,-406.516,-406.713,-406.918,-407.13,-407.35,-407.576,-407.81,-408.052,-408.301,-408.557,-408.821,-409.092,-409.37,-409.656,-409.949,-410.249,-410.557,-410.872,-411.195,-411.525,-411.862,-412.207,-412.559,-412.919,-413.285,-413.66,-414.041,-414.43,-414.826,-415.23,-415.641,-416.059,-416.485,-416.918,-417.359,-417.807,-418.262,-418.725,-419.195,-419.672,-420.157,-420.649,-421.149,-421.656,-422.17,-422.691,-423.22,-423.757,-424.301,-424.852,-425.41,-425.976,-426.549,-427.13,-427.718,-428.313,-428.916,-429.526,-430.143,-430.768,-431.401,-432.04,-432.687,-433.341,-434.003,-434.672,-435.349,-436.032,-436.724,-437.422,-438.128,-438.841,-439.562,-440.29,-441.025,-441.768,-442.518,-443.276,-444.041,-444.813,-445.593,-446.38,-447.174,-447.976,-448.785,-449.602,-450.425,-451.257,-452.095,-452.941,-453.795,-454.655,-455.523,-456.399,-457.282,-458.172,-459.07,-459.975,-460.887,-461.807,-462.734,-463.668,-464.61,-465.559,-466.516,-467.48,-468.451,-469.43,-470.416,-471.409,-472.41,-473.418,-474.434,-475.457,-476.487,-477.525,-478.57,-479.622,-480.682,-481.749,-482.823,-483.905,-484.995,-486.091,-487.195,-488.307,-489.425,-490.551,-491.685,-492.826,-493.974],"best":217.2,"ibest":144,"step":0.05000000000001137,"prod":3.598602033179111e-176,"log10prod":-175.44386617900724,"llmax":-403.9746803996925,"pdf10":[0.039,0.0086,0.0333,0.0613,0.0583,0.0333,0.039,0.0594,0.0277,0.0583],"best16":217.0,"prod5":4.006146605410581e-08,"prod50":5.1700743122669036e-70,"prod100":6.594144846041461e-143},"c12":{"G":[[211.0,4500.0],[230.0,5700.0],[210.0,4450.0],[218.0,5700.0],[215.0,5400.0],[210.0,4550.0],[211.0,4800.0],[219.0,5200.0],[209.0,4400.0],[215.0,5150.0],[214.0,4650.0],[216.0,5550.0],[214.0,4650.0],[213.0,5850.0],[210.0,4200.0],[217.0,5850.0],[210.0,4150.0],[221.0,6300.0],[209.0,4800.0],[222.0,5350.0],[218.0,5700.0],[215.0,5000.0],[213.0,4400.0],[215.0,5050.0],[215.0,5000.0],[215.0,5100.0],[216.0,4100.0],[215.0,5650.0],[210.0,4600.0],[220.0,5550.0],[222.0,5250.0],[209.0,4700.0],[207.0,5050.0],[230.0,6050.0],[220.0,5150.0],[220.0,5400.0],[213.0,4950.0],[219.0,5250.0],[208.0,4350.0],[208.0,5350.0],[208.0,3950.0],[225.0,5700.0],[210.0,4300.0],[216.0,4750.0],[222.0,5550.0],[217.0,4900.0],[210.0,4200.0],[225.0,5400.0],[213.0,5100.0],[215.0,5300.0],[210.0,4850.0],[220.0,5300.0],[210.0,4400.0],[225.0,5000.0],[217.0,4900.0],[220.0,5050.0],[208.0,4300.0],[220.0,5000.0],[208.0,4450.0],[224.0,5550.0],[208.0,4200.0],[221.0,5300.0],[214.0,4400.0],[231.0,5650.0],[219.0,4700.0],[230.0,5700.0],[214.0,4650.0],[229.0,5800.0],[220.0,4700.0],[223.0,5550.0],[216.0,4750.0],[221.0,5000.0],[221.0,5100.0],[217.0,5200.0],[216.0,4700.0],[230.0,5800.0],[209.0,4600.0],[220.0,6000.0],[215.0,4750.0],[223.0,5950.0],[212.0,4625.0],[221.0,5450.0],[212.0,4725.0],[224.0,5350.0],[212.0,4750.0],[228.0,5600.0],[218.0,4600.0],[218.0,5300.0],[212.0,4875.0],[230.0,5550.0],[218.0,4950.0],[228.0,5400.0],[212.0,4750.0],[224.0,5650.0],[214.0,4850.0],[226.0,5200.0],[216.0,4925.0],[222.0,4875.0],[203.0,4625.0],[225.0,5250.0],[219.0,4850.0],[228.0,5600.0],[215.0,4975.0],[228.0,5500.0],[216.0,4725.0],[215.0,5500.0],[210.0,4700.0],[219.0,5500.0],[208.0,4575.0],[209.0,5500.0],[216.0,5000.0],[229.0,5950.0],[213.0,4650.0],[230.0,5500.0],[217.0,4375.0],[230.0,5850.0],[217.0,4875.0],[222.0,6000.0],[214.0,4925.0],[215.0,4850.0],[222.0,5750.0],[212.0,5200.0],[213.0,5400.0]],"shape":[123,2],"mu":[217.1869918699187,5076.016260162602],"S":[[41.713001520259134,2278.468504197238],[2278.468504197238,252067.05664617635]],"S1":[[42.054911368785845,2297.1444755431166],[2297.1444755431166,254133.18006130893]],"rho":0.7026665243575184,"covGshape":[123,123],"Sk":[[41.713001520259134,2.278468504197238],[2.278468504197238,0.25206705664617607]],"rhok":0.7026665243575188,"corrcoef":0.7026665243575183,"G3":[[211.0,4500.0],[230.0,5700.0],[210.0,4450.0]]},"c13":{"f":5.364844963963945,"search":5.3649000000000004,"s2":4.959379855855781,"swap":5.635155036036055,"p5":5.5,"p9":4.767591807554593,"s2p5":5.5,"allfalse":1.0,"step":9.999999999998899e-05,"search_coarse":5.4},"c14":{"ntrain":239,"ntest":103,"train_counts":{"Adelie":106,"Chinstrap":47,"Gentoo":86},"test_counts":{"Adelie":45,"Chinstrap":21,"Gentoo":37},"gshape":[250,300],"acc":{"LDA":99,"QDA":101,"naive Bayes":96},"grid":{"LDA":"0000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000000000000000000012222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000000000000000000000000011112222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000000000000000000111111122222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000000000000000000000111111111122222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000000000000000000000000000111111111111122222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000000000000000000001111111111111111222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000000000000000000000001111111111111111111222222222222222222222222222222222222222222222222222222222200000000000000000000000000000000000000000000000001111111111111111111112222222222222222222222222222222222222222222222222222222000000000000000000000000000000000000000000000000011111111111111111111111112222222222222222222222222222222222222222222222222220000000000000000000000000000000000000000000000000011111111111111111111111111122222222222222222222222222222222222222222222222200000000000000000000000000000000000000000000000000011111111111111111111111111111122222222222222222222222222222222222222222222000000000000000000000000000000000000000000000000000011111111111111111111111111111111222222222222222222222222222222222222222220000000000000000000000000000000000000000000000000000111111111111111111111111111111111111222222222222222222222222222222222222200000000000000000000000000000000000000000000000000000111111111111111111111111111111111111112222222222222222222222222222222222000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111112222222222222222222222222222220000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111112222222222222222222222222200000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111122222222222222222222222000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111122222222222222222220000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111222222222222222200000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111222222222222000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111112222222220000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111112222200000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111122000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111","QDA":"0000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000000000000000000011122222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000000000000000000000000011112222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000000000000000000111111122222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000000000000000000000111111112222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000000000000000000000000001111111111122222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000000000000000000001111111111111222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000000000000000000000011111111111111122222222222222222222222222222222222222222222222222222222222222200000000000000000000000000000000000000000000000011111111111111111222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000000000000000000000111111111111111111112222222222222222222222222222222222222222222222222222222220000000000000000000000000000000000000000000000000111111111111111111111122222222222222222222222222222222222222222222222222222200000000000000000000000000000000000000000000000001111111111111111111111112222222222222222222222222222222222222222222222222222000000000000000000000000000000000000000000000000001111111111111111111111111122222222222222222222222222222222222222222222222220000000000000000000000000000000000000000000000000011111111111111111111111111111222222222222222222222222222222222222222222222200000000000000000000000000000000000000000000000000011111111111111111111111111111112222222222222222222222222222222222222222222000000000000000000000000000000000000000000000000000011111111111111111111111111111111122222222222222222222222222222222222222220000000000000000000000000000000000000000000000000000111111111111111111111111111111111111122222222222222222222222222222222222200000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111222222222222222222222222222222222000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111112222222222222222222222222222220000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111112222222222222222222222222200000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111122222222222222222222222000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111122222222222222222220000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111222222222222222200000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111222222222222000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111222222220000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111122200000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111","naive Bayes":"0000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000000000000000000222222222222222222222222222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222220000000000000000000000000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222222200000000000000000000000000000000000000000022222222222222222222222222222222222222222222222222222222222222222222222222222222211000000000000000000000000000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222222221111110000000000000000000000000000000000000000000002222222222222222222222222222222222222222222222222222222222222222222222111111111100000000000000000000000000000000000000000000000222222222222222222222222222222222222222222222222222222222222222211111111111111000000000000000000000000000000000000000000000000222222222222222222222222222222222222222222222222222222222221111111111111111110000000000000000000000000000000000000000000000000022222222222222222222222222222222222222222222222222221111111111111111111111100000000000000000000000000000000000000000000000000022222222222222222222222222222222222222222222221111111111111111111111111111000000000000000000000000000000000000000000000000000022222222222222222222222222222222222222221111111111111111111111111111111110000000000000000000000000000000000000000000000000000002222222222222222222222222222222111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000002222222222222222222222111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000222222222111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111110000000000000000000000000000000000000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111100000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111111111111111"},"classes":["Adelie","Chinstrap","Gentoo"],"pts":[[39.1,18.7,0],[39.5,17.4,0],[40.3,18.0,0],[36.7,19.3,0],[39.3,20.6,0],[38.9,17.8,0],[39.2,19.6,0],[34.1,18.1,0],[42.0,20.2,0],[37.8,17.1,0],[37.8,17.3,0],[41.1,17.6,0],[38.6,21.2,0],[34.6,21.1,0],[36.6,17.8,0],[38.7,19.0,0],[42.5,20.7,0],[34.4,18.4,0],[46.0,21.5,0],[37.8,18.3,0],[37.7,18.7,0],[35.9,19.2,0],[38.2,18.1,0],[38.8,17.2,0],[35.3,18.9,0],[40.6,18.6,0],[40.5,17.9,0],[37.9,18.6,0],[40.5,18.9,0],[39.5,16.7,0],[37.2,18.1,0],[39.5,17.8,0],[40.9,18.9,0],[36.4,17.0,0],[39.2,21.1,0],[38.8,20.0,0],[42.2,18.5,0],[37.6,19.3,0],[39.8,19.1,0],[36.5,18.0,0],[40.8,18.4,0],[36.0,18.5,0],[44.1,19.7,0],[37.0,16.9,0],[39.6,18.8,0],[41.1,19.0,0],[37.5,18.9,0],[36.0,17.9,0],[42.3,21.2,0],[39.6,17.7,0],[40.1,18.9,0],[35.0,17.9,0],[42.0,19.5,0],[34.5,18.1,0],[41.4,18.6,0],[39.0,17.5,0],[40.6,18.8,0],[36.5,16.6,0],[37.6,19.1,0],[35.7,16.9,0],[41.3,21.1,0],[37.6,17.0,0],[41.1,18.2,0],[36.4,17.1,0],[41.6,18.0,0],[35.5,16.2,0],[41.1,19.1,0],[35.9,16.6,0],[41.8,19.4,0],[33.5,19.0,0],[39.7,18.4,0],[39.6,17.2,0],[45.8,18.9,0],[35.5,17.5,0],[42.8,18.5,0],[40.9,16.8,0],[37.2,19.4,0],[36.2,16.1,0],[42.1,19.1,0],[34.6,17.2,0],[42.9,17.6,0],[36.7,18.8,0],[35.1,19.4,0],[37.3,17.8,0],[41.3,20.3,0],[36.3,19.5,0],[36.9,18.6,0],[38.3,19.2,0],[38.9,18.8,0],[35.7,18.0,0],[41.1,18.1,0],[34.0,17.1,0],[39.6,18.1,0],[36.2,17.3,0],[40.8,18.9,0],[38.1,18.6,0],[40.3,18.5,0],[33.1,16.1,0],[43.2,18.5,0],[35.0,17.9,0],[41.0,20.0,0],[37.7,16.0,0],[37.8,20.0,0],[37.9,18.6,0],[39.7,18.9,0],[38.6,17.2,0],[38.2,20.0,0],[38.1,17.0,0],[43.2,19.0,0],[38.1,16.5,0],[45.6,20.3,0],[39.7,17.7,0],[42.2,19.5,0],[39.6,20.7,0],[42.7,18.3,0],[38.6,17.0,0],[37.3,20.5,0],[35.7,17.0,0],[41.1,18.6,0],[36.2,17.2,0],[37.7,19.8,0],[40.2,17.0,0],[41.4,18.5,0],[35.2,15.9,0],[40.6,19.0,0],[38.8,17.6,0],[41.5,18.3,0],[39.0,17.1,0],[44.1,18.0,0],[38.5,17.9,0],[43.1,19.2,0],[36.8,18.5,0],[37.5,18.5,0],[38.1,17.6,0],[41.1,17.5,0],[35.6,17.5,0],[40.2,20.1,0],[37.0,16.5,0],[39.7,17.9,0],[40.2,17.1,0],[40.6,17.2,0],[32.1,15.5,0],[40.7,17.0,0],[37.3,16.8,0],[39.0,18.7,0],[39.2,18.6,0],[36.6,18.4,0],[36.0,17.8,0],[37.8,18.1,0],[36.0,17.1,0],[41.5,18.5,0],[46.5,17.9,1],[50.0,19.5,1],[51.3,19.2,1],[45.4,18.7,1],[52.7,19.8,1],[45.2,17.8,1],[46.1,18.2,1],[51.3,18.2,1],[46.0,18.9,1],[51.3,19.9,1],[46.6,17.8,1],[51.7,20.3,1],[47.0,17.3,1],[52.0,18.1,1],[45.9,17.1,1],[50.5,19.6,1],[50.3,20.0,1],[58.0,17.8,1],[46.4,18.6,1],[49.2,18.2,1],[42.4,17.3,1],[48.5,17.5,1],[43.2,16.6,1],[50.6,19.4,1],[46.7,17.9,1],[52.0,19.0,1],[50.5,18.4,1],[49.5,19.0,1],[46.4,17.8,1],[52.8,20.0,1],[40.9,16.6,1],[54.2,20.8,1],[42.5,16.7,1],[51.0,18.8,1],[49.7,18.6,1],[47.5,16.8,1],[47.6,18.3,1],[52.0,20.7,1],[46.9,16.6,1],[53.5,19.9,1],[49.0,19.5,1],[46.2,17.5,1],[50.9,19.1,1],[45.5,17.0,1],[50.9,17.9,1],[50.8,18.5,1],[50.1,17.9,1],[49.0,19.6,1],[51.5,18.7,1],[49.8,17.3,1],[48.1,16.4,1],[51.4,19.0,1],[45.7,17.3,1],[50.7,19.7,1],[42.5,17.3,1],[52.2,18.8,1],[45.2,16.6,1],[49.3,19.9,1],[50.2,18.8,1],[45.6,19.4,1],[51.9,19.5,1],[46.8,16.5,1],[45.7,17.0,1],[55.8,19.8,1],[43.5,18.1,1],[49.6,18.2,1],[50.8,19.0,1],[50.2,18.7,1],[46.1,13.2,2],[50.0,16.3,2],[48.7,14.1,2],[50.0,15.2,2],[47.6,14.5,2],[46.5,13.5,2],[45.4,14.6,2],[46.7,15.3,2],[43.3,13.4,2],[46.8,15.4,2],[40.9,13.7,2],[49.0,16.1,2],[45.5,13.7,2],[48.4,14.6,2],[45.8,14.6,2],[49.3,15.7,2],[42.0,13.5,2],[49.2,15.2,2],[46.2,14.5,2],[48.7,15.1,2],[50.2,14.3,2],[45.1,14.5,2],[46.5,14.5,2],[46.3,15.8,2],[42.9,13.1,2],[46.1,15.1,2],[44.5,14.3,2],[47.8,15.0,2],[48.2,14.3,2],[50.0,15.3,2],[47.3,15.3,2],[42.8,14.2,2],[45.1,14.5,2],[59.6,17.0,2],[49.1,14.8,2],[48.4,16.3,2],[42.6,13.7,2],[44.4,17.3,2],[44.0,13.6,2],[48.7,15.7,2],[42.7,13.7,2],[49.6,16.0,2],[45.3,13.7,2],[49.6,15.0,2],[50.5,15.9,2],[43.6,13.9,2],[45.5,13.9,2],[50.5,15.9,2],[44.9,13.3,2],[45.2,15.8,2],[46.6,14.2,2],[48.5,14.1,2],[45.1,14.4,2],[50.1,15.0,2],[46.5,14.4,2],[45.0,15.4,2],[43.8,13.9,2],[45.5,15.0,2],[43.2,14.5,2],[50.4,15.3,2],[45.3,13.8,2],[46.2,14.9,2],[45.7,13.9,2],[54.3,15.7,2],[45.8,14.2,2],[49.8,16.8,2],[46.2,14.4,2],[49.5,16.2,2],[43.5,14.2,2],[50.7,15.0,2],[47.7,15.0,2],[46.4,15.6,2],[48.2,15.6,2],[46.5,14.8,2],[46.4,15.0,2],[48.6,16.0,2],[47.5,14.2,2],[51.1,16.3,2],[45.2,13.8,2],[45.2,16.4,2],[49.1,14.5,2],[52.5,15.6,2],[47.4,14.6,2],[50.0,15.9,2],[44.9,13.8,2],[50.8,17.3,2],[43.4,14.4,2],[51.3,14.2,2],[47.5,14.0,2],[52.1,17.0,2],[47.5,15.0,2],[52.2,17.1,2],[45.5,14.5,2],[49.5,16.1,2],[44.5,14.7,2],[50.8,15.7,2],[49.4,15.8,2],[46.9,14.6,2],[48.4,14.4,2],[51.1,16.5,2],[48.5,15.0,2],[55.9,17.0,2],[47.2,15.5,2],[49.1,15.0,2],[47.3,13.8,2],[46.8,16.1,2],[41.7,14.7,2],[53.4,15.8,2],[43.3,14.0,2],[48.1,15.1,2],[50.5,15.2,2],[49.8,15.9,2],[43.5,15.2,2],[51.5,16.3,2],[46.2,14.1,2],[55.1,16.0,2],[44.5,15.7,2],[48.8,16.2,2],[47.2,13.7,2],[46.8,14.3,2],[50.4,15.7,2],[45.2,14.8,2],[49.9,16.1,2]],"test_pts":[[41.4,18.5,0],[46.8,14.3,2],[59.6,17.0,2],[48.5,14.1,2],[39.7,17.9,0],[50.8,17.3,2],[45.9,17.1,1],[49.6,16.0,2],[37.8,17.1,0],[36.5,18.0,0],[37.9,18.6,0],[46.4,15.6,2],[52.0,19.0,1],[50.3,20.0,1],[42.2,18.5,0],[50.2,14.3,2],[46.8,15.4,2],[45.8,18.9,0],[50.2,18.8,1],[36.5,16.6,0],[35.5,16.2,0],[35.9,19.2,0],[44.5,15.7,2],[34.6,17.2,0],[39.6,17.7,0],[39.0,17.5,0],[39.2,21.1,0],[43.6,13.9,2],[47.2,13.7,2],[35.1,19.4,0],[50.1,15.0,2],[36.7,18.8,0],[52.7,19.8,1],[48.4,16.3,2],[52.8,20.0,1],[47.5,14.0,2],[48.5,17.5,1],[37.6,19.1,0],[46.3,15.8,2],[39.7,18.4,0],[36.0,17.9,0],[45.6,19.4,1],[38.6,17.0,0],[32.1,15.5,0],[50.8,18.5,1],[39.5,16.7,0],[38.8,20.0,0],[45.4,18.7,1],[43.1,19.2,0],[45.7,17.3,1],[43.2,16.6,1],[46.8,16.1,2],[52.1,17.0,2],[46.7,17.9,1],[47.8,15.0,2],[49.5,16.2,2],[35.9,16.6,0],[50.1,17.9,1],[46.6,14.2,2],[50.5,15.9,2],[39.5,17.8,0],[50.5,15.2,2],[46.8,16.5,1],[36.6,17.8,0],[50.0,15.3,2],[40.9,18.9,0],[38.8,17.2,0],[40.5,18.9,0],[50.0,15.9,2],[42.8,14.2,2],[37.8,18.3,0],[50.7,19.7,1],[40.9,13.7,2],[36.6,18.4,0],[41.1,18.6,0],[38.9,18.8,0],[37.3,16.8,0],[35.0,17.9,0],[49.9,16.1,2],[52.0,18.1,1],[46.2,14.9,2],[45.5,13.9,2],[46.5,13.5,2],[50.0,15.2,2],[40.6,18.6,0],[42.8,18.5,0],[40.2,20.1,0],[49.1,14.8,2],[47.5,15.0,2],[35.7,17.0,0],[38.3,19.2,0],[42.5,16.7,1],[40.9,16.8,0],[48.1,15.1,2],[40.6,17.2,0],[46.5,14.8,2],[49.1,15.0,2],[50.5,18.4,1],[49.2,18.2,1],[51.7,20.3,1],[36.2,16.1,0],[48.7,15.7,2],[36.8,18.5,0]],"cx":[30.0,61.0,125],"cy":[12.5,22.0,77],"wrong":{"LDA":[5,17,41,62],"QDA":[5,17],"naive Bayes":[2,5,17,50,52,62,91]},"proba":{"LDA":[0.075,0.86,0.065],"QDA":[0.117,0.88,0.004],"naive Bayes":[0.425,0.317,0.258]},"acc4":{"LDA":102,"QDA":102,"naive Bayes":100},"acc_rs1":{"LDA":99,"QDA":98,"naive Bayes":95},"nostrat_test_counts":{"Adelie":50,"Chinstrap":17,"Gentoo":36},"leak":{"LDA":99,"QDA":101,"naive Bayes":96},"means":{"Adelie":[38.94,18.47],"Chinstrap":[48.88,18.43],"Gentoo":[47.23,14.9]},"priors":{"Adelie":0.444,"Chinstrap":0.197,"Gentoo":0.36}}};
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const LIB = {py: "Python", np: "NumPy", pd: "pandas", plt: "Matplotlib", sp: "SciPy", sk: "scikit-learn"};
+const ST = {new: ["new", "NEW"], rev: ["rev", "مراجعة"], trap: ["trap", "فخ"]};
+const C = n => `<code>${n}</code>`;
+const T = (ar, en) => `${ar} <bdi>(${en})</bdi>`;
+const GH = "https://iyasanwar.github.io/engs3302/guides/";
+const W3 = k => GH + "Lab_W03_Code_Guide.html#" + k, W4 = k => GH + "Lab_W04_Code_Guide.html#" + k, W2 = GH + "Lab_W02_Code_Guide.html#index", W1 = GH + "Lab_W01_Code_Guide.html#index";
+const fx = (v, n) => Number(v).toFixed(n);
+const sci = (v, n = 1) => { const e = Math.floor(Math.log10(Math.abs(v))), m = v / 10 ** e; return `${m.toFixed(n)} × 10<sup>${e}</sup>`; };
+function normpdf(x, m, s) { return Math.exp(-0.5 * ((x - m) / s) ** 2) / (Math.sqrt(2 * Math.PI) * s); }
+const A1 = D.c11, A2 = D.c12, A3 = D.c13, A4 = D.c14;
+
+/* ---------- explanations: key -> entry. l = library, t = status, n = name, s = one line (index), d = body, a = args, x = trap,
+   c = control to flash (an entry with c shows its cell's live panel inside the card), go = action,
+   ref + wk = a name explained in full in an earlier week: the card is short and links to that week's guide ---------- */
+const E = {
+ /* ---------- setup ---------- */
+ warn: {l: "py", t: "new", n: 'warnings.filterwarnings("ignore")', s: `إخفاء ${T("رسائل التحذير", "warnings")}`,
+  d: `<p>بعض المكتبات تطبع ${T("تحذيرات", "warnings")} طويلة: ليست أخطاء، والكود يكمل. هذا السطر يخفيها حتى تبقى المخرجات نظيفة.</p><p>${C("import warnings; warnings…")}: الفاصلة المنقوطة ${C(";")} تضع أمرين في سطر واحد.</p>`},
+ imp: {l: "py", t: "new", n: "import numpy as np, pandas as pd", s: `مكتبتان في سطر واحد، بفاصلة`,
+  d: `<p>${C("import")} يحمّل ${T("مكتبة", "library")}، و${C("as")} يعطيها اسمًا قصيرًا، كما في الأسابيع السابقة. الجديد: الفاصلة تحمّل مكتبتين في سطر واحد. النتيجة نفسها كسطرين.</p>`},
+ from: {l: "sp", t: "new", n: "from scipy.stats import norm, multivariate_normal", s: `أخذ شيئين من ${C("scipy.stats")}`,
+  d: `<p>${C("norm")} هو ${T("التوزيع الطبيعي", "normal distribution")} بمتغير واحد، كما في الأسبوع 3. و${C("multivariate_normal")} هو الطبيعي بأكثر من متغير: مركزه ${T("متجه المتوسطات", "mean vector")} وشكله ${T("مصفوفة التغاير", "covariance matrix")}.</p><p>هذا المعمل يحمّله فقط. خلايا اليوم تحسب بالمصفوفات بنفسها، وهذا أوضح للفهم.</p>`},
+ tts0: {l: "sk", t: "rev", wk: 2, ref: W2, n: "from sklearn.model_selection import train_test_split", s: `دالة تقسيم البيانات إلى ${T("تدريب", "train")} و${T("اختبار", "test")}`,
+  d: `<p>تقسم الجدول قسمين عشوائيين. مرّت في الأسبوع 2، ونستعملها في 1.4.</p>`},
+ skm: {l: "sk", t: "new", n: "from sklearn.discriminant_analysis import …; from sklearn.naive_bayes import GaussianNB", s: `ثلاثة ${T("مصنِّفات", "classifiers")} جاهزة: LDA وQDA وnaive Bayes`,
+  d: `<p>ثلاثة نماذج الأسبوع جاهزة في scikit-learn:</p><ul><li>${C("LinearDiscriminantAnalysis")}: LDA، شكل واحد مشترك لكل الأنواع، فالحدود مستقيمة.</li><li>${C("QuadraticDiscriminantAnalysis")}: QDA، لكل نوع شكله، فالحدود منحنية.</li><li>${C("GaussianNB")}: ${T("بايز الساذج", "naive Bayes")} بمنحنى طبيعي لكل ${T("ميزة", "feature")}، بلا ميل.</li></ul><p>الأسماء طويلة، لكنها تعمل كلها بالطريقة نفسها: ${C("fit")} ثم ${C("predict")} (الخلية 1.4).</p>`},
+ def: {l: "py", t: "rev", wk: 3, ref: W3("setup--def"), n: "def check(label, got, expected, tol=1e-3)", s: `تعريف ${T("دالة", "function")}، ومعامل بقيمة افتراضية`,
+  d: `<p>دالة التحقق التي تعرفها. الفرق المسموح ${C("tol")} صار 0.001.</p>`},
+ allclose: {l: "np", t: "new", n: "np.allclose(a, b, atol=tol)", s: `هل كل الأرقام قريبة من بعضها؟ True أو False`,
+  d: `<p>تقارن ${T("مصفوفتين", "arrays")} عنصرًا بعنصر، وتعيد ${C("True")} إذا كان كل فرق أصغر من المسموح. لذلك تقبل دالة ${C("check")} الآن مصفوفة كاملة، مثل ${T("مصفوفة التغاير", "covariance matrix")} في المهمة 0.2.</p><p>لماذا لا نكتب ${C("==")}؟ لأن الحاسوب يقرّب: ${C("0.1 + 0.2 == 0.3")} يعطي False.</p>`,
+  a: [["a, b", "ما حسبته، وما هو صحيح"], ["atol", "أكبر فرق مسموح لكل عنصر"]]},
+ list: {l: "py", t: "rev", wk: 3, ref: W3("setup--list"), n: "FEATURES = [ … ]", s: T("قائمة", "list"),
+  d: `<p>${T("قائمة", "list")} بأسماء أعمدة القياسات الأربعة. الاسم صار أقصر من الأسابيع السابقة: ${C("FEATURES")}.</p>`},
+ try: {l: "py", t: "rev", wk: 3, ref: W3("setup--try"), n: "try: … except FileNotFoundError:", s: `جرّب، وإن فشل افعل شيئًا آخر ${T("", "exception")}`,
+  d: `<p>إن لم يوجد الملف بجانب الدفتر، نحمّل البيانات من الإنترنت.</p>`},
+ dropna: {l: "pd", t: "rev", wk: 3, ref: W3("setup--dropna"), n: "df.dropna(subset=…).reset_index(drop=True)", s: `حذف الصفوف الناقصة ${T("", "NaN")} وإعادة الترقيم`,
+  d: `<p>بطريقان بلا قياسات يُحذفان، فيبقى ${D.npeng} من ${D.nraw}.</p>`},
+ len: {l: "py", t: "rev", wk: 3, ref: W3("setup--len"), n: "len(x)", s: `عدد العناصر ${T("", "length")}`,
+  d: `<p>${C("len(peng)")} = ${D.npeng}.</p>`},
+
+ /* ---------- 0.1 ---------- */
+ arr: {l: "np", t: "rev", wk: 4, ref: W4("c14--arr"), n: "np.array([[1, 2], [2, 4], [3, 3]])", s: `${T("مصفوفة", "array")} من قائمة قوائم: كل قائمة صف`, c: "c01-ax",
+  d: `<p>ثلاث قوائم داخلية، فثلاثة ${T("صفوف", "rows")}. وفي كل قائمة رقمان، فعمودان. الشكل ${T("", "shape")} (3, 2): ثلاث نقاط، ولكل نقطة ميزتان.</p>`},
+ meanax: {l: "np", t: "rev", wk: 2, ref: W2, n: "X.mean(axis=0)", s: `متوسط لكل عمود = ${T("متجه المتوسطات", "mean vector")}`, c: "c01-ax",
+  d: `<p>${C("axis=0")} يطوي ${T("الصفوف", "rows")}: ينزل في كل عمود ويأخذ المتوسط. فيبقى رقم لكل ${T("ميزة", "feature")}.</p><p>هذا ${T("متجه المتوسطات", "mean vector")} μ في §5.2: مركز السحابة. عند X: (2, 3).</p><p>جرّب الأزرار في اللوحة: ${C("axis=1")} يعطي متوسطًا لكل نقطة، وهذا لا معنى له هنا.</p>`,
+  a: [["axis=0", "رقم لكل عمود (لكل ميزة). هذا ما نريده"], ["axis=1", "رقم لكل صف (لكل نقطة)"], ["(بلا axis)", "متوسط كل الأرقام معًا: رقم واحد"]]},
+
+ /* ---------- 1.1 ---------- */
+ rowsel: {l: "pd", t: "new", n: 'peng[peng.species == "Gentoo"]', s: `اختيار ${T("صفوف", "rows")} بشرط: ${T("قناع", "mask")} بين قوسين`,
+  d: `<p>${C('peng.species == "Gentoo"')} ${T("قناع", "mask")}: ${D.npeng} قيمة True/False. ونضعه بين قوسين مربعين بعد اسم الجدول، فيبقى فقط الصفوف التي فيها True: ${A1.n} بطريق Gentoo.</p><p>هذه طريقة أقصر من ${C(".loc[شرط, عمود]")} التي رأيتها في الأسبوع 3.</p>`},
+ dotcol: {l: "pd", t: "new", n: ".flipper_length_mm.values", s: `عمود باسمه بعد نقطة، ثم ${C(".values")}: مصفوفة NumPy`,
+  d: `<p>${C(".flipper_length_mm")} يأخذ عمودًا باسمه، مثل ${C('["flipper_length_mm"]')}. يعمل فقط إذا كان الاسم بلا مسافات.</p><p>${C(".values")} يحوّل العمود إلى ${T("مصفوفة", "array")} NumPy، مثل ${C(".to_numpy()")} في الأسبوع 3. فصار ${C("x")} ${A1.n} رقمًا.</p>`},
+ npstd: {l: "np", t: "trap", n: "x.std()", s: `${T("الانحراف المعياري", "standard deviation")}: NumPy يقسم على n`, c: "c11-sd",
+  d: `<p>${C("x")} مصفوفة NumPy، فـ${C("x.std()")} يقسم على n، كما في ${T("الأرجحية العظمى", "maximum likelihood")} (§5.1): ${fx(A1.sd, 3)}.</p>`,
+  x: `<b>فخ:</b> على عمود pandas ${C("Series")}، ${C(".std()")} يقسم على n−1: ${fx(A1.sd1, 3)}. الأمر نفسه يعطي رقمًا آخر حسب نوع المتغير. لهذا أضفنا ${C(".values")}.`},
+ linspace: {l: "np", t: "rev", wk: 3, ref: W3("c15--linspace"), n: "np.linspace(210, 225, 301)", s: `num رقمًا ${T("متساوية البعد", "evenly spaced")}، الطرفان يدخلان`, c: "c11-mu",
+  d: `<p>301 ${T("تخمين", "guess")} للمتوسط، من 210 إلى 225، والبعد بينها ${fx(A1.step, 2)} مم.</p>`},
+ lcomp: {l: "py", t: "rev", wk: 2, ref: W2, n: "[… for mu in guesses]", s: `بناء ${T("قائمة", "list")} في سطر ${T("", "list comprehension")}`, c: "c11-mu",
+  d: `<p>لكل تخمين ${C("mu")} نحسب رقمًا واحدًا، فتخرج قائمة من 301 رقم: ${T("الأرجحية اللوغاريتمية", "log-likelihood")} لكل تخمين.</p>`},
+ logpdf: {l: "sp", t: "new", n: "norm.logpdf(x, mu, sd).sum()", s: `لوغاريتم ${T("الكثافة", "density")} لكل سمكة، ثم المجموع`, c: "c11-mu",
+  d: `<p>${C("norm.logpdf")} = ln( ${C("norm.pdf")} ): لوغاريتم ارتفاع المنحنى عند كل بطريق. ${C("x")} مصفوفة، فيخرج ${A1.n} رقمًا. ثم ${C(".sum()")} يجمعها.</p><p>هذا ${T("الأرجحية اللوغاريتمية", "log-likelihood")} في §5.1: ln L(μ) = Σ ln p(xₖ | μ). اللوغاريتم يحوّل الضرب إلى جمع.</p><p>حرّك التخمين في اللوحة: المجموع أكبر ما يكون عند المتوسط.</p>`,
+  a: [["x", "البيانات: كل البطاريق معًا"], ["mu", "المتوسط الذي نجرّبه"], ["sd", "σ، ثابت هنا"]]},
+ argmax: {l: "np", t: "rev", wk: 4, ref: W4("c13--argmax"), n: "guesses[np.argmax(loglik)]", s: `${T("مكان", "index")} أكبر قيمة، ثم التخمين في هذا المكان`, c: "c11-mu",
+  d: `<p>${C("np.argmax")} يعطي <b>المكان</b> ${A1.ibest}، لا القيمة. ثم ${C("guesses[…]")} يعطي التخمين في هذا المكان: ${fx(A1.best, 2)}. أقرب تخمين في الشبكة إلى المتوسط ${fx(A1.mean, 2)}.</p>`},
+ round: {l: "py", t: "rev", wk: 3, ref: W3("c12--round"), n: "round(x, 2)", s: `${T("تقريب", "rounding")} للطباعة`,
+  d: `<p>التقريب للطباعة فقط.</p>`},
+ plot: {l: "plt", t: "rev", wk: 3, ref: W3("c15--plot"), n: "plt.plot(guesses, loglik)", s: `رسم خط يصل النقاط`,
+  d: `<p>المنحنى في اللوحة هو هذا الرسم: التخمين أفقيًا، والأرجحية اللوغاريتمية عموديًا.</p>`},
+ axvline: {l: "plt", t: "new", n: 'plt.axvline(x, color, ls="--")', s: `خط عمودي عند x`, c: "c11-mu",
+  d: `<p>يرسم خطًا ${T("عموديًا", "vertical")} يمتد على ارتفاع الرسم كله، عند ${C("x.mean()")}. نراه يمر بقمة المنحنى تمامًا.</p>`,
+  a: [["x", "مكان الخط على المحور الأفقي"], ["color", "اللون"], ["ls", `${T("نمط الخط", "line style")}: "--" متقطع`]]},
+ prod: {l: "np", t: "trap", n: "np.prod(norm.pdf(x, …))", s: `${T("حاصل ضرب", "product")} كل العناصر: رقم صغير جدًا`, c: "c11-n",
+  d: `<p>${C("np.prod")} يضرب كل العناصر. هنا ${A1.n} ارتفاعًا، كل واحد أصغر من 0.07، فالناتج ${sci(A1.prod)}.</p><p>هذه ${T("الأرجحية", "likelihood")} نفسها قبل اللوغاريتم. غيّر عدد البطاريق في اللوحة: كل بطريق إضافي يصغّر الناتج أكثر.</p>`,
+  x: `<b>فخ:</b> أصغر رقم يحفظه الحاسوب نحو 10<sup>−308</sup>. مع 1000 بطريق يصير الضرب ${C("0.0")} بلا أي رسالة، وتتساوى كل التخمينات. لهذا نجمع اللوغاريتمات.`},
+
+ /* ---------- 1.2 ---------- */
+ cols2: {l: "pd", t: "rev", wk: 2, ref: W2, n: '[["flipper_length_mm", "body_mass_g"]].values', s: `عمودان معًا: قائمة أسماء بين قوسين`,
+  d: `<p>قوسان: الخارجي للاختيار، والداخلي ${T("قائمة", "list")} الأسماء. فيخرج جدول بعمودين، ثم ${C(".values")} يعطي ${T("مصفوفة", "array")} شكلها (${A2.shape.join(", ")}): صف لكل بطريق، وعمود لكل ميزة.</p>`},
+ mvec: {l: "np", t: "rev", wk: 2, ref: W2, n: "G.mean(axis=0)", s: `${T("متجه المتوسطات", "mean vector")}، كما في 0.1`,
+  d: `<p>كما في الخلية 0.1: متوسط لكل عمود. μ = (${fx(A2.mu[0], 1)}, ${fx(A2.mu[1], 1)}).</p>`},
+ cov: {l: "np", t: "new", n: "np.cov(G.T, bias=True)", s: `${T("مصفوفة التغاير", "covariance matrix")}`, c: "c12-bias",
+  d: `<p>تعطي مصفوفة 2×2: على ${T("القطر", "diagonal")} ${T("التباينان", "variances")}، وخارجه ${T("التغاير", "covariance")} σ₁₂ مرتين. هذه Σ في §5.2.</p><p>${C("np.cov")} تريد كل ${T("ميزة", "feature")} في ${T("صف", "row")}. بياناتنا ميزة في كل <b>عمود</b>، فنعطيها ${C("G.T")}.</p>`,
+  a: [["G.T", "البيانات، ميزة في كل صف"], ["bias=True", "نقسم على n: الأرجحية العظمى، كما في الـ Notes. بلا هذا: n−1"]],
+  x: `<b>فخ:</b> ${C("np.cov(G)")} بلا ${C(".T")} لا يعطي خطأ، بل مصفوفة (${A2.covGshape.join(", ")}): تغاير كل بطريقين!`},
+ tr: {l: "np", t: "rev", wk: 2, ref: W2, n: "G.T", s: `${T("المنقول", "transpose")}: الصفوف تصير أعمدة`, c: "c12-T",
+  d: `<p>${C(".T")} يقلب المصفوفة: شكلها من (${A2.shape.join(", ")}) إلى (${A2.shape[1]}, ${A2.shape[0]}).</p>`},
+ idx2: {l: "np", t: "new", n: "S[0, 1]", s: `عنصر في ${T("صف", "row")} و${T("عمود", "column")}، والعدّ من 0`, c: "c12-bias",
+  d: `<p>${C("S[i, j]")}: الصف i والعمود j. ${C("S[0, 0]")} تباين الزعنفة، و${C("S[1, 1]")} تباين الكتلة، و${C("S[0, 1]")} التغاير بينهما.</p><p>فالسطر هو صيغة ${T("الارتباط", "correlation")}: ρ = σ₁₂ / (σ₁ σ₂) = ${fx(A2.rho, 3)}.</p>`},
+ sqrt: {l: "np", t: "rev", wk: 1, ref: W1, n: "np.sqrt(…)", s: `${T("الجذر التربيعي", "square root")}`,
+  d: `<p>${C("np.sqrt(S[0, 0] * S[1, 1])")} = σ₁ × σ₂، لأن الجذر للتباين هو الانحراف المعياري.</p>`},
+ rround: {l: "np", t: "rev", wk: 2, ref: W2, n: "mu.round(1)", s: `تقريب كل عناصر ${T("المصفوفة", "array")}`,
+  d: `<p>يقرّب كل عنصر للطباعة.</p>`},
+ scatter: {l: "plt", t: "new", n: "plt.scatter(x, y, s=10)", s: `${T("مخطط انتشار", "scatter plot")}: نقطة لكل بطريق`, c: "c12-units",
+  d: `<p>يرسم نقطة عند كل زوج (x, y). هنا الزعنفة أفقيًا والكتلة عموديًا، فنرى ${T("الميل", "tilt")}: البطريق الأطول زعنفة أثقل غالبًا.</p><p>${C("G[:, 0]")}: كل الصفوف، العمود 0. و${C("G[:, 1]")} العمود 1.</p>`,
+  a: [["x, y", "مصفوفتان بالطول نفسه"], ["s", "حجم النقطة"]]},
+
+ /* ---------- 1.3 ---------- */
+ thr: {l: "py", t: "new", n: "def threshold(m1, m2, s, P1)", s: `صيغة ${T("العتبة", "threshold")} في سطر واحد`, c: "c13-p",
+  d: `<p>صيغة §5.4 كما هي: x* = (μ₁ + μ₂)/2 + σ²/(μ₁ − μ₂) · ln(P(ω₂)/P(ω₁)). مع صنفين، P(ω₂) = 1 − P1.</p><p>${T("نص التوثيق", "docstring")} يقول الشرطين: انتشار واحد s للصنفين، وm1 > m2. عندها نقول «صنف 1» فوق العتبة.</p>`,
+  x: `<b>فخ:</b> إذا بدّلت m1 وm2، تعطي الدالة رقمًا (${fx(A3.swap, 3)}) بلا رسالة خطأ، لكن معناه انقلب.`},
+ pow: {l: "py", t: "rev", wk: 2, ref: W2, n: "s**2", s: `${T("الأس", "power")}: s تربيع`,
+  d: `<p>${C("**")} للأس في Python. ${C("^")} شيء آخر تمامًا.</p>`},
+ log: {l: "np", t: "new", n: "np.log(…)", s: `${T("اللوغاريتم الطبيعي", "natural log")} ln`, c: "c13-p",
+  d: `<p>${C("np.log")} هو ln، بالأساس e. وللأساس 10 نكتب ${C("np.log10")}.</p><p>${C("np.log((1 - P1) / P1)")} سالب حين P1 > 0.5، فتتحرك العتبة نحو الصنف 2.</p>`},
+ call3: {l: "py", t: "rev", wk: 4, ref: W4("c12--pcall"), n: "threshold(7, 4, 1, 0.6)", s: `${T("استدعاء", "call")} الدالة بأرقام الأسبوع 4`, c: "c13-p",
+  d: `<p>القاروص N(7, 1)، والسلمون N(4, 1)، وP(قاروص) = 0.6. فالعتبة ${fx(A3.f, 3)}: حد الأسبوع 4 نفسه.</p>`},
+ grid: {l: "np", t: "rev", wk: 4, ref: W4("c13--gvec"), n: "norm.pdf(xs, 7, 1) * 0.6", s: `${T("الدرجة", "score")} عند 90001 نقطة مرة واحدة`, c: "c13-s",
+  d: `<p>${T("الأرجحية", "likelihood")} × ${T("الاحتمال القبلي", "prior")} عند كل نقطة في الشبكة. البعد بين النقاط ${fx(A3.step, 4)}.</p>`},
+ search: {l: "np", t: "trap", n: "xs[np.argmax(score1 > score2)]", s: `أول نقطة يفوز فيها الصنف 1`, c: "c13-s",
+  d: `<p>${C("score1 > score2")} ${T("قناع", "mask")}: False يسار الحد، وTrue يمينه. و${C("np.argmax")} على قناع يعطي مكان أول True. فهذا الحد بالبحث: ${fx(A3.search, 3)}، والصيغة ${fx(A3.f, 3)}.</p>`,
+  x: `<b>فخ:</b> إذا لم يوجد أي True، يعيد ${C("np.argmax")} المكان 0 بلا شكوى، فيطبع ${fx(A3.allfalse, 1)}: أول نقطة في الشبكة.`},
+
+ /* ---------- 1.4 ---------- */
+ vals2: {l: "pd", t: "rev", wk: 2, ref: W2, n: 'peng[["bill_length_mm", "bill_depth_mm"]].values', s: `${T("الميزات", "features")}: عمودان، مصفوفة (342, 2)`,
+  d: `<p>كما في 1.2، لكن لكل البطاريق: طول المنقار وعمقه. و${C("yb")} الأسماء: ${D.npeng} نصًّا.</p>`},
+ split: {l: "sk", t: "rev", wk: 2, ref: W2, n: "train_test_split(Xb, yb, test_size=0.3, random_state=0, stratify=yb)", s: `70% ${T("تدريب", "train")}، 30% ${T("اختبار", "test")}، بالنسب نفسها`, c: "c14-out",
+  d: `<p>${A4.ntrain} بطريقًا للتدريب و${A4.ntest} للاختبار. ${C("stratify=yb")} يحفظ نسب الأنواع في القسمين: في الاختبار ${A4.test_counts.Adelie} Adelie و${A4.test_counts.Chinstrap} Chinstrap و${A4.test_counts.Gentoo} Gentoo.</p>`},
+ models: {l: "sk", t: "new", n: '{"LDA": LinearDiscriminantAnalysis(), …}', s: `${T("قاموس", "dict")} من ثلاثة ${T("نماذج", "models")} فارغة`, c: "c14-m",
+  d: `<p>الأقواس ${C("()")} بعد الاسم تصنع ${T("كائنًا", "object")} جديدًا: نموذجًا لم يتعلم شيئًا بعد. نحفظ الثلاثة في قاموس: الاسم مفتاح، والنموذج قيمة.</p><p>هكذا نجرّب الثلاثة بحلقة واحدة، بالكود نفسه.</p>`},
+ subplots: {l: "plt", t: "new", n: "fig, ax = plt.subplots(1, 3, figsize=(14, 4), sharey=True)", s: `ثلاثة رسوم جنبًا إلى جنب`,
+  d: `<p>يصنع ${T("شكلًا", "figure")} ${C("fig")} فيه صف واحد من ثلاثة ${T("محاور رسم", "axes")}. ${C("ax")} مصفوفة من ثلاثة: ${C("ax[0]")} و${C("ax[1]")} و${C("ax[2]")}، رسم لكل نموذج.</p>`,
+  a: [["1, 3", "صف واحد، ثلاثة أعمدة"], ["figsize", "العرض والارتفاع بالبوصة"], ["sharey=True", "المحور العمودي نفسه للثلاثة، فتقارن بسهولة"]]},
+ mesh: {l: "np", t: "new", n: "np.meshgrid(np.linspace(30, 61, 300), np.linspace(12.5, 22, 250))", s: `${T("شبكة", "grid")} نقاط تغطي الرسم`, c: "c14-m",
+  d: `<p>من 300 قيمة أفقية و250 عمودية، يصنع كل الأزواج: ${A4.gshape[0]} × ${A4.gshape[1]} = ${A4.gshape[0] * A4.gshape[1]} نقطة. ${C("gx")} فيه الطول عند كل نقطة، و${C("gy")} العمق. الشكلان (${A4.gshape.join(", ")}): صف لكل قيمة عمودية.</p><p>نصنّف كل نقطة في الشبكة، فنرى ${T("مناطق القرار", "decision regions")}. اللوحة تستعمل شبكة أخشن (${A4.cx[2]} × ${A4.cy[2]}) لترسم أسرع.</p>`},
+ zip: {l: "py", t: "new", n: "for a, (name, m) in zip(ax, models.items()):", s: `المرور على شيئين معًا، زوجًا زوجًا`,
+  d: `<p>${C("zip")} يمشي على القائمتين معًا: الرسم الأول مع النموذج الأول، والثاني مع الثاني… و${C("(name, m)")} ${T("يوزع", "unpacks")} زوج القاموس على اسمين.</p>`},
+ fit: {l: "sk", t: "rev", wk: 2, ref: W2, n: "m.fit(X_train, y_train)", s: `${T("التدريب", "training")}: النموذج يتعلم من بيانات التدريب`, c: "c14-m",
+  d: `<p>لكل نوع يقدّر النموذج ${T("متجه المتوسطات", "mean vector")} و${T("الاحتمال القبلي", "prior")}، وشكل السحابة: LDA مصفوفة واحدة مشتركة، وQDA مصفوفة لكل نوع، وnaive Bayes تباينين لكل نوع. كل هذا ${T("الأرجحية العظمى", "maximum likelihood")} من §5.1 و§5.2.</p><p>مثال: متوسط Chinstrap في التدريب (${A4.means.Chinstrap.join(", ")}).</p>`},
+ pred: {l: "sk", t: "new", n: "(m.predict(X_test) == y_test).sum()", s: `${T("التنبؤ", "prediction")}، ثم عدد الإجابات الصحيحة`, c: "c14-m",
+  d: `<p>${C("predict")} يعطي اسم نوع لكل بطريق اختبار: النوع ذو ${T("الدرجة", "score")} الأكبر. نقارن بالأسماء الحقيقية، فيخرج ${T("قناع", "mask")}، و${C(".sum()")} يعدّ الـ True.</p><p>على المنقار: LDA ${A4.acc.LDA}، QDA ${A4.acc.QDA}، naive Bayes ${A4.acc["naive Bayes"]} من ${A4.ntest}.</p>`},
+ cr: {l: "np", t: "new", n: "np.c_[gx.ravel(), gy.ravel()]", s: `من شبكتين إلى جدول نقاط: عمود لكل ميزة`,
+  d: `<p>${C(".ravel()")} يفرد المصفوفة ثنائية الأبعاد في صف طويل: ${A4.gshape[0] * A4.gshape[1]} رقمًا. و${C("np.c_[a, b]")} يضع الصفين جنبًا إلى جنب كعمودين. فيخرج شكل (${A4.gshape[0] * A4.gshape[1]}, 2)، مثل ${C("X_test")}، فيقبله ${C("predict")}.</p>`},
+ sorted: {l: "np", t: "new", n: "np.searchsorted(m.classes_, …).reshape(gx.shape)", s: `من أسماء الأنواع إلى أرقام 0، 1، 2، ثم شكل الشبكة`, c: "c14-m",
+  d: `<p>${C("predict")} يعطي نصوصًا، والرسم يريد أرقامًا. ${C("m.classes_")} الأسماء مرتبة: ${A4.classes.map(c => C(c)).join("، ")}. و${C("np.searchsorted")} يعطي مكان كل اسم فيها: 0 أو 1 أو 2.</p><p>${C(".reshape(gx.shape)")} يعيد الصف الطويل إلى شكل الشبكة (${A4.gshape.join(", ")}).</p>`,
+  x: `<b>فخ:</b> ${C(".reshape(300, 250)")} لا يعطي خطأ (العدد نفسه)، لكنه يخلط النقاط فتخرج مناطق مشوهة. استعمل ${C("gx.shape")} دائمًا.`},
+ contour: {l: "plt", t: "new", n: "a.contourf(…); a.contour(…)", s: `تلوين ${T("مناطق القرار", "decision regions")} ورسم ${T("الحدود", "boundaries")}`, c: "c14-m",
+  d: `<p>${C("contourf")} يلوّن كل منطقة بلونها (f = filled). و${C("contour")} يرسم الخطوط بينها فقط: الخط عند 0.5 بين 0 و1، وعند 1.5 بين 1 و2.</p>`,
+  a: [["levels", "أين تقع الحدود بين الأرقام"], ["alpha=0.15", "شفافية، لنرى النقاط فوق الألوان"], ['colors="k"', "حدود سوداء"]]},
+ settitle: {l: "plt", t: "new", n: 'a.set_title(f"…")', s: `عنوان رسم واحد من الثلاثة`,
+  d: `<p>مع ${C("plt.subplots")} نكتب على كل رسم وحده: ${C("a.set_title")} و${C("a.set_xlabel")} و${C("a.scatter")}، بدل ${C("plt.title")}.</p>`}
+};
+/* T("", en) gives a bare English tag after an Arabic phrase: tidy the leading space */
+/* shapes such as (100000, 3) or (3,) are isolated LTR so the Arabic sentence does not reorder them */
+const ltrShapes = h => h.replace(/(^|[^\w(">])(\(\d[\d, ]*,?\))/g, (m, p, t) => `${p}<span dir="ltr">${t}</span>`);
+Object.values(E).forEach(e => ["s", "d", "x"].forEach(f => { if (e[f]) e[f] = ltrShapes(e[f].replace(/ +<bdi>/g, " <bdi>").replace(/^ <bdi>/, "<bdi>")); }));
+Object.values(E).forEach(e => { if (e.a) e.a = e.a.map(([n, m]) => [n, ltrShapes(m)]); });
+
+/* ---------- syntax colours (editor style) ---------- */
+const KW = new Set(["import","from","as","def","return","for","in","try","except","if","else","elif","and","or","not","while","with","lambda","pass"]);
+const CONST = new Set(["True","False","None"]);
+const BUILTIN = new Set(["print","len","range","round","isinstance","str","int","float","list","dict","sum","max","min","abs"]);
+const MODS = new Set(["np","pd","plt","norm"]);
+function classify(t) {
+ const cls = new Array(t.length).fill("");
+ const fill = (i, j, c) => { for (let k = i; k < j; k++) cls[k] = c; };
+ let i = 0;
+ while (i < t.length) {
+  const ch = t[i];
+  if (ch === "#") { let j = t.indexOf("\n", i); if (j < 0) j = t.length; fill(i, j, "cm"); i = j; continue; }
+  const sm = /^([fFrRbB]{0,2})("""|'''|"|')/.exec(t.slice(i, i + 5));
+  if (sm && !(sm[1] && /\w/.test(t[i - 1] || ""))) {
+   const q = sm[2], st = i, isF = /[fF]/.test(sm[1]);
+   let j = i + sm[0].length;
+   while (j < t.length && t.slice(j, j + q.length) !== q && !(q.length === 1 && t[j] === "\n")) { if (t[j] === "\\") { j += 2; continue; } j++; }
+   const end = Math.min(t.length, j + q.length);
+   fill(st, end, "st");
+   if (isF) {
+    let k = st + sm[0].length;
+    while (k < j) {
+     if (t[k] === "{") {
+      let d = 1, m = k + 1; while (m < j && d) { if (t[m] === "{") d++; else if (t[m] === "}") d--; if (d) m++; }
+      cls[k] = "br"; if (m < t.length) cls[m] = "br";
+      const inner = t.slice(k + 1, m), colon = inner.search(/:[^}()]*$/), expr = colon >= 0 ? inner.slice(0, colon) : inner;
+      classify(expr).forEach((c, n) => cls[k + 1 + n] = c || "op");
+      if (expr.length < inner.length) fill(k + 1 + expr.length, m, "fmt");
+      k = m + 1;
+     } else k++;
+    }
+   }
+   i = end; continue;
+  }
+  if (/[0-9]/.test(ch) && !/\w/.test(t[i - 1] || "")) { const m = /^\d+(\.\d+)?(e-?\d+)?/.exec(t.slice(i)); fill(i, i + m[0].length, "nu"); i += m[0].length; continue; }
+  if (/[A-Za-z_]/.test(ch)) {
+   const w = /^[A-Za-z_]\w*/.exec(t.slice(i))[0], after = t.slice(i + w.length), prev = t[i - 1];
+   let c = "va";
+   if (KW.has(w)) c = "kw"; else if (CONST.has(w)) c = "co";
+   else if (prev !== "." && MODS.has(w)) c = "mo";
+   else if (/^\s*\(/.test(after)) c = BUILTIN.has(w) ? "bi" : "fn";
+   else if (/^=(?!=)/.test(after) && /[(,]\s*$/.test(t.slice(0, i))) c = "kwarg";
+   else if (prev === ".") c = "at";
+   fill(i, i + w.length, c); i += w.length; continue;
+  }
+  if (/[-+*/<>=!&|%@~]/.test(ch)) cls[i] = "op";
+  i++;
+ }
+ return cls;
+}
+const esc = c => c === "<" ? "&lt;" : c === ">" ? "&gt;" : c === "&" ? "&amp;" : c;
+
+/* ---------- code rendering: one row per line (number + code), each marked name is a button ---------- */
+const attr = s => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+function renderCode() {
+ $$("pre.code").forEach(pre => {
+  const raw = pre.textContent, segs = [], re = /\[\[([\w-]+)\|(.*?)\]\]/g; let last = 0, m, plain = "";
+  while ((m = re.exec(raw))) { if (m.index > last) segs.push([null, raw.slice(last, m.index)]); segs.push([m[1], m[2]]); last = re.lastIndex; }
+  if (last < raw.length) segs.push([null, raw.slice(last)]);
+  const segAt = [];
+  segs.forEach((sg, i) => { for (let n = 0; n < sg[1].length; n++) segAt.push(sg[0] ? i : -1); plain += sg[1]; });
+  const cls = classify(plain), rows = [];
+  let cur = "", oc = null, os = -1;
+  const closeSpan = () => { if (oc) { cur += "</span>"; oc = null; } };
+  const closeBtn = () => { closeSpan(); if (os >= 0) { cur += "</button>"; os = -1; } };
+  for (let i = 0; i < plain.length; i++) {
+   const ch = plain[i];
+   if (ch === "\n") { closeBtn(); rows.push(cur); cur = ""; continue; }
+   const s = segAt[i];
+   if (s !== os) { closeBtn(); if (s >= 0) { const k = segs[s][0]; cur += `<button type="button" class="tk" data-k="${k}" aria-expanded="false" aria-label="${attr("شرح " + (E[k] ? E[k].n : k))}">`; } os = s; }
+   const c = cls[i] || "";
+   if (c !== (oc || "")) { closeSpan(); if (c) { cur += `<span class="hl-${c}">`; oc = c; } }
+   cur += esc(ch);
+  }
+  closeBtn(); rows.push(cur);
+  pre.insertAdjacentHTML("afterend", `<div class="lines"><div class="lines-in">${rows.map((h, i) => `<div class="ln" data-line="${i + 1}"><span class="no">${i + 1}</span><span class="lc">${h || " "}</span></div>`).join("")}</div></div>`);
+ });
+}
+
+/* ---------- the explanation card under its line ---------- */
+let CARD = null;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function flash(el) { if (typeof el === "string") el = document.getElementById(el); if (!el) return; el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); setTimeout(() => el.classList.remove("flash"), 1600); }
+function setHashQuiet(h) { try { history.replaceState(null, "", "#" + h); } catch (e) {} }
+function lineKeys(ln) { const ks = []; $$(".tk", ln).forEach(b => { if (!ks.includes(b.dataset.k)) ks.push(b.dataset.k); }); return ks; }
+const revLink = e => e.ref ? `<a class="revlink" href="${e.ref}" target="_blank" rel="noopener">الشرح الكامل في دليل الأسبوع ${e.wk} ←</a>` : "";
+function openCard(btn, opt = {}) {
+ const view = btn.closest(".view"), cell = view.dataset.view, k = btn.dataset.k, e = E[k];
+ if (!e) return;
+ if (CARD && CARD.ln === btn.closest(".ln") && CARD.k === k && !opt.force) { closeCard(); return; }
+ closeCard(true); closeVar(true);
+ const ln = btn.closest(".ln"), lines = btn.closest(".lines"), ks = lineKeys(ln), st = ST[e.t];
+ const others = ks.filter(x => x !== k);
+ const card = document.createElement("div");
+ card.className = "card";
+ card.style.width = lines.clientWidth + "px";
+ card.innerHTML = `<div class="card-in${e.ref ? " isrev" : ""}" role="region" tabindex="-1" aria-label="${attr("شرح " + e.n)}"><span class="caret" aria-hidden="true"></span>
+  <div class="ctop"><span class="b ${e.l}">${LIB[e.l]}</span><span class="b ${st[0]}">${st[1]}</span><span class="name">${e.n}</span><span class="one">${e.s}</span>
+  <button class="xbtn" type="button" aria-label="إغلاق الشرح (Esc)">×</button></div>
+  <div class="cbody"><div class="ctext">${e.d}
+   ${e.a ? `<div class="args">${e.a.map(([n, m]) => `<div class="arg"><code>${n}</code><span>${m}</span></div>`).join("")}</div>` : ""}
+   ${e.x ? `<div class="trapbox">${e.x}</div>` : ""}${revLink(e)}</div>${e.c ? `<div class="cside"></div>` : ""}</div>
+  ${others.length ? `<div class="cfoot"><span>في السطر نفسه:</span>${others.map(o => `<button type="button" data-k="${o}">${E[o].n}</button>`).join("")}<span class="cnt">الاسم ${ks.indexOf(k) + 1} من ${ks.length} في هذا السطر</span></div>` : ""}</div>`;
+ ln.after(card);
+ ln.classList.add("cur");
+ $$(`.tk[data-k="${k}"]`, ln).forEach(b => { b.classList.add("on"); b.setAttribute("aria-expanded", "true"); });
+ if (e.c) {
+  const panel = $("#p-" + cell), rest = $(`.rest[data-cell="${cell}"]`);
+  if (panel) { $(".cside", card).appendChild(panel); rest.hidden = true; }
+  if (e.go) e.go();
+  setTimeout(() => flash(e.c), 60);
+ }
+ CARD = {cell, k, btn, card, ln, lines};
+ placeCaret();
+ setHashQuiet(cell + "--" + k);
+ if (opt.scroll !== false) {
+  const r = card.getBoundingClientRect(), top = ln.getBoundingClientRect().top;
+  if (opt.center) ln.scrollIntoView({block: "start", behavior: reduce ? "auto" : "smooth"});
+  else if (r.bottom > innerHeight && top > 140) scrollBy({top: Math.min(r.bottom - innerHeight + 16, top - 120), behavior: reduce ? "auto" : "smooth"});
+ }
+ if (opt.focus) $(".card-in", card).focus({preventScroll: true});
+}
+function placeCaret() {
+ if (!CARD) return;
+ const {card, btn, lines} = CARD;
+ card.style.width = lines.clientWidth + "px";
+ const cin = $(".card-in", card), car = $(".caret", card), r = btn.getBoundingClientRect(), c = cin.getBoundingClientRect();
+ car.style.left = Math.max(18, Math.min(c.width - 18, r.left + r.width / 2 - c.left)) + "px";
+}
+function closeCard(silent) {
+ if (!CARD) return;
+ const {cell, card, ln, btn} = CARD, panel = $(".cside .panel", card);
+ if (panel) { const rest = $(`.rest[data-cell="${cell}"]`); rest.appendChild(panel); rest.hidden = false; }
+ card.remove(); ln.classList.remove("cur");
+ $$(".tk.on", ln).forEach(b => { b.classList.remove("on"); b.setAttribute("aria-expanded", "false"); });
+ CARD = null;
+ if (!silent) { setHashQuiet(cell); btn.focus({preventScroll: true}); }
+}
+document.addEventListener("click", ev => {
+ const t = ev.target;
+ const tk = t.closest(".tk"); if (tk) { openCard(tk); return; }
+ if (CARD && t.closest(".card .xbtn")) { closeCard(); return; }
+ const ob = t.closest(".cfoot button[data-k]");
+ if (ob && CARD) { const b = $(`.tk[data-k="${ob.dataset.k}"]`, CARD.ln); if (b) openCard(b, {focus: true}); return; }
+});
+addEventListener("resize", () => placeCaret());
+document.addEventListener("scroll", ev => { if (CARD && ev.target === CARD.lines) placeCaret(); }, true);
+
+/* ---------- variables strip and structure views ---------- */
+const sh = (code, txt) => `<div class="shp">${code}${txt ? `<span>${txt}</span>` : ""}</div>`;
+const cellsHTML = (vals, f = v => v, cls = () => "") => `<div class="cells">${vals.map((v, i) => v === "…" ? `<span class="dots">…</span>` : `<span class="${cls(v, i)}">${f(v, i)}</span>`).join("")}</div>`;
+const dsl = (id, ar, en) => `<a class="dslink" href="#setup--${id}">${ar} <bdi>(${en})</bdi>: الفكرة في سطرين ←</a>`;
+function scalarPic(name, val, note) { return `<div class="frame pic"><span class="cap">${name}</span><span style="font-size:22px;font-weight:700;color:var(--sandfg);background:var(--sand);border-radius:6px;padding:2px 10px">${val}</span>${note ? `<span class="cap">${note}</span>` : ""}</div>`; }
+function fnPic(sig, ins, out) { return `<div class="frame pic"><span class="cap">function</span><div class="cells"><span style="background:var(--basstint);color:var(--bass)">${ins}</span><span class="dots">→</span><span class="hit">${sig}</span><span class="dots">→</span><span style="background:var(--greentint);color:var(--good)">${out}</span></div></div>`; }
+const SPC = {Adelie: "var(--cA)", Chinstrap: "var(--cC)", Gentoo: "var(--cG)"};
+function dfPic(rows, cap) {
+ return `<div class="frame fr-wrap"><table class="dtab"><thead><tr><th class="ix">index</th><th class="cA">species</th><th>…</th><th class="cB">flipper_length_mm</th><th>…</th></tr></thead><tbody>${rows.map(r => `<tr class="${r[0] === "⋮" ? "gap" : ""}"><th class="ix">${r[0]}</th><td>${r[1]}</td><td class="dm">…</td><td>${r[2]}</td><td class="dm">…</td></tr>`).join("")}</tbody></table></div>${cap ? `<span class="cap" style="font-size:12px;color:var(--muted)">${cap}</span>` : ""}`;
+}
+const npArr = (vals, k) => { const s = vals.map(v => { let t = v.toFixed(k).replace(/0+$/, ""); return t; }), w = Math.max(...s.map(x => x.length)); return "[" + s.map(x => x.padEnd(w)).join(" ") + "]"; };
+const matPic = (rows, cap, fmt = v => v, hl = () => "") => `<div class="frame pic"><span class="cap">${cap}</span><div class="mm"><div class="mmg" style="grid-template-columns:repeat(${rows[0].length},auto)">${rows.map((r, i) => r.map((v, j) => `<span class="c ${hl(i, j)}">${fmt(v)}</span>`).join("")).join("")}</div></div></div>`;
+const arrPic = (vals, cap, more) => `<div class="frame pic"><span class="cap">${cap}</span>${cellsHTML(vals, v => v, () => "hit")}${more ? `<span class="cap">${more}</span>` : ""}</div>`;
+const VARS = {
+ setup: [
+  {n: "peng", t: `DataFrame · shape (${D.pshape.join(", ")})`, line: 26, title: T("جدول", "DataFrame"),
+   code: `    return df.dropna(subset=<span class="kA">FEATURES</span>).reset_index(drop=True)\n\n<span class="v">peng</span> = load_penguins()`,
+   lines: [`متغيرًا ${T("", "variable")} اسمه ${C("peng")}، نوعه ${T("جدول", "DataFrame")}.`,
+    `كل ${T("صف", "row")} بطريق واحد: ${D.npeng} صفًا. وكل ${T("عمود", "column")} قياس أو صفة: ${D.pshape[1]} أعمدة.`,
+    `الأعمدة الأربعة <span class="kAc">الملوّنة</span> هي ${C("FEATURES")}: لا ${T("قيمة ناقصة", "NaN")} فيها. والأنواع: ${D.counts.Adelie} Adelie و${D.counts.Chinstrap} Chinstrap و${D.counts.Gentoo} Gentoo.`],
+   shape: sh(`peng.shape → (${D.pshape.join(", ")})`, "صفوف، أعمدة"),
+   pic: () => { const F = ["bill_length_mm", "bill_depth_mm", "flipper_length_mm", "body_mass_g"], R = [D.peng_rows[0], D.peng_rows[1], D.peng_rows[2], ["⋮", "⋮", "⋮", "⋮", "⋮", "⋮", "⋮", "⋮"], D.peng_rows[3]];
+    return `<div class="frame fr-wrap"><table class="dtab"><thead><tr><th class="ix">index</th><th>species</th><th>island</th>${F.map(f => `<th class="cA">${f}</th>`).join("")}<th>sex</th></tr></thead><tbody>${R.map(r => `<tr class="${r[0] === "⋮" ? "gap" : ""}"><th class="ix">${r[0]}</th>${r.slice(1).map(v => `<td>${v}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`; }},
+  {n: "FEATURES", t: "list · len 4", line: 17, title: T("قائمة", "list"),
+   code: `<span class="v">FEATURES</span> = [<span class="kA">"bill_length_mm", "bill_depth_mm", "flipper_length_mm", "body_mass_g"</span>]`,
+   lines: [`${T("قائمة", "list")} فيها 4 ${T("نصوص", "strings")}: أسماء أعمدة القياسات.`, `نعطيها لـ ${C("dropna(subset=…)")}، ونستعملها في «Try it» بعد 1.4: ${C("peng[FEATURES]")}.`],
+   shape: sh("len(FEATURES) → 4"),
+   pic: () => `<div class="frame pic"><span class="cap">FEATURES</span><div class="cells">${["bill_length_mm", "bill_depth_mm", "flipper_length_mm", "body_mass_g"].map((v, i) => `<span style="display:inline-grid;gap:2px;border:0;padding:0"><small style="color:var(--muted)">[${i}]</small><span style="background:var(--basstint);color:var(--bass)">"${v}"</span></span>`).join("")}</div></div>`}],
+ c01: [
+  {n: "X", t: "array · shape (3, 2)", line: 1, title: T("مصفوفة", "array"),
+   code: `<span class="v">X</span> = np.array([<span class="kA">[1, 2]</span>, <span class="kA">[2, 4]</span>, <span class="kA">[3, 3]</span>])`,
+   lines: [`${T("مصفوفة", "array")} من 3 ${T("صفوف", "rows")}: كل <span class="kAc">قائمة داخلية</span> نقطة واحدة.`, `وعمودان: الميزة الأولى والثانية.`, `هذا ترتيب البيانات في كل الأسبوع: صف لكل نقطة، وعمود لكل ميزة.`],
+   shape: sh("X.shape → (3, 2)", "3 نقاط، ميزتان"), pic: () => matPic([[1, 2], [2, 4], [3, 3]], "X")}],
+ c11: [
+  {n: "x", t: `array · shape (${A1.n},)`, line: 1, title: T("مصفوفة", "array"),
+   code: `<span class="v">x</span> = peng[<span class="kA">peng.species == "Gentoo"</span>].<span class="kB">flipper_length_mm</span>.values`,
+   lines: [`<span class="kAc">الشرط</span> أبقى صفوف Gentoo: ${A1.n} صفًا.`, `ثم أخذنا <span class="kBc">عمود الزعنفة</span>، و${C(".values")} حوّله إلى ${T("مصفوفة", "array")} NumPy.`, `القيم أعداد ${T("عشرية", "float")} بالمليمتر.`],
+   shape: sh(`x.shape → (${A1.n},)`), pic: () => arrPic([...A1.x10.slice(0, 6).map(v => v.toFixed(1)), "…"], "x", `${A1.n} values · mean ${fx(A1.mean, 2)}`)},
+  {n: "sd", t: `float64 · ${fx(A1.sd, 3)}`, line: 2, title: T("الانحراف المعياري", "standard deviation"),
+   code: `<span class="v">sd</span> = x.std()`, lines: [`رقم واحد: σ بالقسمة على n.`, `ثابت في كل التخمينات: نبحث عن μ وحده.`],
+   shape: sh(`sd → ${A1.sd}`), pic: () => scalarPic("sd", fx(A1.sd, 4), "mm, divide by n")},
+  {n: "guesses", t: "array · shape (301,)", line: 3, title: T("مصفوفة", "array"),
+   code: `<span class="v">guesses</span> = np.linspace(210, 225, <span class="kA">301</span>)`,
+   lines: [`<span class="kAc">301</span> تخمين متساوي البعد، من 210 إلى 225.`, `البعد بين تخمينين ${fx(A1.step, 2)}.`],
+   shape: sh("guesses.shape → (301,)"), pic: () => arrPic(["210.00", "210.05", "210.10", "…", "224.95", "225.00"], "guesses", "step 0.05")},
+  {n: "loglik", t: "list · len 301", line: 4, title: T("قائمة", "list"),
+   code: `<span class="v">loglik</span> = [<span class="kA">norm.logpdf(x, mu, sd).sum()</span> for mu in guesses]`,
+   lines: [`${T("قائمة", "list")} Python، لا مصفوفة: بُنيت بالأقواس المربعة.`, `فيها رقم لكل تخمين: <span class="kAc">مجموع ${A1.n} لوغاريتمًا</span>.`, `كل الأرقام سالبة، لأن كل كثافة هنا أصغر من 1. الأكبر هو الأقرب إلى الصفر: ${fx(A1.llmax, 2)}.`],
+   shape: sh("len(loglik) → 301"), pic: () => arrPic([A1.loglik[0], A1.loglik[1], "…", A1.loglik[A1.ibest], "…", A1.loglik[300]].map(v => typeof v === "number" ? v.toFixed(2) : v), "loglik", `the largest is at index ${A1.ibest}`)},
+  {n: "best", t: `float64 · ${fx(A1.best, 2)}`, line: 5, title: T("التخمين الأفضل", "best guess"),
+   code: `<span class="v">best</span> = guesses[<span class="kA">np.argmax(loglik)</span>]`,
+   lines: [`<span class="kAc">${C("np.argmax")}</span> أعطى المكان ${A1.ibest}.`, `والتخمين في هذا المكان ${fx(A1.best, 2)}: أقرب نقطة في الشبكة إلى المتوسط ${fx(A1.mean, 2)}.`],
+   shape: sh(`best → ${fx(A1.best, 2)}`), pic: () => scalarPic("best", fx(A1.best, 2), `guesses[${A1.ibest}]`)}],
+ c12: [
+  {n: "G", t: `array · shape (${A2.shape.join(", ")})`, line: 1, title: T("مصفوفة", "array"),
+   code: `<span class="v">G</span> = peng[peng.species == "Gentoo"][[<span class="kA">"flipper_length_mm"</span>, <span class="kB">"body_mass_g"</span>]].values`,
+   lines: [`${A2.shape[0]} صفًا: بطريق Gentoo في كل صف.`, `عمودان: <span class="kAc">الزعنفة</span> بالمليمتر و<span class="kBc">الكتلة</span> بالغرام.`],
+   shape: sh(`G.shape → (${A2.shape.join(", ")})`), pic: () => `<div class="frame"><table class="dtab"><thead><tr><th class="ix">row</th><th class="cA">[:, 0] flipper</th><th class="cB">[:, 1] mass</th></tr></thead><tbody>${A2.G3.map((r, i) => `<tr><th class="ix">${i}</th><td>${r[0].toFixed(1)}</td><td>${r[1].toFixed(1)}</td></tr>`).join("")}<tr class="gap"><th>⋮</th><td>⋮</td><td>⋮</td></tr></tbody></table></div>`},
+  {n: "mu", t: "array · shape (2,)", line: 2, title: T("متجه المتوسطات", "mean vector"),
+   code: `<span class="v">mu</span>, S = G.mean(<span class="kA">axis=0</span>), np.cov(G.T, bias=True)`,
+   lines: [`<span class="kAc">${C("axis=0")}</span>: متوسط لكل عمود.`, `مركز السحابة: زعنفة ${fx(A2.mu[0], 1)} مم، وكتلة ${fx(A2.mu[1], 1)} غ.`],
+   shape: sh("mu.shape → (2,)"), pic: () => arrPic([fx(A2.mu[0], 1), fx(A2.mu[1], 1)], "mu")},
+  {n: "S", t: "array · shape (2, 2)", line: 2, title: T("مصفوفة التغاير", "covariance matrix"),
+   code: `mu, <span class="v">S</span> = G.mean(axis=0), np.cov(<span class="kA">G.T</span>, <span class="kB">bias=True</span>)`,
+   lines: [`مصفوفة 2×2 ${T("متناظرة", "symmetric")}: ${C("S[0, 1]")} = ${C("S[1, 0]")}.`, `على القطر التباينان: ${fx(A2.S[0][0], 1)} مم² و${fx(A2.S[1][1], 0)} غ².`, `خارج القطر التغاير ${fx(A2.S[0][1], 1)} مم·غ: موجب، فالسحابة تميل إلى الأعلى.`, `<span class="kBc">${C("bias=True")}</span>: القسمة على n.`],
+   shape: sh("S.shape → (2, 2)"), pic: () => matPic(A2.S, "S", v => fx(v, 1), (i, j) => i === j ? "pv" : "hl")},
+  {n: "rho", t: `float64 · ${fx(A2.rho, 3)}`, line: 3, title: T("الارتباط", "correlation"),
+   code: `<span class="v">rho</span> = <span class="kA">S[0, 1]</span> / np.sqrt(S[0, 0] * S[1, 1])`,
+   lines: [`رقم بلا وحدات، بين −1 و1.`, `${fx(A2.rho, 3)}: ميل قوي إلى الأعلى.`],
+   shape: sh(`rho → ${fx(A2.rho, 4)}`), pic: () => scalarPic("rho", fx(A2.rho, 3), "no units")}],
+ c13: [
+  {n: "xs", t: "array · shape (90001,)", line: 6, title: T("مصفوفة", "array"),
+   code: `<span class="v">xs</span> = np.linspace(1, 10, <span class="kA">90001</span>)`,
+   lines: [`شبكة من <span class="kAc">90001</span> نقطة على المحور.`, `البعد بين نقطتين ${fx(A3.step, 4)}: لهذا يتفق البحث مع الصيغة إلى ثلاث منازل.`],
+   shape: sh("xs.shape → (90001,)"), pic: () => arrPic(["1.0000", "1.0001", "1.0002", "…", "10.0000"], "xs", "step 0.0001")},
+  {n: "score1", t: "array · shape (90001,)", line: 7, title: T("الدرجة", "score"),
+   code: `<span class="v">score1</span> = norm.pdf(<span class="kA">xs</span>, 7, 1) * 0.6`,
+   lines: [`درجة الصنف 1 عند كل نقطة من <span class="kAc">${C("xs")}</span>: بالشكل نفسه (90001,).`, `${C("score2")} مثلها للصنف 2.`],
+   shape: sh("score1.shape → (90001,)"), pic: () => arrPic(["0.0000", "…", "0.0666", "…", "0.2394", "…"], "score1", "largest at x = 7")}],
+ c14: [
+  {n: "X_train", t: `array · shape (${A4.ntrain}, 2)`, line: 2, title: T("بيانات التدريب", "training data"),
+   code: `<span class="v">X_train</span>, X_test, y_train, y_test = train_test_split(Xb, yb, <span class="kA">test_size=0.3</span>, …)`,
+   lines: [`${A4.ntrain} بطريقًا، عمودان: طول المنقار وعمقه.`, `و${C("y_train")} أسماؤها: ${A4.train_counts.Adelie} Adelie و${A4.train_counts.Chinstrap} Chinstrap و${A4.train_counts.Gentoo} Gentoo.`],
+   shape: sh(`X_train.shape → (${A4.ntrain}, 2)`), pic: () => scalarPic("X_train", `(${A4.ntrain}, 2)`, "70%")},
+  {n: "X_test", t: `array · shape (${A4.ntest}, 2)`, line: 2, title: T("بيانات الاختبار", "test data"),
+   code: `X_train, <span class="v">X_test</span>, y_train, y_test = train_test_split(…, <span class="kA">stratify=yb</span>)`,
+   lines: [`${A4.ntest} بطريقًا لا يراها النموذج في التدريب.`, `<span class="kAc">${C("stratify")}</span> حفظ النسب: ${A4.test_counts.Adelie} و${A4.test_counts.Chinstrap} و${A4.test_counts.Gentoo}.`],
+   shape: sh(`X_test.shape → (${A4.ntest}, 2)`), pic: () => scalarPic("X_test", `(${A4.ntest}, 2)`, "30%")},
+  {n: "models", t: "dict · 3 keys", line: 3, title: T("قاموس", "dict"),
+   code: `<span class="v">models</span> = {<span class="kA">"LDA"</span>: <span class="kB">LinearDiscriminantAnalysis()</span>, …}`,
+   lines: [`<span class="kAc">المفتاح</span> اسم للعرض، و<span class="kBc">القيمة</span> نموذج لم يتدرب بعد.`, `بعد الحلقة صارت النماذج الثلاثة مدرَّبة: ${C("fit")} يغيّر النموذج نفسه.`],
+   shape: sh("len(models) → 3"), pic: () => `<div class="frame pic"><div class="kv">${["LDA", "QDA", "naive Bayes"].map((k, i) => `<span class="k">"${k}"</span><span class="ar2">→</span><span>${["LinearDiscriminantAnalysis()", "QuadraticDiscriminantAnalysis()", "GaussianNB()"][i]}</span>`).join("")}</div></div>`},
+  {n: "gx", t: `array · shape (${A4.gshape.join(", ")})`, line: 5, title: T("شبكة", "grid"),
+   code: `<span class="v">gx</span>, gy = np.meshgrid(np.linspace(30, 61, <span class="kA">300</span>), np.linspace(12.5, 22, <span class="kB">250</span>))`,
+   lines: [`<span class="kBc">250</span> صفًا: صف لكل قيمة عمق.`, `و<span class="kAc">300</span> عمود: عمود لكل قيمة طول.`, `${C("gx")} فيه الطول عند كل نقطة، و${C("gy")} العمق.`],
+   shape: sh(`gx.shape → (${A4.gshape.join(", ")})`), pic: () => matPic([["30.0", "30.1", "…", "61.0"], ["30.0", "30.1", "…", "61.0"], ["⋮", "⋮", "", "⋮"]], "gx: the same row 250 times")},
+  {n: "Z", t: `array · shape (${A4.gshape.join(", ")})`, line: 9, title: T("مناطق القرار", "decision regions"),
+   code: `<span class="v">Z</span> = np.searchsorted(m.classes_, m.predict(…)).<span class="kA">reshape(gx.shape)</span>`,
+   lines: [`0 أو 1 أو 2 عند كل نقطة في الشبكة: النوع الذي يختاره النموذج.`, `<span class="kAc">بشكل الشبكة نفسه</span>، فيرسمها ${C("contourf")}.`, `بعد الحلقة يبقى ${C("Z")} للنموذج الأخير: naive Bayes.`],
+   shape: sh(`Z.shape → (${A4.gshape.join(", ")})`), pic: () => matPic([[0, 0, 1, 1], [0, 0, 1, 1], [2, 2, 2, 1]], "Z (a corner, schematic)")},
+  {n: "correct", t: `int · ${A4.acc["naive Bayes"]}`, line: 8, title: T("عدد صحيح", "integer"),
+   code: `<span class="v">correct</span> = (m.predict(X_test) == y_test).<span class="kA">sum()</span>`,
+   lines: [`عدد إجابات الاختبار الصحيحة للنموذج في هذه الدورة.`, `بعد الحلقة: ${A4.acc["naive Bayes"]} لـ naive Bayes. اللوحة تعرض الثلاثة.`],
+   shape: sh(`correct → ${A4.acc["naive Bayes"]}`), pic: () => scalarPic("correct", A4.acc["naive Bayes"], `of ${A4.ntest}`)}]
+};
+let VAR = null;
+function buildVars() {
+ $$(".vars[data-cell]").forEach(sec => {
+  const cell = sec.dataset.cell, list = VARS[cell] || [];
+  sec.innerHTML = `<h3>3 · المتغيرات بعد تشغيل الخلية <span class="sub">انقر متغيرًا ${T("", "variable")} لترى شكله تحت الشريط</span></h3>
+   <div class="vchips">${list.map((v, i) => `<button type="button" class="vchip" data-var="${i}" aria-expanded="false" aria-controls="vv-${cell}"><b>${v.n}</b><span>${v.t}</span></button>`).join("")}</div>
+   <div class="varview" id="vv-${cell}" hidden></div>`;
+ });
+}
+function openVar(cell, i, opt = {}) {
+ const v = VARS[cell][i], sec = $(`.vars[data-cell="${cell}"]`), box = $(".varview", sec);
+ if (VAR && VAR.cell === cell && VAR.i === i && !opt.force) { closeVar(); return; }
+ closeVar(true); closeCard(true);
+ box.innerHTML = `<div class="sv" role="region" tabindex="-1" aria-label="${attr("شكل " + v.n)}">
+  <div class="svbar"><button type="button" class="back">→ رجوع إلى الكود (السطر ${v.line})</button><span class="svt"><code>${v.n}</code> · ${v.title}</span><button type="button" class="xbtn" aria-label="إغلاق (Esc)">×</button></div>
+  <div class="svcode">${v.code}</div>
+  <div class="svbody"><div class="svtext"><b>ماذا صنع هذا السطر؟</b><ol>${v.lines.map(l => `<li><span>${ltrShapes(l)}</span></li>`).join("")}</ol>${v.shape}${v.link || ""}</div>
+  <div class="svpic">${v.pic()}</div></div></div>`;
+ box.hidden = false;
+ const chip = $(`.vchip[data-var="${i}"]`, sec); chip.setAttribute("aria-expanded", "true");
+ VAR = {cell, i, chip, line: v.line};
+ setHashQuiet(cell + "--var-" + v.n);
+ if (opt.scroll !== false) { const r = box.getBoundingClientRect(); if (r.bottom > innerHeight) box.scrollIntoView({block: r.height > innerHeight - 100 ? "start" : "nearest", behavior: reduce ? "auto" : "smooth"}); }
+ if (opt.focus) $(".sv", box).focus({preventScroll: true});
+}
+function closeVar(silent, back) {
+ if (!VAR) return;
+ const {cell, chip, line} = VAR, box = $(`#vv-${cell}`);
+ box.hidden = true; box.innerHTML = ""; chip.setAttribute("aria-expanded", "false"); VAR = null;
+ if (silent) return;
+ setHashQuiet(cell);
+ if (back) {
+  const ln = $(`.view[data-view="${cell}"] .ln[data-line="${line}"]`);
+  if (ln) { ln.scrollIntoView({block: "center", behavior: reduce ? "auto" : "smooth"}); flash(ln); const b = $(".tk", ln); (b || chip).focus({preventScroll: true}); }
+ } else chip.focus({preventScroll: true});
+}
+document.addEventListener("click", ev => {
+ const t = ev.target, ch = t.closest(".vchip");
+ if (ch) { openVar(ch.closest(".vars").dataset.cell, +ch.dataset.var); return; }
+ if (VAR && t.closest(".sv .back")) { closeVar(false, true); return; }
+ if (VAR && t.closest(".sv .xbtn")) { closeVar(false, true); return; }
+});
+
+/* ---------- helpers ---------- */
+function seg(id, cb) {
+ const s = document.getElementById(id);
+ s.addEventListener("click", ev => {
+  const b = ev.target.closest("button"); if (!b) return;
+  $$("button", s).forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+  cb(b.dataset.v);
+ });
+ return () => $("button[aria-pressed=true]", s).dataset.v;
+}
+function setSeg(id, v) { $$(`#${id} button`).forEach(x => x.setAttribute("aria-pressed", x.dataset.v === String(v) ? "true" : "false")); }
+function scale(d0, d1, r0, r1) { return v => r0 + (v - d0) / (d1 - d0) * (r1 - r0); }
+function axes(svg, X, Y, xt, yt, xl, yl, W, H, L, B, fmtY) {
+ let g = "";
+ yt.forEach(v => { g += `<line class="grid" x1="${L}" x2="${W - 10}" y1="${Y(v)}" y2="${Y(v)}"></line><text x="${L - 6}" y="${Y(v) + 4}" text-anchor="end">${fmtY ? fmtY(v) : v}</text>`; });
+ xt.forEach(v => { g += `<line class="axis" x1="${X(v)}" x2="${X(v)}" y1="${H - B}" y2="${H - B + 4}"></line><text x="${X(v)}" y="${H - B + 17}" text-anchor="middle">${v}</text>`; });
+ g += `<line class="axis" x1="${L}" x2="${W - 10}" y1="${H - B}" y2="${H - B}"></line>`;
+ g += `<text x="${(L + W) / 2}" y="${H - 4}" text-anchor="middle">${xl}</text><text x="12" y="${(H - B) / 2}" text-anchor="middle" transform="rotate(-90 12 ${(H - B) / 2})">${yl}</text>`;
+ return g;
+}
+function erf(x) { // Abramowitz-Stegun 7.1.26
+ const s = Math.sign(x); x = Math.abs(x); const t = 1 / (1 + 0.3275911 * x);
+ const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
+ return s * y;
+}
+const pdf = normpdf;
+const cdf = (x, m, s) => 0.5 * (1 + erf((x - m) / (s * Math.SQRT2)));
+const f = (v, n) => v.toFixed(n);
+const linsp = (a, b, n) => Array.from({length: n}, (_, i) => a + (b - a) * i / (n - 1));
+const MINUS = s => String(s).replace(/^-/, "−");
+const logpdf = (x, m, s) => -0.5 * ((x - m) / s) ** 2 - Math.log(s) - 0.5 * Math.log(2 * Math.PI);
+
+/* ---------- setup diagram ---------- */
+(() => { let g = ""; for (let i = 0; i < 9; i++) g += `<rect x="12" y="${26 + i * 8.4}" width="76" height="5" rx="1.5" fill="${i === 3 || i === 7 ? "var(--salmon)" : "var(--line)"}"></rect>`; $("#csvrows").innerHTML = g; $("#nraw").textContent = D.nraw + " rows"; $("#npeng").textContent = D.npeng + " rows"; })();
+
+/* ---------- 0.1 mean vector ---------- */
+let ax01 = "0";
+seg("c01seg", v => { ax01 = v; draw01(); });
+function draw01() {
+ const X = [[1, 2], [2, 4], [3, 3]], R = D.c01;
+ const hl = (i, j) => ax01 === "0" ? (j === 0 ? "pv" : "hl") : ax01 === "1" ? (i === 1 ? "win" : "") : "pv";
+ let res, shape, note;
+ if (ax01 === "0") { res = R.m0.map(v => fx(v, 1)); shape = "(3, 2) → (2,)"; note = `${C("axis=0")} ينزل في كل ${T("عمود", "column")}: (1 + 2 + 3) / 3 = 2، و(2 + 4 + 3) / 3 = 3. رقم لكل ${T("ميزة", "feature")}: هذا مركز السحابة.`; }
+ else if (ax01 === "1") { res = R.m1.map(v => fx(v, 1)); shape = "(3, 2) → (3,)"; note = `${C("axis=1")} يمشي في كل ${T("صف", "row")}: متوسط ميزتي النقطة الواحدة. الصف الثاني (2 + 4) / 2 = 3. هذا يخلط ميزتين مختلفتين، فلا معنى له هنا.`; }
+ else { res = [fx(R.mall, 2)]; shape = "(3, 2) → one number"; note = `بلا ${C("axis")}: متوسط الأرقام الستة معًا. رقم واحد، لا مركز.`; }
+ $("#c01-pic").innerHTML = `<div class="mm"><div class="mmg" style="grid-template-columns:repeat(2,auto)">${X.map((r, i) => r.map((v, j) => `<span class="c ${hl(i, j)}">${v}</span>`).join("")).join("")}</div><span class="op">→</span><div class="mmg" style="grid-template-columns:repeat(${res.length},auto)">${res.map(v => `<span class="c win">${v}</span>`).join("")}</div></div>`;
+ $("#c01-out").textContent = `X.mean(${ax01 === "n" ? "" : "axis=" + ax01}) → [${res.join(", ")}]     shape ${shape}`;
+ $("#c01-note").innerHTML = note;
+}
+
+/* ---------- 1.1 maximum likelihood ---------- */
+const G11 = linsp(210, 225, 301), X11 = A1.x;
+let i11 = 60, sd11 = 0, n11 = 123;
+$("#c11-r").addEventListener("input", e => { i11 = +e.target.value; draw11(); });
+seg("c11sseg", v => { sd11 = +v; draw11(); });
+seg("c11nseg", v => { n11 = +v; drawProd(); });
+const ll = (mu, s) => X11.reduce((a, x) => a + logpdf(x, mu, s), 0);
+function draw11() {
+ const s = sd11 ? A1.sd1 : A1.sd, L = G11.map(m => ll(m, s));
+ let ib = 0; L.forEach((v, i) => { if (v > L[ib]) ib = i; });
+ const mu = G11[i11];
+ $("#c11-v").textContent = fx(mu, 2);
+ const W = 560, H = 260, Lp = 64, B = 38, X = scale(210, 225, Lp, W - 14), lo = Math.min(...L), hi = Math.max(...L), Y = scale(lo - 5, hi + 5, H - B, 14);
+ const yt = [-460, -440, -420, -400].filter(v => v >= lo - 5 && v <= hi + 5);
+ let g = axes(null, X, Y, [210, 213, 216, 219, 222, 225], yt, "guess for the mean (mm)", "log-likelihood", W, H, Lp, B);
+ g += `<polyline fill="none" stroke="var(--bass)" stroke-width="2.4" points="${G11.map((m, i) => `${f(X(m), 1)},${f(Y(L[i]), 1)}`).join(" ")}"></polyline>`;
+ g += `<line x1="${X(A1.mean)}" x2="${X(A1.mean)}" y1="${Y(lo - 5)}" y2="14" stroke="var(--salmon)" stroke-dasharray="6 5" stroke-width="1.6"></line><text x="${X(A1.mean) + 6}" y="26" style="fill:var(--salink)">x.mean() = ${fx(A1.mean, 2)}</text>`;
+ g += `<circle cx="${X(mu)}" cy="${Y(L[i11])}" r="6" fill="var(--sand)" stroke="var(--sandfg)" stroke-width="2"></circle>`;
+ $("#c11-svg").innerHTML = g;
+ $("#c11-out").textContent = `sd = ${fx(s, 3)}${sd11 ? "   (ddof=1: divide by n − 1)" : "   (divide by n)"}\nnorm.logpdf(x, ${fx(mu, 2)}, sd).sum() = ${fx(L[i11], 2)}\nbest guess: ${fx(G11[ib], 2)}   (index ${ib})   average: ${fx(A1.mean, 2)}`;
+ const d = L[ib] - L[i11];
+ $("#c11-note").innerHTML = i11 === ib ? `هذا هو الأفضل: أكبر مجموع، عند المتوسط تقريبًا. ${sd11 ? "لاحظ: σ تغيّر قليلًا، والتخمين الأفضل لم يتغير." : ""}` :
+  `أقل من الأفضل بـ ${fx(d, 2)}. في اللوغاريتم هذا فرق كبير: الأرجحية أصغر ${d > 20 ? "بآلاف المرات" : "بـ " + fx(Math.exp(d), 1) + " مرة"}.`;
+ drawProd();
+}
+function drawProd() {
+ const p = {5: A1.prod5, 50: A1.prod50, 100: A1.prod100, 123: A1.prod}[n11];
+ $("#c11-prod").innerHTML = `np.prod(norm.pdf(x[:${n11}], x.mean(), sd)) = ${p.toExponential(2)}`;
+}
+
+/* ---------- 1.2 covariance ---------- */
+let t12 = "T", b12 = 1, u12 = "g";
+seg("c12tseg", v => { t12 = v; draw12(); });
+seg("c12bseg", v => { b12 = +v; draw12(); });
+seg("c12useg", v => { u12 = v; draw12(); });
+function draw12() {
+ const k = u12 === "kg" ? 1000 : 1, base = b12 ? A2.S : A2.S1, S = [[base[0][0], base[0][1] / k], [base[1][0] / k, base[1][1] / k / k]];
+ const rho = S[0][1] / Math.sqrt(S[0][0] * S[1][1]);
+ const fm = v => Math.abs(v) >= 100 ? fx(v, 1) : Math.abs(v) >= 1 ? fx(v, 3) : fx(v, 4);
+ if (t12 === "G") {
+  $("#c12-mat").innerHTML = `<div class="frame pic"><span class="cap">np.cov(G, …)</span><span style="font-size:20px;font-weight:700;color:var(--bad)">shape (${A2.covGshape.join(", ")})</span><span class="cap">covariance of every pair of penguins</span></div>`;
+  $("#c12-out").textContent = `np.cov(G${b12 ? ", bias=True" : ""}).shape → (${A2.covGshape.join(", ")})     no error message`;
+  $("#c12-note").innerHTML = `بلا ${C(".T")} ترى ${C("np.cov")} كل بطريق ${T("ميزةً", "feature")}، فتحسب تغاير كل بطريقين: ${A2.covGshape[0]} × ${A2.covGshape[1]}. الكود يعمل، والأرقام بلا معنى.`;
+ } else {
+  $("#c12-mat").innerHTML = `<div class="frame pic"><span class="cap">S = np.cov(G.T${b12 ? ", bias=True" : ""})</span><div class="mmg" style="grid-template-columns:repeat(2,auto);direction:ltr">${S.map((r, i) => r.map((v, j) => `<span class="c ${i === j ? "pv" : "hl"}">${fm(v)}</span>`).join("")).join("")}</div><span class="cap">ρ = ${fx(rho, 3)}</span></div>`;
+  $("#c12-out").textContent = `variances: ${fm(S[0][0])} mm², ${fm(S[1][1])} ${u12}²\ncovariance: ${fm(S[0][1])} mm·${u12}\ncorrelation: ${fx(rho, 3)}`;
+  $("#c12-note").innerHTML = (b12 ? `${C("bias=True")}: القسمة على n = ${A2.shape[0]}، كما في الـ Notes.` : `بلا ${C("bias=True")}: القسمة على n − 1 = ${A2.shape[0] - 1}، فكل رقم أكبر قليلًا. الارتباط لم يتغير.`) +
+   (u12 === "kg" ? ` بالكيلوغرام صار التغاير أصغر 1000 مرة، والتباين أصغر مليون مرة. أما ρ فبقي ${fx(rho, 3)}: لا وحدات له.` : ` الإهليلجان r = 1 وr = 2 من هذه المصفوفة نفسها.`);
+ }
+ // scatter in g with r = 1, 2 ellipses from the bias=True matrix (the drawing does not depend on the buttons)
+ const W = 380, H = 280, L = 56, B = 38, X = scale(200, 236, L, W - 10), Y = scale(3800, 6400, H - B, 12), S0 = A2.S;
+ let g = axes(null, X, Y, [200, 210, 220, 230], [4000, 5000, 6000], "flipper (mm)", "mass (g)", W, H, L, B);
+ g += A2.G.map(([a, b]) => `<circle cx="${f(X(a), 1)}" cy="${f(Y(b), 1)}" r="2.6" fill="var(--cG)" opacity=".55"></circle>`).join("");
+ const a = S0[0][0], bb = S0[0][1], d = S0[1][1], tr = (a + d) / 2, det = Math.sqrt(((a - d) / 2) ** 2 + bb * bb), l1 = tr + det, l2 = tr - det, th = Math.atan2(l1 - a, bb);
+ [1, 2].forEach(r => { const pts = Array.from({length: 73}, (_, i) => { const t = 2 * Math.PI * i / 72, u = r * Math.sqrt(l1) * Math.cos(t), v = r * Math.sqrt(l2) * Math.sin(t); return [A2.mu[0] + u * Math.cos(th) - v * Math.sin(th), A2.mu[1] + u * Math.sin(th) + v * Math.cos(th)]; });
+  g += `<polyline fill="none" stroke="var(--fg)" stroke-width="${r === 1 ? 2 : 1.4}" ${r === 2 ? 'stroke-dasharray="5 5"' : ""} points="${pts.map(([p, q]) => `${f(X(p), 1)},${f(Y(q), 1)}`).join(" ")}"></polyline>`; });
+ g += `<circle cx="${X(A2.mu[0])}" cy="${Y(A2.mu[1])}" r="5" fill="var(--salmon)"></circle><text x="${X(A2.mu[0]) + 8}" y="${Y(A2.mu[1]) - 8}" style="fill:var(--salink)">mu</text>`;
+ $("#c12-svg").innerHTML = g;
+}
+
+/* ---------- 1.3 threshold ---------- */
+let p13 = 0.6, s13 = 1;
+$("#c13-pr").addEventListener("input", e => { p13 = +e.target.value; $("#c13-pv").textContent = fx(p13, 2); draw13(); });
+seg("c13sseg", v => { s13 = +v; draw13(); });
+const thr = (m1, m2, s, P1) => (m1 + m2) / 2 + s * s / (m1 - m2) * Math.log((1 - P1) / P1);
+function draw13() {
+ const xf = thr(7, 4, s13, p13);
+ let xsr = 1; for (let i = 0; i < 90001; i++) { const x = 1 + 9 * i / 90000; if (normpdf(x, 7, s13) * p13 > normpdf(x, 4, s13) * (1 - p13)) { xsr = x; break; } }
+ const W = 560, H = 260, L = 56, B = 38, X = scale(1, 10, L, W - 14), ym = Math.max(normpdf(7, 7, s13) * Math.max(p13, 1 - p13), 0.05) * 1.12, Y = scale(0, ym, H - B, 14);
+ let g = axes(null, X, Y, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], [0, ym / 2, ym].map(v => +v.toFixed(2)), "x", "score", W, H, L, B, v => v.toFixed(2));
+ const xs = linsp(1, 10, 361);
+ g += `<polyline fill="none" stroke="var(--bass)" stroke-width="2.4" points="${xs.map(x => `${f(X(x), 1)},${f(Y(normpdf(x, 7, s13) * p13), 1)}`).join(" ")}"></polyline>`;
+ g += `<polyline fill="none" stroke="var(--salmon)" stroke-width="2.4" points="${xs.map(x => `${f(X(x), 1)},${f(Y(normpdf(x, 4, s13) * (1 - p13)), 1)}`).join(" ")}"></polyline>`;
+ g += `<line x1="${X(5.5)}" x2="${X(5.5)}" y1="${Y(0)}" y2="18" stroke="var(--faint)" stroke-dasharray="3 4"></line><text x="${X(5.5) + 4}" y="28">5.5</text>`;
+ if (xf > 1 && xf < 10) g += `<line x1="${X(xf)}" x2="${X(xf)}" y1="${Y(0)}" y2="34" stroke="var(--fg)" stroke-width="2"></line><text x="${X(xf) + (xf < 5.5 ? -6 : 6)}" y="44" text-anchor="${xf < 5.5 ? "end" : "start"}" style="fill:var(--fg)">x* = ${fx(xf, 3)}</text>`;
+ g += `<text x="${X(8.6)}" y="${Y(normpdf(8.6, 7, s13) * p13) - 8}" style="fill:var(--bass)">score1 (7)</text><text x="${X(1.4)}" y="${Y(normpdf(2.4, 4, s13) * (1 - p13)) - 8}" style="fill:var(--salink)">score2 (4)</text>`;
+ $("#c13-svg").innerHTML = g;
+ $("#c13-out").textContent = `formula: threshold(7, 4, ${s13}, ${fx(p13, 2)}) = ${fx(xf, 3)}\nsearch:  xs[np.argmax(score1 > score2)] = ${fx(xsr, 3)}\nshift from the middle 5.5: ${MINUS(fx(xf - 5.5, 3))}`;
+ const sh = xf - 5.5;
+ $("#c13-note").innerHTML = Math.abs(sh) < 1e-9 ? `الاحتمالان القبليان متساويان: ln 1 = 0، فالعتبة في المنتصف تمامًا، مهما كان σ.` :
+  `الإزاحة σ²/3 · ln(${fx(1 - p13, 2)}/${fx(p13, 2)}) = ${MINUS(fx(sh, 3))}، نحو الصنف ${sh < 0 ? "2 (الأقل احتمالًا قبليًا)" : "1"}. ${s13 !== 1 ? `σ² = ${fx(s13 * s13, 2)}: الإزاحة ${fx(s13 * s13, 2)} مرة إزاحة σ = 1.` : "جرّب s = 2: الإزاحة تتضاعف أربع مرات."}`;
+}
+
+/* ---------- 1.4 three classifiers ---------- */
+let m14 = "LDA", pt14 = "test";
+seg("c14mseg", v => { m14 = v; draw14(); });
+seg("c14pseg", v => { pt14 = v; draw14(); });
+const SCOL = ["var(--cA)", "var(--cC)", "var(--cG)"];
+function draw14() {
+ const [x0, x1, nx] = A4.cx, [y0, y1, ny] = A4.cy, Zs = A4.grid[m14];
+ const W = 560, H = 330, L = 56, B = 40, X = scale(30, 61, L, W - 12), Y = scale(12.5, 22, H - B, 12);
+ const dx = (x1 - x0) / (nx - 1), dy = (y1 - y0) / (ny - 1);
+ let g = "";
+ for (let r = 0; r < ny; r++) {   // one rectangle per run of equal class along a row
+  let c0 = 0;
+  for (let c = 1; c <= nx; c++) {
+   if (c === nx || Zs[r * nx + c] !== Zs[r * nx + c0]) {
+    const k = +Zs[r * nx + c0], xa = X(x0 + (c0 - 0.5) * dx), xb = X(x0 + (c - 0.5) * dx), ya = Y(y0 + (r + 0.5) * dy), yb2 = Y(y0 + (r - 0.5) * dy);
+    g += `<rect x="${f(Math.max(xa, L), 1)}" y="${f(Math.max(ya, 12), 1)}" width="${f(Math.min(xb, W - 12) - Math.max(xa, L), 1)}" height="${f(Math.min(yb2, H - B) - Math.max(ya, 12), 1)}" fill="${SCOL[k]}" opacity=".16"></rect>`;
+    c0 = c;
+   }
+  }
+ }
+ g += axes(null, X, Y, [30, 35, 40, 45, 50, 55, 60], [13, 15, 17, 19, 21], "bill length (mm)", "bill depth (mm)", W, H, L, B);
+ const P = pt14 === "all" ? A4.pts : A4.test_pts, wrong = new Set(A4.wrong[m14]);
+ g += P.map(([a, b, k], i) => `<circle cx="${f(X(a), 1)}" cy="${f(Y(b), 1)}" r="${pt14 === "test" ? 3.6 : 2.6}" fill="${SCOL[k]}" opacity=".9"></circle>${pt14 === "test" && wrong.has(i) ? `<circle cx="${f(X(a), 1)}" cy="${f(Y(b), 1)}" r="8" fill="none" stroke="var(--bad)" stroke-width="2"></circle>` : ""}`).join("");
+ g += A4.classes.map((c, k) => `<g transform="translate(${W - 120},${22 + k * 18})"><circle r="5" fill="${SCOL[k]}"></circle><text x="10" y="4" style="fill:var(--fg)">${c}</text></g>`).join("");
+ $("#c14-svg").innerHTML = g;
+ $("#c14-out").textContent = `${m14}: ${A4.acc[m14]} of ${A4.ntest} correct\nred rings: the ${A4.ntest - A4.acc[m14]} wrong test penguins\nLDA ${A4.acc.LDA} · QDA ${A4.acc.QDA} · naive Bayes ${A4.acc["naive Bayes"]}`;
+ $("#c14-note").innerHTML = {LDA: `شكل واحد مشترك للأنواع الثلاثة، فكل حد بين نوعين خط مستقيم.`,
+  QDA: `لكل نوع شكله، فالحدود تنحني قليلًا. أصاب بطريقين أكثر من LDA، وهذا فرق صغير.`,
+  "naive Bayes": `بلا ميل: كل ميزة وحدها. الحدود منحنية أيضًا، لكنها لا تتبع ميل السحب، فيخطئ أكثر على هاتين الميزتين المترابطتين.`}[m14];
+}
+
+/* ---------- answers of "try in the notebook" and numbers in traps ---------- */
+(() => {
+ const put = (id, h) => { const el = document.getElementById(id); if (el) el.innerHTML = h; };
+ const R = D.c01;
+ put("tr01a", `<code>(3, 2)</code>: ${R.shape[0]} ${T("صفوف", "rows")} (نقاط)، و${R.shape[1]} ${T("أعمدة", "columns")} (ميزات). الرقم الأول دائمًا عدد الصفوف.`);
+ put("tr01b", `${fx(R.mall, 1)}: متوسط الأرقام الستة معًا. يخلط الميزة الأولى بالثانية، فلا يصف مركز السحابة.`);
+ put("tr01c", `(1 + 2 + 3 + 6) / 4 = 3، و(2 + 4 + 3 + 7) / 4 = 4: <code>[3. 4.]</code>. نقطة بعيدة واحدة تسحب المركز نحوها.`);
+ put("tr11a", `${fx(A1.best16, 1)}. الشبكة صارت بخطوة 1 مم، وأقرب نقطة فيها إلى ${fx(A1.mean, 2)} هي ${fx(A1.best16, 0)}. البحث لا يجد أفضل من أفضل نقطة في شبكته.`);
+ put("tr11b", `لا: ما زال ${fx(A1.best, 2)}. σ ثابت لكل التخمينات، فيغيّر ارتفاع المنحنى كله ولا يغيّر مكان القمة.`);
+ put("tr11c", `<code>${A1.ibest}</code> و<code>${fx(A1.llmax, 2)}</code>. الأول <b>مكان</b> الأكبر في القائمة، والثاني <b>قيمته</b>. نحتاج المكان لنقرأ التخمين.`);
+ put("tr11d", `${A1.prod5.toExponential(2)} مع 5، و${A1.prod50.toExponential(2)} مع 50. كل بطريق يضرب في رقم أصغر من 0.07، فيصغر الناتج بسرعة. مع 1000 بطريق يصير 0.0.`);
+ put("tr12a", `القسمة على ${A2.shape[0] - 1} بدل ${A2.shape[0]}: تباين الزعنفة ${fx(A2.S1[0][0], 2)} بدل ${fx(A2.S[0][0], 2)}، والتغاير ${fx(A2.S1[0][1], 1)} بدل ${fx(A2.S[0][1], 1)}. أما ρ فلا يتغير (${fx(A2.rho, 3)})، لأن العامل نفسه فوق وتحت.`);
+ put("tr12b", `<code>(${A2.covGshape.join(", ")})</code>، بلا رسالة خطأ. تغاير كل بطريقين، لا كل ميزتين.`);
+ put("tr12c", `التغاير ${fx(A2.Sk[0][1], 3)} بدل ${fx(A2.S[0][1], 1)}: أصغر 1000 مرة. وتباين الكتلة أصغر مليون مرة. ρ بقي ${fx(A2.rhok, 3)}: الارتباط لا وحدات له.`);
+ put("tr12d", `مصفوفة 2×2: 1 على القطر، و${fx(A2.corrcoef, 3)} خارجه. هذا ρ نفسه، و${C("np.corrcoef")} يحسبه مباشرة.`);
+ put("tr13a", `كلاهما ${fx(A3.p5, 1)}. مع احتمالين متساويين ln(0.5/0.5) = ln 1 = 0، فلا إزاحة، ولا يهم σ.`);
+ put("tr13b", `${fx(A3.p9, 3)}: إلى اليسار، بعيدًا عن 5.5. القاروص صار شائعًا جدًا، فنقول «قاروص» في جزء أكبر من المحور.`);
+ put("tr13c", `${fx(A3.search_coarse, 1)}. الخطوة صارت 0.1، فلا يرى البحث ما بين 5.3 و5.4. الصيغة لا تحتاج شبكة.`);
+ put("tr13d", `يطبع ${fx(A3.swap, 3)} بلا شكوى، لكنه خطأ: الصيغة تفترض m1 > m2. مع m1 = 4 صار المقام سالبًا، فانقلبت الإزاحة.`);
+ put("tr14a", `LDA ${A4.acc4.LDA}، QDA ${A4.acc4.QDA}، naive Bayes ${A4.acc4["naive Bayes"]} من ${A4.ntest}. الثلاثة جيدة، والفرق بطريق أو بطريقان.`);
+ put("tr14b", `لا: LDA ${A4.acc_rs1.LDA}، QDA ${A4.acc_rs1.QDA}، naive Bayes ${A4.acc_rs1["naive Bayes"]}. الترتيب بين LDA وQDA تغيّر مع التقسيم. فرق بطريقين ليس دليلًا قويًا.`);
+ put("tr14c", `Adelie ${A4.nostrat_test_counts.Adelie}، Chinstrap ${A4.nostrat_test_counts.Chinstrap}، Gentoo ${A4.nostrat_test_counts.Gentoo}، بدل ${A4.test_counts.Adelie} و${A4.test_counts.Chinstrap} و${A4.test_counts.Gentoo}. بلا ${C("stratify")} تتغير النسب بالصدفة، وChinstrap قليل أصلًا.`);
+ put("tr14d", `${C("classes_")}: ${A4.classes.join("، ")}. و${C("means_")}: متجه متوسطات لكل نوع من بيانات التدريب، مثل Adelie (${A4.means.Adelie.join(", ")}). هذه الأرجحية العظمى من §5.2.`);
+ put("trcovs", `<span dir="ltr">(${A2.covGshape.join(", ")})</span>`);
+ put("trbias", `${fx(A2.S[0][0], 2)} بالقسمة على n، و${fx(A2.S1[0][0], 2)} على n−1`);
+ put("trstd", `${fx(A1.sd, 3)} و${fx(A1.sd1, 3)} لزعانف Gentoo`);
+ put("trprod", `${A1.prod5.toExponential(1)} مع 5 بطاريق، و${A1.prod.toExponential(1)} مع ${A1.n}`);
+ put("trrs", `LDA ${A4.acc_rs1.LDA} وQDA ${A4.acc_rs1.QDA}`);
+})();
+
+/* ---------- index ---------- */
+function buildIndex() {
+ const where = {};
+ $$(".view").forEach(v => $$(".lines .tk", v).forEach(b => { where[b.dataset.k] = where[b.dataset.k] || v.dataset.view; }));
+ const lab = {setup: "الإعداد", c01: "0.1", c11: "1.1", c12: "1.2", c13: "1.3", c14: "1.4"};
+ const order = ["py", "np", "pd", "plt", "sp", "sk"], tord = {new: 0, trap: 1, rev: 2};
+ const rows = Object.entries(E).sort((x, y) => (order.indexOf(x[1].l) - order.indexOf(y[1].l)) || (tord[x[1].t] - tord[y[1].t]));
+ $("#glo tbody").innerHTML = rows.map(([k, e]) => `<tr><td class="n">${e.n}</td><td><span class="b ${e.l}">${LIB[e.l]}</span></td><td class="hide-ph"><span class="b ${ST[e.t][0]}">${ST[e.t][1]}</span></td><td>${e.s}</td><td><a href="#${where[k]}--${k}">${lab[where[k]]}</a>${e.ref ? ` · <a class="wk" href="${e.ref}" target="_blank" rel="noopener">الأسبوع ${e.wk}</a>` : ""}</td></tr>`).join("");
+}
+
+/* ---------- reading-order strip inside a cell ---------- */
+function buildSteps() {
+ $$(".view.cell .steps").forEach(s => {
+  if (!s.children.length) s.innerHTML = `<span class="sl">اقرأ بالترتيب:</span><button type="button" data-step="1"><b>1</b> الصيغة</button><span class="ar">←</span><button type="button" data-step="2" class="on"><b>2</b> الكود سطرًا سطرًا</button><span class="ar">←</span><button type="button" data-step="3"><b>3</b> المتغيرات الناتجة</button><span class="ar">←</span><button type="button" data-step="4"><b>4</b> جرّب</button>`;
+ });
+ document.addEventListener("click", ev => {
+  const b = ev.target.closest(".steps button"); if (!b) return;
+  const view = b.closest(".view"), n = b.dataset.step, el = view.querySelector(`:not(button)[data-step="${n}"]`);
+  $$(".steps button", view).forEach(x => x.classList.toggle("on", x === b));
+  if (!el) return;
+  if (el.tagName === "DETAILS") el.open = true;
+  el.scrollIntoView({block: "start", behavior: reduce ? "auto" : "smooth"});
+ });
+}
+
+/* ---------- views and hash routing ---------- */
+const VIEWS = ["setup", "c01", "c11", "c12", "c13", "c14", "tasks", "traps", "index"];
+const NAME = {setup: "الإعداد", c01: "0.1 متجه المتوسطات", c11: "1.1 الأرجحية العظمى", c12: "1.2 التغاير والارتباط", c13: "1.3 صيغة العتبة", c14: "1.4 LDA وQDA وnaive Bayes", tasks: "مهامك", traps: "الفخاخ", index: "فهرس الأسماء"};
+const SHORT = {setup: "الإعداد", c01: "0.1", c11: "1.1", c12: "1.2", c13: "1.3", c14: "1.4", tasks: "مهامك", traps: "الفخاخ", index: "الفهرس"};
+const NCELL = 6;
+let CUR = null;
+const SEEN = new Set();
+try { JSON.parse(localStorage.getItem("lg5-seen") || "[]").forEach(v => SEEN.add(v)); } catch (e) {}
+function showView(v) {
+ closeCard(true); closeVar(true);
+ $$(".view").forEach(s => s.hidden = s.dataset.view !== v);
+ CUR = v; SEEN.add(v);
+ try { localStorage.setItem("lg5-seen", JSON.stringify([...SEEN])); } catch (e) {}
+ const i = VIEWS.indexOf(v), pv = VIEWS[i - 1], nx = VIEWS[i + 1];
+ $$("#side .nv").forEach(a => { const on = a.dataset.v === v; if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); a.classList.toggle("done", SEEN.has(a.dataset.v) && !on); });
+ const cur = $(`#side .nv[data-v="${v}"]`), side = $("#side");
+ if (cur && side.scrollWidth > side.clientWidth + 2) { const r = cur.getBoundingClientRect(), s = side.getBoundingClientRect(); if (r.left < s.left || r.right > s.right) side.scrollLeft += (r.left + r.width / 2) - (s.left + s.width / 2); }
+ $("#tbcount").textContent = i < NCELL ? `الخلية ${i + 1} من ${NCELL}` : `${NAME[v]} · بعد الخلايا`;
+ const pct = Math.round((i + 1) / VIEWS.length * 100);
+ $("#tbbar i").style.width = pct + "%"; $("#tbbar").setAttribute("aria-valuenow", pct);
+ const P = $("#tbprev"), N = $("#tbnext");
+ if (pv) { P.href = "#" + pv; P.textContent = `→ ${SHORT[pv]} السابق`; P.removeAttribute("aria-disabled"); P.removeAttribute("tabindex"); } else { P.href = "#" + v; P.textContent = "→ السابق"; P.setAttribute("aria-disabled", "true"); P.tabIndex = -1; }
+ if (nx) { N.href = "#" + nx; N.textContent = `التالي ${SHORT[nx]} ←`; N.removeAttribute("aria-disabled"); N.removeAttribute("tabindex"); } else { N.href = "#" + v; N.textContent = "التالي ←"; N.setAttribute("aria-disabled", "true"); N.tabIndex = -1; }
+ const pn = $(`.view[data-view="${v}"] .pn`);
+ if (pn) pn.innerHTML = (pv ? `<a href="#${pv}">→ السابق: ${NAME[pv]}</a>` : "") + (nx ? `<a class="primary" href="#${nx}">التالي: ${NAME[nx]} ←</a>` : `<a class="primary" href="#setup">إلى البداية: الإعداد ←</a>`);
+ $$(`.view[data-view="${v}"] .steps button`).forEach(b => b.classList.toggle("on", b.dataset.step === "2"));
+ document.title = `Lab 5 Code Guide · ${SHORT[v]}`;
+}
+function openSub(v, sub) {
+ const view = $(`.view[data-view="${v}"]`);
+ if (E[sub]) { const b = $(`.lines .tk[data-k="${sub}"]`, view); if (b) { openCard(b, {force: true, focus: true, center: true}); return; } }
+ if (sub.startsWith("var-")) { const i = (VARS[v] || []).findIndex(x => x.n === sub.slice(4)); if (i >= 0) { openVar(v, i, {force: true, focus: true}); $(`.vars[data-cell="${v}"]`).scrollIntoView({block: "start"}); } return; }
+ const el = document.getElementById(sub);
+ if (el && view.contains(el)) { el.scrollIntoView({block: "center", behavior: reduce ? "auto" : "smooth"}); flash(el); }
+}
+function route() {
+ let h = ""; try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) { h = location.hash.slice(1); }
+ let [v, sub] = h.split("--");
+ if (!VIEWS.includes(v)) { v = "setup"; sub = ""; }
+ const changed = v !== CUR;
+ if (changed) showView(v);
+ if (sub) requestAnimationFrame(() => openSub(v, sub));
+ else if (changed) scrollTo(0, 0);
+}
+addEventListener("hashchange", route);
+document.addEventListener("click", ev => {
+ const a = ev.target.closest('a[href^="#"]'); if (!a || ev.ctrlKey || ev.metaKey || ev.shiftKey) return;
+ const h = a.getAttribute("href"); if (!h || h === "#") return;
+ ev.preventDefault();
+ if (location.hash === h) route(); else location.hash = h;
+});
+document.addEventListener("keydown", ev => {
+ if (ev.key !== "Escape") return;
+ if (CARD) { ev.preventDefault(); closeCard(); } else if (VAR) { ev.preventDefault(); closeVar(false, true); }
+});
+
+/* ---------- theme and start ---------- */
+(() => {
+ const root = document.documentElement;
+ const apply = v => { if (v === "auto") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", v); setSeg("themeseg", v); };
+ let saved = "auto"; try { saved = localStorage.getItem("lg-theme") || "auto"; } catch (e) {}
+ apply(saved);
+ seg("themeseg", v => { apply(v); try { localStorage.setItem("lg-theme", v); } catch (e) {} });
+})();
+renderCode(); buildSteps(); buildVars(); buildIndex();
+draw01(); draw11(); draw12(); draw13(); draw14();
+route();
+</script>
+
+</body></html>
